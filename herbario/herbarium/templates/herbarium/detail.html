@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+
+    <head>
+
+    </head>
+
+    <body>
+
+            <p>{{ object.name }}
+            {{ object.scientific_name }}
+            {{ object.order }}
+            {{ object.family }}
+            {{ object.plant_class}}
+            </p>
+            {% if object.image%}
+            <img src="{{object.image.url}}">
+            {% endif%}
+            {{ object.description }}
+
+    </body>
+
+</html>
