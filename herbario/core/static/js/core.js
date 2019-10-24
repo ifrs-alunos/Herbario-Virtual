@@ -1,0 +1,30 @@
+// Carrosel das Plamtas
+//Essa função controla que imagem deve aparecer no carrosel e coisas relacionadas a isso
+var carosel_index = 0;
+function show_slide (new_index)
+{
+    // Esconde o anterior e mostra o de agora.
+    document.getElementsByClassName('zoom_image')[carosel_index].setAttribute('hidden', 'true');
+    document.getElementsByClassName('zoom_image')[new_index].removeAttribute('hidden');
+    //Da pra melhorar a relação entre remover a classe em vez de setar para false
+    document.getElementsByClassName('slide_index')[carosel_index].classList.remove('select');
+    document.getElementsByClassName('slide_index')[new_index].classList.add('select');
+
+    carosel_index = new_index
+
+}
+
+// Zoom nas imagens do Carrosel
+//Está funcão só controla que parte da imagem com zoom será mostrada em realção as coordenadas do mouse
+function zoom(e)
+{
+    //Faz a imagem de tamanho normal sumir
+    //converte a posição em coordenadas para porcentagem
+    var x = e.offsetX * 100 / e.currentTarget.offsetWidth;
+    var y = e.offsetY * 100 / e.currentTarget.offsetHeight;
+    //Define esse valores para o backgroundPosition
+    e.currentTarget.style.backgroundPosition = "" + x + "%" + y + "%";
+
+}
+
+// Página de Listagem --------------------------------------------------

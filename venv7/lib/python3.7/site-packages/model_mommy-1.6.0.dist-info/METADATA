@@ -1,0 +1,68 @@
+Metadata-Version: 2.0
+Name: model-mommy
+Version: 1.6.0
+Summary: Smart object creation facility for Django.
+Home-page: http://github.com/vandersonmota/model_mommy
+Author: vandersonmota
+Author-email: vandersonmota@gmail.com
+License: Apache 2.0
+Description-Content-Type: UNKNOWN
+Keywords: django testing factory python
+Platform: UNKNOWN
+Classifier: Framework :: Django
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: OS Independent
+Classifier: Topic :: Software Development
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.6
+Requires-Dist: django (>=1.8.0)
+Requires-Dist: six
+
+============================================
+Model Mommy: Smart fixtures for better tests
+============================================
+
+*Model-mommy* offers you a smart way to create fixtures for testing in Django.
+With a simple and powerful API you can create many objects with a single line of code.
+
+.. image:: https://travis-ci.org/vandersonmota/model_mommy.svg?branch=master
+    :target: https://travis-ci.org/vandersonmota/model_mommy
+    :alt: Test Status
+
+.. image:: https://badge.fury.io/py/model_mommy.svg
+    :target: https://badge.fury.io/py/model_mommy
+    :alt: Latest PyPI version
+
+.. image:: https://img.shields.io/gratipay/vandersonmota.svg?style=social&label=Donate
+    :target: https://www.gratipay.com/vandersonmota
+
+Install
+=======
+
+.. code-block:: console
+
+    pip install model_mommy
+
+
+Usage and Info
+==============
+
+*     http://model-mommy.readthedocs.org/
+
+
+Maintainers
+===========
+
+*     Bernardo Fontes - https://github.com/berinhard/
+
+
+Creator
+=======
+
+*     Vanderson Mota - https://github.com/vandersonmota/
+
+

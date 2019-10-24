@@ -1,37 +1,99 @@
-<!DOCTYPE html>
+{% extends "core/base.html" %}
 
-<html>
+{% block content %}
 
-    <head>
+    <div class="pure-g">
+        <div class="pure-u-1 pure-u-md-1-5 pure-u-lg-1-5 pure-u-xl-1-5 ">
+            <!-- {# <li class="pure-menu-item">
+                Divisão
+                <ul>
+                    {% for tuple in  divisions %}
+                        <li>
+                        <a href="?filter_type=class&filter={{tuple.0}}">{{tuple.0}}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </li> #} -->
+            <nav class="pure-menu">
 
-    </head>
+            <!--    {# <h3 class="pure-menu-heading" >Família</h3>
+                    <ul class="pure-menu-list">
+                        <table class="pure-table">
+                        {% for tuple in  families %}
+                            <tr>
+                                <li class="pure-menu-item">
+                                    <td>
+                                    <a  class="pure-menu-link" href="?filter_type=family&filter={{tuple.0}}">{{tuple.0}}</a>
+                                    </td>
+                                </li>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </ul> #} -->
+                <h3 class="pure-menu-heading" > Filtrar por</h3>
+                <table class="pure-table pure-table-striped list-menu">
+                        <tr>
+                            <td><a href="?search=">Todas</a></td>
+                        </tr>
+                        {% for tuple in  families %}
+                            <tr>
+                                <th><a href="?filter_type=division&filter={{tuple.0}}">{{tuple.0}}</th></a>
 
-    <body>
-        <nav>
-            <ul>
-                <li>Classes</li>
-                {% for tuple in  classes %}
-                <a href="?filter_type=class&filter={{tuple.0}}">{{tuple.0}}</a>
+                            </tr>
+                            {%for element in tuple.1%}
+                            <tr>
+
+                                <td>
+                                    <a href="?filter_type=family&filter={{element.0}}">{{element.1}}</a>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+
+                </table>
+
+            </nav>
+        </div>
+        <div class="pure-u-1 pure-u-md-4-5 pure-u-lg-4-5 pure-u-xl-4-5 ">
+        <form method="get" class="pure-form search-box">
+            {% for field in  form %}
+            {{field.label_tag}}
+            {{field}}
+            {{field.errors }}
+            {% endfor %}
+            <button class=" button-warning " type="submit">Pesquisar</button>
+        </form> <br/>
+
+            <div class="pure-g">
+
+                {% for object in object_list %}
+                <div class="pure-u-1-2 pure-u-md-1-3 pure-u-lg-1-5 pure-u-xl-1-5">
+                    <div class="list-item">
+                        <div class="list-img-container">
+                        {% if object.photos.all.0 %}
+                            {% if object.photos.all.1%}
+                            <figure class="list-figure" style=" background-image: url({{ object.photos.all.1.image.url }});">
+                            {%else%}
+                            <figure class="list-figure" style=" background-image: url({{ object.photos.all.0.image.url }});">
+                            {% endif %}
+                            <a href="{% url 'herbarium:detail' object.slug %}"><img src=" {{ object.photos.all.0.image.url }}" class=" list-img" />
+                            </a>
+                            </figure>
+                        {% else %}
+                            <h4>  Não imagens disponíveis :( </h4>
+                        {% endif %}
+                        </div>
+                        <a  href="{% url 'herbarium:detail' object.slug %}"><h3 class="list-title">{{ object.name }}</h3></a>
+                        <a  href="{% url 'herbarium:detail' object.slug %}"><p class="list-title">{{ object.scientific_name }}</p></a>
+                    </div>
+                </div>
+
                 {% endfor %}
-                <li>Ordem</li>
-                <li>Família</li>
-                <li>Divisão</li>
-            </ul>
-        </nav>
+            </div>
 
-        {% for object in object_list %}
-            ,<a href="{% url 'herbarium:detail' object.slug %}">{{ object.name }}</a>
-        {% endfor %}
-        <form method="get">
+        </div>
+    </div>
 
-        {% for field in  form %}
-        {{field.label_tag}}
-        {{field}}
-        {{field.errors }}
-        {% endfor %}
-        <button type="submit">Pesquisar</button>
-        </form>
 
-    </body>
-
-</html>
+{% endblock %}

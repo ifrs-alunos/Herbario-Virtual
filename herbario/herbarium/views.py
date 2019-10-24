@@ -20,9 +20,11 @@ class HerbariumIndex(ListView):
         search = self.request.GET.get('search', '')
 
         queryset = Plant.objects.filter(name__icontains=search)
-        if filter_type == 'class':
-            
-            queryset = Plant.objects.filter(plant_class=filter)
+        if filter_type == 'family':
+
+            queryset = Plant.objects.filter(family=filter)
+        elif filter_type == 'division':
+            queryset = Plant.objects.filter(division=filter)
 
         return queryset
 
@@ -32,7 +34,7 @@ class HerbariumIndex(ListView):
     def get_context_data(self,**kwargs ):
         context = super().get_context_data(**kwargs)
         #Pegando as escolhas para o filtros
-        context['classes'] = Plant.PLANT_CLASS_CHOICES
+        context['families'] = Plant.FAMILY_CHOICES
         context['form'] = SearchForm(self.request.GET or None)
 
         return context

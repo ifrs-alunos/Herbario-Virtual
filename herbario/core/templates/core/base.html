@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>LabFito</title>
+        <link rel="stylesheet" href="{% static "css/style.css" %}" />
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
+        <script src="{% static "js/core.js" %}"></script>
+        <!-- Só para IE 8 para cima -->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css">
+    </head>
+
+    <body>
+        <header>
+
+            <img id='logo' alt="Logo do LabFito" src="{%static "images/labfito.png" %}  ">
+
+            <nav class="pure-menu pure-menu-horizontal">
+
+                <ul class="pure-menu-list">
+
+                    <li class="pure-menu-item">
+                        <a class="pure-menu-link" href="{% url "core:index" %}">Ínicio</a>
+                    </li>
+
+                    <li class="pure-menu-item">
+                        <a class="pure-menu-link" href="{% url "herbarium:index" %}">Plantas Daninhas</a>
+                    </li>
+
+                    <li class="pure-menu-item pure-menu-disabled">
+                        <a class="pure-menu-link" >Insetos</a>
+                    </li>
+
+                    <li class="pure-menu-item pure-menu-disabled">
+                        <a class="pure-menu-link" >Doenças de plantas</a>
+                    </li>
+
+                    <li class="pure-menu-item pure-menu-disabled">
+                        <a class="pure-menu-link" >Materiais</a>
+                    </li>
+
+
+                </ul>
+            </nav>
+
+        </header>
+
+        <main>
+            {% block content  %}
+
+            {% endblock %}
+        </main>
+
+        <footer>
+            Desenvolvido por Matheus Hofman com orientação dos professores Rafael Negretti e Ricardo Luís dos Santos
+            <img id="footer_logo" src="{% static "images/logo_IFVacaria.jpg"%}" alt="Logo do IFRS campus Vacaria">
+        </footer>
+    </body>
+</html>

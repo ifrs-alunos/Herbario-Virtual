@@ -1,24 +1,98 @@
-<!DOCTYPE html>
-{% load static %}
-<html>
+{% extends "core/base.html" %}
 
-    <head>
 
-    </head>
+{% block content %}
+    <div class="pure-g">
 
-    <body>
 
-            <p>{{ object.name }}
-            {{ object.scientific_name }}
-            {{ object.order }}
-            {{ object.family }}
-            {{ object.plant_class}}
-            </p>
-            {% if object.image%}
-            <img src="{{object.image.url}}">
-            {% endif%}
-            {{ object.description }}
+        <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
+            <h2 >{{ object.scientific_name }}</h2>
+        </div>
 
-    </body>
+        <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
 
-</html>
+            <div style="text-align: right;">
+                {# talvez aqui va um breadcrumb #}
+            </div>
+
+        </div>
+
+
+        <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
+
+            <table class="pure-table pure-table-striped">
+                <thead>
+                    <th> Informações da Planta </th>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Nome Comum: {{ object.name }} </td>
+                    </tr>
+                    <tr>
+                        <td>Divisão: {{ object.division }} </td>
+                    </tr>
+                    <tr>
+                        <td>Família: {{ object.family }} </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
+            {# Carrrosel #}
+            <div class="carosel pure-g">
+
+                <div class="carosel_view pure-u-1 pure-u-md-4-5 pure-u-lg-4-5 pure-u-xl-4-5 ">
+                    {% if object.photos.all %}
+                        {% for photo in object.photos.all %}
+                            {# figure com background-image é o zoom e img é a imagem normal #}
+                            {% if photo.image.width > photo.image.height %}
+                            <figure class="zoom_image" style=" background-image: url({{ photo.image.url }});" onmousemove="zoom(event)" {% if not forloop.first %} hidden = true {%endif%} >
+                                <img  class='slide_h' src=" {{ photo.image.url }} ">
+                            </figure>
+                            {% else %}
+                            <figure class="zoom_image" style=" background-image: url({{ photo.image.url }});" onmousemove="zoom(event)" {% if not forloop.first %} hidden = true {%endif%} >
+                                <img  class='slide_w' src=" {{ photo.image.url }} ">
+                            </figure>
+                            {%endif%}
+
+                        {% endfor %}
+                    {%else%}
+                        <p>Desculpe. Não há imagens disponíveis para esta planta.</p>
+                    {%endif%}
+                </div>
+
+                <div class="carosel_control pure-u-1 pure-u-md-1-5 pure-u-lg-1-5 pure-u-xl-1-5  ">
+
+                    <div class="row">
+                            {% for photo in object.photos.all %}
+                                <div class="col pure-u-1-3 pure-u-md-1 pure-u-lg-1 pure-u-xl-1">
+                                    <img {% if forloop.first %} class="slide_index select" {% else %} class="slide_index" {%endif%} src=" {{ photo.image.url }}" onclick="show_slide( {{ forloop.counter0 }} )" >
+                                </div>
+                            {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
+            <h3> Características Gerais </h3>
+            <p> {{ object.description|linebreaksbr }}  </p>
+        </div>
+
+        <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
+            <div style="text-align: center; height: 100%;">
+                <a href="#"><button class=" green-button"> Visualizar em 360° </button></a>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
