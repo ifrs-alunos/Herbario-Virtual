@@ -1,5 +1,23 @@
 {% extends 'core/base.html' %}
-
+{% load static %}
 {% block content  %}
-oi
-{% endblock %} %}
+    <div class="pure-g">
+        <div class="pure-u-1">
+            <img  class="pure-img std_img" src="{% static "images/laboratorio.png" %}" />
+            <h1>O Laboratório de Fitossanidade</h1>
+            <p>Divulgação de conteúdos relacionados às disciplinas de fitossanidade dos cursos técnicos em Agropecuária, Agronomia e Biologia.</p>
+        </div>
+
+        <div class="pure-u-1 pure-u-md-1  pure-u-lg-2-5 pure-u-xl-2-5 ">
+            <h1>Sobre o Campus Vacaria</h1>
+            <p>O Campus Vacaria iniciou suas atividades em 2006 como uma extensão da Escola Agrotécnica Federal de Sertão.
+A federalização ocorreu em agosto de 2011, quando o polo passou a ser um campus em implantação do IFRS.
+O Campus Vacaria passou a funcionar em sua sede própria no ano de 2015. Um espaço de 2500 m² e amplas instalações. Atualmente oferta cinco cursos técnicos, três superiores, duas especializações atende cerca de 604 alunos.
+</p>
+        </div>
+
+        <div class="pure-u-1 pure-u-md-1  pure-u-lg-3-5 pure-u-xl-3-5 ">
+            <img  class="pure-img std_img" src="{% static "images/campusVacaria.jpg" %}" />
+        </div>
+    </div>
+{% endblock %}

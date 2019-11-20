@@ -41,6 +41,16 @@ nav.pure-menu li a:hover, nav.pure-menu li a:focus {
 
 }
 
+/* Página Inicial */
+.std_img {
+    border-radius: 5px;
+    margin: 2% auto 2% auto;
+    width: 80%;
+}
+
+
+
+
 /* Tabela */
 
 table {
@@ -247,17 +257,40 @@ figure.zoom_image{
 
 }
 
-/* Rodapé */
+/* paginação (botões de trocar de página) */
+.pagination {
+    text-align: center;
+}
+
+.pagination #current{
+    font-size: 22px;
+}
+
+.pagination, .pagination a{
+    color: #ffa31a;
+
+}
+
+
+
+
+/* Rodapé --------------------------------------------------------*/
 footer {
     background-color: #4bca2e;
     color: white;
-    height: 80px;
+
     text-align: center;
+
 }
-/* Estava ajeitando a imagem do footer */
+
+footer p {
+    color: white;
+    margin-top: 3%;
+
+}
+
 #footer_logo {
+    width: 80%;
     border-radius: 5px;
-    height: 70px;
-    margin-top: auto;
-    margin-bottom: auto;
+    margin: 5% 0px 0px 5%;
 }

@@ -4,32 +4,9 @@
 
     <div class="pure-g">
         <div class="pure-u-1 pure-u-md-1-5 pure-u-lg-1-5 pure-u-xl-1-5 ">
-            <!-- {# <li class="pure-menu-item">
-                Divisão
-                <ul>
-                    {% for tuple in  divisions %}
-                        <li>
-                        <a href="?filter_type=class&filter={{tuple.0}}">{{tuple.0}}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-            </li> #} -->
+
             <nav class="pure-menu">
 
-            <!--    {# <h3 class="pure-menu-heading" >Família</h3>
-                    <ul class="pure-menu-list">
-                        <table class="pure-table">
-                        {% for tuple in  families %}
-                            <tr>
-                                <li class="pure-menu-item">
-                                    <td>
-                                    <a  class="pure-menu-link" href="?filter_type=family&filter={{tuple.0}}">{{tuple.0}}</a>
-                                    </td>
-                                </li>
-                            </tr>
-                        {% endfor %}
-                        </table>
-                    </ul> #} -->
                 <h3 class="pure-menu-heading" > Filtrar por</h3>
                 <table class="pure-table pure-table-striped list-menu">
                         <tr>
@@ -55,6 +32,7 @@
 
             </nav>
         </div>
+
         <div class="pure-u-1 pure-u-md-4-5 pure-u-lg-4-5 pure-u-xl-4-5 ">
         <form method="get" class="pure-form search-box">
             {% for field in  form %}
@@ -90,6 +68,24 @@
                 </div>
 
                 {% endfor %}
+            </div>
+
+            <div class="pagination">
+
+                    {% if page_obj.has_previous %}
+                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}}{%endif%}">&laquo;</a>
+                        <a href="?page=1{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}} {%endif%}">1 ...</a>
+                    {% endif %}
+
+
+                    <span id='current'> <a href="?page={{ page_obj.number }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}}{%endif%}"> {{ page_obj.number }}  </a> </span>
+
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}} {%endif%}">... {{ page_obj.paginator.num_pages }}</a>
+                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}}{%endif%}">&raquo;</a>
+                    {% endif %}
+
             </div>
 
         </div>

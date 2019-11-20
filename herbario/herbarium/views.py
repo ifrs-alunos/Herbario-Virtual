@@ -11,6 +11,7 @@ class HerbariumIndex(ListView):
     model = Plant
     template_name = 'herbarium/index.html'
 
+
     #Pegando Queryset
     def get_queryset(self):
         queryset = Plant.objects.all()
@@ -38,6 +39,9 @@ class HerbariumIndex(ListView):
         context['form'] = SearchForm(self.request.GET or None)
 
         return context
+
+
+    paginate_by = 3
 
 
 class HerbariumDetail(DetailView):
