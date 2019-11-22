@@ -1,3 +1,4 @@
 *.pyc
 __pycache__
+venv7
 db.sqlite3
