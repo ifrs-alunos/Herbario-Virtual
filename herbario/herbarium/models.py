@@ -1,6 +1,31 @@
 from django.db import models
 
-# Create your models here.
+#Create your models here.
+class Division(models.Model):
+
+    name = models.CharField('Nome', blank=True, max_length=100)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Divisão'
+        verbose_name_plural = 'Divisões'
+        ordering = ['name']
+
+
+class Family(models.Model):
+
+    name = models.CharField('Nome', blank=True, max_length=100)
+    division = models.ForeignKey(Division, on_delete=models.CASCADE, related_name='families')
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Família'
+        verbose_name_plural = 'Famílias'
+        ordering = ['name']
 
 
 class Plant(models.Model):
@@ -66,7 +91,7 @@ class Plant(models.Model):
             self.division = self.FAMILY_CHOICES[1][0]
         else:
             self.division = 'Não registrado'
-            
+
         super( Plant, self ).save( *args, **kw )
 
 

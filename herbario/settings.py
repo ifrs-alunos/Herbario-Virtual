@@ -25,7 +25,7 @@ SECRET_KEY = 'eg%2hr5a4y@6w+*kipd5by()+vwqkaqqf_s4gj9h%!g_a(l!t6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['labfito.vacaria.ifrs.edu.br']
 
 
 # Application definition
