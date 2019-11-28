@@ -41,7 +41,7 @@ class HerbariumIndex(ListView):
         return context
 
 
-    paginate_by = 3
+    paginate_by = 10
 
 
 class HerbariumDetail(DetailView):
