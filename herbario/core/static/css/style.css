@@ -42,6 +42,18 @@ nav.pure-menu li a:hover, nav.pure-menu li a:focus {
 }
 
 /* Página Inicial */
+.main_img {
+    height: 480px;
+    width: 80%;
+    border-radius: 5px;
+    margin: 2% auto 2% auto;
+    overflow: hidden;
+    /* O background-image é definido no html */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
 .std_img {
     border-radius: 5px;
     margin: 2% auto 2% auto;

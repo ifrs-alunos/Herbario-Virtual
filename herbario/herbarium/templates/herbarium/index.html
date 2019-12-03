@@ -10,13 +10,9 @@
                 <h3 class="pure-menu-heading" > Filtrar por</h3>
                 <table class="pure-table pure-table-striped list-menu">
                         <tr>
-                            <td><a href="?search=">Todas</a></td>
+                            <td><a href="?search="><b>Famílias</b></a></td>
                         </tr>
                         {% for tuple in  families %}
-                            <tr>
-                                <th><a href="?filter_type=division&filter={{tuple.0}}">{{tuple.0}}</th></a>
-
-                            </tr>
                             {%for element in tuple.1%}
                             <tr>
 
