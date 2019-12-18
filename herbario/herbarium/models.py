@@ -77,6 +77,7 @@ class Plant(models.Model):
     division = models.CharField("Divisão", blank=True, editable=False, max_length=100)
     slug = models.SlugField('Identificador', blank=True, null=True)
     description = models.TextField('Descrição', blank=True)
+    fyuseimage = models.TextField('ID imagem do Fyuse', blank=True, max_length=1000)
 
 
     created_at = models.DateField('Criado em', auto_now_add=True, null=True)

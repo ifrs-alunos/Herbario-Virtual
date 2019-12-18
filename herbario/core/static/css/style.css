@@ -164,6 +164,15 @@ figure.zoom_image{
 
 }
 
+/* Imagens em 360 */
+.imagefyuse{
+    width: 90%
+    padding: 0px 3% 0px 3%;
+}
+.imagefyuse:first-child {
+    margin: auto;
+}
+
 
 
 /* buttons */

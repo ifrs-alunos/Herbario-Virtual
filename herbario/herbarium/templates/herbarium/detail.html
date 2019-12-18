@@ -44,7 +44,7 @@
 
         <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
             {# Carrrosel #}
-            <div class="carosel pure-g">
+            <div id="carosel" class="carosel pure-g">
 
                 <div class="carosel_view pure-u-1 pure-u-md-4-5 pure-u-lg-4-5 pure-u-xl-4-5 ">
                     {% if object.photos.all %}
@@ -62,7 +62,7 @@
 
                         {% endfor %}
                     {%else%}
-                        <p>Desculpe. Não há imagens disponíveis para esta planta.</p>
+                        <h3>Desculpe. Não há imagens disponíveis para esta planta.</h3>
                     {%endif%}
                 </div>
 
@@ -80,6 +80,14 @@
 
             </div>
 
+            <div class="imagefyuse" hidden=true >
+                {%if object.fyuseimage %}
+            <div id="fyu_{{object.fyuseimage}}" class="fy_auto"></div><script src="https://cdn.fyusion.com/assets/fyu-viewer-latest.js"></script><script>FYU.add("{{object.fyuseimage}}", "fyu_{{object.fyuseimage}}" );</script>
+                {%else%}
+                <h3>Desculpe. Não há imagens em 360° disponíveis para esta planta.</h3>
+                {%endif%}
+            </div>
+
         </div>
 
         <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
@@ -89,7 +97,7 @@
 
         <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
             <div style="text-align: center; height: 100%;">
-                <a href="#"><button class=" green-button"> Visualizar em 360° </button></a>
+                <button class=" green-button" onclick="fyuse()"> Visualizar em 360° </button>
             </div>
 
         </div>

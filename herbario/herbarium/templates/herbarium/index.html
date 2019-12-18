@@ -46,14 +46,17 @@
                     <div class="list-item">
                         <div class="list-img-container">
                         {% if object.photos.all.0 %}
+
                             {% if object.photos.all.1%}
                             <figure class="list-figure" style=" background-image: url({{ object.photos.all.1.image.url }});">
                             {%else%}
                             <figure class="list-figure" style=" background-image: url({{ object.photos.all.0.image.url }});">
                             {% endif %}
+
                             <a href="{% url 'herbarium:detail' object.slug %}"><img src=" {{ object.photos.all.0.image.url }}" class=" list-img" />
                             </a>
                             </figure>
+
                         {% else %}
                             <h4>  Não imagens disponíveis :( </h4>
                         {% endif %}

@@ -27,4 +27,16 @@ function zoom(e)
 
 }
 
-// Página de Listagem --------------------------------------------------
+//Fyuse e visualização em 360°
+function fyuse(){
+    a = document.getElementsByClassName('imagefyuse')[0];
+    if (a.hasAttribute('hidden')){
+        document.getElementsByClassName('carosel')[0].setAttribute('hidden', 'true');
+        document.getElementsByClassName('imagefyuse')[0].removeAttribute('hidden');
+    }
+    else {
+        document.getElementsByClassName('imagefyuse')[0].setAttribute('hidden', 'true');
+        document.getElementsByClassName('carosel')[0].removeAttribute('hidden');
+    }
+
+}
