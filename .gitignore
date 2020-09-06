@@ -1,5 +1,6 @@
 *.pyc
-__pycache__
-venv7
+__pycache__/
+venv7/
 db.sqlite3
-media
+media/
+/herbario/local_settings.py
