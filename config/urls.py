@@ -22,8 +22,8 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('herbario/', include( 'herbario.herbarium.urls' ,namespace='herbarium')),
-    path('', include( 'herbario.core.urls' ,namespace='core')),
+    path('herbario/', include( 'herbarium.urls' ,namespace='herbarium')),
+    path('', include( 'core.urls' ,namespace='core')),
 
 ]
 
