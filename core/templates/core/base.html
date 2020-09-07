@@ -1,52 +1,66 @@
 <!DOCTYPE html>
 {% load static %}
-
 <html lang="pt-br">
     <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
         <title>LabFito</title>
-        <link rel="stylesheet" href="{% static "core/css/style.css" %}" />
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
-        <script src="{% static "core/js/core.js" %}"></script>
-        <!-- Só para IE 8 para cima -->
-        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css">
+
+        <!-- Estilos próprios -->
+
+        <link rel="stylesheet" href="{% static "core/css/style.css" %}"/>
+        <!-- <script src="{% static "core/js/core.js" %}"></script> -->
+
+        <!-- Framework Pure -->
+
+        <!-- <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css" integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous"> -->
+        <!-- <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/grids-responsive-min.css"> -->
+
+        <!-- Framework CSS Bootstrap -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
     </head>
 
     <body>
         <header>
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <a class="navbar-brand" href="#">
+                    <img id='logo' alt="Logo do LabFito" src="{%static "core/images/labfito.png" %}">
+                </a>
 
-            <img id='logo' alt="Logo do LabFito" src="{%static "core/images/labfito.png" %}  ">
+                 <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="{% url "core:index" %}">Ínicio</a>
+                            <!-- <a class="nav-link" href="#">Home <span class="sr-only">(Página atual)</span></a> -->
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "herbarium:index" %}">Plantas Daninhas</a>
+                            <!-- <a class="nav-link" href="#">Destaques</a> -->
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="">Doenças de plantas</a>
+                            <!-- <a class="nav-link" href="#">Preços</a> -->
 
-            <nav class="pure-menu pure-menu-horizontal">
-
-                <ul class="pure-menu-list">
-
-                    <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="{% url "core:index" %}">Ínicio</a>
-                    </li>
-
-                    <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="{% url "herbarium:index" %}">Plantas Daninhas</a>
-                    </li>
-
-                    <li class="pure-menu-item pure-menu-disabled">
-                        <a class="pure-menu-link" >Insetos</a>
-                    </li>
-
-                    <li class="pure-menu-item pure-menu-disabled">
-                        <a class="pure-menu-link" >Doenças de plantas</a>
-                    </li>
-
-                    <li class="pure-menu-item">
-                        <a class="pure-menu-link" href="{% url 'core:subjects' %}" >Disciplinas</a>
-                    </li>
-
-                    <li class="pure-menu-item pure-menu-disabled">
-                        <a class="pure-menu-link" >Materiais</a>
-                    </li>
-
-
-                </ul>
+                        </li>
+                        <li class="nav-item">
+                            <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
+                            <a class="nav-link disabled">Insetos</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
+                            <a class="nav-link" href="{% url 'core:subjects' %}">Disciplinas</a>
+                        </li>
+                        <li class="nav-item">
+                            <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
+                            <a class="nav-link" href="">Materiais</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Publicações</a>
+                        </li>
+                    </ul>
+                </div>
             </nav>
 
         </header>
@@ -57,13 +71,29 @@
             {% endblock %}
         </main>
 
-        <footer class="pure-g">
-            <div class="pure-u-1 pure-u-md-1 pure-u-lg-20-24 pure-u-xl-20-24">
-                <p>Desenvolvido por Matheus Hofman com orientação dos professores Rafael Negretti e Ricardo Luís dos Santos</p>
+        <footer class="">
+            <div class="">
+
+                <ul>Redes sociais do Labifito:
+                    <li>
+                        <a href="">Facebook</a>
+                    </li>
+                </ul>
+
+                <p>Site desenvolvido pelos bolsistas do projeto de ensino "Herbário Virtual de Plantas Daninhas" Matheus Mathyas Hofman e Júlia Fonseca de Aguiar com orientação dos professores Rafael Dallegrave Negretti e Ricardo Luís dos Santos</p>
+
+                <p>© 2019-2020 Instituto Federal do Rio Grande do Sul - Campus Vacaria</p>
+
             </div>
-            <div class="pure-u-1 pure-u-md-1 pure-u-lg-4-24 pure-u-xl-4-24 ">
-                <img id="footer_logo" src="{% static "core/images/logo_IFVacaria.jpg"%}" alt="Logo do IFRS campus Vacaria">
-            </div>
+                <div class="">
+                    <img id="footer_logo" src="{% static "core/images/logo_IFVacaria.jpg"%}" alt="Logo do IFRS campus Vacaria">
+                </div>
+                
         </footer>
+
+        <!-- Respectivamente, jQuery, Popper.js e Bootstrap JS -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     </body>
 </html>
