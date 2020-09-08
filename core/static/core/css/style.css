@@ -1,3 +1,21 @@
 #logo{
     width: 140px;
 }
+
+footer{
+    background-color: #f8f9fa !important;
+}
+
+.cointainer {
+    margin: 100%;
+}
+
+.container .carousel-item img  {
+    width: 1000px ;
+    height: 450px ;
+    object-fit: cover;
+}
+
+#footer_logo {
+    width: 250px;
+}

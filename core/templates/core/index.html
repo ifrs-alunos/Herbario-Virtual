@@ -1,23 +1,72 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content  %}
-    <div class="pure-g">
-        <div class="pure-u-1">
-            <figure class="main_img" style="background-image: url({% static 'core/images/laboratorio.jpg' %});"></figure>
-            <h1>O Laboratório de Fitossanidade</h1>
-            <p>Divulgação de conteúdos relacionados às disciplinas de fitossanidade dos cursos técnicos em Agropecuária, Agronomia e Biologia.</p>
+<div class="container">
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-10">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <!-- <ol class="carousel-indicators">
+                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                </ol> -->
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100" src="{% static 'core/images/laboratorio-labfito.jpg'%}" alt="Primeiro Slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="{% static 'core/images/alunos-labfito.jpg'%}" alt="Segundo Slide">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100" src="{% static 'core/images/detalhe-planta.jpg'%}" alt="Terceiro Slide">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Anterior</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Próximo</span>
+                </a>
+            </div>
         </div>
+        <div class="col"></div>
+    </div>
 
-        <div class="pure-u-1 pure-u-md-1  pure-u-lg-2-5 pure-u-xl-2-5 ">
-            <h1>Sobre o Campus Vacaria</h1>
-            <p>O Campus Vacaria iniciou suas atividades em 2006 como uma extensão da Escola Agrotécnica Federal de Sertão.
-A federalização ocorreu em agosto de 2011, quando o polo passou a ser um campus em implantação do IFRS.
-O Campus Vacaria passou a funcionar em sua sede própria no ano de 2015. Um espaço de 2500 m² e amplas instalações. Atualmente oferta cinco cursos técnicos, três superiores, duas especializações atende cerca de 604 alunos.
-</p>
+    <h2>Notícias:</h2>
+
+    <h5>Aula prática 1° ano e 2° ano</h5>
+
+    <p>Publicado em: Setembro/2020</p>
+    <p>As turmas do 1º e 2º ano do Técnico em Agropecuária Integrado realizaram nos dias 10 e 11/03/2020 visita em lavouras de soja para coleta e monitoramento de insetos pragas. As aulas práticas foram realizadas no Departamento de Diagnóstico e Pesquisa Agropecuária próxima ao IFRS - Vacaria. Veja a publicação completa <a href="">clicando aqui</a>.</p>
+
+    <div class="row">
+        <!-- <div class="col"></div> -->
+        <div class="col">
+            <img width="535px" src="{% static 'core/images/aula-mar-2020.jpg'%}">
         </div>
-
-        <div class="pure-u-1 pure-u-md-1  pure-u-lg-3-5 pure-u-xl-3-5 ">
-            <img  class="pure-img std_img" src="{% static "core/images/campusVacaria.jpg" %}" />
+        <div class="col">
+            <img width="535px" src="{% static 'core/images/aula-mar-2020-2.jpg'%}">
         </div>
     </div>
+
+    <hr>
+    <h5>Aula prática 1° ano</h5>
+
+    <p>Publicado em: Setembro/2020</p>
+    <p>O 1º ano Agropecuária Integrado realizou a instalação de armadilhas para monitoramento de insetos pragas em pessegueiro na manhã de 14/09/19. A Atividade fez parte da disciplina de fitossanidade. Veja a publicação completa <a href="">clicando aqui</a>.</p>
+    <div class ="row">
+        <!-- <div class="col"></div> -->
+        <div class="col">
+            <img width="535px" src="{% static 'core/images/aula-pratica-2019.jpg'%}">
+        </div>
+        <div class="col">
+            <img width="535px" src="{% static 'core/images/aula-pratica-2019-2.jpg'%}">
+        </div>
+        <!-- <div class="col"></div> -->
+    </div>
+</div>
+
 {% endblock %}
