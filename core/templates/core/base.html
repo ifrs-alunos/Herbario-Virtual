@@ -14,25 +14,26 @@
         <!-- Framework CSS Bootstrap -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
 
-
+        <!-- Icons por FontAwesome -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-
     </head>
 
     <body>
         <header>
+            <!-- Barra de navegação -->
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">
-                    <img id='logo' alt="Logo do LabFito" src="{%static "core/images/labfito.png" %}">
+                <a class="navbar-brand">
+                    <img id='logo' alt="Logo do LabFito" src="{%static 'core/images/labfito.png'%}">
                 </a>
 
+                <!-- Itens da barra de navegação -->
                  <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item active">
-                            <a class="nav-link" href="{% url "core:index" %}">Ínicio</a>
+                            <a class="nav-link" href="{% url 'core:index' %}">Ínicio</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url "herbarium:index" %}">Plantas Daninhas</a>
+                            <a class="nav-link" href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" href="">Doenças de plantas</a>
@@ -52,7 +53,6 @@
                     </ul>
                 </div>
             </nav>
-
         </header>
 
         <main>
@@ -62,14 +62,17 @@
         </main>
 
         <footer>
+            <!-- Redes sociais -->
             <div class="container">
                 <div class="row">
                     <div class="col">
                         <h6>Redes sociais do Labifito:</h6>
-                        <p><i class="fa fa-facebook-official"></i> <a href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">Facebook</a></p>
+                        <p><i class="fa fa-facebook-official"></i> <a href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">facebook.com/labifito.ifrsvacaria</a></p>
                     </div>
                 </div>
                 <hr>
+
+                <!-- Informações sobre desenvolvimento do site -->
                 <div class="row">
                     <div class="col-9">
                         <p>Site desenvolvido pelos bolsistas do projeto de ensino "Herbário Virtual de Plantas Daninhas" Matheus Mathyas Hofman e Júlia Fonseca de Aguiar com orientação dos professores Rafael Dallegrave Negretti e Ricardo Luís dos Santos</p>

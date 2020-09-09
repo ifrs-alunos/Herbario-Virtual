@@ -1,27 +1,38 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-    <table class="pure-table pure-table-striped">
-        <thead>
-            <tr>
-                <th>
-                    Disciplinas
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td> Fitossanidade e Agroclimatologia </td>
-            </tr>
-            <tr>
-                <td> Culturas anuais de inverno e verão </td>
-            </tr>
-            <tr>
-                <td> Culturas de inverno </td>
-            </tr>
-            <tr>
-                <td> Culturas de verão </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class ="container">
+        <div class="row">
+            <div class="col"></div>
+            <div class="col-5">
+                <!-- Tabela com disciplinas -->
+                <table class="table table-striped">
+                    <thead>
+                        <!-- Cabeçalho -->
+                        <tr>
+                            <th scope="col">
+                                Disciplinas
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Itens da tabela -->
+                        <tr>
+                            <td> Fitossanidade e Agroclimatologia </td>
+                        </tr>
+                        <tr>
+                            <td> Culturas anuais de inverno e verão </td>
+                        </tr>
+                        <tr>
+                            <td> Culturas de inverno </td>
+                        </tr>
+                        <tr>
+                            <td> Culturas de verão </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
 {% endblock %}
