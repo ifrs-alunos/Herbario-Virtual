@@ -7,6 +7,7 @@ from .forms import SearchForm
 # Create your views here.
 
 
+# Lista as plantas cadastradas???
 class HerbariumIndex(ListView):
     model = Plant
     template_name = 'herbarium/index.html'
@@ -43,12 +44,12 @@ class HerbariumIndex(ListView):
 
     paginate_by = 10
 
-
+# ????
 class HerbariumDetail(DetailView):
     model = Plant
     template_name = 'herbarium/detail.html'
 
 
-
+# ????
 index = HerbariumIndex.as_view();
 detail = HerbariumDetail.as_view();

@@ -3,11 +3,14 @@ from django.db import models
 #Create your models here.
 class Division(models.Model):
 
+    # Cria uma variável do tipo texto com máximo de 100 caracteres
     name = models.CharField('Nome', blank=True, max_length=100)
 
+    # Retorna variável name caso seja dado um print do objeto
     def __str__(self):
         return self.name
 
+    # ???
     class Meta:
         verbose_name = 'Divisão'
         verbose_name_plural = 'Divisões'
@@ -16,12 +19,18 @@ class Division(models.Model):
 
 class Family(models.Model):
 
+    # Cria uma variável do tipo texto com máximo de 100 caracteres
     name = models.CharField('Nome', blank=True, max_length=100)
+
+    # ?????
     division = models.ForeignKey(Division, on_delete=models.CASCADE, related_name='families')
 
+
+    # Retorna variável name caso seja dado um print do objeto
     def __str__(self):
         return self.name
 
+    # ????
     class Meta:
         verbose_name = 'Família'
         verbose_name_plural = 'Famílias'
@@ -66,8 +75,7 @@ class Plant(models.Model):
 
     ]
 
-
-
+    # Quando plantas forem cadastradas, deverá conter todas as informações a seguir???
 
     name = models.CharField('Nome', blank=True, max_length=100)
     scientific_name = models.CharField('Nome científico', blank=True, max_length=200)
@@ -82,6 +90,8 @@ class Plant(models.Model):
 
     created_at = models.DateField('Criado em', auto_now_add=True, null=True)
     updated_at = models.DateField('Criado em', auto_now=True, null=True)
+
+    # ?????????
 
     def save( self, *args, **kw ):
         #Define a divisão baseado na família selecionada
@@ -105,7 +115,7 @@ class Plant(models.Model):
         verbose_name_plural = 'Plantas'
         ordering = ['name']
 
-
+# ??????
 def plant_directory_path(instance, filename):
 
     return 'images/plantas/{}/{}'.format(instance.plant.name, filename)
