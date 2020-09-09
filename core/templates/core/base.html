@@ -9,10 +9,13 @@
 
         <!-- Estilos próprios -->
 
-        <link rel="stylesheet" href="{% static 'core/css/style.css'%}">
+        <link rel="stylesheet" href="{% static 'core/css/style.css'%}"/>
 
         <!-- Framework CSS Bootstrap -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/>
+
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
     </head>
 
@@ -27,31 +30,24 @@
                     <ul class="navbar-nav">
                         <li class="nav-item active">
                             <a class="nav-link" href="{% url "core:index" %}">Ínicio</a>
-                            <!-- <a class="nav-link" href="#">Home <span class="sr-only">(Página atual)</span></a> -->
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url "herbarium:index" %}">Plantas Daninhas</a>
-                            <!-- <a class="nav-link" href="#">Destaques</a> -->
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" href="">Doenças de plantas</a>
-                            <!-- <a class="nav-link" href="#">Preços</a> -->
-
                         </li>
                         <li class="nav-item">
-                            <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
                             <a class="nav-link disabled">Insetos</a>
                         </li>
                         <li class="nav-item">
-                            <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
                             <a class="nav-link" href="{% url 'core:subjects' %}">Disciplinas</a>
                         </li>
                         <li class="nav-item">
-                            <!-- <a class="nav-link disabled" href="#">Desativado</a> -->
-                            <a class="nav-link" href="">Materiais</a>
+                            <a class="nav-link disabled" href="">Materiais</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Publicações</a>
+                            <a class="nav-link disabled" href="">Publicações</a>
                         </li>
                     </ul>
                 </div>
@@ -70,9 +66,10 @@
                 <div class="row">
                     <div class="col">
                         <h6>Redes sociais do Labifito:</h6>
-                        <p><a href="">Facebook</a></p>   
+                        <p><i class="fa fa-facebook-official"></i> <a href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">Facebook</a></p>
                     </div>
                 </div>
+                <hr>
                 <div class="row">
                     <div class="col-9">
                         <p>Site desenvolvido pelos bolsistas do projeto de ensino "Herbário Virtual de Plantas Daninhas" Matheus Mathyas Hofman e Júlia Fonseca de Aguiar com orientação dos professores Rafael Dallegrave Negretti e Ricardo Luís dos Santos</p>

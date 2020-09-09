@@ -1,10 +1,12 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% block content  %}
+
 <div class="container">
     <div class="row">
         <div class="col"></div>
-        <div class="col-10">
+        <div class="col-11">
+            <!-- Carrossel com fotos do Labifito -->
             <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
                 <!-- <ol class="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -35,7 +37,29 @@
         <div class="col"></div>
     </div>
 
-    <h2>Notícias:</h2>
+    <!-- Textos e imagens com explicações do que é o Labifito -->
+    <div class="row">
+        <div class="col-lg-4">
+            <img class="rounded-circle" src="{% static 'core/images/foto-lagarta.jpg'%}" alt="Generic placeholder image" width="140" height="140">
+            <h2>O que é o Labifito?</h2>
+            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+            <p><a class="btn btn-secondary" href="#" role="button">Saiba Mais &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+            <img class="rounded-circle" src="{% static 'core/images/catalogacao.jpg'%}" alt="Generic placeholder image" width="140" height="140">
+            <h2>Por que um herbário virtual?</h2>
+            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+            <p><a class="btn btn-secondary" href="#" role="button">Saiba mais &raquo;</a></p>
+        </div>
+        <div class="col-lg-4">
+            <img class="rounded-circle" src="{% static 'core/images/alunos-labfito-2.jpg'%}" alt="Generic placeholder image" width="140" height="140">
+            <h2>Idealizadores</h2>
+            <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+            <p><a class="btn btn-secondary" href="#" role="button">Saiba mais &raquo;</a></p>
+        </div>
+    </div>
+
+<!--     <h2>Notícias:</h2>
 
     <h5>Aula prática 1° ano e 2° ano</h5>
 
@@ -43,7 +67,6 @@
     <p>As turmas do 1º e 2º ano do Técnico em Agropecuária Integrado realizaram nos dias 10 e 11/03/2020 visita em lavouras de soja para coleta e monitoramento de insetos pragas. As aulas práticas foram realizadas no Departamento de Diagnóstico e Pesquisa Agropecuária próxima ao IFRS - Vacaria. Veja a publicação completa <a href="">clicando aqui</a>.</p>
 
     <div class="row">
-        <!-- <div class="col"></div> -->
         <div class="col">
             <img width="535px" src="{% static 'core/images/aula-mar-2020.jpg'%}">
         </div>
@@ -58,15 +81,13 @@
     <p>Publicado em: Setembro/2020</p>
     <p>O 1º ano Agropecuária Integrado realizou a instalação de armadilhas para monitoramento de insetos pragas em pessegueiro na manhã de 14/09/19. A Atividade fez parte da disciplina de fitossanidade. Veja a publicação completa <a href="">clicando aqui</a>.</p>
     <div class ="row">
-        <!-- <div class="col"></div> -->
         <div class="col">
             <img width="535px" src="{% static 'core/images/aula-pratica-2019.jpg'%}">
         </div>
         <div class="col">
             <img width="535px" src="{% static 'core/images/aula-pratica-2019-2.jpg'%}">
         </div>
-        <!-- <div class="col"></div> -->
     </div>
-</div>
+</div> -->
 
 {% endblock %}
