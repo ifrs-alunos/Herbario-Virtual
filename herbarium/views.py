@@ -13,7 +13,8 @@ class HerbariumIndex(ListView):
     template_name = 'herbarium/index.html'
 
 
-    #Pegando Queryset
+    #Pegando Queryset 
+    # ????
     def get_queryset(self):
         queryset = Plant.objects.all()
 
