@@ -21,7 +21,7 @@
     <body>
         <header>
             <!-- Barra de navegação -->
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #A6DDA6;">
                 <a class="navbar-brand">
                     <img id='logo' alt="Logo do LabFito" src="{%static 'core/images/labfito.png'%}">
                 </a>
@@ -61,21 +61,32 @@
             {% endblock %}
         </main>
 
-        <footer>
+        <footer >
             <!-- Redes sociais -->
             <div class="container">
                 <div class="row">
                     <div class="col">
                         <h6>Redes sociais do Labifito:</h6>
-                        <p><i class="fa fa-facebook-official"></i> <a href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">facebook.com/labifito.ifrsvacaria</a></p>
+                            <a href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">
+                                <i class="fa fa-facebook-official" id="facebook-icon"></i>
+                            </a>
                     </div>
                 </div>
                 <hr>
 
                 <!-- Informações sobre desenvolvimento do site -->
-                <div class="row">
+                <div id="getdiv" class="row">
                     <div class="col-9">
-                        <p>Site desenvolvido pelos bolsistas do projeto de ensino "Herbário Virtual de Plantas Daninhas" Matheus Mathyas Hofman e Júlia Fonseca de Aguiar com orientação dos professores Rafael Dallegrave Negretti e Ricardo Luís dos Santos</p>
+                        <p>
+                            Sistema desenvolvido no projeto <b>Herbário Virtual de Plantas Daninhas</b> por:
+                        </p>
+                            <ul>
+                                <li>Júlia Fonseca de Aguiar (bolsista)</li>
+                                <li>Matheus Mathyas Hofman (bolsista)</li> 
+                                <li>Rafael Dallegrave Negretti (professor)</li>
+                                <li>Ricardo Luis dos Santos (professor)</li>
+                            </ul> 
+                        </p>
 
                         <p>© 2019-2020 Instituto Federal do Rio Grande do Sul - Campus Vacaria</p>
                     </div>

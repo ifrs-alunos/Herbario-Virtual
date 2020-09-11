@@ -10,6 +10,11 @@
  
 
 /* Conteúdo principal */
+
+header.navbar {
+    background-color: black !important;
+}
+
 .container .carousel-item img  {
     width: 1100px ;
     height: 430px ;
@@ -33,19 +38,37 @@ main .container .row {
     object-fit: cover;
 }
 
+div .btn-secondary {
+    background-color: black;
+}
+
 /* Footer */
 footer{
-    background-color: #f8f9fa !important;
+    background-color: #84AE84 !important;
     margin-bottom: 0;
 }
 
 footer .container {
-    padding: 2%;
+    padding: 1%;
 } 
 
 footer a {
     color: black;
     text-decoration: underline;
+}
+
+footer ul {
+    list-style: square;
+}
+
+/* Alinha a imagem do logo no centro da div */
+#getdiv {
+    display: flex;
+    align-items: center;
+}
+
+#facebook-icon {
+    font-size: 35px;
 }
 
 /* App Herbarium */
