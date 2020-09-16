@@ -2,27 +2,32 @@ from django.db import models
 
 #Create your models here.
 class Division(models.Model):
+    # Cria divisão de plantas: por Dicotiledôneas e Monocotiledôneas
 
-    # Cria uma variável do tipo texto com máximo de 100 caracteres
+    # Cria uma variável do tipo texto com máximo de 100 caracteres que pode estar vazio
+    # name = models.CharField('Nome', blank=True, max_length=100) (TROCAR BLANK = TRUE)
     name = models.CharField('Nome', blank=True, max_length=100)
 
     # Retorna variável name caso seja dado um print do objeto
     def __str__(self):
         return self.name
 
-    # ???
+    # Configurações do model (Como aparece no admin)
     class Meta:
         verbose_name = 'Divisão'
         verbose_name_plural = 'Divisões'
-        ordering = ['name']
+        ordering = ['name'] #ordena por ordem alfabética
 
 
 class Family(models.Model):
+    # Cria famílias de plantas
 
     # Cria uma variável do tipo texto com máximo de 100 caracteres
     name = models.CharField('Nome', blank=True, max_length=100)
 
-    # ?????
+    # Relação de 1 para muitos entre família e divisão
+    # on_delete = se deletar 1 divisão, deleta todas as famílias que são daquela divisão
+    # related_name = ObjetivoTipoDivision.families retorna todas as famílias daquela divisao 
     division = models.ForeignKey(Division, on_delete=models.CASCADE, related_name='families')
 
 
@@ -38,8 +43,11 @@ class Family(models.Model):
 
 
 class Plant(models.Model):
+    # Define o que é uma planta
 
     #Escolha de família separa por divisão a qual a família pertence.
+
+    # Objetivo: tirar
     FAMILY_CHOICES = [
         ('Dicotiledôneas' ,
             (
@@ -80,19 +88,23 @@ class Plant(models.Model):
     name = models.CharField('Nome', blank=True, max_length=100)
     scientific_name = models.CharField('Nome científico', blank=True, max_length=200)
 
-
+    # MODIFICAR: relacionar a planta com a sua família (classe Family) e com isso, automaticamente, será relacionada com a Division 
     family = models.CharField('Família', blank=True, max_length=100, choices=FAMILY_CHOICES)
+
+    # Objetivo: tirar
     division = models.CharField("Divisão", blank=True, editable=False, max_length=100)
+
+    # Torna um conjunto de palavras passíveis para serem usadas como um URL
     slug = models.SlugField('Identificador', blank=True, null=True)
     description = models.TextField('Descrição', blank=True)
-    fyuseimage = models.TextField('ID imagem do Fyuse', blank=True, max_length=1000)
 
+    # Usado para fazer imagem 3D
+    fyuseimage = models.TextField('ID imagem do Fyuse', blank=True, max_length=1000)
 
     created_at = models.DateField('Criado em', auto_now_add=True, null=True)
     updated_at = models.DateField('Criado em', auto_now=True, null=True)
 
-    # ?????????
-
+    # Objetivo: tirar
     def save( self, *args, **kw ):
         #Define a divisão baseado na família selecionada
         family = (self.family, self.family.capitalize()) #para que a tupla fique igual a que está no choices
@@ -115,7 +127,8 @@ class Plant(models.Model):
         verbose_name_plural = 'Plantas'
         ordering = ['name']
 
-# ??????
+
+# Função que retorna onde imagens devem ser guardadas
 def plant_directory_path(instance, filename):
 
     return 'images/plantas/{}/{}'.format(instance.plant.name, filename)
@@ -124,12 +137,15 @@ def plant_directory_path(instance, filename):
 #Modelo de foto para que seja possível a planta ter multiplas Imagens
 
 class Photo(models.Model):
+    # Cria modelo para fotos das plantas
 
-    plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos' )
-    image = models.ImageField(upload_to= plant_directory_path )
+    # Relaciona as fotos com a planta
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos')
+
+    # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
+    image = models.ImageField(upload_to= plant_directory_path)
 
     def __str__(self):
-
         return self.image.name
 
     class Meta:
