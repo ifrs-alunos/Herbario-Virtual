@@ -130,5 +130,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 #Arquivos de mídia
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "herbario", "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "herbario", "media") #????
 MEDIA_URL = '/media/'
