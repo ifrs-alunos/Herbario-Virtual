@@ -79,6 +79,35 @@ td, th {
     text-align: center !important;
 }
 
-table.table-herbarium {
-    width: 40%;
+/*table.table-herbarium {
+    width: 80%;
+}*/
+
+.card-img-top {
+    /*width: 300px !important;*/
+    height: 260px !important;
+    object-fit: cover;
 }
+
+.card-col {
+    margin-bottom: 3% !important;
+}
+
+main .container .row {
+    margin-bottom: 5% !important;
+}
+
+table.table {
+    margin-bottom: 10%;
+}
+
+img.img{
+    margin-left: 20px;
+}
+
+/*
+.teste {
+    font-size: 10px !important;
+}*/
+
+.
