@@ -1,106 +1,54 @@
 {% extends "core/base.html" %}
 
-
 {% block content %}
-    <div class="pure-g">
-
-
-        <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
-            <h2 >{{ object.scientific_name }}</h2>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h4 class="teste">Visualização detalhada de {{plant.name}}:</h4>  
+            </div>  
         </div>
+        <div class="row">
+            <div class="col-6">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nome comum</th>
+                      <td>{{plant.name}}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>Nome Científico</th>
+                      <td>{{plant.scientific_name}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Divisão</th>
+                      <td>{{plant.family.division}}</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Família</th>
+                      <td>{{plant.family}}</td>
+                    </tr>
+                  </tbody>
+                </table>
 
-        <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
-
-            <div style="text-align: right;">
-                {# talvez aqui va um breadcrumb #}
+                <h5>Descrição da planta:</h5>
+                <p>{{plant.description}}</p>
             </div>
 
-        </div>
-
-
-        <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
-
-            <table class="pure-table pure-table-striped">
-                <thead>
-                    <th> Informações da Planta </th>
-                </thead>
-
-                <tbody>
-
-                    <tr>
-                        <td>Nome Comum: {{ object.name }} </td>
-                    </tr>
-                    <tr>
-                        <td>Divisão: {{ object.division }} </td>
-                    </tr>
-                    <tr>
-                        <td>Família: {{ object.family }} </td>
-                    </tr>
-
-                </tbody>
-
-            </table>
-        </div>
-
-        <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
-            {# Carrrosel #}
-            <div id="carosel" class="carosel pure-g">
-
-                <div class="carosel_view pure-u-1 pure-u-md-4-5 pure-u-lg-4-5 pure-u-xl-4-5 ">
-                    {% if object.photos.all %}
-                        {% for photo in object.photos.all %}
-                            {# figure com background-image é o zoom e img é a imagem normal #}
-                            {% if photo.image.width > photo.image.height %}
-                            <figure class="zoom_image" style=" background-image: url({{ photo.image.url }});" onmousemove="zoom(event)" {% if not forloop.first %} hidden = true {%endif%} >
-                                <img  class='slide_h' src=" {{ photo.image.url }} ">
-                            </figure>
-                            {% else %}
-                            <figure class="zoom_image" style=" background-image: url({{ photo.image.url }});" onmousemove="zoom(event)" {% if not forloop.first %} hidden = true {%endif%} >
-                                <img  class='slide_w' src=" {{ photo.image.url }} ">
-                            </figure>
-                            {%endif%}
-
-                        {% endfor %}
-                    {%else%}
-                        <h3>Desculpe. Não há imagens disponíveis para esta planta.</h3>
-                    {%endif%}
-                </div>
-
-                <div class="carosel_control pure-u-1 pure-u-md-1-5 pure-u-lg-1-5 pure-u-xl-1-5  ">
-
-                    <div class="row">
-                            {% for photo in object.photos.all %}
-                                <div class="col pure-u-1-3 pure-u-md-1 pure-u-lg-1 pure-u-xl-1">
-                                    <img {% if forloop.first %} class="slide_index select" {% else %} class="slide_index" {%endif%} src=" {{ photo.image.url }}" onclick="show_slide( {{ forloop.counter0 }} )" >
-                                </div>
-                            {% endfor %}
+            <div class="col-6">
+                <div id="carouselExampleSlidersOnly" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="img-fluid" src="{{ plant.photos.first.image.url }}">
                     </div>
-
                 </div>
-
+<!-- 
+                <br/>
+                <img class="img" src="{{ plant.photos.first.image.url }}" width="150px">
+                <img class="img" src="{{ plant.photos.first.image.url }}" width="150px">
+                <img class="img" src="{{ plant.photos.first.image.url }}" width="150px">  -->               
             </div>
-
-            <div class="imagefyuse" hidden=true >
-                {%if object.fyuseimage %}
-            <div id="fyu_{{object.fyuseimage}}" class="fy_auto"></div><script src="https://cdn.fyusion.com/assets/fyu-viewer-latest.js"></script><script>FYU.add("{{object.fyuseimage}}", "fyu_{{object.fyuseimage}}" );</script>
-                {%else%}
-                <h3>Desculpe. Não há imagens em 360° disponíveis para esta planta.</h3>
-                {%endif%}
-            </div>
-
         </div>
-
-        <div class="pure-u-1 pure-u-md-3-5 pure-u-lg-3-5 pure-u-xl-3-5">
-            <h3> Características Gerais </h3>
-            <p> {{ object.description|linebreaksbr }}  </p>
-        </div>
-
-        <div class="pure-u-1 pure-u-md-2-5 pure-u-lg-2-5 pure-u-xl-2-5">
-            <div style="text-align: center; height: 100%;">
-                <button class=" green-button" onclick="fyuse()"> Visualizar em 360° </button>
-            </div>
-
-        </div>
-
     </div>
 {% endblock %}

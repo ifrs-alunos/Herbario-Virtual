@@ -1,38 +1,11 @@
 {% extends "core/base.html" %}
 
 {% block content %}
-<!-- 
-    <div class="pure-g">
-        <div class="pure-u-1 pure-u-md-1-5 pure-u-lg-1-5 pure-u-xl-1-5 ">
-
-            <nav class="pure-menu">
-
-                <h3 class="pure-menu-heading" > Filtrar por</h3>
-                <table class="pure-table pure-table-striped list-menu">
-                        <tr>
-                            <td><a href="?search="><b>Famílias</b></a></td>
-                        </tr>
-                        {% for tuple in  families %}
-                            {%for element in tuple.1%}
-                            <tr>
-
-                                <td>
-                                    <a href="?filter_type=family&filter={{element.0}}">{{element.1}}</a>
-                                </td>
-
-                            </tr>
-                            {% endfor %}
-                        {% endfor %}
-
-                </table>
-
-            </nav>
-        </div> -->
 
     <div class ="container">
         <div class="row">
-            <div class="col"></div>
-            <div class="col-11">
+            <!-- <div class="col"></div> -->
+            <div class="col-6">
                 <h4>Filtrar planta por:</h4>
                 <!-- Formulário para filtrar planta -->
                 <form>
@@ -41,112 +14,86 @@
                         Selecione
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Divisão</a>
                             <a class="dropdown-item" href="#">Família</a>
                             <a class="dropdown-item" href="#">Espécie</a>
-                            <a class="dropdown-item" href="#">Características</a>
                         </div>
                     </div>
 
                     <!-- Para implementar: assim que o usuário selecionar uma opção, aparece outro input para ampliar o filtro -->
                 </form>
-            </div> 
-            <div class="col"></div>  
+            </div>
         </div>
 
-
         <div class="row">
-            <div class="col"></div>
-            <div class="col-11">
-                <!-- Tabela que mostra resultado dos filtros selecionados -->
-                <!-- Para implementar: se não houver filtros, mostra todas as espécies cadastradas -->
-                <table class="table table-striped table-herbarium">
-                    <thead>
+            <div class="col-3">
+                <h5> Famílias Monocotiledôneas</h5>
+                <!-- <table class="table table-striped"> -->
+<!--                     <thead>
                         <tr>
-                            <th scope="col">
-                                Famílias
-                            </th>
+                            <th>Famílias</th>
                         </tr>
                     </thead>
                     <tbody>
+                        {% for family in families1 %}
                         <tr>
-                            <td>Opção 1</td>
+                            <td>{{ family }}</td>
                         </tr>
-                        <tr>
-                            <td>Opção 2</td>
-                        </tr>
-                        <tr>
-                            <td>Opção 3</td>
-                        </tr>
-                        <tr>
-                            <td>Opção 4</td>
-                        </tr>
+                        {% endfor %}
                     </tbody>
-                </table>
+                </table> -->
+
+                <ul class="list-group">
+
+                    {% for family in families1 %}
+                    <li class="list-group-item">{{ family }}</li>
+                    {% endfor %}
+                </ul>
+
+                <br/>
+
+                <h5> Famílias Dicotiledôneas</h5>
+                <!-- <table class="table table-striped">
+                    <thead>
+                         <tr>
+                            <th>Famílias</th>
+                         </tr>   
+                    </thead>
+                    <tbody>
+
+                        {% for family in families2 %}
+                        <tr>
+                          <td>{{ family }}</td>
+                        </tr>
+                        {% endfor %}
+                  </tbody>
+                </table> -->
+
+                <ul class="list-group">
+
+                    {% for family in families2 %}
+                    <li class="list-group-item">{{ family }}</li>
+                    {% endfor %}
+                </ul>
             </div>
-            <div class="col"></div>
-        </div>
-    </div>
 
-        <!-- <div class="pure-u-1 pure-u-md-4-5 pure-u-lg-4-5 pure-u-xl-4-5 ">
-        <form method="get" class="pure-form search-box">
-            {% for field in  form %}
-            {{field.label_tag}}
-            {{field}}
-            {{field.errors }}
-            {% endfor %}
-            <button class=" button-warning " type="submit">Pesquisar</button>
-        </form> <br/>
-
-            <div class="pure-g">
-
-                {% for object in object_list %}
-                <div class="pure-u-1-2 pure-u-md-1-3 pure-u-lg-1-5 pure-u-xl-1-5">
-                    <div class="list-item">
-                        <div class="list-img-container">
-                        {% if object.photos.all.0 %}
-
-                            {% if object.photos.all.1%}
-                            <figure class="list-figure" style=" background-image: url({{ object.photos.all.1.image.url }});">
-                            {%else%}
-                            <figure class="list-figure" style=" background-image: url({{ object.photos.all.0.image.url }});">
-                            {% endif %}
-
-                            <a href="{% url 'herbarium:detail' object.slug %}"><img src=" {{ object.photos.all.0.image.url }}" class=" list-img" />
-                            </a>
-                            </figure>
-
-                        {% else %}
-                            <h4>  Não imagens disponíveis :( </h4>
-                        {% endif %}
-                        </div>
-                        <a  href="{% url 'herbarium:detail' object.slug %}"><h3 class="list-title">{{ object.name }}</h3></a>
-                        <a  href="{% url 'herbarium:detail' object.slug %}"><p class="list-title">{{ object.scientific_name }}</p></a>
+            <div class="col-9">
+                <!-- <h5> Plantas:</h5> --> 
+                <div class="row">
+                    {% for plant in plants %}
+                    <div class="col-4 card-col">
+                            <div class="card">
+                                <img class="card-img-top" src="{{ plant.photos.first.image.url }}" alt="Card image cap">
+                                <div class="card-body">
+                                    <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name }}</h5></a>
+                                    <p class="card-text">{{ plant.description }}</p>
+                                    <p class="card-text"><small class="text-muted">{{ plant.scientific_name }}</small></p>
+                                </div>
+                            </div>
                     </div>
+                    {% endfor %}
                 </div>
-
-                {% endfor %}
             </div>
-
-            <div class="pagination">
-
-                    {% if page_obj.has_previous %}
-                        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}}{%endif%}">&laquo;</a>
-                        <a href="?page=1{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}} {%endif%}">1 ...</a>
-                    {% endif %}
-
-
-                    <span id='current'> <a href="?page={{ page_obj.number }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}}{%endif%}"> {{ page_obj.number }}  </a> </span>
-
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}} {%endif%}">... {{ page_obj.paginator.num_pages }}</a>
-                        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&?search={{request.GET.search}}{%endif%}{% if request.GET.filter %}&?filter_type={{request.GET.filter_type}}&?filter={{request.GET.filter}}{%endif%}">&raquo;</a>
-                    {% endif %}
-
-            </div>
-
         </div>
     </div>
- -->
-
 {% endblock %}
