@@ -21,9 +21,9 @@ class HerbariumIndex(ListView):
         context = super().get_context_data(**kwargs)
 
         # Adiciona um contexto novo, o qual pega todos os objetos do tipo Family
-        # context["families"] = Family.objects.all()
-        context["families1"] = Family.objects.filter(division__name="Monocotiledôneas")
-        context["families2"] = Family.objects.filter(division__name="Dicotiledôneas")
+        context["families"] = Family.objects.all()
+        # context["families1"] = Family.objects.filter(division__name="Monocotiledôneas")
+        # context["families2"] = Family.objects.filter(division__name="Dicotiledôneas")
 
 
         # Retorna o contexto
@@ -73,6 +73,5 @@ class HerbariumDetail(DetailView):
     template_name = 'herbarium/detail.html'
 
 
-# # ????
 # index = HerbariumIndex.as_view();
 # detail = HerbariumDetail.as_view();

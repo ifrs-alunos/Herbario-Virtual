@@ -1,5 +1,6 @@
 from django.db import models
 
+'''
 #Create your models here.
 class Division(models.Model):
     # Cria divisão de plantas: por Dicotiledôneas e Monocotiledôneas
@@ -17,7 +18,7 @@ class Division(models.Model):
         verbose_name = 'Divisão'
         verbose_name_plural = 'Divisões'
         ordering = ['name'] #ordena por ordem alfabética
-
+'''
 
 class Family(models.Model):
     # Cria famílias de plantas
@@ -28,7 +29,7 @@ class Family(models.Model):
     # Relação de 1 para muitos entre família e divisão
     # on_delete = se deletar 1 divisão, deleta todas as famílias que são daquela divisão
     # related_name = ObjetivoTipoDivision.families retorna todas as famílias daquela divisao 
-    division = models.ForeignKey(Division, on_delete=models.CASCADE, related_name='families')
+    # division = models.ForeignKey(Division, on_delete=models.CASCADE, related_name='families')
 
 
     # Retorna variável name caso seja dado um print do objeto

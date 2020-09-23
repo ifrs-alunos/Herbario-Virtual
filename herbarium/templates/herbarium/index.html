@@ -27,54 +27,28 @@
 
         <div class="row">
             <div class="col-3">
-                <h5> Famílias Monocotiledôneas</h5>
-                <!-- <table class="table table-striped"> -->
-<!--                     <thead>
-                        <tr>
-                            <th>Famílias</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for family in families1 %}
-                        <tr>
-                            <td>{{ family }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table> -->
-
+                <h5>Famílias:</h5>
                 <ul class="list-group">
+                    {% for family in families %}
+                    <li class="list-group-item">{{ family }}</li>
+                    {% endfor %}
+                </ul> 
+
+                <!-- <h5> Famílias Monocotiledôneas</h5> -->
+<!--                 <ul class="list-group">
 
                     {% for family in families1 %}
                     <li class="list-group-item">{{ family }}</li>
                     {% endfor %}
-                </ul>
+                </ul> -->
 
-                <br/>
-
-                <h5> Famílias Dicotiledôneas</h5>
-                <!-- <table class="table table-striped">
-                    <thead>
-                         <tr>
-                            <th>Famílias</th>
-                         </tr>   
-                    </thead>
-                    <tbody>
-
-                        {% for family in families2 %}
-                        <tr>
-                          <td>{{ family }}</td>
-                        </tr>
-                        {% endfor %}
-                  </tbody>
-                </table> -->
-
-                <ul class="list-group">
+                <!-- <h5> Famílias Dicotiledôneas</h5> -->
+<!--                 <ul class="list-group">
 
                     {% for family in families2 %}
                     <li class="list-group-item">{{ family }}</li>
                     {% endfor %}
-                </ul>
+                </ul> -->
             </div>
 
             <div class="col-9">

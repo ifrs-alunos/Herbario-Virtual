@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Plant, Photo, Family, Division
+from .models import Plant, Photo, Family
 
 # Register your models here.
 class PhotoInline(admin.TabularInline):
@@ -17,4 +17,4 @@ class PlantAdmin(admin.ModelAdmin):
 
 admin.site.register(Plant, PlantAdmin)
 admin.site.register(Family)
-admin.site.register(Division)
+# admin.site.register(Division)
