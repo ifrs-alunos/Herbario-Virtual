@@ -110,4 +110,24 @@ img.img{
     font-size: 10px !important;
 }*/
 
-.
+main a {
+    color: black;
+}
+
+li.list-group-item {
+    border-color: #84AE84;
+    /*text-align: center;*/
+}
+
+li.list-group-item.active, button#button-addon2  {
+    background-color: #A6DDA6;
+    border-color: #84AE84;
+    font-weight: bold;
+}
+
+button#button-addon2 {
+    background-color: #A6DDA6;
+    border-color: #84AE84;
+    color: black;
+    font-weight: normal;
+}
