@@ -22,12 +22,31 @@ class HerbariumIndex(ListView):
 
         # Adiciona um contexto novo, o qual pega todos os objetos do tipo Family
         context["families"] = Family.objects.all()
+        context["selected_family"] = self.kwargs.get("family")
         # context["families1"] = Family.objects.filter(division__name="Monocotiledôneas")
         # context["families2"] = Family.objects.filter(division__name="Dicotiledôneas")
 
-
         # Retorna o contexto
         return context
+
+    def get_queryset(self, **kwargs):
+        print(self.kwargs)
+
+        # Se o dicionário da requisição não for vazio, ou seja, não contiver nenhuma família especificada
+        if self.kwargs != {}:
+            # Seleciona todas as plantas de uma família que se encontra na chave do dicionário da requisição
+            plants_by_family = Plant.objects.filter(family__name=self.kwargs['family'])
+
+            # Retorna a lista de plantas
+            return plants_by_family
+
+        # Se estiver vazio, ou seja, se acessar a página inicial do herbário e não selecionar nenhum filtro por família
+        else:
+            # Seleciona todas as plantas cadastradas
+            all_plants = Plant.objects.all()
+
+            # Retorna a lista de todas as plantas
+            return all_plants
 
     '''
     # Não necessário agora

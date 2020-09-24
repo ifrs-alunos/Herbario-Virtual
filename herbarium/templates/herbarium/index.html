@@ -6,10 +6,18 @@
         <div class="row">
             <!-- <div class="col"></div> -->
             <div class="col-6">
-                <h4>Filtrar planta por:</h4>
+                <h4>Filtrar plantas por:</h4>
                 <!-- Formulário para filtrar planta -->
+                <br/>
+                <h6>Nome comum, científico ou descrição:</h6>
                 <form>
-                    <div class="dropdown">
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Pesquisar</button>
+                        </div>
+                    </div>          
+<!--                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Selecione
                         </button>
@@ -18,9 +26,7 @@
                             <a class="dropdown-item" href="#">Família</a>
                             <a class="dropdown-item" href="#">Espécie</a>
                         </div>
-                    </div>
-
-                    <!-- Para implementar: assim que o usuário selecionar uma opção, aparece outro input para ampliar o filtro -->
+                    </div> -->
                 </form>
             </div>
         </div>
@@ -29,8 +35,22 @@
             <div class="col-3">
                 <h5>Famílias:</h5>
                 <ul class="list-group">
+                    {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
+                    {% if selected_family == None %}
+                    <li class="list-group-item active"><a href="{% url 'herbarium:index' %}">Todas</a></li>
+                    {% else %}
+                    <li class="list-group-item"><a href="{% url 'herbarium:index' %}">Todas</a></li>
+                    {% endif %}
+
+                    {# Para cada família na lista de famílias #}
                     {% for family in families %}
-                    <li class="list-group-item">{{ family }}</li>
+
+                    {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
+                    {% if selected_family == family.name %}
+                    <li class="list-group-item active"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
+                    {% else %}
+                    <li class="list-group-item"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
+                    {% endif %}
                     {% endfor %}
                 </ul> 
 
@@ -52,7 +72,6 @@
             </div>
 
             <div class="col-9">
-                <!-- <h5> Plantas:</h5> --> 
                 <div class="row">
                     {% for plant in plants %}
                     <div class="col-4 card-col">
