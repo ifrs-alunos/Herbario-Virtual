@@ -29,6 +29,10 @@
                       <th scope="row">Família</th>
                       <td>{{plant.family}}</td>
                     </tr>
+                    <tr>
+                      <th scope="row">Estados de Ocorrência</th>
+                      <td>{{plant.occorrence_states.all|join:', '}}</td>
+                    </tr>
                   </tbody>
                 </table>
 
