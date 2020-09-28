@@ -41,6 +41,18 @@ class Family(models.Model):
         verbose_name_plural = 'Famílias'
         ordering = ['name']
 
+class State(models.Model):
+
+    name = models.CharField('Estado', blank=False, max_length=2)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Estado'
+        verbose_name_plural = 'Estados'
+        ordering = ['name']
+
 
 class Plant(models.Model):
     # Define o que é uma planta
@@ -102,6 +114,8 @@ class Plant(models.Model):
     slug = models.SlugField('Identificador', blank=False, null=True, unique=True)
     description = models.TextField('Descrição', blank=False)
 
+    occorrence_states = models.ManyToManyField(State, verbose_name="Estados de Ocorrência")
+
     # Usado para fazer imagem 3D
     # fyuseimage = models.TextField('ID imagem do Fyuse', blank=False, max_length=1000)
 
@@ -131,6 +145,7 @@ class Plant(models.Model):
         verbose_name = 'Planta'
         verbose_name_plural = 'Plantas'
         ordering = ['name']
+
 
 
 # Função que retorna onde imagens devem ser guardadas
