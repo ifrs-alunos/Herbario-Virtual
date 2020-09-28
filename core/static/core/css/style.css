@@ -6,15 +6,18 @@
 #logo{
     width: 140px;
 }
- 
+
+/* Retirando espaços em volta do logo */
 nav.navbar {
     margin-bottom: 3%;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
-header.navbar {
-    background-color: black !important;
+a.navbar-brand {
+    padding-top: 0;
+    padding-bottom: 0;
 }
-
 
 /* Carrossel */
 .container .carousel-item img  {
