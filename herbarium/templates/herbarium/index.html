@@ -80,7 +80,7 @@
                                 <img class="card-img-top" src="{{ plant.photos.first.image.url }}" alt="Card image cap">
                                 <div class="card-body">
                                     <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name }}</h5></a>
-                                    <p class="card-text">{{ plant.description }}</p>
+                                    <p class="card-text">{{ plant.description|truncatechars_html:100 }}</p>
                                     <p class="card-text"><small class="text-muted">{{ plant.scientific_name }}</small></p>
                                 </div>
                             </div>
