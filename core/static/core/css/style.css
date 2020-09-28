@@ -1,36 +1,34 @@
 /* Estilo do template base e da página inicial */
 
-
-/* App Core */
+/* Header */
 
 /* Barra de navegação */
 #logo{
     width: 140px;
 }
  
-
-/* Conteúdo principal */
+nav.navbar {
+    margin-bottom: 3%;
+}
 
 header.navbar {
     background-color: black !important;
 }
 
+
+/* Carrossel */
 .container .carousel-item img  {
     width: 1100px ;
     height: 430px ;
     object-fit: cover;
 }
 
-#footer_logo {
-    width: 250px;
-}
-
+/* Página inicial */
 .col-lg-4 {
     text-align: center;
 }
 
 main .container .row {
-    margin-top: 3%;
     margin-bottom: 8%;
 }
 
@@ -43,6 +41,10 @@ div .btn-secondary {
 }
 
 /* Footer */
+#footer_logo {
+    width: 250px;
+}
+
 footer{
     background-color: #84AE84 !important;
     margin-bottom: 0;
@@ -79,12 +81,13 @@ td, th {
     text-align: center !important;
 }
 
-/*table.table-herbarium {
-    width: 80%;
-}*/
+table.table {
+    margin-bottom: 10%;
+}
+
+/* Index */
 
 .card-img-top {
-    /*width: 300px !important;*/
     height: 260px !important;
     object-fit: cover;
 }
@@ -97,18 +100,10 @@ main .container .row {
     margin-bottom: 5% !important;
 }
 
-table.table {
-    margin-bottom: 10%;
-}
 
 img.img{
     margin-left: 20px;
 }
-
-/*
-.teste {
-    font-size: 10px !important;
-}*/
 
 main a {
     color: black;
@@ -116,7 +111,6 @@ main a {
 
 li.list-group-item {
     border-color: #84AE84;
-    /*text-align: center;*/
 }
 
 li.list-group-item.active, button#button-addon2  {
@@ -130,4 +124,9 @@ button#button-addon2 {
     border-color: #84AE84;
     color: black;
     font-weight: normal;
+}
+
+/* Pode melhorar: para alinhar lista de famílias e cards */
+div.col-9 div.row {
+    margin-top: 3.6%;
 }
