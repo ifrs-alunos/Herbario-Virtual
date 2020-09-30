@@ -133,3 +133,44 @@ button#button-addon2 {
 div.col-9 div.row {
     margin-top: 3.6%;
 }
+
+/* Galeria de imagens com SimpleLightbox */
+
+/* Seleciona todas as imagens da galeria */
+.gallery a img {
+    object-fit: cover;
+    margin: 0 10px 10px 0.01%;
+    width: 97px;
+
+    /* Para animação quando mouse passar em cima */
+    transition: transform .3s;
+
+    border-radius: 7px;
+}
+
+/* Aplica estilo somente quando o mouse passar por cima das imagens */
+.gallery a img:hover {
+    transform: scale(1.10);
+}
+
+/* Seleciona apenas a segunda imagem da galeria */
+.gallery a:nth-child(2) img {
+    margin: 0 10px 10px 10%;
+}
+
+/* Seleciona apenas a primeira imagem da galeria */
+.gallery a:first-child img {
+    /* Para centralizar imagem no centro da coluna */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 430px;
+    height: 430px;
+}
+
+/* Aplica estilo somente quando o mouse passar por cima da primeira imagem da galeria */
+.gallery a:first-child img:hover {
+    /* Sobrepõe o estilo do transform das outras imagens*/
+    transform: scale(1.02);
+}
