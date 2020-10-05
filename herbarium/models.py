@@ -20,6 +20,33 @@ class Division(models.Model):
         ordering = ['name'] #ordena por ordem alfabética
 '''
 
+class Region(models.Model):
+
+    name = models.CharField('Região', blank=True, max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Região'
+        verbose_name_plural = 'Regiões'
+        ordering = ['name']
+
+class State(models.Model):
+
+    name = models.CharField('Nome', blank=False, max_length=20)
+    initials = models.CharField('Sigla', blank=False, max_length=2, null=True)
+
+    region = models.ForeignKey(Region, on_delete=models.CASCADE, related_name="states", null=True, verbose_name="Região")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Estado'
+        verbose_name_plural = 'Estados'
+        ordering = ['name']
+
 class Family(models.Model):
     # Cria famílias de plantas
 
@@ -40,19 +67,6 @@ class Family(models.Model):
         verbose_name = 'Família'
         verbose_name_plural = 'Famílias'
         ordering = ['name']
-
-class State(models.Model):
-
-    name = models.CharField('Estado', blank=False, max_length=2)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = 'Estado'
-        verbose_name_plural = 'Estados'
-        ordering = ['name']
-
 
 class Plant(models.Model):
     # Define o que é uma planta
@@ -114,7 +128,10 @@ class Plant(models.Model):
     slug = models.SlugField('Identificador', blank=False, null=True, unique=True)
     description = models.TextField('Descrição', blank=False)
 
-    occorrence_states = models.ManyToManyField(State, verbose_name="Estados de Ocorrência")
+    importance = models.TextField('Importância', blank=False, null=True)
+
+    # occurrence_states = models.ManyToManyField(State, verbose_name="Estados de Ocorrência")
+    occurrence_regions = models.ManyToManyField(Region, verbose_name="Regiões de Ocorrência")
 
     # Usado para fazer imagem 3D
     # fyuseimage = models.TextField('ID imagem do Fyuse', blank=False, max_length=1000)

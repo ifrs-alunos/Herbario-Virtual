@@ -30,13 +30,31 @@
                           <td>{{plant.family}}</td>
                       </tr>
                       <tr>
-                          <th scope="row">Estados de Ocorrência</th>
-                          <td>{{plant.occorrence_states.all|join:', '}}</td>
+                          <th scope="row">Regiões de Ocorrência</th>
+<!--                           <td>{{plant.occurrence_regions.states.all|join:', '}}</td> -->  
+                              <td>{{plant.occurrence_regions.all|join:', '}}</td>
                       </tr>
                   </tbody>
               </table>
-              <h5>Descrição da planta:</h5>
+
+<!--               <p>Teste: Lista de Estados das Regiões que a planta está inserida:</p>
+              {% for i in plant.occurrence_regions.all %}
+              <p>Região: {{i}}</p>
+              <p>Lista de Estados: {{i.states.all|join:', '}}</p>
+              {% endfor %}
+
+              <br/><br/><br/>
+              <p>Teste a fazer ainda: Lista de Siglas de Estados das Regiões que a planta está inserida:</p>
+              {% for i in plant.occurrence_regions.all %}
+              <p>Região: {{i}}</p>
+              <p>Lista de Estados: {{i.states.all.initials}}</p>
+              {% endfor %} -->
+
+              <h5>Descrição:</h5>
               <p>{{plant.description}}</p>
+
+              <h5>Importância:</h5>
+              <p>{{plant.importance}}</p>
           </div>
 
           <div class="col-6 div-col6">
