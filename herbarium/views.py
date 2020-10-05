@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView,  DetailView, TemplateView
 
-from .models import Plant, Family
+from .models import Plant, Family, State
 from .forms import SearchForm
 
 # Create your views here.
@@ -23,6 +23,7 @@ class HerbariumIndex(ListView):
         # Adiciona um contexto novo, o qual pega todos os objetos do tipo Family
         context["families"] = Family.objects.all()
         context["selected_family"] = self.kwargs.get("family")
+
         # context["families1"] = Family.objects.filter(division__name="Monocotiledôneas")
         # context["families2"] = Family.objects.filter(division__name="Dicotiledôneas")
 
@@ -30,7 +31,7 @@ class HerbariumIndex(ListView):
         return context
 
     def get_queryset(self, **kwargs):
-        print(self.kwargs)
+        # print(self.kwargs)
 
         # Se o dicionário da requisição não for vazio, ou seja, não contiver nenhuma família especificada
         if self.kwargs != {}:
@@ -91,6 +92,13 @@ class HerbariumDetail(DetailView):
     model = Plant
     template_name = 'herbarium/detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Teste pra fazer: adiciona a sigla dos estados
+        # context["initials"] = State.objects.all()
+
+        return context
 
 # index = HerbariumIndex.as_view();
 # detail = HerbariumDetail.as_view();
