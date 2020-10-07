@@ -9,6 +9,7 @@ spam.innerHTML += seleciona_ano;
 
 var lightbox = new SimpleLightbox('.gallery a', {maxZoom:100});
 
+
 // // Carrosel das Plamtas
 // //Essa função controla que imagem deve aparecer no carrosel e coisas relacionadas a isso
 // var carosel_index = 0;

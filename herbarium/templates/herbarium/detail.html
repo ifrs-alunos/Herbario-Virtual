@@ -9,6 +9,7 @@
       </div>
       <div class="row">
           <div class="col-5">
+              <!--  Tabela com os dados da planta -->
               <table class="table table-striped">
                   <thead>
                       <tr>
@@ -42,39 +43,27 @@
               <p>Região: {{i}}</p>
               <p>Lista de Estados: {{i.states.all|join:', '}}</p>
               {% endfor %}
-
-              <br/><br/><br/>
-              <p>Teste a fazer ainda: Lista de Siglas de Estados das Regiões que a planta está inserida:</p>
-              {% for i in plant.occurrence_regions.all %}
-              <p>Região: {{i}}</p>
-              <p>Lista de Estados: {{i.states.all.initials}}</p>
-              {% endfor %} -->
+ -->
 
               <h5>Descrição:</h5>
-              <p>{{plant.description}}</p>
+              <p id="description">{{plant.description}}</p>
 
               <h5>Importância:</h5>
-              <p>{{plant.importance}}</p>
+              <p id="importance">{{plant.importance}}</p>
           </div>
 
-          <div class="col-7 div-col6">
-<!--               <div class="gallery">
-                  <a href="{{plant.photos.first.image.url}}">
-                      <img src="{{plant.photos.first.image.url}}" alt="" title="Foto de {{plant.name}}"/>
-                  </a>
-                  <a href="{{plant.photos.first.image.url}}">
-                      <img src="{{plant.photos.first.image.url}}" alt="" title="Foto de {{plant.name}}"/>
-                  </a>
-                  <a href="{{plant.photos.first.image.url}}">
-                      <img src="{{plant.photos.first.image.url}}" alt="" title="Foto de {{plant.name}}"/>
-                  </a>
-                  <a href="{{plant.photos.first.image.url}}">
-                      <img src="{{plant.photos.first.image.url}}" alt="" title="Foto de {{plant.name}}"/>
-                  </a>
-                  <a href="{{plant.photos.first.image.url}}">
-                      <img src="{{plant.photos.first.image.url}}" alt="" title="Foto de {{plant.name}}"/>
-                  </a>
-              </div> -->
+          <!-- Galeria de imagens de uma planta -->
+          <div class="col-7 galeria">
+            <div class="row">
+              <div class="col-9">
+                <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="450px;" height="430px;">
+              </div>
+              <div class="col-3">
+                {% for plant in plant.photos.all %}
+                <img class="imagem_miniatura" src="{{plant.image.url}}" width="165px;" height="100px;">
+                {% endfor %}
+              </div>
+            </div>
           </div>
       </div>
   </div>

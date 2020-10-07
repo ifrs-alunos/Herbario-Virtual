@@ -1,3 +1,9 @@
+/* Todos os templates */
+.container, div.col-9, div.col-3 {
+    /* Esconde conteúdos que ultrapassam as dimensões do bloco */
+    overflow: hidden;
+}
+
 /* Estilo do template base e da página inicial */
 
 /* Header */
@@ -19,6 +25,8 @@ a.navbar-brand {
     padding-bottom: 0;
 }
 
+/* Página inicial Core */
+
 /* Carrossel */
 .container .carousel-item img  {
     width: 1100px ;
@@ -26,7 +34,6 @@ a.navbar-brand {
     object-fit: cover;
 }
 
-/* Página inicial */
 .col-lg-4 {
     text-align: center;
 }
@@ -66,7 +73,7 @@ footer ul {
     list-style: square;
 }
 
-/* Alinha a imagem do logo no centro da div */
+/* Alinha a imagem do logo do footer no centro da div */
 #getdiv {
     display: flex;
     align-items: center;
@@ -78,7 +85,7 @@ footer ul {
 
 /* App Herbarium */
 
-/* Tabelas*/
+/* Tabela */
 
 td, th {
     text-align: center !important;
@@ -88,7 +95,7 @@ table.table {
     margin-bottom: 10%;
 }
 
-/* Index */
+/* Index Herbarium */
 
 .card-img-top {
     height: 260px !important;
@@ -102,7 +109,6 @@ table.table {
 main .container .row {
     margin-bottom: 5% !important;
 }
-
 
 img.img{
     margin-left: 20px;
@@ -134,43 +140,55 @@ div.col-9 div.row {
     margin-top: 3.6%;
 }
 
-/* Galeria de imagens com SimpleLightbox */
+/* Página de detalhes de uma planta  */
 
-/* Seleciona todas as imagens da galeria */
-.gallery a img {
+#importance, #description {
+    text-align: justify;
+
+    padding-bottom: 5%;
+}
+
+/* Galeria de imagens */
+
+.galeria div {
+    padding: 0;
+    width: auto;
+}
+
+img {
     object-fit: cover;
-    margin: 0 10px 10px 0.01%;
-    width: 97px;
-
-    /* Para animação quando mouse passar em cima */
-    transition: transform .3s;
-
-    border-radius: 7px;
 }
 
-/* Aplica estilo somente quando o mouse passar por cima das imagens */
-.gallery a img:hover {
-    transform: scale(1.10);
-}
-
-/* Seleciona apenas a segunda imagem da galeria */
-.gallery a:nth-child(2) img {
-    margin: 0 10px 10px 10%;
-}
-
-/* Seleciona apenas a primeira imagem da galeria */
-.gallery a:first-child img {
-    /* Para centralizar imagem no centro da coluna */
+/* Seleciona imagem em destaque */
+.galeria div.col-9 img {
+    /* Para alinhar horizontalmente na div */
     display: block;
     margin-left: auto;
     margin-right: auto;
 
-    width: 430px;
-    height: 430px;
+    /* Aplica cantos arredondados */
+    border-radius: 7px;
+
 }
 
-/* Aplica estilo somente quando o mouse passar por cima da primeira imagem da galeria */
-.gallery a:first-child img:hover {
-    /* Sobrepõe o estilo do transform das outras imagens*/
-    transform: scale(1.02);
+/* Seleciona imagem em miniatura */
+.galeria div.col-3 img {
+    margin-bottom: 10px; 
+
+    border-radius: 7px;
+}
+
+/* Aplica estilo para imagens em miniatura quando o cursor passa por cima */
+.galeria div.col-3 img:hover {
+    /* Diminui opacidade da imagem */
+    filter: opacity(70%);
+
+    /* Torna cursor de forma "pointer" */
+    cursor: pointer;
+}
+
+/* Seleciona a primeira imagem em miniatura */
+.galeria div.col-3 img:first-child {
+    /* Aplica um estilo de borda no elemento */
+    border: 4px solid #12dc89;
 }
