@@ -187,8 +187,8 @@ img {
     cursor: pointer;
 }
 
-/* Seleciona a primeira imagem em miniatura */
-.galeria div.col-3 img:first-child {
+/* Seleciona a imagem selecionada dentre a lista de imagens em miniatura */
+.imagem_selecionada {
     /* Aplica um estilo de borda no elemento */
     border: 4px solid #12dc89;
 }
