@@ -1,4 +1,4 @@
-// Seleciona tag spam onde deve ser inserido o ano atual
+// Seleciona tag spam onde deve ser inserido o ano atual no footer
 var spam = document.getElementById("ano_atual");
 
 now = new Date;
@@ -7,10 +7,42 @@ seleciona_ano = now.getFullYear();
 // Insere no HTML
 spam.innerHTML += seleciona_ano; 
 
-var lightbox = new SimpleLightbox('.gallery a', {maxZoom:100});
+// Código JS da Galeria de imagens
 
+// Objetivo 1: Trocar a imagem em destaque e o estilo do elemento quando o usuario clica em uma imagem em miniatura
 
-// // Carrosel das Plamtas
+// Seleciona todos os elementos com a classe "imagem_miniatura"
+var imagens_miniaturas = document.getElementsByClassName("imagem_miniatura");
+
+// Indica que, quando algum elemento da seleção for clicado, dispara a função tornar_destaque
+for (var i = 0; i < imagens_miniaturas.length ; ++i){
+  	imagens_miniaturas[i].onclick = tornar_destaque;
+}
+
+function tornar_destaque(event) {
+
+	// Se a imagem clicada contém a classe "imagem_selecionada"
+    if (event.target.classList.contains("imagem_selecionada")) {
+    	// pass
+    } else {
+    	// Seleciona o elemento que contém a classe "imagem_selecionada"
+		var imagem_selecionada = document.getElementsByClassName("imagem_selecionada")[0];
+
+		// Remove a classe "imagem_selecionada" do elemento
+    	imagem_selecionada.classList.remove("imagem_selecionada");
+
+    	// Adiciona a classe "imagem_selecionada" ao novo elemento que foi clicado
+    	event.target.classList.add("imagem_selecionada");
+
+    	// Seleciona o elemento que contém a classe "imagem_em_destaque"
+    	var imagem_em_destaque = document.getElementsByClassName("imagem_em_destaque")[0];
+
+    	// Troca o atributo "src" da imagem anterior pelo atributo "src" da nova imagem que foi clicada
+    	imagem_em_destaque.setAttribute("src", event.target.src);
+    }
+}
+
+// // Carrosel das Plantas
 // //Essa função controla que imagem deve aparecer no carrosel e coisas relacionadas a isso
 // var carosel_index = 0;
 // function show_slide (new_index)
