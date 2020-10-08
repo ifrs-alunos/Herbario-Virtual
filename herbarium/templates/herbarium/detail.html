@@ -56,11 +56,15 @@
           <div class="col-7 galeria">
             <div class="row">
               <div class="col-9">
-                <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="450px;" height="430px;">
+                <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="460px;" height="430px;">
               </div>
               <div class="col-3">
-                {% for plant in plant.photos.all %}
-                <img class="imagem_miniatura" src="{{plant.image.url}}" width="165px;" height="100px;">
+                {% for photo in plant.photos.all %}
+                {% if photo.image.url == plant.photos.first.image.url %}
+                <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="165px;" height="100px;">
+                {% else %}
+                <img class="imagem_miniatura" src="{{photo.image.url}}" width="165px;" height="100px;">
+                {% endif %}
                 {% endfor %}
               </div>
             </div>
