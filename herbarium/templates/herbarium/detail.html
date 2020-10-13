@@ -53,7 +53,7 @@
           </div>
 
           <!-- Galeria de imagens de uma planta -->
-          <div class="col-7 galeria">
+<!--           <div class="col-7 galeria">
             <div class="row">
               <div class="col-9">
                 <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="460px;" height="430px;">
@@ -68,7 +68,25 @@
                 {% endfor %}
               </div>
             </div>
+          </div> -->
+
+          <!--  TESTE, EXCLUSIVAMENTE TESTE -->
+          <div class="col-7 galeria">
+              <div class="row">
+                  <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
+              </div>
+              <div class="row miniaturas">
+                  {% for photo in plant.photos.all %}
+                  {% if photo.image.url == plant.photos.first.image.url %}
+                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  {% else %}
+                  <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  {% endif %}
+                  {% endfor %}
+              </div>
           </div>
+
+
       </div>
   </div>
 {% endblock %}
