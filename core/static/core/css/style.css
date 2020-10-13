@@ -1,7 +1,15 @@
 /* Todos os templates */
-.container, div.col-9, div.col-3 {
+.container, div.galeria .row {
     /* Esconde conteúdos que ultrapassam as dimensões do bloco */
-    overflow: hidden;
+    overflow: hidden !important;
+}
+
+.contato {
+    margin-left: 3%;
+}
+
+p.contato {
+    margin-top: 3%;
 }
 
 /* Estilo do template base e da página inicial */
@@ -79,9 +87,15 @@ footer ul {
     align-items: center;
 }
 
-#facebook-icon {
+#facebook-icon, #youtube-icon, #email-link {
     font-size: 35px;
 }
+
+footer .link-redes, footer .link-redes:hover {
+    text-decoration: none;
+    padding-right: 4px;
+}
+
 
 /* App Herbarium */
 
@@ -152,7 +166,7 @@ div.col-9 div.row {
 
 .galeria div {
     padding: 0;
-    width: auto;
+    width: auto;    
 }
 
 img {
@@ -160,7 +174,7 @@ img {
 }
 
 /* Seleciona imagem em destaque */
-.galeria div.col-9 img {
+.galeria .imagem_em_destaque {
     /* Para alinhar horizontalmente na div */
     display: block;
     margin-left: auto;
@@ -172,14 +186,24 @@ img {
 }
 
 /* Seleciona imagem em miniatura */
-.galeria div.col-3 img {
-    margin-bottom: 10px; 
+.galeria .miniaturas img:nth-child(4n+1) {
+/*    margin-bottom: 10px; 
+*/
+    margin-left: 0;
+    border-radius: 7px;
+}
 
+/* Seleciona imagem em miniatura */
+.galeria .miniaturas img {
+/*    margin-bottom: 10px; 
+*/
+    margin-left: 5px;
+    margin-bottom: 5px;
     border-radius: 7px;
 }
 
 /* Aplica estilo para imagens em miniatura quando o cursor passa por cima */
-.galeria div.col-3 img:hover {
+.galeria .imagem_miniatura:hover {
     /* Diminui opacidade da imagem */
     filter: opacity(70%);
 
@@ -190,5 +214,17 @@ img {
 /* Seleciona a imagem selecionada dentre a lista de imagens em miniatura */
 .imagem_selecionada {
     /* Aplica um estilo de borda no elemento */
-    border: 4px solid #12dc89;
+    border: 3px solid #12dc89;
 }
+
+
+
+
+
+div.galeria div.row {
+    margin-top: 0 !important; 
+    margin-right: 0 !important; 
+    margin-left: 0 !important; 
+    margin-bottom: 1% !important;
+}
+
