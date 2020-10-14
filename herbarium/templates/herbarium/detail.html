@@ -9,6 +9,7 @@
       </div>
       <div class="row">
           <div class="col-5">
+              <div id="demo-container">Oi</div>
               <!--  Tabela com os dados da planta -->
               <table class="table table-striped">
                   <thead>
@@ -73,7 +74,8 @@
           <!--  TESTE, EXCLUSIVAMENTE TESTE -->
           <div class="col-7 galeria">
               <div class="row">
-                  <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
+                  <img id="zoom_07" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
+                  width="635px;" height="430px;">
               </div>
               <div class="row miniaturas">
                   {% for photo in plant.photos.all %}
@@ -85,8 +87,6 @@
                   {% endfor %}
               </div>
           </div>
-
-
       </div>
   </div>
 {% endblock %}

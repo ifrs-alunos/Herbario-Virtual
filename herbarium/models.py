@@ -168,7 +168,7 @@ class Plant(models.Model):
 # Função que retorna onde imagens devem ser guardadas
 def plant_directory_path(instance, filename):
 
-    return 'images/plantas/{}/{}'.format(instance.plant.name, filename)
+    return 'plantas/{}/{}'.format(instance.plant.name, filename)
 
 
 #Modelo de foto para que seja possível a planta ter multiplas imagens
@@ -180,7 +180,7 @@ class Photo(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos')
 
     # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
-    image = models.ImageField(upload_to= plant_directory_path)
+    image = models.ImageField(upload_to=plant_directory_path)
 
     def __str__(self):
         return self.image.name
@@ -188,3 +188,4 @@ class Photo(models.Model):
     class Meta:
         verbose_name = 'Foto'
         verbose_name_plural = 'Fotos'
+
