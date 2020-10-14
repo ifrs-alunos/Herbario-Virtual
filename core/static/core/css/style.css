@@ -4,14 +4,6 @@
     overflow: hidden !important;
 }
 
-.contato {
-    margin-left: 3%;
-}
-
-p.contato {
-    margin-top: 3%;
-}
-
 /* Estilo do template base e da página inicial */
 
 /* Header */
@@ -96,6 +88,13 @@ footer .link-redes, footer .link-redes:hover {
     padding-right: 4px;
 }
 
+.contato {
+    margin-left: 3%;
+}
+
+p.contato {
+    margin-top: 3%;
+}
 
 /* App Herbarium */
 
@@ -185,18 +184,14 @@ img {
 
 }
 
-/* Seleciona imagem em miniatura */
+/* Seleciona a primeira miniatura de quatro em quatro */
 .galeria .miniaturas img:nth-child(4n+1) {
-/*    margin-bottom: 10px; 
-*/
     margin-left: 0;
     border-radius: 7px;
 }
 
 /* Seleciona imagem em miniatura */
 .galeria .miniaturas img {
-/*    margin-bottom: 10px; 
-*/
     margin-left: 5px;
     margin-bottom: 5px;
     border-radius: 7px;
@@ -217,10 +212,7 @@ img {
     border: 3px solid #12dc89;
 }
 
-
-
-
-
+/* Pode melhorar, foi o único jeito que funcionou */
 div.galeria div.row {
     margin-top: 0 !important; 
     margin-right: 0 !important; 

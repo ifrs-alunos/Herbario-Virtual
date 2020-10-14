@@ -42,6 +42,19 @@ function tornar_destaque(event) {
     }
 }
 
+// $("#zoom_07").elevateZoom({
+//     // zoomType: "inner",
+//     // cursor: "crosshair"
+
+//     zoomType: "lens",
+//     lensShape: "round",
+//     lensSize: 200,
+
+//     // scrollZoom : true,
+//     // zoomType: "inner",
+//     // cursor: "crosshair",
+// });
+
 // // Carrosel das Plantas
 // //Essa função controla que imagem deve aparecer no carrosel e coisas relacionadas a isso
 // var carosel_index = 0;
