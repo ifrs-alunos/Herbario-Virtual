@@ -46,9 +46,9 @@ function tornar_destaque(event) {
 //     // zoomType: "inner",
 //     // cursor: "crosshair"
 
-//     zoomType: "lens",
-//     lensShape: "round",
-//     lensSize: 200,
+//     // zoomType: "lens",
+//     // lensShape: "round",
+//     // lensSize: 200,
 
 //     // scrollZoom : true,
 //     // zoomType: "inner",
