@@ -50,7 +50,7 @@ function tornar_destaque(event) {
 //     // lensShape: "round",
 //     // lensSize: 200,
 
-//     // scrollZoom : true,
+//     scrollZoom : true,
 //     // zoomType: "inner",
 //     // cursor: "crosshair",
 // });

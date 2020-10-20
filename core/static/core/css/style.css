@@ -88,6 +88,10 @@ footer .link-redes, footer .link-redes:hover {
     padding-right: 4px;
 }
 
+#youtube-icon:hover {
+    color: #B22222;
+}
+
 .contato {
     margin-left: 3%;
 }
@@ -195,22 +199,29 @@ img {
     margin-left: 5px;
     margin-bottom: 5px;
     border-radius: 7px;
+
+    /* Diminui opacidade das imagens */
+    filter: opacity(50%);
 }
 
 /* Aplica estilo para imagens em miniatura quando o cursor passa por cima */
 .galeria .imagem_miniatura:hover {
-    /* Diminui opacidade da imagem */
-    filter: opacity(70%);
+    /* Torna a imagem com 80% da cor original (sobreescrevendo estilo) */
+    filter: opacity(80%);
 
     /* Torna cursor de forma "pointer" */
     cursor: pointer;
 }
 
 /* Seleciona a imagem selecionada dentre a lista de imagens em miniatura */
-.imagem_selecionada {
+.galeria .miniaturas .imagem_selecionada {
+    /* Torna a imagem com a 100% cor original (sobreescrevendo estilo) */
+    filter: opacity(100%);
     /* Aplica um estilo de borda no elemento */
     border: 2px solid #12dc89;
 }
+
+
 
 /* Pode melhorar, foi o único jeito que funcionou */
 div.galeria div.row {
