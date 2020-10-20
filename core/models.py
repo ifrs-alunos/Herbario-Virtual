@@ -8,7 +8,7 @@ def highlight_directory_path(instance, filename):
     # Transforma a string passada como parâmetro em um slug
     folder_name = slugify(instance.title)
 
-    return 'destaques/{}/{}'.format(folder_name, filename)
+    return 'destaques/noticias/{}/{}'.format(folder_name, filename)
 
 class Highlight(models.Model):
     # keyword = models.CharField('Palavra-chave', blank=False, max_length=10, null=True)
@@ -26,3 +26,18 @@ class Highlight(models.Model):
         verbose_name = 'Destaque'
         verbose_name_plural = 'Destaques'
 
+def carousel_image_directory_path(instance, filename):
+    folder_name = slugify(instance.image)
+
+    return 'destaques/carrossel/{}/{}'.format(folder_name, filename)
+
+class CarouselImage(models.Model):
+    image = models.ImageField('Imagem', upload_to=carousel_image_directory_path, blank=False)
+
+    def __str__(self):
+        name = slugify(self.image.name)
+        return name
+
+    class Meta:
+        verbose_name = 'Imagem do Carrossel'
+        verbose_name_plural = 'Imagens do Carrossel'
