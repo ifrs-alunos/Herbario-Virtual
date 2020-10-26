@@ -50,7 +50,7 @@ function tornar_destaque(event) {
 //     // lensShape: "round",
 //     // lensSize: 200,
 
-//     scrollZoom : true,
+//     // scrollZoom : true,
 //     // zoomType: "inner",
 //     // cursor: "crosshair",
 // });
@@ -71,18 +71,32 @@ function tornar_destaque(event) {
 
 // }
 
-// // Zoom nas imagens do Carrosel
-// //Está funcão só controla que parte da imagem com zoom será mostrada em realção as coordenadas do mouse
-// function zoom(e)
-// {
-//     //Faz a imagem de tamanho normal sumir
-//     //converte a posição em coordenadas para porcentagem
-//     var x = e.offsetX * 100 / e.currentTarget.offsetWidth;
-//     var y = e.offsetY * 100 / e.currentTarget.offsetHeight;
-//     //Define esse valores para o backgroundPosition
-//     e.currentTarget.style.backgroundPosition = "" + x + "%" + y + "%";
+zoom_image = document.getElementById('zoom_image');
 
-// }
+zoom_image.onmousemove = zoom;
+
+// Zoom nas imagens do Carrosel
+//Está funcão só controla que parte da imagem com zoom será mostrada em realção as coordenadas do mouse
+function zoom(event) {
+    console.log("oi");
+
+    //Faz a imagem de tamanho normal sumir
+    event.currentTarget.style.opacity = 0;
+
+    //converte a posição em coordenadas para porcentagem
+    var x = event.offsetX * 100 / event.currentTarget.offsetWidth;
+    var y = event.offsetY * 100 / event.currentTarget.offsetHeight;
+
+    // var x = event.offsetX;
+    // var y = event.offsetY;
+
+    // console.log(x);
+    // console.log(y);
+
+    event.currentTarget.style.backgroundPosition = "" + x + "%" + y + "%";
+
+    console.log(event.currentTarget.style.backgroundPosition)
+}
 
 // //Fyuse e visualização em 360°
 // function fyuse(){

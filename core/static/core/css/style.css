@@ -97,6 +97,10 @@ footer .link-redes, footer .link-redes:hover {
 }
 
 p.contato {
+    margin-top: 5%;
+}
+
+#link-integra {
     margin-top: 3%;
 }
 
@@ -231,3 +235,22 @@ div.galeria div.row {
     margin-bottom: 1% !important;
 }
 
+
+
+
+/* TESTE */
+
+/*.zoom-image:hover {
+    opacity: 0;
+}
+*/
+
+figure.zoom {
+    height: 100%;
+    margin: auto;
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: 300%; /*esta será a quantidade de zoom na imagem*/
+    overflow: hidden;
+    border-radius: 5px;
+}

@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load static %}
 
 {% block content %}
   <div class="container">
@@ -74,7 +75,7 @@
           <!--  TESTE, EXCLUSIVAMENTE TESTE -->
           <div class="col-7 galeria">
               <div class="row">
-                  <img id="zoom_07" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
+                  <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
                   width="635px;" height="430px;">
               </div>
               <div class="row miniaturas">
@@ -87,6 +88,41 @@
                   {% endfor %}
               </div>
           </div>
+
+          <!-- TESTE MESMO MESMO -->
+<!--           <div class="col-7 galeria">
+              <div class="row">
+                  <figure class="zoom" style=" background-image: url({{plant.photos.first.image.url}});">
+                      <img id="zoom_image" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
+                      width="635px;" height="430px;">
+                  </figure>
+              </div>
+              <div class="row miniaturas">
+                  {% for photo in plant.photos.all %}
+                  {% if photo.image.url == plant.photos.first.image.url %}
+                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  {% else %}
+                  <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  {% endif %}
+                  {% endfor %}
+              </div>
+          </div> -->
+
+<!--           <div class="col-7 galeria">
+              <div class="row">
+                  <img id="zoom_07" class="imagem_em_destaque" src="{% static 'core/images/teste1.png' %}" 
+                  data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
+              </div>
+              <div class="row miniaturas">
+                  {% for photo in plant.photos.all %}
+                  {% if photo.image.url == plant.photos.first.image.url %}
+                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  {% else %}
+                  <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  {% endif %}
+                  {% endfor %}
+              </div>
+          </div> -->
       </div>
   </div>
 {% endblock %}
