@@ -32,12 +32,19 @@ def carousel_image_directory_path(instance, filename):
     return 'destaques/carrossel/{}/{}'.format(folder_name, filename)
 
 class CarouselImage(models.Model):
+    title = models.CharField('Título', max_length=25, blank=False, null=True)
+    description = models.CharField('Descrição Rápida', max_length=60, blank=False, null=True)
+
     image = models.ImageField('Imagem', upload_to=carousel_image_directory_path, blank=False)
 
+    list_order = models.IntegerField('Ordem no Carrossel', blank=False, null=True, unique=True) 
+
     def __str__(self):
-        name = slugify(self.image.name)
-        return name
+        # name = slugify(self.image.name)
+        # return name
+        return "Slide {}: {}".format(self.list_order, self.title)
 
     class Meta:
         verbose_name = 'Imagem do Carrossel'
         verbose_name_plural = 'Imagens do Carrossel'
+        ordering = ['list_order']
