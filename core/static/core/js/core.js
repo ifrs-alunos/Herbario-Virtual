@@ -1,3 +1,5 @@
+// Código JS para tornar ano não estático no footer
+
 // Seleciona tag spam onde deve ser inserido o ano atual no footer
 var spam = document.getElementById("ano_atual");
 
@@ -7,9 +9,8 @@ seleciona_ano = now.getFullYear();
 // Insere no HTML
 spam.innerHTML += seleciona_ano; 
 
-// Código JS da Galeria de imagens
 
-// Objetivo 1: Trocar a imagem em destaque e o estilo do elemento quando o usuario clica em uma imagem em miniatura
+// Código JS da Galeria de imagens
 
 // Seleciona todos os elementos com a classe "imagem_miniatura"
 var imagens_miniaturas = document.getElementsByClassName("imagem_miniatura");
@@ -19,6 +20,7 @@ for (var i = 0; i < imagens_miniaturas.length ; ++i){
   	imagens_miniaturas[i].onclick = tornar_destaque;
 }
 
+// Função responsável por retirar uma imagem em destaque e inserir outra 
 function tornar_destaque(event) {
 
 	// Se a imagem clicada contém a classe "imagem_selecionada"
@@ -39,21 +41,35 @@ function tornar_destaque(event) {
 
     	// Troca o atributo "src" da imagem anterior pelo atributo "src" da nova imagem que foi clicada
     	imagem_em_destaque.setAttribute("src", event.target.src);
+
+        // TESTES 
+        
+        // imagem_em_destaque.setAttribute("data-zoom-image", event.target.src);
+
+        // teste = document.getElementsByClassName("zoomWindow")[0];
+
+        // console.log(teste);
+
+        // teste.target.style.backgroundImage = event.target.src;
     }
 }
 
-// $("#zoom_07").elevateZoom({
-//     // zoomType: "inner",
-//     // cursor: "crosshair"
+// Inicializa o zoom na imagem em destaque a partir da biblioteca ElevateZoom
+$("#zoom").elevateZoom({
+    // Tipo do zoom (nesse caso, zoom interno)
+    zoomType: "inner",
 
-//     // zoomType: "lens",
-//     // lensShape: "round",
-//     // lensSize: 200,
+    // Especifica o cursor do mouse
+    cursor: "crosshair",
 
-//     // scrollZoom : true,
-//     // zoomType: "inner",
-//     // cursor: "crosshair",
-// });
+    // Ativa o deslize automático a partir do movimento do mouse
+    easing: true,
+
+    // Especifica intensidade do "delay" para o zoom aparecer e sair
+    zoomWindowFadeIn: 600,
+    zoomWindowFadeOut: 600
+});
+
 
 // // Carrosel das Plantas
 // //Essa função controla que imagem deve aparecer no carrosel e coisas relacionadas a isso
@@ -71,32 +87,32 @@ function tornar_destaque(event) {
 
 // }
 
-zoom_image = document.getElementById('zoom_image');
+// zoom_image = document.getElementById('zoom_image');
 
-zoom_image.onmousemove = zoom;
+// zoom_image.onmousemove = zoom;
 
-// Zoom nas imagens do Carrosel
-//Está funcão só controla que parte da imagem com zoom será mostrada em realção as coordenadas do mouse
-function zoom(event) {
-    console.log("oi");
+// // Zoom nas imagens do Carrosel
+// //Está funcão só controla que parte da imagem com zoom será mostrada em realção as coordenadas do mouse
+// function zoom(event) {
+//     console.log("oi");
 
-    //Faz a imagem de tamanho normal sumir
-    event.currentTarget.style.opacity = 0;
+//     //Faz a imagem de tamanho normal sumir
+//     event.currentTarget.style.opacity = 0;
 
-    //converte a posição em coordenadas para porcentagem
-    var x = event.offsetX * 100 / event.currentTarget.offsetWidth;
-    var y = event.offsetY * 100 / event.currentTarget.offsetHeight;
+//     //converte a posição em coordenadas para porcentagem
+//     var x = event.offsetX * 100 / event.currentTarget.offsetWidth;
+//     var y = event.offsetY * 100 / event.currentTarget.offsetHeight;
 
-    // var x = event.offsetX;
-    // var y = event.offsetY;
+//     // var x = event.offsetX;
+//     // var y = event.offsetY;
 
-    // console.log(x);
-    // console.log(y);
+//     // console.log(x);
+//     // console.log(y);
 
-    event.currentTarget.style.backgroundPosition = "" + x + "%" + y + "%";
+//     event.currentTarget.style.backgroundPosition = "" + x + "%" + y + "%";
 
-    console.log(event.currentTarget.style.backgroundPosition)
-}
+//     console.log(event.currentTarget.style.backgroundPosition)
+// }
 
 // //Fyuse e visualização em 360°
 // function fyuse(){

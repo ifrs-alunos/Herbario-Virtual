@@ -75,8 +75,10 @@
           <!--  TESTE, EXCLUSIVAMENTE TESTE -->
           <div class="col-7 galeria">
               <div class="row">
-                  <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
-                  width="635px;" height="430px;">
+<!--                   <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
+                  width="635px;" height="430px;"> -->
+  <!--                 <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/fullhdpequeno.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
+                  <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
               </div>
               <div class="row miniaturas">
                   {% for photo in plant.photos.all %}

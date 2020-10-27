@@ -1,4 +1,4 @@
-/* Todos os templates */
+ Todos os templates */
 .container, div.galeria .row {
     /* Esconde conteúdos que ultrapassam as dimensões do bloco */
     overflow: hidden !important;
@@ -192,6 +192,10 @@ img {
 
 }
 
+.zoomWindow {
+    border-radius: 7px;
+}
+
 /* Seleciona a primeira miniatura de quatro em quatro */
 .galeria .miniaturas img:nth-child(4n+1) {
     margin-left: 0;
@@ -245,12 +249,12 @@ div.galeria div.row {
 }
 */
 
-figure.zoom {
+/*figure.zoom {
     height: 100%;
     margin: auto;
     background-repeat: no-repeat;
     background-position: 50% 50%;
     background-size: 300%; /*esta será a quantidade de zoom na imagem*/
-    overflow: hidden;
+/*    overflow: hidden;
     border-radius: 5px;
-}
+}*/
