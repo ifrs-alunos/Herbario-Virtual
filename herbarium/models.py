@@ -1,4 +1,7 @@
 from django.db import models
+from PIL import Image
+from io import BytesIO
+from django.core.files import File
 
 '''
 #Create your models here.
@@ -118,7 +121,7 @@ class Plant(models.Model):
 
     # MODIFICAR: relacionar a planta com a sua família (classe Family) e com isso, automaticamente, será relacionada com a Division 
     # family = models.CharField('Família', blank=True, max_length=100, choices=FAMILY_CHOICES)
-    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="plants")
+    family = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="plants", verbose_name="Família")
 
     # Objetivo: tirar
     # division = models.CharField("Divisão", blank=True, editable=False, max_length=100)
@@ -165,14 +168,33 @@ class Plant(models.Model):
 
 
 
-# Função que retorna onde imagens devem ser guardadas
+# Função que retorna onde imagens grandes devem ser guardadas
 def plant_directory_path(instance, filename):
 
-    return 'plantas/{}/{}'.format(instance.plant.name, filename)
+    return 'plantas/imagens-grandes/{}/{}'.format(instance.plant.name, filename)
 
+# Função que retorna onde imagens pequenas devem ser guardadas
+def small_plant_directory_path(instance, filename):
+
+    return 'plantas/imagens-pequenas/{}/{}'.format(instance.plant.name, filename)
+
+# Função para criar uma imagem miniatura com um tamanho específico (1210x908) a partir de uma imagem maior 
+def make_small_image(image, size=(1210, 908)):
+    im = Image.open(image) # Abre a imagem com o Pillow
+
+    im.convert('RGB') 
+
+    im.thumbnail(size) # Redimensiona a imagem com o tamanho padrão descrito nos parâmetros
+
+    thumb_io = BytesIO() # Cria um objeto BytesIO
+
+    im.save(thumb_io, 'JPEG', quality=100) # Salva imagem para um objeto BytesIO 
+
+    thumbnail = File(thumb_io, name=image.name) # Cria um objeto File 'amigável' ao Django 
+
+    return thumbnail
 
 #Modelo de foto para que seja possível a planta ter multiplas imagens
-
 class Photo(models.Model):
     # Cria modelo para fotos das plantas
 
@@ -180,10 +202,20 @@ class Photo(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos')
 
     # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
-    image = models.ImageField(upload_to=plant_directory_path)
+    image = models.ImageField(upload_to=plant_directory_path, verbose_name="Imagens")
+
+    # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores 
+    small_image = models.ImageField(upload_to=small_plant_directory_path, null=True, editable=False)
 
     def __str__(self):
         return self.image.name
+
+    # Sobreescreve o método save
+    def save(self, *args, **kwargs):
+        # Realiza o processamento na imagem cadastrada (self.image) e guarda o retorno no atributo small_image
+        self.small_image = make_small_image(self.image)
+
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Foto'
