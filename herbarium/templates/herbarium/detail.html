@@ -80,12 +80,18 @@
   <!--                 <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/fullhdpequeno.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
                   <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
               </div>
-              <div class="row miniaturas">
+              <div id="galeria" class="row miniaturas">
                   {% for photo in plant.photos.all %}
                   {% if photo.image.url == plant.photos.first.image.url %}
                   <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
+<!--                   <a href="#" class="elevatezoom-gallery active" data-update="" data-image="{{photo.image.url}}" data-zoom-image="{{photo.image.url}}">
+                    <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  </a> -->
                   {% else %}
                   <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
+  <!--                 <a href="#" class="elevatezoom-gallery" data-image="{{photo.image.url}}" data-zoom-image="{{photo.image.url}}">
+                    <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
+                  </a> -->
                   {% endif %}
                   {% endfor %}
               </div>

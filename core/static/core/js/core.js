@@ -20,7 +20,7 @@ for (var i = 0; i < imagens_miniaturas.length ; ++i){
   	imagens_miniaturas[i].onclick = tornar_destaque;
 }
 
-// Função responsável por retirar uma imagem em destaque e inserir outra 
+// Função responsável por retirar uma imagem em destaque e inserir outra, além de tornar o zoom funcional em todas as imagens 
 function tornar_destaque(event) {
 
 	// Se a imagem clicada contém a classe "imagem_selecionada"
@@ -39,18 +39,48 @@ function tornar_destaque(event) {
     	// Seleciona o elemento que contém a classe "imagem_em_destaque"
     	var imagem_em_destaque = document.getElementsByClassName("imagem_em_destaque")[0];
 
-    	// Troca o atributo "src" da imagem anterior pelo atributo "src" da nova imagem que foi clicada
-    	imagem_em_destaque.setAttribute("src", event.target.src);
+        // Troca valor dos atributos src e data-zoom-image da imagem em destaque
+        imagem_em_destaque.setAttribute("data-zoom-image", event.target.src);
+        imagem_em_destaque.setAttribute("src", event.target.src);
 
-        // TESTES 
-        
-        // imagem_em_destaque.setAttribute("data-zoom-image", event.target.src);
 
-        // teste = document.getElementsByClassName("zoomWindow")[0];
+        // Implementações necessárias para que o zoom funcione com todos os elementos da galeria:
 
-        // console.log(teste);
+        // Seleciona o elemento criado pela biblioteca e o remove
+        zoom_container = document.getElementsByClassName("zoomContainer")[0];
+        zoom_container.remove();
 
-        // teste.target.style.backgroundImage = event.target.src;
+        // Seleciona o elemento que será aplicado o zoom, ou seja, o elemento que contém a "imagem antiga" e o remove
+        img = document.getElementById("zoom");
+        img.remove();
+
+        // Cria um novo elemento onde será aplicado o zoom e insere seus atributos
+        new_img = document.createElement("img");
+        new_img.setAttribute("id", "zoom");
+        new_img.classList.add("imagem_em_destaque");
+        new_img.setAttribute("src", event.target.src);
+        new_img.setAttribute("data-zoom-image", event.target.src);
+        new_img.style.width = "635px";
+        new_img.style.height = "430px";
+
+        // Insere no HTML esse novo elemento criado
+        document.querySelector(".galeria > .row").appendChild(new_img);
+
+        // Inicializa novamente o zoom na imagem em destaque a partir da biblioteca ElevateZoom
+        $("#zoom").elevateZoom({
+            // Tipo do zoom (nesse caso, zoom interno)
+            zoomType: "inner",
+
+            // Especifica o cursor do mouse
+            cursor: "crosshair",
+
+            // Ativa o deslize automático a partir do movimento do mouse
+            easing: true,
+
+            // Especifica intensidade do "delay" para o zoom aparecer e sair
+            zoomWindowFadeIn: 600,
+            zoomWindowFadeOut: 600
+        });
     }
 }
 
@@ -70,6 +100,23 @@ $("#zoom").elevateZoom({
     zoomWindowFadeOut: 600
 });
 
+// //initiate the plugin and pass the id of the div containing gallery images
+// $("#zoom").elevateZoom({
+//     gallery:'galeria',
+//     cursor: 'pointer',
+//     zoomType: 'inner',
+//     easing : true,
+//     galleryActiveClass: 'active',
+//     imageCrossfade: true,
+//     // loadingIcon: 'https://www.elevateweb.co.uk/spinner.gif'
+// });
+
+// //pass the images to Fancybox
+// $("#zoom").bind("click", function(e) {
+//     var ez = $('#zoom').data('elevateZoom');
+//     $.fancybox(ez.getGalleryList());
+//     return false;
+// });
 
 // // Carrosel das Plantas
 // //Essa função controla que imagem deve aparecer no carrosel e coisas relacionadas a isso
