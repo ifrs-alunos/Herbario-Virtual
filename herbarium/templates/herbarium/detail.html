@@ -10,7 +10,6 @@
       </div>
       <div class="row">
           <div class="col-5">
-              <!-- <div id="demo-container">Oi</div> -->
               <!--  Tabela com os dados da planta -->
               <table class="table table-striped">
                   <thead>
@@ -24,28 +23,31 @@
                         <th>Nome Científico</th>
                         <td>{{plant.scientific_name}}</td>
                       </tr>
+                      {% comment %}
                       <!-- <tr>
                           <th scope="row">Divisão</th>
                           <td>{{plant.family.division}}</td>
                       </tr> -->
+                      {% endcomment %}
                       <tr>
                           <th scope="row">Família</th>
                           <td>{{plant.family}}</td>
                       </tr>
                       <tr>
                           <th scope="row">Regiões de Ocorrência</th>
-<!--                           <td>{{plant.occurrence_regions.states.all|join:', '}}</td> -->  
-                              <td>{{plant.occurrence_regions.all|join:', '}}</td>
+                          {# <!-- <td>{{plant.occurrence_regions.states.all|join:', '}}</td> --> #} 
+                          <td>{{plant.occurrence_regions.all|join:', '}}</td>
                       </tr>
                   </tbody>
               </table>
 
+            {% comment %}
 <!--               <p>Teste: Lista de Estados das Regiões que a planta está inserida:</p>
               {% for i in plant.occurrence_regions.all %}
               <p>Região: {{i}}</p>
               <p>Lista de Estados: {{i.states.all|join:', '}}</p>
               {% endfor %} -->
-
+            {% endcomment %}
 
               <h5>Descrição:</h5>
               <p id="description">{{plant.description}}</p>
@@ -54,83 +56,25 @@
               <p id="importance">{{plant.importance}}</p>
           </div>
 
-          <!-- Galeria de imagens de uma planta -->
-<!--           <div class="col-7 galeria">
-            <div class="row">
-              <div class="col-9">
-                <img class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" width="460px;" height="430px;">
-              </div>
-              <div class="col-3">
-                {% for photo in plant.photos.all %}
-                {% if photo.image.url == plant.photos.first.image.url %}
-                <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="165px;" height="100px;">
-                {% else %}
-                <img class="imagem_miniatura" src="{{photo.image.url}}" width="165px;" height="100px;">
-                {% endif %}
-                {% endfor %}
-              </div>
-            </div>
-          </div> -->
-
-          <!--  TESTE, EXCLUSIVAMENTE TESTE -->
           <div class="col-7 galeria">
               <div class="row">
-<!--                   <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
-                  width="635px;" height="430px;"> -->
-  <!--                 <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/fullhdpequeno.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
-                  <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
+                  {% comment %}
+<!--                   <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
+                  {% endcomment %}
+                  <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.small_image.url}}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
               </div>
               <div id="galeria" class="row miniaturas">
                   {% for photo in plant.photos.all %}
                   {% if photo.image.url == plant.photos.first.image.url %}
-                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
-<!--                   <a href="#" class="elevatezoom-gallery active" data-update="" data-image="{{photo.image.url}}" data-zoom-image="{{photo.image.url}}">
-                    <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
-                  </a> -->
+                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.small_image.url}}" 
+                  data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
                   {% else %}
-                  <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
-  <!--                 <a href="#" class="elevatezoom-gallery" data-image="{{photo.image.url}}" data-zoom-image="{{photo.image.url}}">
-                    <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
-                  </a> -->
+                  <img class="imagem_miniatura" src="{{photo.small_image.url}}"
+                  data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
                   {% endif %}
                   {% endfor %}
               </div>
           </div>
-
-          <!-- TESTE MESMO MESMO -->
-<!--           <div class="col-7 galeria">
-              <div class="row">
-                  <figure class="zoom" style=" background-image: url({{plant.photos.first.image.url}});">
-                      <img id="zoom_image" class="imagem_em_destaque" src="{{plant.photos.first.image.url}}" 
-                      width="635px;" height="430px;">
-                  </figure>
-              </div>
-              <div class="row miniaturas">
-                  {% for photo in plant.photos.all %}
-                  {% if photo.image.url == plant.photos.first.image.url %}
-                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
-                  {% else %}
-                  <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
-                  {% endif %}
-                  {% endfor %}
-              </div>
-          </div> -->
-
-<!--           <div class="col-7 galeria">
-              <div class="row">
-                  <img id="zoom_07" class="imagem_em_destaque" src="{% static 'core/images/teste1.png' %}" 
-                  data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
-              </div>
-              <div class="row miniaturas">
-                  {% for photo in plant.photos.all %}
-                  {% if photo.image.url == plant.photos.first.image.url %}
-                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.image.url}}" width="155px;" height="100px;">
-                  {% else %}
-                  <img class="imagem_miniatura" src="{{photo.image.url}}" width="155px;" height="100px;">
-                  {% endif %}
-                  {% endfor %}
-              </div>
-          </div> -->
       </div>
   </div>
 {% endblock %}

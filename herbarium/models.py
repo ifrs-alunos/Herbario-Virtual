@@ -205,7 +205,7 @@ class Photo(models.Model):
     image = models.ImageField(upload_to=plant_directory_path, verbose_name="Imagens")
 
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores 
-    small_image = models.ImageField(upload_to=small_plant_directory_path, null=True, editable=False)
+    small_image = models.ImageField(upload_to=small_plant_directory_path, editable=False, null=True)
 
     def __str__(self):
         return self.image.name

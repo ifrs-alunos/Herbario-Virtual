@@ -1,4 +1,5 @@
- Todos os templates */
+/*Todos os templates */
+
 .container, div.galeria .row {
     /* Esconde conteúdos que ultrapassam as dimensões do bloco */
     overflow: hidden !important;

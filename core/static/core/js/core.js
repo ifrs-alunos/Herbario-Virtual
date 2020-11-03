@@ -54,12 +54,15 @@ function tornar_destaque(event) {
         img = document.getElementById("zoom");
         img.remove();
 
+        // Seleciona o atributo "data-zoom-image" do elemento que disparou a função
+        data_zoom_image = event.target.getAttribute("data-zoom-image");
+
         // Cria um novo elemento onde será aplicado o zoom e insere seus atributos
         new_img = document.createElement("img");
         new_img.setAttribute("id", "zoom");
         new_img.classList.add("imagem_em_destaque");
         new_img.setAttribute("src", event.target.src);
-        new_img.setAttribute("data-zoom-image", event.target.src);
+        new_img.setAttribute("data-zoom-image", data_zoom_image);
         new_img.style.width = "635px";
         new_img.style.height = "430px";
 
