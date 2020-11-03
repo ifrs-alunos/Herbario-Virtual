@@ -179,12 +179,17 @@ def small_plant_directory_path(instance, filename):
     return 'plantas/imagens-pequenas/{}/{}'.format(instance.plant.name, filename)
 
 # Função para criar uma imagem miniatura com um tamanho específico (1210x908) a partir de uma imagem maior 
-def make_small_image(image, size=(1210, 908)):
+# Usar size=(1210, 908) ou 30% da dimensão?
+def make_small_image(image):
     im = Image.open(image) # Abre a imagem com o Pillow
 
-    im.convert('RGB') 
+    im.convert('RGB')
 
-    im.thumbnail(size) # Redimensiona a imagem com o tamanho padrão descrito nos parâmetros
+    image_width, image_height = im.size # Define image_width como o primeiro valor da tupla e image_size como segundo
+
+    # im.thumbnail(size) Redimensiona a imagem com o tamanho padrão descrito nos parâmetros
+
+    im.thumbnail((image_width*0.3, image_height*0.3)) # Redimensiona a imagem para diminuir 70% da dimensão da largura e da altura
 
     thumb_io = BytesIO() # Cria um objeto BytesIO
 
