@@ -28,7 +28,7 @@ class Highlight(models.Model):
 
 def carousel_image_directory_path(instance, filename):
     
-    # image_order = slugify(instance.list_order)
+    image_order = slugify(instance.list_order)
     image_title = slugify(instance.title)
 
     return 'destaques/carrossel/slide {}/{}/{}'.format(image_order, image_title, filename)
