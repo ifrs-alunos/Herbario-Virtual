@@ -105,29 +105,19 @@ footer .link-redes, footer .link-redes:hover {
     color: #B22222;
 }
 
-#link-integra {
+#icon-preto:hover {
+    text-decoration: none;
+    filter: opacity(0%)
+}
+
+footer .link-integra {
     position: relative;
     top: -8px;
-    filter: grayscale(0%);
+    text-decoration: none;
 }
 
-#link-integra:hover {
-    filter: contrast(50%) brightness(300%) hue-rotate(179deg);
-    /*filter: opacity(100%);*/
-}
-
-#relative {
-    position: relative;
-}
-
-#relative * {
-    position: relative;
-    top: -8px;
-}
-
-#laranja {
+#link-icon-preto {
     left: -34px;
-    filter: opacity(0%);
 }
 
 .contato {
