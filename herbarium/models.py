@@ -129,7 +129,8 @@ class Plant(models.Model):
 
     # Torna um conjunto de palavras passíveis para serem usadas como um URL
     # O slug não pode ser repetido, logo unique = True
-    slug = models.SlugField('Identificador', blank=False, null=True, unique=True)
+    slug = models.SlugField('Identificador', blank=True, null=True, unique=True)
+
     description = models.TextField('Descrição', blank=False)
 
     importance = models.TextField('Importância', blank=False, null=True)
@@ -159,8 +160,13 @@ class Plant(models.Model):
     '''
 
     def __str__(self):
-
         return self.name
+
+    def save(self, *args, **kwargs):
+        if self.slug == None:
+            self.slug = slugify(self.name)
+        
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Planta'
