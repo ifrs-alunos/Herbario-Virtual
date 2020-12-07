@@ -27,12 +27,16 @@ class Highlight(models.Model):
         verbose_name_plural = 'Destaques'
 
 def carousel_image_directory_path(instance, filename):
-    folder_name = slugify(instance.image)
+    
+    # image_order = slugify(instance.list_order)
+    image_title = slugify(instance.title)
 
-    return 'destaques/carrossel/{}/{}'.format(folder_name, filename)
+    return 'destaques/carrossel/slide {}/{}/{}'.format(image_order, image_title, filename)
 
 class CarouselImage(models.Model):
+
     title = models.CharField('Título', max_length=25, blank=False, null=True)
+
     description = models.CharField('Descrição Rápida', max_length=60, blank=False, null=True)
 
     image = models.ImageField('Imagem', upload_to=carousel_image_directory_path, blank=False)
@@ -40,8 +44,6 @@ class CarouselImage(models.Model):
     list_order = models.IntegerField('Ordem no Carrossel', blank=False, null=True, unique=True) 
 
     def __str__(self):
-        # name = slugify(self.image.name)
-        # return name
         return "Slide {}: {}".format(self.list_order, self.title)
 
     class Meta:

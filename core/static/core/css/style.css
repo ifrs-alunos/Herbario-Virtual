@@ -51,6 +51,18 @@ div .btn-secondary {
     background-color: black;
 }
 
+.image-title, .image-description {
+    /*text-shadow: 10px -10px 100px black;*/
+    /*padding:20px;*/
+    color: white; 
+    /*text-shadow: 1px 1px 30px black, 0 0 35px black, 0 0 15px black;*/
+    /*text-shadow: 1px 1px 20px black, 0 0 30px black, 0 0 30px black;*/
+    /*text-shadow: 1px 1px 5px black*/
+    text-shadow: 0 0 30px black, 0 -10px 15px black, 
+                0 10px 30px black, -20px 0 20px black, 
+                20px 0 15px black; 
+}
+
 /* Footer */
 #footer_logo {
     width: 250px;
@@ -93,6 +105,31 @@ footer .link-redes, footer .link-redes:hover {
     color: #B22222;
 }
 
+#link-integra {
+    position: relative;
+    top: -8px;
+    filter: grayscale(0%);
+}
+
+#link-integra:hover {
+    filter: contrast(50%) brightness(300%) hue-rotate(179deg);
+    /*filter: opacity(100%);*/
+}
+
+#relative {
+    position: relative;
+}
+
+#relative * {
+    position: relative;
+    top: -8px;
+}
+
+#laranja {
+    left: -34px;
+    filter: opacity(0%);
+}
+
 .contato {
     margin-left: 3%;
 }
@@ -101,9 +138,9 @@ p.contato {
     margin-top: 5%;
 }
 
-#link-integra {
+/*#link-integra {
     margin-top: 3%;
-}
+}*/
 
 /* App Herbarium */
 

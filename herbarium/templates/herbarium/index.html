@@ -77,7 +77,7 @@
                     {% for plant in plants %}
                     <div class="col-4 card-col">
                             <div class="card">
-                                <img class="card-img-top" src="{{ plant.photos.first.image.url }}" alt="Card image cap">
+                                <img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap">
                                 <div class="card-body">
                                     <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name }}</h5></a>
                                     <p class="card-text">{{ plant.description|truncatechars_html:100 }}</p>
