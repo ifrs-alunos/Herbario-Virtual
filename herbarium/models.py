@@ -184,16 +184,16 @@ def small_plant_directory_path(instance, filename):
 
 # Função para criar uma imagem miniatura com um tamanho específico (1210x908) a partir de uma imagem maior 
 # Usar size=(1210, 908) ou 30% da dimensão?
-def make_small_image(image):
+def make_small_image(image, size=(645, 430)):
     im = Image.open(image) # Abre a imagem com o Pillow
 
     im.convert('RGB')
 
-    image_width, image_height = im.size # Define image_width como o primeiro valor da tupla e image_size como segundo
+    # image_width, image_height = im.size # Define image_width como o primeiro valor da tupla e image_size como segundo
 
-    # im.thumbnail(size) Redimensiona a imagem com o tamanho padrão descrito nos parâmetros
+    im.thumbnail(size) # Redimensiona a imagem com o tamanho padrão descrito nos parâmetros
 
-    im.thumbnail((image_width*0.2, image_height*0.2)) # Redimensiona a imagem para diminuir 70% da dimensão da largura e da altura
+    # im.thumbnail((image_width*0.2, image_height*0.2)) # Redimensiona a imagem para diminuir 70% da dimensão da largura e da altura
 
     thumb_io = BytesIO() # Cria um objeto BytesIO
 
@@ -224,10 +224,10 @@ class Photo(models.Model):
         # Realiza o processamento na imagem cadastrada (self.image) e guarda o retorno no atributo small_image
         img = Image.open(self.image)
 
-        image_width, image_height = image_size
+        image_width, image_height = img.size
 
-        # Especificando tamanho mínimo
-        if image_width > 1080 and image_height > 1920:
+        # Especificando tamanho mínimo como Full HD
+        if image_width >= 1920 and image_height >= 1080:
             self.small_image = make_small_image(self.image)
             super().save(*args, **kwargs)
         else:
