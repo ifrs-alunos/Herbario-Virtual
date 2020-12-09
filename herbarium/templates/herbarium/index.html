@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load pagination %}
 
 {% block content %}
 
@@ -16,8 +17,9 @@
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="button" id="button-addon2">Pesquisar</button>
                         </div>
-                    </div>          
-<!--                     <div class="dropdown">
+                    </div>   
+                    {% comment %}       
+                    <!-- <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Selecione
                         </button>
@@ -27,6 +29,7 @@
                             <a class="dropdown-item" href="#">Espécie</a>
                         </div>
                     </div> -->
+                    {% endcomment %}
                 </form>
             </div>
         </div>
@@ -54,6 +57,7 @@
                     {% endfor %}
                 </ul> 
 
+                {% comment %}
                 <!-- <h5> Famílias Monocotiledôneas</h5> -->
 <!--                 <ul class="list-group">
 
@@ -69,24 +73,56 @@
                     <li class="list-group-item">{{ family }}</li>
                     {% endfor %}
                 </ul> -->
+                {% endcomment %}
             </div>
 
             <div class="col-9">
-                <!-- <h5>Teste</h5> -->
                 <div class="row">
                     {% for plant in plants %}
                     <div class="col-4 card-col">
-                            <div class="card">
-                                <img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap">
-                                <div class="card-body">
-                                    <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name }}</h5></a>
-                                    <p class="card-text">{{ plant.description|truncatechars_html:100 }}</p>
-                                    <p class="card-text"><small class="text-muted">{{ plant.scientific_name }}</small></p>
-                                </div>
+                        <div class="card">
+                            <img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap">
+                            <div class="card-body">
+                                <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
+                                <p class="card-text">{{ plant.description|truncatechars_html:70}}</p>
+                                <p class="card-text"><small class="text-muted">{{ plant.scientific_name|truncatechars_html:25}}</small></p>
                             </div>
+                        </div>
                     </div>
                     {% endfor %}
+                    {% comment %}
+                    <!-- <nav id="nav-pagination" aria-label="Navegação da listagem de plantas">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Anterior">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">Anterior</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="{% url 'herbarium:index'%}">1</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'herbarium:index'%}?page=2">2</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'herbarium:index'%}?page=3">3</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="{% url 'herbarium:index'%}?page=4">4</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Próximo">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">Próximo</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav> -->
+                    {% comment %}
                 </div>
+                <!-- Paginação da listagem de plantas -->
+                {% pagination %}
             </div>
         </div>
     </div>
