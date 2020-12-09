@@ -10,6 +10,6 @@ urlpatterns = [
     path('detalhes/<slug:slug>/', views.HerbariumDetail.as_view(), name='detail'),
     # Página de listagem de plantas
 
-    path('<slug:family>/', views.HerbariumIndex.as_view(), name="plants")  
+    path('<slug:family>/', views.HerbariumIndex.as_view(), name="plants"),  
 ]
 

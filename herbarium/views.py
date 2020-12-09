@@ -6,14 +6,13 @@ from .forms import SearchForm
 
 # Create your views here.
 
-
 # Lista as plantas cadastradas
 class HerbariumIndex(ListView):
     model = Plant
     template_name = 'herbarium/index.html'
     context_object_name = 'plants'
 
-    paginate_by = 10
+    paginate_by = 6
 
     # Funcionalidade adicional: lista famílias de plantas ao sobreescrever método get_context_data
     def get_context_data(self, **kwargs):
@@ -33,7 +32,7 @@ class HerbariumIndex(ListView):
     def get_queryset(self, **kwargs):
         # print(self.kwargs)
 
-        # Se o dicionário da requisição não for vazio, ou seja, não contiver nenhuma família especificada
+        # Se o dicionário da requisição não for vazio, ou seja, se contiver uma família especificada
         if self.kwargs != {}:
             # Seleciona todas as plantas de uma família que se encontra na chave do dicionário da requisição
             plants_by_family = Plant.objects.filter(family__name=self.kwargs['family'])
@@ -45,6 +44,8 @@ class HerbariumIndex(ListView):
         else:
             # Seleciona todas as plantas cadastradas
             all_plants = Plant.objects.all()
+
+            # print(all_plants)
 
             # Retorna a lista de todas as plantas
             return all_plants
