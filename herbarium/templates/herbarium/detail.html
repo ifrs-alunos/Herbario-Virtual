@@ -9,37 +9,45 @@
           </div>  
       </div>
       <div class="row">
-          <div class="col-5">
-              <!--  Tabela com os dados da planta -->
-              <table class="table table-striped">
-                  <thead>
-                      <tr>
-                        <th scope="col">Nome comum</th>
-                        <td>{{plant.name}}</td>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr>
-                        <th>Nome Científico</th>
-                        <td>{{plant.scientific_name}}</td>
-                      </tr>
-                      {% comment %}
-                      <!-- <tr>
-                          <th scope="row">Divisão</th>
-                          <td>{{plant.family.division}}</td>
-                      </tr> -->
-                      {% endcomment %}
-                      <tr>
-                          <th scope="row">Família</th>
-                          <td>{{plant.family}}</td>
-                      </tr>
-                      <tr>
-                          <th scope="row">Regiões de Ocorrência</th>
-                          {# <!-- <td>{{plant.occurrence_regions.states.all|join:', '}}</td> --> #} 
-                          <td>{{plant.occurrence_regions.all|join:', '}}</td>
-                      </tr>
+            <div class="col-5">
+                <!--  Tabela com os dados da planta -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Característica
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">Nome comum</td>
+                            <td scope="row">{{plant.name}}</td>
+                        </tr>
+                        <tr>
+                            <td>Nome Científico</td>
+                            <td>{{plant.scientific_name}}</td>
+                        </tr>
+                        {% comment %}
+                        <!-- <tr>
+                            <td scope="row">Divisão</td>
+                            <td>{{plant.family.division}}</td>
+                        </tr> -->
+                        {% endcomment %}
+                        <tr>
+                            <td scope="row">Família</td>
+                            <td>{{plant.family}}</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Regiões de Ocorrência</td>
+                            {# <!-- <td>{{plant.occurrence_regions.states.all|join:', '}}</td> --> #} 
+                            <td>{{plant.occurrence_regions.all|join:', '}}</td>
+                        </tr>
                   </tbody>
-              </table>
+                </table>
 
             {% comment %}
 <!--               <p>Teste: Lista de Estados das Regiões que a planta está inserida:</p>

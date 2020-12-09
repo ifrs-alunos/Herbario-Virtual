@@ -1,9 +1,9 @@
 /*Todos os templates */
 
-.container, div.galeria .row {
-    /* Esconde conteúdos que ultrapassam as dimensões do bloco */
-    overflow: hidden !important;
-}
+/* .container, div.galeria .row { 
+    Esconde conteúdos que ultrapassam as dimensões do bloco 
+    overflow: hidden !important; 
+} */
 
 /* Estilo do template base e da página inicial */
 
@@ -155,6 +155,9 @@ table.table {
     margin-bottom: 3% !important;
 }
 
+.card:hover {
+    box-shadow: 5px 10px 40px #888888;}
+
 main .container .row {
     margin-bottom: 5% !important;
 }
@@ -267,22 +270,20 @@ div.galeria div.row {
     margin-bottom: 1% !important;
 }
 
-
-
-
-/* TESTE */
-
-/*.zoom-image:hover {
-    opacity: 0;
+nav#nav-pagination {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    top: -3%;
 }
-*/
 
-/*figure.zoom {
-    height: 100%;
-    margin: auto;
-    background-repeat: no-repeat;
-    background-position: 50% 50%;
-    background-size: 300%; /*esta será a quantidade de zoom na imagem*/
-/*    overflow: hidden;
-    border-radius: 5px;
-}*/
+a.page-link, a.page-link:hover {
+    color: black;
+}
+
+.page-item.active a.page-link {
+    color: black;
+    background-color: #A6DDA6;
+    border-color: #84AE84;
+}
