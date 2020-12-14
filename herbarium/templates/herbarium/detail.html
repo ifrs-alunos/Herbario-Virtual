@@ -29,7 +29,12 @@
                         </tr>
                         <tr>
                             <td>Nome Científico</td>
-                            <td>{{plant.scientific_name}}</td>
+                            <td><i>{{plant.scientific_name}}</i>
+                                {# Verifica se o campo é nulo #} 
+                                {% if plant.scientific_name_complementary %}
+                                    {{plant.scientific_name_complementary}}
+                                {% endif %}
+                            </td>
                         </tr>
                         {% comment %}
                         <!-- <tr>

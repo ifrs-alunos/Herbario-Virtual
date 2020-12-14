@@ -85,7 +85,7 @@
                             <div class="card-body">
                                 <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
                                 <p class="card-text">{{ plant.description|truncatechars_html:70}}</p>
-                                <p class="card-text"><small class="text-muted">{{ plant.scientific_name|truncatechars_html:25}}</small></p>
+                                <p class="card-text"><small class="text-muted"><i>{{ plant.scientific_name|truncatechars_html:30}}</i></small></p>
                             </div>
                         </div>
                     </div>
@@ -119,7 +119,7 @@
                             </li>
                         </ul>
                     </nav> -->
-                    {% comment %}
+                    {% endcomment %}
                 </div>
                 <!-- Paginação da listagem de plantas -->
                 {% pagination %}

@@ -119,6 +119,7 @@ class Plant(models.Model):
 
     name = models.CharField('Nome', blank=False, max_length=100)
     scientific_name = models.CharField('Nome científico', blank=False, max_length=200)
+    scientific_name_complementary = models.CharField(verbose_name="Nome Científico Complementar", max_length=60, blank=True, null=True)
 
     # MODIFICAR: relacionar a planta com a sua família (classe Family) e com isso, automaticamente, será relacionada com a Division 
     # family = models.CharField('Família', blank=True, max_length=100, choices=FAMILY_CHOICES)
@@ -237,7 +238,7 @@ class Photo(models.Model):
             self.small_image = make_small_image(self.image)
             super().save(*args, **kwargs)
         else:
-            raise ValueError("Imagem da planta {} não contém a dimensão mínima indicada (Full HD)".format(self.image))
+            raise ValueError("Imagem da planta {} não contém a dimensão mínima indicada (Full HD: 1920x1080)".format(self.image))
 
     class Meta:
         verbose_name = 'Foto'
