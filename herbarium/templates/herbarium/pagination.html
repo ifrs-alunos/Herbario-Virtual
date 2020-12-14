@@ -1,6 +1,3 @@
-{# Content of 'templates/core/components/pagination.html' #}
-{# This example uses the Materialize framework #}
-
 {% load pagination %}
 
 <nav id="nav-pagination" aria-label="Navegação da listagem de plantas">
@@ -8,13 +5,13 @@
         {% if page_obj.has_previous %}
             <li class="page-item">
                 <a class="page-link" href="?{{filters}}&page={{ page_obj.previous_page_number }}">
-                    Anterior
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
                 </a>
             </li>
         {% else %}
             <li class="page-item disabled">
                 <a class="page-link" href="">
-                    Anterior
+                    <i class="fa fa-chevron-left" aria-hidden="true"></i>
                 </a> 
             </li>
         {% endif %}
@@ -46,13 +43,13 @@
         {% if page_obj.has_next %}
             <li class="page-item">
                 <a class="page-link" href="?{{ filters }}&page={{ page_obj.next_page_number }}">
-                    Próximo
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 </a>
             </li>
         {% else %}
             <li class="page-item disabled">
                 <a class="page-link" href="">
-                    Próximo
+                    <i class="fa fa-chevron-right" aria-hidden="true"></i>
                 </a> 
             </li>   
         {% endif %}

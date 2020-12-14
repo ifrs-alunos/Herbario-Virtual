@@ -200,6 +200,9 @@ div.col-9 div.row {
     padding-bottom: 5%;
 }
 
+main a:hover, #email-labfito:hover {
+    color: #374637;
+}
 /* Galeria de imagens */
 
 .galeria div {

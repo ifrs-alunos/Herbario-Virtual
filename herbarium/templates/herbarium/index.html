@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
 {% load pagination %}
+{% load static %}
 
 {% block content %}
 
@@ -81,12 +82,16 @@
                     {% for plant in plants %}
                     <div class="col-4 card-col">
                         <div class="card">
-                            <img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap">
+                            {% if plant.photos.first.small_image.url %}
+                            <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
+                            {% else %}
+                            <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
+                            {% endif %}
                             <div class="card-body">
-                                <a href="{% url 'herbarium:detail' plant.slug %}" target="new_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
+                                <a id="card-title" href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
                                 <p class="card-text">{{ plant.description|truncatechars_html:70}}</p>
                                 <p class="card-text"><small class="text-muted"><i>{{ plant.scientific_name|truncatechars_html:30}}</i></small></p>
-                            </div>
+                            </div>  
                         </div>
                     </div>
                     {% endfor %}

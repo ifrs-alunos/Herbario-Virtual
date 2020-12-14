@@ -2,13 +2,13 @@
 {% load static %}
 
 {% block content %}
-  <div class="container">
-      <div class="row">
-          <div class="col">
-              <h4 class="teste">Visualização detalhada de {{plant.name}}:</h4>  
-          </div>  
-      </div>
-      <div class="row">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h4 class="teste">Visualização detalhada de {{plant.name}}:</h4>  
+            </div>  
+        </div>
+        <div class="row">
             <div class="col-5">
                 <!--  Tabela com os dados da planta -->
                 <table class="table table-striped">
@@ -51,43 +51,49 @@
                             {# <!-- <td>{{plant.occurrence_regions.states.all|join:', '}}</td> --> #} 
                             <td>{{plant.occurrence_regions.all|join:', '}}</td>
                         </tr>
-                  </tbody>
+                    </tbody>
                 </table>
 
-            {% comment %}
-<!--               <p>Teste: Lista de Estados das Regiões que a planta está inserida:</p>
-              {% for i in plant.occurrence_regions.all %}
-              <p>Região: {{i}}</p>
-              <p>Lista de Estados: {{i.states.all|join:', '}}</p>
-              {% endfor %} -->
-            {% endcomment %}
+                {% comment %}
+    <!--               <p>Teste: Lista de Estados das Regiões que a planta está inserida:</p>
+                {% for i in plant.occurrence_regions.all %}
+                <p>Região: {{i}}</p>
+                <p>Lista de Estados: {{i.states.all|join:', '}}</p>
+                {% endfor %} -->
+                {% endcomment %}
 
-              <h5>Descrição:</h5>
-              <p id="description">{{plant.description}}</p>
+                <h5>Descrição:</h5>
+                <p id="description">{{plant.description}}</p>
 
-              <h5>Importância:</h5>
-              <p id="importance">{{plant.importance}}</p>
-          </div>
+                <h5>Importância:</h5>
+                <p id="importance">{{plant.importance}}</p>
+            </div>
 
-          <div class="col-7 galeria">
-              <div class="row">
-                  {% comment %}
-<!--                   <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
-                  {% endcomment %}
-                  <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.small_image.url}}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
-              </div>
-              <div id="galeria" class="row miniaturas">
-                  {% for photo in plant.photos.all %}
-                  {% if photo.image.url == plant.photos.first.image.url %}
-                  <img class="imagem_miniatura imagem_selecionada" src="{{photo.small_image.url}}" 
-                  data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
-                  {% else %}
-                  <img class="imagem_miniatura" src="{{photo.small_image.url}}"
-                  data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
-                  {% endif %}
-                  {% endfor %}
-              </div>
-          </div>
-      </div>
-  </div>
+            <div class="col-7 galeria">
+                {% if plant.photos.first.small_image.url %}
+                <div class="row">
+                    {% comment %}
+    <!--            <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
+                    {% endcomment %}
+                    <img id="zoom" class="imagem_em_destaque" src="{{plant.photos.first.small_image.url}}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;">
+                </div>
+                <div id="galeria" class="row miniaturas">
+                    {% for photo in plant.photos.all %}
+                    {% if photo.image.url == plant.photos.first.image.url %}
+                    <img class="imagem_miniatura imagem_selecionada" src="{{photo.small_image.url}}" 
+                    data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
+                    {% else %}
+                    <img class="imagem_miniatura" src="{{photo.small_image.url}}"
+                    data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="row">
+                    <img src="{% static 'herbarium/images/aviso.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
