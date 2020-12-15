@@ -31,8 +31,8 @@
                             <td>Nome Científico</td>
                             <td><i>{{plant.scientific_name}}</i>
                                 {# Verifica se o campo é nulo #} 
-                                {% if plant.scientific_name_complementary %}
-                                    {{plant.scientific_name_complementary}}
+                                {% if plant.complementary_scientific_name %}
+                                    {{plant.complementary_scientific_name}}
                                 {% endif %}
                             </td>
                         </tr>

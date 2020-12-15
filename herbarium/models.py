@@ -119,7 +119,7 @@ class Plant(models.Model):
 
     name = models.CharField('Nome', blank=False, max_length=100)
     scientific_name = models.CharField('Nome científico', blank=False, max_length=200)
-    scientific_name_complementary = models.CharField(verbose_name="Nome Científico Complementar", max_length=60, blank=True, null=True)
+    complementary_scientific_name = models.CharField(verbose_name="Nome Científico Complementar", max_length=60, blank=True, null=True)
 
     # MODIFICAR: relacionar a planta com a sua família (classe Family) e com isso, automaticamente, será relacionada com a Division 
     # family = models.CharField('Família', blank=True, max_length=100, choices=FAMILY_CHOICES)

@@ -89,7 +89,7 @@
                             {% endif %}
                             <div class="card-body">
                                 <a id="card-title" href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
-                                <p class="card-text">{{ plant.description|truncatechars_html:70}}</p>
+                                <p class="card-text">{{ plant.description|truncatechars_html:50}}</p>
                                 <p class="card-text"><small class="text-muted"><i>{{ plant.scientific_name|truncatechars_html:30}}</i></small></p>
                             </div>  
                         </div>
