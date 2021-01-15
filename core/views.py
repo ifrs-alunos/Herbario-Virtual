@@ -18,3 +18,10 @@ def subjects(request):
     template_name = 'core/subjects.html'
 
     return render(request, template_name, {})
+
+def highlight(request, highlight_slug):
+    template_name = 'core/highlights.html'
+
+    highlight = Highlight.objects.get(slug=highlight_slug)
+
+    return render(request, template_name, {'highlight':highlight})

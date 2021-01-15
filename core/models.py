@@ -19,12 +19,21 @@ class Highlight(models.Model):
 
     image = models.ImageField('Imagem', upload_to=highlight_directory_path)
 
+    slug = models.SlugField(verbose_name="Slug", unique=True, null=True, blank=True)
+
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        if self.slug == None:
+            self.slug = slugify(self.title)
+        
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Destaque'
         verbose_name_plural = 'Destaques'
+        ordering = ['id']
 
 def carousel_image_directory_path(instance, filename):
     
