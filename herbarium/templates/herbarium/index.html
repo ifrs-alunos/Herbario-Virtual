@@ -12,11 +12,12 @@
                 <!-- Formulário para filtrar planta -->
                 <br/>
                 <h6>Nome comum, científico ou descrição:</h6>
-                <form>
+                <form method="GET">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="" aria-label="Recipient's username" aria-describedby="button-addon2">
+                        <!-- <input type="text" class="form-control"> -->
+                        {{search_form.text}}
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="button-addon2">Pesquisar</button>
+                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Pesquisar</button>
                         </div>
                     </div>   
                     {% comment %}       
@@ -79,6 +80,7 @@
 
             <div class="col-9">
                 <div class="row">
+                    {% if plants %}
                     {% for plant in plants %}
                     <div class="col-4 card-col">
                         <div class="card">
@@ -95,6 +97,9 @@
                         </div>
                     </div>
                     {% endfor %}
+                    {% else %}
+                    <h6 id="message-error">Não foi possível encontrar planta(s) com o(s) filtro(s) aplicado(s). Certifique-se que selecionou a família correta e/ou digitou corretamente.</h4>
+                    {% endif %}
                     {% comment %}
                     <!-- <nav id="nav-pagination" aria-label="Navegação da listagem de plantas">
                         <ul class="pagination">
