@@ -19,7 +19,14 @@
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Pesquisar</button>
                         </div>
-                    </div>   
+                    </div>
+                    {% if search_form.text.value %}
+                    {% if selected_family %}
+                    <button type="button" class="btn btn-light"><a href="/herbario/{{selected_family}}">Limpar Filtro</a></button>
+                    {% else %}
+                    <button type="button" class="btn btn-light"><a href="/herbario">Limpar Filtro</a></button>
+                    {% endif %}
+                    {% endif %}
                     {% comment %}       
                     <!-- <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

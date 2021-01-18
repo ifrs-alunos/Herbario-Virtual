@@ -24,8 +24,7 @@ class HerbariumIndex(ListView):
         context["families"] = Family.objects.all()
         context["selected_family"] = self.kwargs.get("family")
 
-        # Contexto para adicionar barra de pesquisa vazio
-        context["search_form"] = SearchForm()
+        context["search_form"] = SearchForm(self.request.GET)
 
         # context["families1"] = Family.objects.filter(division__name="Monocotiledôneas")
         # context["families2"] = Family.objects.filter(division__name="Dicotiledôneas")
@@ -34,32 +33,58 @@ class HerbariumIndex(ListView):
         return context
 
     def get_queryset(self, **kwargs):
-        # print(self.kwargs)
+        # Seleciona todas as plantas
+        plants = Plant.objects.all()
+
+        # Executa se alguma família tiver sido selecionada
+        if self.kwargs:
+            # Filtra todas as plantas por uma família passada na chave 'family' do dicionário da requisição
+            plants = plants.filter(family__name=self.kwargs['family'])
+        
+        # Executa se algum texto tiver sido pesquisado
+        if self.request.GET:
+            # Instanciando formulário com dados GET da requisição
+            search_form = SearchForm(self.request.GET)
+
+            if search_form.is_valid():
+                # Acessa o valor do campo text do formulário
+                filter_text = search_form.cleaned_data['text']
+                # Cria o filtro genérico
+                filter = Q(name__icontains=filter_text) | Q(scientific_name__icontains=filter_text) | Q(description__icontains=filter_text)
+
+                # Filtra plantas pelo filtro de texto
+                plants = plants.filter(filter)
+        
+        # Retorna a variável que armazena todas as plantas requisitadas pelo usuário (com ou sem filtro)
+        return plants
+
+        '''
+        # Coleta e manipula os dados de requisições da barra de pesquisa
+        if self.request.GET != {}:
+            # Instanciando formulário com dados GET da requisição
+            search_form = SearchForm(self.request.GET)
+
+            if search_form.is_valid():
+                # Acessa o valor do campo text do formulário
+                filter_text = search_form.cleaned_data['text']
+
+                filter = Q(name__icontains=filter_text) | Q(scientific_name__icontains=filter_text) | Q(description__icontains=filter_text)
 
         # Se o dicionário da requisição não for vazio, ou seja, se contiver uma família especificada
         if self.kwargs != {}:
             # Seleciona todas as plantas de uma família que se encontra na chave do dicionário da requisição
             plants_by_family = Plant.objects.filter(family__name=self.kwargs['family'])
 
-            # Coleta e manipula os dados de requisições da barra de pesquisa
-            if self.request.GET != {}:
-                # Instanciando formulário com dados GET da requisição
-                search_form = SearchForm(self.request.GET)
-
-                if search_form.is_valid():
-                    # Acessa o valor do campo text do formulário
-                    filter_text = search_form.cleaned_data['text']
-                    # print(filter_text)
-
-                    filter = Q(name__icontains=filter_text) | Q(scientific_name__icontains=filter_text) | Q(description__icontains=filter_text)
-
-                    print("Lista de plantas da família {} utilizando filtro".format(self.kwargs['family']))
-                    filtered_plants = plants_by_family.filter(filter)
-                    print(filtered_plants)
-                    return filtered_plants
-            # Se não foi utilizado a barra de pesquisa, retorna apenas todas as plantas da família
-            else:
+            try:
+                filtered_plants = plants_by_family.filter(filter)
+                print("Lista de plantas da família {} utilizando filtro".format(self.kwargs['family']))
+                print(filtered_plants)
+                # Retorna plantas com dois filtros: um por família e outro por pesquisa
+                return filtered_plants
+            except NameError:
+                # Se não foi utilizado a barra de pesquisa, retorna todas as plantas da família
                 print("Lista de plantas da familia {}".format(self.kwargs['family']))
+                print(plants_by_family)
                 # Retorna a lista de plantas
                 return plants_by_family
 
@@ -88,7 +113,7 @@ class HerbariumIndex(ListView):
                 # Retorna a lista de todas as plantas
                 print("Lista de todas as plantas")
                 return all_plants
-
+    '''
     '''
     # Não necessário agora
 
