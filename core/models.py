@@ -10,6 +10,15 @@ def highlight_directory_path(instance, filename):
 
     return 'destaques/noticias/{}/{}'.format(folder_name, filename)
 
+'''
+def more_highlight_path(instance, filename):
+
+    # Transforma a string passada como parâmetro em um slug
+    folder_name = slugify(instance.title)
+
+    return 'destaques/noticias/{}/mais-imagens/{}'.format(folder_name, filename)
+'''
+
 class Highlight(models.Model):
     # keyword = models.CharField('Palavra-chave', blank=False, max_length=10, null=True)
 
@@ -20,6 +29,10 @@ class Highlight(models.Model):
     image = models.ImageField('Imagem', upload_to=highlight_directory_path)
 
     slug = models.SlugField(verbose_name="Slug", unique=True, null=True, blank=True)
+
+    more_information = models.TextField(verbose_name='Mais Informações', null=True)
+
+    # more_photos = models.ImageField(verbose_name='Mais Imagens', upload_to=more_highlight_path)
 
     def __str__(self):
         return self.title

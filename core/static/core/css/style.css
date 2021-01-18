@@ -27,6 +27,10 @@ a.navbar-brand {
 }
 
 /* Página inicial Core */
+/* 
+main .container #saiba-mais {
+    margin-bottom: 5% !important;
+} */
 
 /* Carrossel */
 .container .carousel-item img  {
@@ -87,7 +91,7 @@ footer ul {
 }
 
 /* Alinha a imagem do logo do footer no centro da div */
-#getdiv {
+#getdiv, div#card-saiba-mais {
     display: flex;
     align-items: center;
 }
@@ -225,6 +229,12 @@ img {
     border-radius: 7px;
 
 }
+/* 
+div#card-saiba-mais {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+} */
 
 .zoomWindow {
     border-radius: 7px;
