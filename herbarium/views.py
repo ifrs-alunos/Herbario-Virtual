@@ -115,7 +115,6 @@ class HerbariumIndex(ListView):
                 return all_plants
     '''
     '''
-    # Não necessário agora
 
     # Pegando Queryset - retorno de um conjunto de busca do banco de dados
     def get_queryset(self): # Reescrevendo um método padrão do Django, que a principio pegaria todas as plantas
@@ -150,7 +149,6 @@ class HerbariumIndex(ListView):
         return context
 
     '''
-
 
 class HerbariumDetail(DetailView):
     # Mostra detalhes de uma planta em específico. Passa no contexto os dados de UMA planta

@@ -6,15 +6,13 @@
 
     <div class ="container">
         <div class="row">
-            <!-- <div class="col"></div> -->
             <div class="col-6">
                 <h4>Filtrar plantas por:</h4>
-                <!-- Formulário para filtrar planta -->
                 <br/>
                 <h6>Nome comum, científico ou descrição:</h6>
+                <!-- Formulário para filtrar plantas por texto -->
                 <form method="GET">
                     <div class="input-group mb-3">
-                        <!-- <input type="text" class="form-control"> -->
                         {{search_form.text}}
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Pesquisar</button>
@@ -27,18 +25,6 @@
                     <button type="button" class="btn btn-light"><a href="/herbario">Limpar Filtro</a></button>
                     {% endif %}
                     {% endif %}
-                    {% comment %}       
-                    <!-- <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Selecione
-                        </button>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Divisão</a>
-                            <a class="dropdown-item" href="#">Família</a>
-                            <a class="dropdown-item" href="#">Espécie</a>
-                        </div>
-                    </div> -->
-                    {% endcomment %}
                 </form>
             </div>
         </div>
@@ -46,6 +32,7 @@
         <div class="row">
             <div class="col-3">
                 <h5>Famílias:</h5>
+                <!-- Filtro por famílias de plantas daninhas -->
                 <ul class="list-group">
                     {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == None %}
@@ -65,7 +52,6 @@
                     {% endif %}
                     {% endfor %}
                 </ul> 
-
                 {% comment %}
                 <!-- <h5> Famílias Monocotiledôneas</h5> -->
 <!--                 <ul class="list-group">
@@ -88,14 +74,17 @@
             <div class="col-9">
                 <div class="row">
                     {% if plants %}
+                    <!-- Cards das plantas daninhas -->
                     {% for plant in plants %}
                     <div class="col-4 card-col">
                         <div class="card">
+                            {# Verifica a planta contém ao menos uma imagem cadastrada #}
                             {% if plant.photos.first.small_image.url %}
                             <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
                             <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
+                            
                             <div class="card-body">
                                 <a id="card-title" href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
                                 <p class="card-text">{{ plant.description|truncatechars_html:50}}</p>
@@ -107,36 +96,6 @@
                     {% else %}
                     <h6 id="message-error">Não foi possível encontrar planta(s) com o(s) filtro(s) aplicado(s). Certifique-se que selecionou a família correta e/ou digitou corretamente.</h4>
                     {% endif %}
-                    {% comment %}
-                    <!-- <nav id="nav-pagination" aria-label="Navegação da listagem de plantas">
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Anterior">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Anterior</span>
-                                </a>
-                            </li>
-                            <li class="page-item active">
-                                <a class="page-link" href="{% url 'herbarium:index'%}">1</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="{% url 'herbarium:index'%}?page=2">2</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="{% url 'herbarium:index'%}?page=3">3</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="{% url 'herbarium:index'%}?page=4">4</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Próximo">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Próximo</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav> -->
-                    {% endcomment %}
                 </div>
                 <!-- Paginação da listagem de plantas -->
                 {% pagination %}
