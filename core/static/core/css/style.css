@@ -159,8 +159,8 @@ table.table {
     margin-bottom: 3% !important;
 }
 
-.card:hover {
-    box-shadow: 5px 10px 40px #888888;}
+.card-col .card:hover {
+    box-shadow: 5px 10px 40px #88888893;}
 
 main .container .row {
     margin-bottom: 5% !important;
