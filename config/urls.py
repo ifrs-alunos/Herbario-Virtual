@@ -23,8 +23,9 @@ from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('herbario/', include( 'herbarium.urls', namespace='herbarium')),
-    path('', include( 'core.urls' ,namespace='core')),
+    path('herbario/', include('herbarium.urls', namespace='herbarium')),
+    path('conta/', include('accounts.urls')),
+    path('', include('core.urls',namespace='core')),
 ]
 
 #Para Imagem ser servida pelo Django
