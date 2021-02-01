@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
@@ -23,10 +22,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'eg%2hr5a4y@6w+*kipd5by()+vwqkaqqf_s4gj9h%!g_a(l!t6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['labfito.vacaria.ifrs.edu.br', 'localhost']
-
 
 # Application definition
 
@@ -73,29 +71,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': os.environ.get('DB_NAME', 'herbario'),
-    #     'USER': os.environ.get('DB_USER', 'herbario'),
-    #     'PASSWORD': os.environ.get('DB_PASS', 'senhasegura'),
-    #     'HOST': 'localhost',
-    #     'PORT': '5432',
-    # }
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME', 'herbario'),
-        'USER': os.environ.get('DB_USER', 'postgres'),
-        'PASSWORD': os.environ.get('DB_PASS', 'senhasegura'),
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
-
+# Será sobreescrito no local_settings.py
+DATABASES = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
@@ -129,7 +109,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -137,10 +116,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'config/core/static'),)
 
-
 #Arquivos de mídia
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, "herbario", "media") 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media") 
 
 MEDIA_URL = '/media/'
+
+from .local_settings import *
