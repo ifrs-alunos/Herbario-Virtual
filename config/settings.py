@@ -39,7 +39,10 @@ INSTALLED_APPS = [
     'core',
     'accounts',
     'dashboard',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -99,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
@@ -122,5 +125,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, "media") 
 
 MEDIA_URL = '/media/'
+
+LOGIN_REDIRECT_URL = '/conta/perfil'
+
+LOGOUT_REDIRECT_URL = '/conta/login/'
 
 from .local_settings import *

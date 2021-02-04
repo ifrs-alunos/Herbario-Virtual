@@ -1,9 +1,10 @@
 {% extends "core/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block content %}
 
 {% if form.errors %}
-    <p>Your username and password didn't match. Please try again.</p>
+    <p>Seu nome de usuário e/ou senha estão incorretos. Por favor, tente novamente.</p>
 {% endif %}
 
 {% if next %}
@@ -15,20 +16,18 @@
     {% endif %}
 {% endif %}
 
-<form method="post">
-    {% csrf_token %}
-    <table>
-        <tr>
-            <td>{{ form.username.label_tag }}</td>
-            <td>{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td>{{ form.password.label_tag }}</td>
-            <td>{{ form.password }}</td>
-        </tr>
-    </table>
-    <input type="submit">
-    <input type="hidden" name="next" value="{{ next }}">
-</form>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <h4>Fazer login</h4><br/>
+            <form method="post">
+                {% csrf_token %}
+                {{form|crispy}}
+                <br/><p>OBS: campos com * são obrigatórios</p>
+                <button type="submit" class="btn btn-light" name="next" value="{{ next }}">Entrar</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
