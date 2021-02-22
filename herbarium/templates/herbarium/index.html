@@ -6,7 +6,7 @@
 
     <div class ="container">
         <div class="row">
-            <div class="col-6">
+            <div class="col-lg-6 col-md-8">
                 <h4>Filtrar plantas por:</h4>
                 <br/>
                 <h6>Nome comum, científico ou descrição:</h6>
@@ -29,16 +29,21 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-3">
+        <div class="row mt-lg-4 mt-2">
+            <div class="col">
                 <h5>Famílias:</h5>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-3 ">
                 <!-- Filtro por famílias de plantas daninhas -->
-                <ul class="list-group">
+                <ul class="list-group d-none d-lg-block">
                     {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == None %}
-                    <li class="list-group-item active"><a href="{% url 'herbarium:index' %}">Todas</a></li>
+                        <li class="list-group-item active"><a href="{% url 'herbarium:index' %}">Todas</a></li>
                     {% else %}
-                    <li class="list-group-item"><a href="{% url 'herbarium:index' %}">Todas</a></li>
+                        <li class="list-group-item"><a href="{% url 'herbarium:index' %}">Todas</a></li>
                     {% endif %}
 
                     {# Para cada família na lista de famílias #}
@@ -46,12 +51,33 @@
 
                     {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == family.name %}
-                    <li class="list-group-item active"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
+                        <li class="list-group-item active"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
                     {% else %}
-                    <li class="list-group-item"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
+                        <li class="list-group-item"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
                     {% endif %}
                     {% endfor %}
                 </ul> 
+
+                <select class="custom-select d-lg-none mb-3" onchange="location=this.value;">
+                    {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
+                    {% if selected_family == None %}
+                        <option selected value="{% url 'herbarium:index' %}">Todas</option>
+                    {% else %}
+                        <option value="{% url 'herbarium:index' %}">Todas</option>
+                    {% endif %}
+
+                    {# Para cada família na lista de famílias #}
+                    {% for family in families %}
+
+                    {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
+                    {% if selected_family == family.name %}
+                        <option selected value="{% url 'herbarium:plants' family.name %}">{{family}}</option>
+                    {% else %}
+                        <option value="{% url 'herbarium:plants' family.name %}">{{family}}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+
                 {% comment %}
                 <!-- <h5> Famílias Monocotiledôneas</h5> -->
 <!--                 <ul class="list-group">
@@ -71,23 +97,25 @@
                 {% endcomment %}
             </div>
 
-            <div class="col-9">
+            <div class="col-lg-9">
                 <div class="row">
                     {% if plants %}
                     <!-- Cards das plantas daninhas -->
                     {% for plant in plants %}
-                    <div class="col-4 card-col">
-                        <div class="card">
+                    <div class="col-lg-4 col-md-6 card-col d-flex col-12">
+                        <div class="card col-12">
                             {# Verifica a planta contém ao menos uma imagem cadastrada #}
                             {% if plant.photos.first.small_image.url %}
-                            <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
+                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
-                            <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
+                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
                             
                             <div class="card-body">
                                 <a id="card-title" href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
-                                <p class="card-text">{{ plant.description|truncatechars_html:50}}</p>
+                                <p class="card-text">{{ plant.description|truncatechars_html:75}}</p>
+                            </div>
+                            <div class="card-body">
                                 <p class="card-text"><small class="text-muted"><i>{{ plant.scientific_name|truncatechars_html:30}}</i></small></p>
                             </div>  
                         </div>
@@ -98,7 +126,9 @@
                     {% endif %}
                 </div>
                 <!-- Paginação da listagem de plantas -->
-                {% pagination %}
+                <div class="row">
+                    {% pagination %}
+                </div>
             </div>
         </div>
     </div>

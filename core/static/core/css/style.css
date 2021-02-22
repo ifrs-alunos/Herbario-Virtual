@@ -5,6 +5,7 @@
     overflow: hidden !important; 
 } */
 
+
 /* Estilo do template base e da página inicial */
 
 /* Header */
@@ -27,24 +28,36 @@ a.navbar-brand {
 }
 
 /* Página inicial Core */
-/* 
-main .container #saiba-mais {
-    margin-bottom: 5% !important;
-} */
+
 
 /* Carrossel */
+
 .container .carousel-item img  {
-    width: 1100px ;
-    height: 430px ;
+    /* width: 1100px ; */
+    height: 200px ;
     object-fit: cover;
 }
 
-.col-lg-4 {
-    text-align: center;
+@media (min-width: 576px) {
+    .container .carousel-item img  {
+        height: 320px ;
+    }
 }
 
-main .container .row {
-    margin-bottom: 8%;
+@media (min-width: 768px) {
+    .container .carousel-item img  {
+        height: 380px ;
+    }
+}
+
+@media (min-width: 992px) {
+    .container .carousel-item img  {
+        height: 430px ;
+    }
+}
+
+.col-lg-4 {
+    text-align: left;
 }
 
 .rounded-circle {
@@ -124,13 +137,13 @@ footer .link-integra {
     left: -34px;
 }
 
-.contato {
-    margin-left: 3%;
+footer div.container {
+    overflow: hidden;
 }
 
-p.contato {
-    margin-top: 5%;
-}
+/* .contato {
+    margin-left: 3%;
+} */
 
 /*#link-integra {
     margin-top: 3%;
@@ -152,7 +165,7 @@ table.table {
 
 .card-img-top {
     height: 260px !important;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .card-col {
@@ -161,10 +174,6 @@ table.table {
 
 .card-col .card:hover {
     box-shadow: 5px 10px 40px #88888893;}
-
-main .container .row {
-    margin-bottom: 5% !important;
-}
 
 img.img{
     margin-left: 20px;

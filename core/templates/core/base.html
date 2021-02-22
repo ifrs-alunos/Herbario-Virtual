@@ -23,7 +23,10 @@
         <header>
             <!-- Barra de navegação -->
             <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #A6DDA6;">
-                <a class="navbar-brand">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand"> 
                     <img id='logo' alt="Logo do LabFito" src="{%static 'core/images/labfito.png'%}">
                 </a>
 
@@ -65,8 +68,8 @@
         <footer >
             <!-- Redes sociais -->
             <div class="container">
-                <div class="row">
-                    <div class="col-7">
+                <div class="row text-center text-md-left">
+                    <div class="col-lg-7 col-md-6">
                         <h6>Redes sociais e páginas do Labifito:</h6>
                         <a class="link-redes" aria-hidden="true" href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">
                             <i class="fa fa-facebook-official" id="facebook-icon"></i>
@@ -83,15 +86,15 @@
                             <img id="icon-preto" src="{% static 'core/images/logo_integra.png' %}">
                         </a>
                     </div>
-                    <div class="col-5">
+                    <div class="col-lg-5 col-md-6 mt-3 mt-md-0 mb-0">
                         <h6 class="contato">E-mail de contato:</h6>                        
-                        <p class="contato"><a class="link-redes" id="email-labfito" href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@vacaria.ifrs.edu.br</a></p>
+                        <p class="contato"><a class="link-redes" id="email-labfito" href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@<wbr/>vacaria.ifrs.edu.br</a></p>
                     </div>
                 </div>
                 <hr>
                 <!-- Informações sobre desenvolvimento do site -->
                 <div id="getdiv" class="row">
-                    <div class="col-7">
+                    <div class="col-lg-7 col-md-6">
                         <p>
                             Sistema desenvolvido no projeto <b>Herbário Virtual de Plantas Daninhas</b> por:
                         </p>
@@ -102,9 +105,9 @@
                                 <li>Ricardo Luis dos Santos (professor)</li>
                             </ul> 
                         </p>
-                        <p>© 2019-<spam id="ano_atual"></spam> Instituto Federal do Rio Grande do Sul - Campus Vacaria</p>
+                        <p class='text-center text-md-left'>© 2019-<spam id="ano_atual"></spam> Instituto Federal do Rio Grande do Sul - Campus Vacaria</p>
                     </div>
-                    <div class="col-5">
+                    <div class="col-lg-5 col-md-6 text-center text-md-left">
                         <img id="footer_logo" src="{% static 'core/images/logo_ifrs2.png'%}" alt="Logo do IFRS campus Vacaria">
                     </div>
                 </div>

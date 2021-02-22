@@ -4,8 +4,8 @@
 
 <div class="container">
     <div class="row">
-        <div class="col"></div>
-        <div class="col-11">
+        <!-- <div class="col"></div> -->
+        <div class="col">
             <!-- Carrossel com fotos do Labifito -->
             <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
                 <ol class="carousel-indicators">
@@ -26,7 +26,7 @@
                     {# foorloop = variável django que indica quantas vezes o loop foi executado #}
                     {% if forloop.counter == 1 %}
                     <div class="carousel-item active">
-                        <img class="d-block w-100" src="{{imagem.image.url}}" alt="Slide {{forloop.counter}}">
+                        <img class="d-block w-100 img-fluid" src="{{imagem.image.url}}" alt="Slide {{forloop.counter}}">
                         <div class="carousel-caption d-none d-md-block">
                             <h5 class="image-title">{{imagem.title}}</h5>
                             <p class="image-description">{{imagem.description}}</p>
@@ -34,7 +34,7 @@
                     </div>
                     {% else %}
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="{{imagem.image.url}}" alt="Slide {{forloop.counter}}">
+                        <img class="d-block w-100 img-fluid" src="{{imagem.image.url}}" alt="Slide {{forloop.counter}}">
                         <div class="carousel-caption d-none d-md-block">
                             <h5 class="image-title">{{imagem.title}}</h5>
                             <p class="image-description">{{imagem.description}}</p>
@@ -54,13 +54,13 @@
                 </a>
             </div>
         </div>
-        <div class="col"></div>
+        <!-- <div class="col"></div> -->
     </div>
 
     <!-- Textos e imagens com explicações acerca do Labifito  -->
-    <div class="row">
+    <div class="row my-5">
         {% for destaque in destaques %}
-        <div class="col-lg-4">
+        <div class="col-lg-4 text-center">
             <img class="rounded-circle" src="{{destaque.image.url}}" alt="Generic placeholder image" width="140" height="140">
             <h2>{{destaque.title}}</h2>
             <p>{{destaque.text}}</p>
