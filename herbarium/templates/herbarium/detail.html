@@ -4,12 +4,12 @@
 {% block content %}
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-lg-12">
                 <h4 class="teste">Visualização detalhada de {{plant.name}}:</h4>  
             </div>  
         </div>
         <div class="row">
-            <div class="col-5">
+            <div class="col-lg-5">
                 <!--  Tabela com os dados da planta -->
                 <table class="table table-striped">
                     <thead>
@@ -71,7 +71,7 @@
             </div>
 
             <!-- Galeria de imagens da planta -->
-            <div class="col-7 galeria">
+            <div class="col-lg-7 galeria">
                 {# Verifica se a planta contém ao menos uma imagem #}
                 {% if plant.photos.first.small_image.url %}
                 <!-- Imagem em destaque -->
@@ -96,7 +96,7 @@
                 </div>
                 {% else %}
                 <div class="row">
-                    <img src="{% static 'herbarium/images/aviso.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens">
+                    <img class="w-100" src="{% static 'herbarium/images/aviso.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens">
                 </div>
                 {% endif %}
             </div>
