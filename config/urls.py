@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('herbario/', include('herbarium.urls', namespace='herbarium')),
     path('conta/', include('accounts.urls')),
+    path('painel/', include('dashboard.urls')),
     path('', include('core.urls',namespace='core')),
 ]
 

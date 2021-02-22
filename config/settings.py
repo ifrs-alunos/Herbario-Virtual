@@ -126,7 +126,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = '/media/'
 
-LOGIN_REDIRECT_URL = '/conta/perfil'
+LOGIN_REDIRECT_URL = '/painel/'
 
 LOGOUT_REDIRECT_URL = '/conta/login/'
 

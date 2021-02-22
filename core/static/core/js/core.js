@@ -9,11 +9,26 @@ seleciona_ano = now.getFullYear();
 // Insere no HTML
 spam.innerHTML += seleciona_ano; 
 
+var links = document.getElementsByClassName("nav-item");
+console.log(links)
+
+for (var i = 0; i < links.length ; ++i){
+    links[i].onclick = tornar_negrito;
+}
+
+function tornar_negrito(event) {
+    var negrito = document.getElementsByClassName("active");
+    console.log(negrito)
+    // negrito.classList.remove("active");
+
+    // event.classList.add("active");
+}
 
 // Código JS da Galeria de imagens
 
 // Seleciona todos os elementos com a classe "imagem_miniatura"
 var imagens_miniaturas = document.getElementsByClassName("imagem_miniatura");
+
 
 // Indica que, quando algum elemento da seleção for clicado, dispara a função tornar_destaque
 for (var i = 0; i < imagens_miniaturas.length ; ++i){
@@ -102,6 +117,8 @@ $("#zoom").elevateZoom({
     zoomWindowFadeIn: 600,
     zoomWindowFadeOut: 600
 });
+
+
 
 // //initiate the plugin and pass the id of the div containing gallery images
 // $("#zoom").elevateZoom({
