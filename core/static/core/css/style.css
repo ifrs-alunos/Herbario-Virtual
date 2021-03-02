@@ -27,6 +27,16 @@ a.navbar-brand {
     padding-bottom: 0;
 }
 
+@media (max-width: 576px) {
+    a.navbar-brand {
+        margin: 0;
+    }
+
+    .card-img-top {
+        object-fit: contain;
+    }
+}
+
 /* Página inicial Core */
 
 
@@ -165,7 +175,12 @@ table.table {
 
 .card-img-top {
     height: 260px !important;
-    object-fit: contain;
+    object-fit: cover;
+    /* margin-top: 6%; */
+}
+
+div.card.col-12 {
+    padding: 0;
 }
 
 .card-col {

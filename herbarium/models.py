@@ -1,5 +1,5 @@
 from django.db import models
-from PIL import Image
+from PIL import Image, ExifTags
 from io import BytesIO
 from django.core.files import File
 from django.utils.text import slugify
@@ -210,6 +210,50 @@ def make_small_image(image, size=(645, 430)):
 
     return thumbnail
 
+def remove_metadata(image_with_metadata):
+    # PROBLEMA:
+    # image = Image.open(image_with_metadata)
+
+    # data = list(image.getdata())
+
+    # # print(data)
+    # image_without_exif = Image.new(image.mode, image.size)
+    # image_without_exif.putdata(data)
+
+    # image_without_exif.rotate(180)
+
+    # thumb_io = BytesIO() # Cria um objeto BytesIO
+
+    # image_without_exif.save(thumb_io, 'JPEG', quality=100) # Salva imagem para um objeto BytesIO 
+
+    # image_without_metadata = File(thumb_io, name=image_with_metadata.name) # Cria um objeto File 'amigável' ao Django
+
+    # return image_without_metadata
+
+    
+    image=Image.open(image_with_metadata)
+
+    for orientation in ExifTags.TAGS.keys():
+        if ExifTags.TAGS[orientation]=='Orientation':
+            break
+    
+    exif = image._getexif()
+
+    if exif[orientation] == 3:
+        image=image.rotate(180, expand=True)
+    elif exif[orientation] == 6:
+        image=image.rotate(270, expand=True)
+    elif exif[orientation] == 8:
+        image=image.rotate(90, expand=True)
+
+    thumb_io = BytesIO() # Cria um objeto BytesIO
+
+    image.save(thumb_io, 'JPEG', quality=100)
+    # image.close()
+
+    image_rotate = File(thumb_io, name=image_with_metadata.name)
+    return image_rotate
+
 #Modelo de foto para que seja possível a planta ter multiplas imagens
 class Photo(models.Model):
     # Cria modelo para fotos das plantas
@@ -229,12 +273,15 @@ class Photo(models.Model):
     # Sobreescreve o método save
     def save(self, *args, **kwargs):
         # Realiza o processamento na imagem cadastrada (self.image) e guarda o retorno no atributo small_image
-        img = Image.open(self.image)
+        pillow_img = Image.open(self.image)
 
-        image_width, image_height = img.size
+        pillow_img_width, pillow_img_height = pillow_img.size
 
         # Especificando tamanho mínimo como Full HD
-        if image_width >= 1920 and image_height >= 1080:
+        if (pillow_img_width >= 1920 and pillow_img_height >= 1080) or (pillow_img_width >= 1080 and pillow_img_height >= 1920):
+            func = remove_metadata(self.image)
+            self.image = func
+            # Cria a imagem pequena e insere no campo do modelo            
             self.small_image = make_small_image(self.image)
             super().save(*args, **kwargs)
         else:
