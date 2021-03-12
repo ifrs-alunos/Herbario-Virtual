@@ -5,6 +5,13 @@
     overflow: hidden !important; 
 } */
 
+
+button.btn.btn-light, a.btn.btn-secondary {
+    background-color:#A6DDA6;
+    border-color: #84AE84;
+    color: black;
+}
+
 /* Estilo do template base e da página inicial */
 
 /* Header */
@@ -49,10 +56,6 @@ main .container .row {
 
 .rounded-circle {
     object-fit: cover;
-}
-
-div .btn-secondary {
-    background-color: black;
 }
 
 .image-title, .image-description {
