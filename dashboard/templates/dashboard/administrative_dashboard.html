@@ -4,10 +4,23 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-6">
-            <h4>Olá, {{request.user}}! Você está conectado(a)!</h4><br/>
-            <p>Você é um administrador!</p>
-            <p>Para fazer logout, clique aqui: <a href='{% url "accounts:logout" %}'>Sair</a></p>
+        <div class="col-12">
+            <h4 class="mb-4">Painel de controle</h4>
+        </div>
+        <div class="col-12">
+            <div class="jumbotron">
+                <h1 class="display-4">Olá, {{request.user}}!</h1>
+                <p class="lead">Você está conectado(a) e é um(a) <b>administrador(a)</b> da plataforma.</p>
+                <hr class="my-4">
+                <p>Utilize os botões abaixo para selecionar o que deseja fazer:</p>
+                <p class="lead">
+                    <a class="btn btn-secondary btn-lg" href="#" role="button">Adicionar planta</a>
+                    <a class="btn btn-secondary btn-lg" href="#" role="button">Editar plantas</a>
+                    <a class="btn btn-secondary btn-lg" href="#" role="button">Adicionar notícia</a>
+                    <a class="btn btn-secondary btn-lg" href="#" role="button">Editar notícias</a>
+                    <a class="btn btn-secondary btn-lg" href="#" role="button">Ver solicitações</a>
+                </p>
+            </div>
         </div>
     </div>
 </div>

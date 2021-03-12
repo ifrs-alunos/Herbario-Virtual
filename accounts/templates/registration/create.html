@@ -7,6 +7,11 @@
     <div class="row">
         <div class="col-lg-11">
             <h4 >Criar conta</h4><br/>
+            <div class="alert alert-secondary mb-5" role="alert">
+                <h6 class="alert-heading">O que eu posso fazer com uma conta de usuário?</h6>
+                <hr>
+                <p class="mb-0">Neste momento, ainda estamos desenvolvendo as ações permitidas para usuários. Futuramente, você poderá nos enviar fotos de plantas já cadastradas e também solicitar a inserção de novas plantas daninhas de seu conhecimento. Cadastre-se e seja nosso(a) contribuidor(a)!</p>
+              </div>
             <form method="POST">
                 {% csrf_token %}
                 <div class="row">
@@ -19,7 +24,6 @@
                         {{profile_form.phone|as_crispy_field }}
                     </div>
                 </div>
-            
                 <div class="row">
                     <div class="col-lg-6 col-sm-12">
                         {{profile_form.institution|as_crispy_field }}
@@ -38,7 +42,7 @@
                     </div>
                 </div>
 
-                <p>OBS: campos com * são obrigatórios</p>
+                <p class="font-weight-light">Campos marcados com * são obrigatórios</p>
                 <button type="submit" class="btn btn-light">Enviar</button>
             </form>
         </div>

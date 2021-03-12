@@ -23,11 +23,15 @@
             <form method="post">
                 {% csrf_token %}
                 {{form|crispy}}
-                <br/><p>OBS: campos com * são obrigatórios</p>
+                <br/><p class="font-weight-light">Campos marcados com * são obrigatórios</p>
                 <button type="submit" class="btn btn-light" name="next" value="{{ next }}">Entrar</button>
             </form>
-            <br/><br/>
-            <p>Ainda não tem uma conta? Clique <b><a href="{% url 'accounts:create' %}">aqui</a></b> e se cadastre.</p>
+        </div>
+        <div class="col-6 d-flex align-items-center flex-column">
+            <div class="alert alert-secondary " role="alert">
+                <h5 class="alert-heading">Não possuí uma conta de usuário?</h5><hr>
+                <p  class="mb-0">Clique <b><a href="{% url 'accounts:create' %}">aqui</a></b> para mais informações e se cadastre</p>
+            </div>
         </div>
     </div>
 </div>
