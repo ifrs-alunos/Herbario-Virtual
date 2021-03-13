@@ -18,24 +18,28 @@
 
         <!-- Icons por FontAwesome -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
     </head>
     <body>
         <header>
             <!-- Barra de navegação -->
             <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #A6DDA6;">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
-                </button>
+                </button> -->
 
-                <!-- <div id="mySidenav" class="sidenav">
+                <div id="mySidenav" class="sidenav">
                     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                    <a href="#">About</a>
-                    <a href="#">Services</a>
-                    <a href="#">Clients</a>
-                    <a href="#">Contact</a>
+                    <a href="{% url 'core:index' %}">Início</a>
+                    <a href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
+                    <a href="">Doenças de plantas</a>
+                    <a href="">Insetos</a>
+                    <a href="{% url 'core:subjects' %}">Disciplinas</a>
+                    <a href="">Materiais</a>
+                    <a href="">Publicações</a>
                 </div>
 
-                <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span> -->
+                <span class="d-lg-none pl-3 pr-3" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
 
                 <a class="navbar-brand"> 
                     <img id='logo' alt="Logo do LabFito" src="{%static 'core/images/labfito.png'%}">
@@ -138,9 +142,9 @@
  -->
     {% endcomment %}
 
-    <!-- Scripts Biblioteca ElevateZoom -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+    {% block scripts %}
+
+    {% endblock %}
     
     <!-- Js Externo -->
     <script src="{% static 'core/js/core.js' %}"></script>

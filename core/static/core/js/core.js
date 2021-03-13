@@ -1,6 +1,12 @@
 // Código JS para tornar ano não estático no footer
 
-
+function openNav() {
+    document.getElementById("mySidenav").style.width = "100%";
+}
+  
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+}
 
 // Seleciona tag spam onde deve ser inserido o ano atual no footer
 var spam = document.getElementById("ano_atual");

@@ -1,5 +1,53 @@
 /*Todos os templates */
 
+span.d-lg-none {
+    color: #536e53;
+    border: 1px solid #81ac818e;
+    border-radius: 5px;
+    /* padding: 0px 10px 0px 10px; */
+}
+
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 9999999;
+    top: 0;
+    left: 0;
+    background-color: #A6DDA6;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    text-align:center;
+}
+  
+.sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #302e2e;
+    display: block;
+    transition: 0.3s;
+  
+}
+  
+.sidenav a:hover{
+    color: #000000;
+}
+  
+.sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+  
+@media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+}
+  
 /* .container, div.galeria .row { 
     Esconde conteúdos que ultrapassam as dimensões do bloco 
     overflow: hidden !important; 
