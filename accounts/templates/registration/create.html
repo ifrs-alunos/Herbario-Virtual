@@ -3,51 +3,49 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row">
-        <div class="col-lg-11">
-            <h4 >Criar conta</h4><br/>
-            <div class="alert alert-secondary mb-5" role="alert">
-                <h6 class="alert-heading">O que eu posso fazer com uma conta de usuário?</h6>
-                <hr>
-                <p class="mb-0">Neste momento, ainda estamos desenvolvendo as ações permitidas para usuários. Futuramente, você poderá nos enviar fotos de plantas já cadastradas e também solicitar a inserção de novas plantas daninhas de seu conhecimento. Cadastre-se e seja nosso(a) contribuidor(a)!</p>
-              </div>
-            <form method="POST">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12">
-                        {{profile_form.name|as_crispy_field }}
-                        {{form.username|as_crispy_field }}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-11">
+                <h4 >Criar conta</h4><br/>
+                <form id="create_form" method="POST">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            {{profile_form.name|as_crispy_field }}
+                            {{form.username|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            {{form.email|as_crispy_field }}
+                            {{profile_form.phone|as_crispy_field }}
+                        </div>
                     </div>
-                    <div class="col-lg-6 col-sm-12">
-                        {{form.email|as_crispy_field }}
-                        {{profile_form.phone|as_crispy_field }}
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            {{profile_form.institution|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            {{profile_form.role|as_crispy_field }}
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12">
-                        {{profile_form.institution|as_crispy_field }}
-                    </div>
-                    <div class="col-lg-6 col-sm-12">
-                        {{profile_form.role|as_crispy_field }}
-                    </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-lg-6 col-sm-12">
-                        {{form.password1|as_crispy_field }}
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12">
+                            {{form.password1|as_crispy_field }}
+                        </div>
+                        <div class="col-lg-6 col-sm-12">
+                            {{form.password2|as_crispy_field }}
+                        </div>
                     </div>
-                    <div class="col-lg-6 col-sm-12">
-                        {{form.password2|as_crispy_field }}
-                    </div>
-                </div>
 
-                <p class="font-weight-light">Campos marcados com * são obrigatórios</p>
-                <button type="submit" class="btn btn-light">Enviar</button>
-            </form>
+                    <p class="font-weight-light">Campos marcados com * são obrigatórios</p>
+                    <button type="submit" class="btn btn-light">Enviar</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
+{% endblock %}
 
-
+{% block scripts %}
+    <!-- Plugin Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
 {% endblock %}

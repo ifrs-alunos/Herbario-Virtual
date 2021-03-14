@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4>O que poderei fazer após me cadastrar?</h4><br/>
+            </div>
+            <div class="col-12">
+                <div class="alert alert-secondary mb-5" role="alert">
+                    <p class="mb-0">Neste momento, ainda estamos desenvolvendo as ações permitidas para usuários. Futuramente, você poderá nos enviar fotos de plantas já cadastradas e também solicitar a inserção de novas plantas daninhas de seu conhecimento. Cadastre-se e seja o(a) contribuidor(a) deste herbário virtual clicando neste link: <u><a href="{% url 'accounts:create' %}">Criar uma conta de usuário</a><u></p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

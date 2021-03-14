@@ -10,9 +10,11 @@ from django.contrib.auth.models import Group
 
 # Create your views here.
 
-# class ProfileView(TemplateView):
-#     template_name = "registration/profile.html"
+class ProfileView(TemplateView):
+    template_name = "accounts/profile.html"
 
+class InfoView(TemplateView):
+    template_name = "accounts/info.html"
 
 def create_user(request):
     """Função que cria um novo usuário"""

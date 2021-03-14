@@ -18,6 +18,7 @@
 
         <!-- Icons por FontAwesome -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+        
     </head>
     <body>
         <header>
@@ -57,14 +58,17 @@
                         <li class="nav-item">
                             <div class="dropdown dropleft">
                                 <div class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown">
-                                    <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
+                                    <button type="button" class="btn btn-outline-dark">
+                                        <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
+                                        {{user.username}}
+                                    </button>
                                 </div>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                     <h6 class="dropdown-header">{{user.username}}</h6>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Acessar Conta</a>
+                                    <a class="dropdown-item" href="{% url 'accounts:profile' %}">Acessar Perfil</a>
                                     <a class="dropdown-item" href="{% url 'dashboard:view_dashboard' %}">Ver Painel</a>
-                                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">Fazer Logout</a>
+                                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">Sair da Sessão</a>
                                 </div>
                             </div>
                         </li>
@@ -153,6 +157,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
     
+    {% block scripts %}
+
+    {% endblock %}
+
     <!-- Js Externo -->
     <script src="{% static 'core/js/core.js' %}"></script>
 </html>

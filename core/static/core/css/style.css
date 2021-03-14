@@ -12,6 +12,10 @@ button.btn.btn-light, a.btn.btn-secondary {
     color: black;
 }
 
+.alert.alert-secondary {
+    background-color: rgba(248, 248, 248, 0.897);
+}
+
 /* Estilo do template base e da página inicial */
 
 /* Header */
