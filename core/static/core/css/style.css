@@ -62,6 +62,11 @@ span.d-lg-none {
     width: 140px;
 }
 
+#logo_sidenav {
+    text-align: center;
+    width: 130px;
+}
+
 /* Retirando espaços em volta do logo */
 nav.navbar {
     margin-bottom: 3%;
