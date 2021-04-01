@@ -59,13 +59,12 @@
                             <div class="dropdown dropleft">
                                 <div class="dropdown-toggle" id="dropdownMenuButton" data-toggle="dropdown">
                                     <button type="button" class="btn btn-outline-dark">
-                                        <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
+                                        <!-- <i class="fa fa-user-o fa-6" aria-hidden="true"></i> -->
                                         {{user.username}}
+                                        <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
                                     </button>
                                 </div>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <h6 class="dropdown-header">{{user.username}}</h6>
-                                    <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="{% url 'accounts:profile' %}">Acessar Perfil</a>
                                     <a class="dropdown-item" href="{% url 'dashboard:view_dashboard' %}">Ver Painel</a>
                                     <a class="dropdown-item" href="{% url 'accounts:logout' %}">Sair da Sessão</a>

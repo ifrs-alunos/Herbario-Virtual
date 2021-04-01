@@ -32,8 +32,8 @@ def create_user(request):
             profile.user = user
             profile.save()
 
-            group = Group.objects.get(name="Contribuidor")
-            user.groups.add(group)
+            # group = Group.objects.get(name="Contribuidor")
+            # user.groups.add(group)
 
             return redirect('accounts:login')
 

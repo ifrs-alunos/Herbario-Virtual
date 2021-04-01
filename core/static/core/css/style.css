@@ -12,6 +12,19 @@ button.btn.btn-light, a.btn.btn-secondary {
     color: black;
 }
 
+/* .btn.btn-outline-dark {
+    background-color: white;
+} */
+
+.btn.btn-outline-dark:hover {
+    background-color: #84AE84;
+}
+
+div.jumbotron {
+    background-color: white;
+    border: solid #84AE84 1px;
+}
+
 .alert.alert-secondary {
     background-color: rgba(248, 248, 248, 0.897);
 }
