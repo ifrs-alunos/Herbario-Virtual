@@ -5,11 +5,21 @@
     overflow: hidden !important; 
 } */
 
+.div_create {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-button.btn.btn-light, a.btn.btn-secondary {
+button.btn.btn-light, button.btn.btn-secondary, a.btn.btn-secondary {
     background-color:#A6DDA6;
     border-color: #84AE84;
     color: black;
+}
+
+div#profile_button, div#create_button {
+    position: absolute;
+    right: 0;
 }
 
 /* .btn.btn-outline-dark {
@@ -67,9 +77,6 @@ main .container #saiba-mais {
     text-align: center;
 }
 
-main .container .row {
-    margin-bottom: 8%;
-}
 
 .rounded-circle {
     object-fit: cover;
@@ -182,9 +189,6 @@ table.table {
 .card-col .card:hover {
     box-shadow: 5px 10px 40px #88888893;}
 
-main .container .row {
-    margin-bottom: 5% !important;
-}
 
 img.img{
     margin-left: 20px;

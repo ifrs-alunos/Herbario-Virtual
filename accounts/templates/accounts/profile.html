@@ -3,10 +3,44 @@
 {% block content %}
 
 <div class="container">
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-12">
-            <h4>Conta e Perfil</h4><br/>
-            <!-- <p>Para fazer logout, clique aqui: <a href='{% url "accounts:logout" %}'>Sair</a></p> -->
+            <h4>Conta e Perfil</h4>
+        </div>
+    </div>
+    <div>
+        <div class="row mb-4">
+            <div class="col-3">
+                <ul class="list-group">
+                    <li class="list-group-item active"><a href="{% url 'accounts:profile' %}">Dados pessoais</a></li>
+                    <li class="list-group-item"><a href="#">Alteração de senha</a></li>
+                    <li class="list-group-item"><a href="#">Contribuições</a></li>
+                    <li class="list-group-item"><a href="#">Excluir conta</a></li>
+                </ul>
+            </div>
+            <div class="col-8 ml-3 mb-5">
+                <h6>Nome completo:</h6>
+                <p class="mb-4">{{user.profile.name}}</p>
+
+                <h6>Nome de usuário:</h6>
+                <p class="mb-4">{{user.username}}</p>
+
+                <h6>E-mail:</h6>
+                <p class="mb-4">{{user.email}}</p>
+
+                <h6>Telefone/Celular:</h6>
+                <p class="mb-4" id="id_phone">{{user.profile.phone}}</p>
+
+                <h6>Instituição de trabalho/estudo:</h6>
+                <p class="mb-4" id="id_phone">{{user.profile.institution}}</p>
+
+                <h6>Cargo de ofício:</h6>
+                <p class="mb-4" id="id_phone">{{user.profile.role}}</p>
+
+                <div id="profile_button">
+                    <a href="#"><button type="button" class="btn btn-secondary">Editar <i class="fa fa-pencil" aria-hidden="true"></i></button></a>
+                </div>
+            </div>
         </div>
     </div>
 </div>
