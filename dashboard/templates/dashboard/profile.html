@@ -1,0 +1,25 @@
+{% extends 'dashboard/dashboard.html' %} 
+
+{% block item %}
+    <h6>Nome completo:</h6>
+    <p class="mb-4">{{user.profile.name}}</p>
+
+    <h6>Nome de usuário:</h6>
+    <p class="mb-4">{{user.username}}</p>
+
+    <h6>E-mail:</h6>
+    <p class="mb-4">{{user.email}}</p>
+
+    <h6>Telefone/Celular:</h6>
+    <p class="mb-4" id="id_phone">{{user.profile.phone}}</p>
+
+    <h6>Instituição de trabalho/estudo:</h6>
+    <p class="mb-4" id="id_phone">{{user.profile.institution}}</p>
+
+    <h6>Cargo de ofício:</h6>
+    <p class="mb-4" id="id_phone">{{user.profile.role}}</p>
+
+    <div id="profile_button">
+        <a href="#"><button type="button" class="btn btn-secondary">Editar <i class="fa fa-pencil" aria-hidden="true"></i></button></a>
+    </div>
+{% endblock %}

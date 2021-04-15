@@ -1,34 +1,5 @@
-{% extends "core/base.html" %}
+{% extends "dashboard/dashboard.html" %}
 
-{% block content %}
-
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h4 class="mb-4">Painel de controle</h4>
-        </div>
-        <div class="col-12">
-            <div class="jumbotron pt-5">
-                <h1 class="display-4">Olá, {{request.user}}!</h1>
-                <p class="lead">Você está conectado(a) e é um(a) <b>administrador(a)</b> da plataforma.</p>
-                <hr class="my-4">
-                <p>Utilize os botões abaixo para selecionar uma ação:</p>
-                <p class="lead">
-                    <!-- <a class="btn btn-secondary btn-lg" href="#" role="button">Adicionar planta</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Editar/Excluir plantas</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Adicionar notícia</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Editar/Excluir notícias</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Acessar solicitações</a>
-                    <a class="btn btn-secondary btn-lg mt-2" href="#" role="button">Acessar contribuidores</a>
-                    <a class="btn btn-secondary btn-lg mt-2" href="#" role="button">Editar contribuidores</a> -->
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Acessar plantas</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Acessar notícias</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Acessar solicitações</a>
-                    <a class="btn btn-secondary btn-lg" href="#" role="button">Acessar contribuidores</a>
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
+{% block nav %}
 
 {% endblock %}

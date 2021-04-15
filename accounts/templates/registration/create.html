@@ -4,13 +4,14 @@
 {% block content %}
 
     <div class="container">
-        <div class="row">
-            <div class="col-lg-12 mb-4">
+        <!-- <div class="row">
+            <div class="col-lg-12 mb-4 text-center">
                 <h4>Criar conta</h4>
             </div>
-        </div>
+        </div> -->
         <div class="row">
-            <div class="col-lg-6 mb-5 div_create">
+            <div class="col-lg-7 mb-5 div_create">
+                <h4 class="mb-5">Criar conta</h4>
                 <form id="create_form" method="POST">
                     {% csrf_token %}
                     {{profile_form.name|as_crispy_field }}

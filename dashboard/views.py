@@ -4,16 +4,21 @@ from django.contrib.auth.mixins import PermissionRequiredMixin
 
 # Create your views here.
 
-class DashboardView(View):
-
-    def get(self, request, *args, **kwargs):
-        # Verifica se o usuário na sessão é superuser ou não
-        if request.user.is_superuser:
-            view = AdministrativeDashboardView.as_view()
-        else:
-            view = ContributorDashboadView.as_view()
+# class DashboardView(View):
+    # def get(self, request, *args, **kwargs):
+    #     # Verifica se o usuário na sessão é superuser ou não
+    #     if request.user.is_superuser:
+    #         view = AdministrativeDashboardView.as_view()
+    #     else:
+    #         view = ContributorDashboadView.as_view()
         
-        return view(request, *args, **kwargs)
+    #     return view(request, *args, **kwargs)
+    
+class DashboardView(TemplateView):
+    template_name = "dashboard/dashboard.html"
+
+class ProfileView(TemplateView):
+    template_name = "dashboard/profile.html"
 
 # Classe Painel do Administrador
 class AdministrativeDashboardView(TemplateView):

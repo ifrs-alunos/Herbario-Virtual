@@ -11,6 +11,15 @@
     margin-right: auto;
 }
 
+button.nav-button {
+    border: none;
+}
+
+a.user-link {
+    color: #0000009f;
+    text-decoration: none;
+}
+
 button.btn.btn-light, button.btn.btn-secondary, a.btn.btn-secondary {
     background-color:#A6DDA6;
     border-color: #84AE84;
