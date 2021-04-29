@@ -1,41 +1,70 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect, render
+from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, View
-from django.contrib.auth.mixins import PermissionRequiredMixin
-
-# Create your views here.
-
-# class DashboardView(View):
-    # def get(self, request, *args, **kwargs):
-    #     # Verifica se o usuário na sessão é superuser ou não
-    #     if request.user.is_superuser:
-    #         view = AdministrativeDashboardView.as_view()
-    #     else:
-    #         view = ContributorDashboadView.as_view()
-        
-    #     return view(request, *args, **kwargs)
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from accounts.forms import ProfileForm, UserUpdateForm, UserUpdateForm, SolicitationForm
+from accounts.models import Profile, Solicitation
     
 class DashboardView(TemplateView):
     template_name = "dashboard/dashboard.html"
 
-class ProfileView(TemplateView):
-    template_name = "dashboard/profile.html"
+def update_profile(request):
+    """Função que exibe ou edita um perfil"""
 
-# Classe Painel do Administrador
-class AdministrativeDashboardView(TemplateView):
-    template_name = "dashboard/administrative_dashboard.html"
+    # Tenta obter o objeto com a pk informado. Se não conseguir, retorna um erro 404
+    profile = get_object_or_404(Profile, user=request.user)
 
-# Classe Painel do Contribuidor
-class ContributorDashboadView(TemplateView):
-    template_name = "dashboard/contributor_dashboard.html"
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Instancia um formulário vinculado a um objeto Turma com os dados recebidos da requisição POST
+        form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, instance=profile)
+        if form.is_valid() and profile_form.is_valid():
+            form.save()
+            profile_form.save()
+
+            # Retorna para a página de lista de turmas
+            return redirect("dashboard:view_dashboard")
+    
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET    
+    else:
+        # Cria uma instância com os dados do objeto passado como parâmetro
+        form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileForm(instance=profile)
+
+    context = {
+        "form": form,
+        "profile_form": profile_form,
+        "link": "profile"
+    }
+
+    # Renderiza a página de editar turma com os campos e seus respectivos dados
+    return render(request, "dashboard/profile.html", context)
 
 class CreatePlantView(PermissionRequiredMixin, CreateView):
     permission_required = 'herbarium.add_plant'
-    pass
 
 class UpdatePlantView(PermissionRequiredMixin, UpdateView):
     permission_required = 'herbarium.change_plant'
-    pass
+
 
 class DeletePlantView(PermissionRequiredMixin, DeleteView):
     permission_required = 'herbarium.delete_plant'
-    pass
+
+class SendSolicitation(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+    model = Solicitation
+    form_class = SolicitationForm
+    permission_required = 'accounts.add_solicitation'
+    template_name = 'dashboard/solicitation.html' 
+    success_url = reverse_lazy('dashboard:solicitation')
+
+    def get_initial(self):
+        initial = super().get_initial()
+        initial['user'] = self.request.user
+        return initial 
+
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+        data['link'] =  'solicitation'
+
+        return data

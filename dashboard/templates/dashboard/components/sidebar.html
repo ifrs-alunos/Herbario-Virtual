@@ -1,4 +1,57 @@
-<ul class="list-group">
-    <li class="list-group-item"><a href="{% url 'dashboard:profile' %}">Perfil</a></li>
-    <li class="list-group-item"><a href="#">Contribuições</a></li>
-</ul>
+<div class="accordion accordion-flush" id="accordionFlushExample">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="flush-headingOne">
+        <button class="accordion-button collapsed {% if link == 'profile' %}selected-button{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+          Perfil
+        </button>
+      </h2>
+      <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+        <div class="accordion-body">
+            <ul class="list-group">
+                <li class="list-group-item"><a id="{% if link == 'profile' %}selected-link{% endif %}" href="{% url 'dashboard:profile' %}">Dados pessoais</a></li>
+                {% if perms.accounts.add_solicitation %}
+                <li class="list-group-item"><a id="{% if link == 'solicitation' %}selected-link{% endif %}" href="{% url 'dashboard:solicitation' %}">Solicitar ser contribuidor</a></li>
+                {% endif %}
+                <li class="list-group-item"><a href="#">Alteração de senha</a></li>
+                <li class="list-group-item"><a href="#">Contribuições</a></li>                
+            </ul>
+        </div>
+      </div>
+    </div>
+    {% if perms.herbarium.add_plant %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="flush-headingTwo">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+          Plantas
+        </button>
+      </h2>
+      <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+      </div>
+    </div>
+    {% endif %}
+    {% if perms.core.add_highlight %}
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="flush-headingThree">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+          Notícias
+        </button>
+      </h2>
+      <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+        <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+      </div>
+    </div>
+    {% endif %}
+    {% if perms.auth.view_user %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingFour">
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+            Usuários
+          </button>
+        </h2>
+        <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+          <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+        </div>
+    </div>
+    {% endif %}
+  </div>

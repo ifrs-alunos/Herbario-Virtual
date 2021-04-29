@@ -11,11 +11,7 @@
     <!-- Barra lateral -->
     <div class="row mb-5">
         <div class="col-3">
-            {% if user.is_superuser %}
-                {% include "dashboard/components/admin_sidebar.html" %}  
-            {% else %}
-                {% include "dashboard/components/sidebar.html" %}
-            {% endif %}    
+            {% include "dashboard/components/sidebar.html" %}
         </div>
         <!-- Bloco conteúdo -->
         <div class="col-8 ml-3 mb-5">

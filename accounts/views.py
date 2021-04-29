@@ -1,8 +1,10 @@
+from .models import Solicitation
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
-from .forms import ProfileForm, UserForm
+from django.views.generic import TemplateView, CreateView
+from .forms import ProfileForm, UserForm, SolicitationForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from django.contrib.auth.models import Group
 
@@ -32,8 +34,9 @@ def create_user(request):
             profile.user = user
             profile.save()
 
-            # group = Group.objects.get(name="Contribuidor")
-            # user.groups.add(group)
+            # Tornando todos usuários comuns
+            group = Group.objects.get(name="common_user")
+            user.groups.add(group)
 
             return redirect('accounts:login')
 

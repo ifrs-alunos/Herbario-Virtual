@@ -1,0 +1,13 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block item %}
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{form|crispy}}
+
+        <p class="font-weight-light mt-4">Campos marcados com * são obrigatórios</p>
+        <button type="submit" class="btn btn-light">Enviar</button>
+    </form>
+{% endblock item %}
