@@ -1,0 +1,21 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block item %}
+
+{# Lista de campos que não serão editados pelo admin #}
+<p><span class="fw-bold">Usuário:</span> {{solicitation.user}}</p>
+<p><span class="fw-bold">Mensagem:</span> {{solicitation.message}}</p>
+<p><span class="fw-bold">Data de envio:</span> {{solicitation.date}}</p>
+
+<p class="fw-bold">Aceitar ou negar solicitação:</p>
+
+{# Formulário para editar o status da solicitação #}
+<form method="POST">
+    {% csrf_token %}
+
+    {{form|crispy}}
+    <button type="submit" class="btn btn-light mt-4">Enviar</button>
+</form>
+
+{% endblock %}

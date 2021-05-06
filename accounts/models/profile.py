@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from .solicitation import Solicitation
 
 class Profile(models.Model):
+    """Essa classe define um perfil de um usuário"""
+    
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
     name = models.CharField(max_length=200, verbose_name="Nome completo", help_text="Não utilize abreviações nos sobrenomes.")
     institution = models.CharField(max_length=150, verbose_name="Instituição de trabalho e/ou estudo", help_text="Caso possuia mais de uma, escreva a que atua principalmente.")

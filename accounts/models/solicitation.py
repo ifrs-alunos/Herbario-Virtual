@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 class Solicitation(models.Model):
+    """Essa classe define uma solicitação para um usuário comum se tornar contribuidor do sistema"""
+    
     class Status(models.TextChoices):
         SENT = ('sent', 'Em análise')
         ACCEPTED = ('accepted', 'Aceita')
