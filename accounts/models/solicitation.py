@@ -3,11 +3,11 @@ from django.contrib.auth import get_user_model
 
 class Solicitation(models.Model):
     class Status(models.TextChoices):
-        SENT = ('sent', 'Enviado')
-        ACCEPTED = ('accepted', 'Aceito')
-        DENIED = ('denied', 'Negado')
+        SENT = ('sent', 'Em análise')
+        ACCEPTED = ('accepted', 'Aceita')
+        DENIED = ('denied', 'Negada')
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário', related_name="solicitations")
     message = models.TextField(verbose_name="Mensagem")
     date = models.DateField(verbose_name="Data de envio", auto_now_add=True)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.SENT)

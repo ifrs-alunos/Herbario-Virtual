@@ -65,6 +65,17 @@ class SendSolicitation(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         data =  super().get_context_data(**kwargs)
+        solicitation = self.request.user.solicitations.last()
+
+        # Cria novo contexto
         data['link'] =  'solicitation'
+        data['solicitation'] = solicitation
 
         return data
+
+    def post(self, request, *args, **kwargs):
+        # Se pode enviar uma NOVA solicitação POST
+        if request.user.profile.can_send_solicitation() == True:
+            return super().post(request, *args, **kwargs)
+        else:
+            return self.handle_no_permission()

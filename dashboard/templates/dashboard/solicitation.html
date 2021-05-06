@@ -2,12 +2,26 @@
 {% load crispy_forms_tags %}
 
 {% block item %}
+    {% if user.profile.can_send_solicitation %}
+
+    {% if solicitation.status == "denied" %}
+    <div class="alert alert-warning" role="alert">
+        Sua última solicitação foi negada. No entanto, você pode enviar outra.
+    </div>
+    {% endif %}
+
     <form method="POST">
         {% csrf_token %}
         
         {{form|crispy}}
 
-        <p class="font-weight-light mt-4">Campos marcados com * são obrigatórios</p>
+        <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
         <button type="submit" class="btn btn-light">Enviar</button>
     </form>
+    {% else %}
+
+    <div class="alert alert-warning" role="alert">
+        Você não pode enviar novas solicitações. Sua última solicitação está: <span class="fw-bold">{{solicitation.get_status_display}}</span>
+    </div>
+    {% endif %}
 {% endblock item %}
