@@ -19,7 +19,9 @@
               href="{% url 'dashboard:solicitation' %}">Solicitar ser contribuidor</a></li>
           {% endif %}
           <li class="list-group-item"><a href="#">Alteração de senha</a></li>
+          {% if perms.herbarium.add_plant %}
           <li class="list-group-item"><a href="#">Contribuições</a></li>
+          {% endif %}
         </ul>
       </div>
     </div>

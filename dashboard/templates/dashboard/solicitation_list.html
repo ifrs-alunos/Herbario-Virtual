@@ -2,8 +2,8 @@
 
 {% block item %}
 
-{% if solicitations %} {# Se existem solicitações #}
-  {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
+{% comment %} {% if solicitations %} {# Se existem solicitações #} {% endcomment %}
+  {% comment %} {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
     {% if solicitation.status == 'sent' %} {# Executa caso o status da solicitação seja "Enviada" #}
       <div class="card mb-3">
         <div class="card-header">
@@ -15,18 +15,52 @@
         </div>
       </div>
     {% else %} {# Executa caso o status da solicitação seja "Aceita" ou "Negada". Isto é, estas NÃO devem aparecer na lista #}
-      {% if forloop.counter == solicitations|length %} {# Verifica se o número de vezes que o loop chegou ao "else" é igual ao tamanho da lista #}
+      {% if counter == solicitations|length %} {# Verifica se o número de vezes que o loop chegou ao "else" é igual ao tamanho da lista #}
         <div class="alert alert-warning" role="alert">
           Nenhuma solicitação para analisar no momento.
         </div>
       {% endif %}
     {% endif %}
+  {% endfor %} {% endcomment %}
+  
+  {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
+    <div class="card mb-3">
+      <div class="card-header">
+        {{solicitation.user.profile.name}}
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{solicitation.message|truncatechars_html:250}}</p>
+        <a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-secondary">Visualizar</a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="alert alert-warning" role="alert">
+      Nenhuma solicitação para analisar no momento.
+    </div>
   {% endfor %}
 
-{% else %} {# Caso não exista nenhuma solicitação #}
-  <div class="alert alert-warning" role="alert">
-    Nenhuma solicitação para analisar no momento.
-  </div>
-{% endif %}
-
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Nome do usuário</th>
+        <th scope="col">Mensagem</th>
+        <th scope="col">Ação</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
+        <tr>
+          <td scope="row">{{solicitation.id}}</td>
+          <td>{{solicitation.user.profile.name}}</td>
+          <td>{{solicitation.message|truncatechars_html:50}}</td>
+          <td><a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+        </tr>
+      {% empty %}
+        <div class="alert alert-warning" role="alert">
+          Nenhuma solicitação para analisar no momento.
+        </div>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

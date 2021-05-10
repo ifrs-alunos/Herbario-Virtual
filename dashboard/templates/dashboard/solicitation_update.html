@@ -4,7 +4,10 @@
 {% block item %}
 
 {# Lista de campos que não serão editados pelo admin #}
-<p><span class="fw-bold">Usuário:</span> {{solicitation.user}}</p>
+<h5 class="mb-4">Solicitação #{{solicitation.id}}</h5>
+<p><span class="fw-bold">Nome de usuário:</span> {{solicitation.user}}</p>
+<p><span class="fw-bold">Nome completo:</span> {{solicitation.user.profile.name}}</p>
+<p><span class="fw-bold">E-mail:</span> {{solicitation.user.email}}</p>
 <p><span class="fw-bold">Mensagem:</span> {{solicitation.message}}</p>
 <p><span class="fw-bold">Data de envio:</span> {{solicitation.date}}</p>
 

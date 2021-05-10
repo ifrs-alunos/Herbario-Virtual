@@ -6,6 +6,9 @@ from django.views.generic.detail import DetailView
 from accounts.forms import ProfileForm, UserUpdateForm, UserUpdateForm, SolicitationForm
 from accounts.models import Profile, Solicitation
 from dashboard.forms import SolicitationStatusUpdateForm
+import itertools
+import functools
+from django.contrib.auth.models import Group
     
 class DashboardView(TemplateView):
     template_name = "dashboard/dashboard.html"
@@ -80,7 +83,7 @@ class SolicitationCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
 
         return data
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): 
         # Verifica se o usuário logado tem permissão para enviar uma NOVA solicitação por método POST
         if request.user.profile.can_send_solicitation() == True:
             return super().post(request, *args, **kwargs)
@@ -98,10 +101,15 @@ class SolicitationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView
     def get_context_data(self, **kwargs):
         data =  super().get_context_data(**kwargs)
 
-        # Cria novo contexto
-        data['link'] =  'solicitation-list'
+        data['link'] =  'solicitation-list' # Cria novo contexto
 
         return data
+
+    def get_queryset(self): # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=Solicitation.Status.SENT)
+        
+        return queryset
 
 class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     """Essa classe atualiza o status de uma solicitação. É realizada somente por um administrador do sistema"""
@@ -115,7 +123,20 @@ class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Update
     def get_context_data(self, **kwargs):
         data =  super().get_context_data(**kwargs)
 
-        # Cria novo contexto
-        data['link'] =  'solicitation-list'
+        data['link'] =  'solicitation-list' # Cria novo contexto
 
         return data
+
+    def form_valid(self, form):
+        solicitation = form.save()
+
+        if solicitation.status == "accepted": # Verifica se a solicitação salva foi aceita
+            user = solicitation.user # Recupera o usuário da solicitação
+
+            old_group = Group.objects.get(name="common_users") 
+            new_group = Group.objects.get(name="contributors")
+
+            user.groups.remove(old_group) # Retira o grupo de usuário comum
+            user.groups.add(new_group) # Adiciona o grupo de contribuidor
+
+        return redirect("dashboard:solicitation_list")
