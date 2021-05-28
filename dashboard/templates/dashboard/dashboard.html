@@ -1,4 +1,5 @@
 {% extends "core/base.html" %}
+{% load static %}
 
 {% block content %}
 
@@ -22,4 +23,8 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'dashboard/js/sidebar.js' %}"></script>
 {% endblock %}

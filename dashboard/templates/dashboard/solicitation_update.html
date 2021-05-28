@@ -28,6 +28,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ block.super }}
     <script src="{% static 'dashboard/js/solicitation.js' %}"></script>
     <script>
         var id = {{solicitation.id}};

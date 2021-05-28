@@ -3,24 +3,6 @@
 {% load crispy_forms_tags %}
 
 {% block item %}
-    <!-- <h6>Nome completo:</h6>
-    <p class="mb-4">{{user.profile.name}}</p>
-
-    <h6>Nome de usuário:</h6>
-    <p class="mb-4">{{user.username}}</p>
-
-    <h6>E-mail:</h6>
-    <p class="mb-4">{{user.email}}</p>
-
-    <h6>Telefone/Celular:</h6>
-    <p class="mb-4" id="id_phone">{{user.profile.phone}}</p>
-
-    <h6>Instituição de trabalho/estudo:</h6>
-    <p class="mb-4" id="id_phone">{{user.profile.institution}}</p>
-
-    <h6>Cargo de ofício:</h6>
-    <p class="mb-4" id="id_phone">{{user.profile.role}}</p> -->
-
     <form id="create_form" method="POST">
         {% csrf_token %}
 
