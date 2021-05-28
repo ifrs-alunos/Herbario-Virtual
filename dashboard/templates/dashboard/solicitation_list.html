@@ -1,6 +1,8 @@
 {% extends 'dashboard/dashboard.html' %}
+{% load static %}
 
 {% block item %}
+  {% if solicitations %}
   <table class="table table-striped">
     <thead>
       <tr>
@@ -16,13 +18,41 @@
           <td scope="row">{{solicitation.user.profile.institution|truncatechars_html:20}}</td>
           <td>{{solicitation.user.profile.name|truncatechars_html:30}}</td>
           <td>{{solicitation.message|truncatechars_html:50}}</td>
-          <td><a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação"><i class="fa fa-eye" aria-hidden="true"></i></a></td>
+          <td>
+            <a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
+              <i class="fa fa-eye" aria-hidden="true"></i>
+            </a>
+            <button id="" type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Aceitar solicitação">
+              <i class="fa fa-check-square-o" aria-hidden="true"></i>
+            </button>
+            <button id="" type="button" class="btn btn-danger deny_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Negar solicitação">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </button>
+          </td>
         </tr>
-      {% empty %}
-        <div class="alert alert-warning" role="alert">
-          Nenhuma solicitação para analisar no momento.
-        </div>
       {% endfor %}
     </tbody>
   </table>
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      Nenhuma solicitação para analisar no momento.
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  <script src="{% static 'dashboard/js/solicitation.js' %}"></script>
+  <script>
+    // Verifica se há solicitações
+    if ({{solicitations|length}} != 0) { 
+      $(".accept_button").click(function(event){
+        const id = $(event.currentTarget).closest("tr").attr("id");
+        accept(id);  
+      });
+      $(".deny_button").click(function(event){
+        const id = $(event.currentTarget).closest("tr").attr("id");
+        deny(id);
+      });
+    }
+  </script> 
 {% endblock %}

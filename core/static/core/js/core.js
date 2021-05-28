@@ -6,11 +6,11 @@ var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
 
 // Código link sidebar do painel de controle
 
-// $(document).ready(function(){
-//     $("#selected-link").parentsUntil(".accordion-collapse").addClass("show");
-//     // $("#selected-link").parentsUntil(".accordion-header").children().addClass("collapsed");
-//     // $("#selected-link").parentsUntil(".accordion-header").children().setAttribute('aria-expanded', true);
-// });
+$(document).ready(function(){
+    $("#selected-link").parentsUntil(".accordion-collapse").addClass("show");
+    // $("#selected-link").parentsUntil(".accordion-header").children().addClass("collapsed");
+    // $("#selected-link").parentsUntil(".accordion-header").children().setAttribute('aria-expanded', true);
+});
 
 // Adicionando negrito ao link selecionado
 var link_selected = document.getElementById('selected-link');
@@ -18,9 +18,9 @@ link_selected.classList.add("fw-bold");
 
 // Adicionando classes e atributos para accordion exibir seus itens
 
-// var accordion = link_selected.parentElement.parentElement.parentElement.parentElement.classList.add("show");
+var accordion = link_selected.parentElement.parentElement.parentElement.parentElement.classList.add("show");
 
-// var accordion_header = link_selected.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].children[0].classList.remove('collapsed').setAttribute('aria-expanded', true);
+var accordion_header = link_selected.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].children[0].classList.remove('collapsed').setAttribute('aria-expanded', true);
 
 
 // Código JS para tornar ano não estático no footer
