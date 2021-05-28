@@ -69,6 +69,8 @@ class Plant(models.Model):
     created_at = models.DateField('Criado em', auto_now_add=True, null=False)
     updated_at = models.DateField('Criado em', auto_now=True, null=False)
 
+    published = models.BooleanField(verbose_name="Publicado", null=True)
+
     def __str__(self):
         return self.name
 

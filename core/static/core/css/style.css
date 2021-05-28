@@ -53,6 +53,70 @@ span.d-lg-none {
     overflow: hidden !important; 
 } */
 
+li.list-group-item a {
+    text-decoration: none;
+}
+
+div.accordion-body {
+    padding: 0;
+}
+
+div.accordion-body .list-group-item {
+    border: none;
+}
+
+button.accordion-button:not(.collapsed) {
+    background-color: #d5f7d5;
+    color: black;
+}
+
+button.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgb(81 142 85 / 25%);
+}
+
+.div_create {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+button.nav-button {
+    border: none;
+}
+
+a.user-link {
+    color: #0000009f;
+    text-decoration: none;
+}
+
+button.btn.btn-light, button.btn.btn-secondary, a.btn.btn-secondary {
+    background-color:#A6DDA6;
+    border-color: #84AE84;
+    color: black;
+}
+
+div#profile_button, div#create_button {
+    position: absolute;
+    right: 0;
+}
+
+/* .btn.btn-outline-dark {
+    background-color: white;
+} */
+
+.btn.btn-outline-dark:hover {
+    background-color: #84AE84;
+}
+
+div.jumbotron {
+    background-color: white;
+    border: solid #84AE84 1px;
+}
+
+.alert.alert-secondary {
+    background-color: rgba(248, 248, 248, 0.897);
+}
+
 /* Estilo do template base e da página inicial */
 
 /* Header */
@@ -124,10 +188,6 @@ a.navbar-brand {
 
 .rounded-circle {
     object-fit: cover;
-}
-
-div .btn-secondary {
-    background-color: black;
 }
 
 .image-title, .image-description {
@@ -240,10 +300,16 @@ div.card.col-12 {
 }
 
 .card-col .card:hover {
-    box-shadow: 5px 10px 40px #88888893;}
+    box-shadow: 5px 10px 40px #88888893;
+}
 
 img.img{
     margin-left: 20px;
+}
+
+button#dropdownMenuButton {
+    background-color: #84ae84;
+    border-color: #84AE84;
 }
 
 main a {

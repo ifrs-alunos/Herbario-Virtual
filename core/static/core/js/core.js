@@ -1,3 +1,28 @@
+// Código JS Tooltip
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+  return new bootstrap.Tooltip(tooltipTriggerEl)
+})
+
+// Código link sidebar do painel de controle
+
+// $(document).ready(function(){
+//     $("#selected-link").parentsUntil(".accordion-collapse").addClass("show");
+//     // $("#selected-link").parentsUntil(".accordion-header").children().addClass("collapsed");
+//     // $("#selected-link").parentsUntil(".accordion-header").children().setAttribute('aria-expanded', true);
+// });
+
+// Adicionando negrito ao link selecionado
+var link_selected = document.getElementById('selected-link');
+link_selected.classList.add("fw-bold");
+
+// Adicionando classes e atributos para accordion exibir seus itens
+
+// var accordion = link_selected.parentElement.parentElement.parentElement.parentElement.classList.add("show");
+
+// var accordion_header = link_selected.parentElement.parentElement.parentElement.parentElement.parentElement.children[0].children[0].classList.remove('collapsed').setAttribute('aria-expanded', true);
+
+
 // Código JS para tornar ano não estático no footer
 
 function openNav() {
@@ -17,11 +42,47 @@ seleciona_ano = now.getFullYear();
 // Insere no HTML
 spam.innerHTML += seleciona_ano; 
 
+// ------------ //
+
+// Código máscara do campo telefone (formulário de criação de conta de usuário)
+
+var SPMaskBehavior = function (val) {
+    return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+  },
+  spOptions = {
+    onKeyPress: function(val, e, field, options) {
+        field.mask(SPMaskBehavior.apply({}, arguments), options);
+      }
+  };
+  
+// Insere a máscara 
+$('#id_phone').mask(SPMaskBehavior, spOptions);
+
+// Retira a máscara ao submeter o form
+$("#create_form").submit(function(){
+    $('#id_phone').unmask();
+});
+
+var links = document.getElementsByClassName("nav-item");
+console.log(links)
+
+for (var i = 0; i < links.length ; ++i){
+    links[i].onclick = tornar_negrito;
+}
+
+function tornar_negrito(event) {
+    var negrito = document.getElementsByClassName("active");
+    console.log(negrito)
+    // negrito.classList.remove("active");
+
+    // event.classList.add("active");
+}
 
 // Código JS da Galeria de imagens
 
 // Seleciona todos os elementos com a classe "imagem_miniatura"
 var imagens_miniaturas = document.getElementsByClassName("imagem_miniatura");
+
 
 // Indica que, quando algum elemento da seleção for clicado, dispara a função tornar_destaque
 for (var i = 0; i < imagens_miniaturas.length ; ++i){

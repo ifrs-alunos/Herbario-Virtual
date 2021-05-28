@@ -26,7 +26,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['labfito.vacaria.ifrs.edu.br', 'localhost']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -38,7 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'herbarium',
     'core',
+    'accounts',
+    'dashboard',
+    'crispy_forms',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -70,10 +74,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+# Será sobreescrito no local_settings.py
 DATABASES = {}
 
 # Password validation
@@ -98,7 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'America/Sao_Paulo'
 
@@ -108,7 +112,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
@@ -116,12 +119,15 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'config/core/static'),)
 
-
 #Arquivos de mídia
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, "herbario", "media") 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media") 
 
 MEDIA_URL = '/media/'
+
+LOGIN_REDIRECT_URL = '/painel/'
+
+LOGOUT_REDIRECT_URL = '/conta/login/'
 
 from .local_settings import *
