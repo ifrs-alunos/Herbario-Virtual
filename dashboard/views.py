@@ -1,14 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect, render
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, DeleteView, ListView
+from django.urls import reverse_lazy, reverse
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.views.generic.detail import DetailView
 from accounts.forms import ProfileForm, UserUpdateForm, UserUpdateForm, SolicitationForm
 from accounts.models import Profile, Solicitation
 from dashboard.forms import SolicitationStatusUpdateForm
-import itertools
-import functools
 from django.contrib.auth.models import Group
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib import messages
     
 class DashboardView(TemplateView):
     template_name = "dashboard/dashboard.html"
@@ -140,3 +139,30 @@ class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Update
             user.groups.add(new_group) # Adiciona o grupo de contribuidor
 
         return redirect("dashboard:solicitation_list")
+
+class ChangePassword(PasswordChangeView):
+    template_name = 'dashboard/change_password.html'
+
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+
+        data['link'] =  'change-password' # Cria novo contexto
+
+        return data
+    
+    def get_success_url(self):
+        return reverse('dashboard:profile')
+    
+    def form_valid(self, form):
+        messages.success(self.request, "Sua senha foi alterada com sucesso!")
+        return super().form_valid(form)
+
+class ContributionTemplateView(TemplateView):
+    template_name = 'dashboard/contributions.html'
+
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+
+        data['link'] =  'contributions' # Cria novo contexto
+
+        return data

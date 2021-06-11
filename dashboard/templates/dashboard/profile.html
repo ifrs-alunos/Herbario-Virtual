@@ -3,6 +3,14 @@
 {% load crispy_forms_tags %}
 
 {% block item %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %} alert-{{message.tags}}{% endif %}" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+    {% endif %}
+
     <form id="create_form" method="POST">
         {% csrf_token %}
 

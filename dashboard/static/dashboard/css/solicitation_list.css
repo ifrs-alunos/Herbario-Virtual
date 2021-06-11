@@ -1,0 +1,14 @@
+button.btn.btn-danger.deny_button {
+    background-color: #ffa4a4;
+    color: #c13b3b;
+}
+
+button.btn.btn-success.accept_button {
+    background-color: #A6DDA6;
+    color: #2c6b3a;
+}
+
+a.btn.btn-primary {
+    background-color: #bacff5;
+    color: #334969;
+}

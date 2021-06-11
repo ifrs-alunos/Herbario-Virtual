@@ -1,6 +1,10 @@
 {% extends 'dashboard/dashboard.html' %}
 {% load crispy_forms_tags static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/solicitation.css' %}"/>
+{% endblock %}
+
 {% block item %}
 
 {# Lista de campos que não serão editados pelo admin #}

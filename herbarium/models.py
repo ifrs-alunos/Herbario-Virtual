@@ -84,6 +84,7 @@ class Plant(models.Model):
         verbose_name = 'Planta'
         verbose_name_plural = 'Plantas'
         ordering = ['name']
+        permissions = [('contribute_with_plants', 'Pode contribuir com plantas')]
 
 def plant_directory_path(instance, filename):
     '''Esta função retorna o diretório onde as imagens grandes de uma planta devem ser armazenadas'''

@@ -1,6 +1,10 @@
 {% extends 'dashboard/dashboard.html' %}
 {% load static %}
 
+{% block head %}
+  <link rel="stylesheet" href="{% static 'dashboard/css/solicitation_list.css' %}"/>
+{% endblock %}
+
 {% block item %}
   {% if solicitations %}
   <table class="table table-striped">

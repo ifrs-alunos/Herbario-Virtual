@@ -10,4 +10,6 @@ urlpatterns = [
     path('solicitacao/', views.SolicitationCreateView.as_view(), name='solicitation'),
     path('lista-solicitacoes/', views.SolicitationListView.as_view(), name='solicitation_list'),
     path('solicitacao/<int:pk>/', views.SolicitationUpdateView.as_view(), name="solicitation_update"),
+    path('trocar-senha', views.ChangePassword.as_view(), name="change_password"),
+    path('contribuicoes', views.ContributionTemplateView.as_view(), name="contributions"),
 ]
