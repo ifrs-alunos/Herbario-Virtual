@@ -3,11 +3,13 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from accounts.forms import ProfileForm, UserUpdateForm, UserUpdateForm, SolicitationForm
-from accounts.models import Profile, Solicitation
-from dashboard.forms import SolicitationStatusUpdateForm
-from django.contrib.auth.models import Group
+from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation
+from dashboard.forms import SolicitationStatusUpdateForm, PlantSolicitationModelForm, PhotoSolicitationModelForm
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
+from herbarium.models import Plant
+from herbarium.forms import PlantForm, PhotoForm
     
 class DashboardView(TemplateView):
     template_name = "dashboard/dashboard.html"
@@ -166,3 +168,130 @@ class ContributionTemplateView(TemplateView):
         data['link'] =  'contributions' # Cria novo contexto
 
         return data
+
+class HerbariumListView(ListView):
+    model = Plant
+    context_object_name = 'plants'
+    template_name = 'dashboard/herbarium_update.html'
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+
+        data['link'] =  'herbarium-update' # Cria novo contexto
+
+        return data
+
+class UserListView(ListView):
+    model = User
+    context_object_name = 'users'
+    template_name = 'dashboard/user_list.html'
+    paginate_by = 12
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.exclude(is_superuser=True) # Exclui superusers
+        queryset = queryset.exclude(groups='3') # Exclui contas com grupo 'admin-group'
+        
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+
+        data['link'] =  'user-list' # Cria novo contexto
+
+        return data
+
+def plant_solicitation(request):
+    """Essa função cria uma solicitação para enviar uma nova planta"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+        plant_form = PlantForm(request.POST)
+
+        if plant_form.is_valid():
+            plant = plant_form.save() # Cria objeto mas nao salva no banco de dados
+            plant.published = False
+
+            plant_solicitation = PlantSolicitation(user=request.user, status='sent', new_plant=plant)
+            plant_solicitation.save()
+
+            return redirect('dashboard:contributions')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        plant_form = PlantForm()
+
+    context = {
+        'plant_form': plant_form,
+        'link': 'plant-solicitation',
+    }
+
+    return render(request, 'dashboard/plant_solicitation.html', context)
+
+def photo_solicitation(request):
+    """Essa função cria uma solicitação para enviar uma nova planta"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+        photo_form = PhotoForm(request.POST, request.FILES)
+
+        if photo_form.is_valid():
+            photo = photo_form.save() # Cria objeto mas nao salva no banco de dados
+            photo.published = False
+
+            photo_solicitation = PhotoSolicitation(user=request.user, status='sent', new_photo=photo)
+            photo_solicitation.save()
+
+            return redirect('dashboard:contributions')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        photo_form = PhotoForm()
+
+    context = {
+        'photo_form': photo_form,
+        'link': 'photo-solicitation',
+    }
+
+    return render(request, 'dashboard/photo_solicitation.html', context)
+
+class PlantSolicitationListView(ListView):
+    model = PlantSolicitation
+    context_object_name = 'solicitations'
+    template_name = 'dashboard/plant_solicitation_list.html'
+    
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+
+        data['link'] =  'plant-solicitation-list' # Cria novo contexto
+
+        return data
+
+    def get_queryset(self): # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=PlantSolicitation.Status.SENT)
+        
+        return queryset
+
+class PhotoSolicitationListView(ListView):
+    model = PhotoSolicitation
+    context_object_name = 'solicitations'
+    template_name = 'dashboard/photo_solicitation_list.html'
+    
+    def get_context_data(self, **kwargs):
+        data =  super().get_context_data(**kwargs)
+
+        data['link'] =  'photo-solicitation-list' # Cria novo contexto
+
+        return data
+
+    def get_queryset(self): # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=PhotoSolicitation.Status.SENT)
+        
+        return queryset

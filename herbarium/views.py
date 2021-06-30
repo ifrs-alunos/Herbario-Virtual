@@ -35,6 +35,7 @@ class HerbariumIndex(ListView):
     def get_queryset(self, **kwargs):
         # Seleciona todas as plantas
         plants = Plant.objects.all()
+        plants = plants.filter(published=True)
 
         # Executa se alguma família tiver sido selecionada
         if self.kwargs:

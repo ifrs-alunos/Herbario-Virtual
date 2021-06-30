@@ -121,13 +121,15 @@ class Photo(models.Model):
     '''Esta classe define os atributos que compõem uma foto de uma planta, permitindo que ela tenha múltiplas imagens'''
 
     # Relaciona as fotos com a planta
-    plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos')
+    plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos', verbose_name="Planta")
 
     # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
     image = models.ImageField(upload_to=plant_directory_path, verbose_name="Imagens")
 
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores 
     small_image = models.ImageField(upload_to=small_plant_directory_path, editable=False, null=True)
+
+    published = models.BooleanField(verbose_name="Publicado", null=True)
 
     def __str__(self):
         return self.image.name

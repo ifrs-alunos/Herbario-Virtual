@@ -1,0 +1,20 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags static %}
+
+{% block item %}
+
+<div class="alert alert-warning" role="alert">
+    <p>- Insira todos os campos de uma planta por vez;</p>
+    <p>- Este formulário é uma <strong>solicitação</strong>. Um administrador do sistema avaliará o seu envio.</p>
+</div>
+
+{{plant_form.errors}}
+<form method="POST">
+    {% csrf_token %}
+    {{plant_form|crispy}}
+
+    <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+    <button type="submit" class="btn btn-light">Enviar</button>
+</form>
+
+{% endblock %}

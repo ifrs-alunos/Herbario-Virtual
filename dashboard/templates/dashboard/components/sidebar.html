@@ -39,7 +39,29 @@
     </h2>
     <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
       data-bs-parent="#accordionFlushExample">
-      <div class="accordion-body">Seção em produção!</div>
+      <div class="accordion-body">
+          <ul class="list-group">
+            {% if perms.herbarium.contribute_with_plants %}
+            <li class="list-group-item"><a id="{% if link == 'photo-solicitation' %}selected-link{% endif %}"
+              href="{% url 'dashboard:photo_solicitation' %}">Adicionar foto</a>
+            </li>
+            <li class="list-group-item"><a id="{% if link == 'plant-solicitation' %}selected-link{% endif %}"
+              href="{% url 'dashboard:plant_solicitation' %}">Adicionar planta</a>
+            </li>
+            {% endif %}
+            {% if perms.herbarium.change_plant %}
+            <li class="list-group-item"><a id="{% if link == 'herbarium-update' %}selected-link{% endif %}"
+              href="{% url 'dashboard:herbarium_update' %}">Administrar herbário</a>
+            </li>
+            <li class="list-group-item"><a id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"
+              href="{% url 'dashboard:photo_solicitation_list' %}">Solicitações de foto</a>
+            </li>
+            <li class="list-group-item"><a id="{% if link == 'plant-solicitation-list' %}selected-link{% endif %}"
+              href="{% url 'dashboard:plant_solicitation_list' %}">Solicitações de planta</a>
+            </li>
+            {% endif %}
+        </ul>
+      </div>
     </div>
   </div>
   {% endif %}
@@ -71,6 +93,8 @@
         <ul class="list-group">
           <li class="list-group-item"><a id="{% if link == 'solicitation-list' %}selected-link{% endif %}"
               href="{% url 'dashboard:solicitation_list' %}">Solicitações</a></li>
+          <li class="list-group-item"><a id="{% if link == 'user-list' %}selected-link{% endif %}"
+              href="{% url 'dashboard:user_list' %}">Cadastrados</a></li>
         </ul>
       </div>
     </div>
