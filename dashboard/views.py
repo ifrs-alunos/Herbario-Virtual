@@ -191,8 +191,8 @@ class UserListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.exclude(is_superuser=True) # Exclui superusers
-        queryset = queryset.exclude(groups='3') # Exclui contas com grupo 'admin-group'
-        
+        queryset = queryset.exclude(groups__name="admins") # Exclui contas com grupo 'admin-group'
+    
         return queryset
 
     def get_context_data(self, **kwargs):
