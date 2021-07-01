@@ -130,4 +130,6 @@ LOGIN_REDIRECT_URL = '/painel/'
 
 LOGOUT_REDIRECT_URL = '/conta/login/'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 from .local_settings import *
