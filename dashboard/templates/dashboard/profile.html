@@ -1,6 +1,6 @@
-{% extends 'dashboard/dashboard.html' %} 
+{% extends 'dashboard/dashboard.html' %}
 
-{% load crispy_forms_tags %}
+{% load crispy_forms_tags static %}
 
 {% block item %}
     {% if messages %}
@@ -30,4 +30,11 @@
     <!-- <div id="profile_button">
         <a href="#"><button type="button" class="btn btn-secondary">Editar <i class="fa fa-pencil" aria-hidden="true"></i></button></a>
     </div> -->
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Plugin Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+    <script src="{% static 'accounts/js/create.js' %}"></script>
 {% endblock %}
