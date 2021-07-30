@@ -43,7 +43,7 @@
 
                     <!-- Caso usuário estiver autenticado, aparecer seu nome de usuário e botão para deslogar -->
                         {% if user.is_authenticated %}
-                        <a class="user-link" href="{% url 'dashboard:view_dashboard' %}">
+                        <a class="user-link" href="{% url 'accounts:view_dashboard' %}">
                                 <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
                                 {{user.username}}
 
@@ -105,7 +105,7 @@
                         {% if user.is_authenticated %}
                         
                         <li class="nav-item">
-                            <a class="user-link" href="{% url 'dashboard:view_dashboard' %}">
+                            <a class="user-link" href="{% url 'accounts:view_dashboard' %}">
                                 <button type="button" class="btn btn-outline-dark nav-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Painel de controle">
                                     <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
                                     {{user.username}}

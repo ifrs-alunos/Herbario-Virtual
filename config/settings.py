@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'herbarium',
     'core',
     'accounts',
-    'dashboard',
     'crispy_forms',
     'django_extensions',
 ]

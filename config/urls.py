@@ -24,8 +24,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('herbario/', include('herbarium.urls', namespace='herbarium')),
-    path('conta/', include('accounts.urls')),
-    path('painel/', include('dashboard.urls')),
+    path('painel/', include('accounts.urls')),
     path('', include('core.urls',namespace='core')),
 ]
 
