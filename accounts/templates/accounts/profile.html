@@ -1,0 +1,40 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% load crispy_forms_tags static %}
+
+{% block item %}
+    {% if messages %}
+    {% for message in messages %}
+        <div class="alert {% if message.tags %} alert-{{message.tags}}{% endif %}" role="alert">
+            {{message}}
+        </div>
+    {% endfor %}
+    {% endif %}
+
+    <form id="create_form" method="POST">
+        {% csrf_token %}
+
+            <div class="mb-2">{{profile_form.name|as_crispy_field }}</div>
+            <div class="mb-2">{{form.username|as_crispy_field }}</div>
+            <div class="mb-2">{{form.email|as_crispy_field }}</div>
+            <div class="mb-2">{{profile_form.institution|as_crispy_field }}</div>
+            <div class="mb-2">{{profile_form.role|as_crispy_field }}</div>
+            <div class="mb-2">{{profile_form.phone|as_crispy_field }}</div>
+
+        <!-- <div class="text-right"> -->
+            <p class="font-weight-light mt-4">Campos marcados com * são obrigatórios</p>
+            <button type="submit" class="btn btn-light">Enviar</button>
+        <!-- </div> -->
+    </form>
+
+    <!-- <div id="profile_button">
+        <a href="#"><button type="button" class="btn btn-secondary">Editar <i class="fa fa-pencil" aria-hidden="true"></i></button></a>
+    </div> -->
+
+{% endblock %}
+
+{% block scripts %}
+    <!-- Plugin Jquery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
+    <script src="{% static 'accounts/js/create.js' %}"></script>
+{% endblock %}
