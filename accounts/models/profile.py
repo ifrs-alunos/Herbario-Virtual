@@ -5,7 +5,7 @@ from .solicitation import Solicitation
 class Profile(models.Model):
     """Essa classe define um perfil de um usuário"""
     
-    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name="profile")
     name = models.CharField(max_length=200, verbose_name="Nome completo", help_text="Não utilize abreviações nos sobrenomes.")
     institution = models.CharField(max_length=150, verbose_name="Instituição de trabalho e/ou estudo", help_text="Caso possuia mais de uma, escreva a que atua principalmente.")
     role = models.CharField(max_length=100, verbose_name="Cargo de ofício", help_text="Utilize como base seu cargo na instituição citada.")
@@ -24,5 +24,4 @@ class Profile(models.Model):
             return False
         else:
             # Envia solicitação caso não tenha enviado ou todas sejam rejeitadas
-            return True       
-        
+            return True
