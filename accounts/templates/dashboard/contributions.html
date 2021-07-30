@@ -1,0 +1,11 @@
+{% extends 'dashboard/dashboard.html' %} 
+
+{% block item %}
+
+    {% for object in object_list %}
+        <p>{{ object }}</p>
+    {% empty %}
+        <h6>Neste momento, você ainda não possui contribuições!</h6>
+    {% endfor %}
+
+{% endblock %}

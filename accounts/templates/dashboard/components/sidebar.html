@@ -1,0 +1,103 @@
+
+<div class="accordion accordion-flush" id="accordionFlushExample">
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingOne">
+    {% comment %} {% if link == 'profile' %}selected-button{% endif %} {% endcomment %}
+      <button class="accordion-button collapsed" type="button"
+        data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false"
+        aria-controls="flush-collapseOne">
+        Perfil
+      </button>
+    </h2>
+    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+      data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <ul class="list-group">
+          <li class="list-group-item"><a id="{% if link == 'profile' %}selected-link{% endif %}"
+              href="{% url 'accounts:profile' %}">Dados pessoais</a></li>
+          {% if perms.accounts.add_solicitation %}
+          <li class="list-group-item"><a id="{% if link == 'solicitation' %}selected-link{% endif %}"
+              href="{% url 'accounts:solicitation' %}">Solicitar ser contribuidor</a></li>
+          {% endif %}
+          <li class="list-group-item"><a id="{% if link == 'change-password' %}selected-link{% endif %}" 
+              href="{% url 'accounts:change_password' %}">Alteração de senha</a></li>
+          {% if perms.herbarium.contribute_with_plants %}
+          <li class="list-group-item"><a id="{% if link == 'contributions' %}selected-link{% endif %}"
+              href="{% url 'accounts:contributions' %}">Minhas contribuições</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% if perms.herbarium.add_plant %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingTwo">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+        Plantas
+      </button>
+    </h2>
+    <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo"
+      data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+          <ul class="list-group">
+            {% if perms.herbarium.contribute_with_plants %}
+            <li class="list-group-item"><a id="{% if link == 'photo-solicitation' %}selected-link{% endif %}"
+              href="{% url 'accounts:photo_solicitation' %}">Adicionar foto</a>
+            </li>
+            <li class="list-group-item"><a id="{% if link == 'plant-solicitation' %}selected-link{% endif %}"
+              href="{% url 'accounts:plant_solicitation' %}">Adicionar planta</a>
+            </li>
+            {% endif %}
+            {% if perms.herbarium.change_plant %}
+            <li class="list-group-item"><a id="{% if link == 'herbarium-update' %}selected-link{% endif %}"
+              href="{% url 'accounts:herbarium_update' %}">Administrar herbário</a>
+            </li>
+            <li class="list-group-item"><a id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"
+              href="{% url 'accounts:photo_solicitation_list' %}">Solicitações de foto</a>
+            </li>
+            <li class="list-group-item"><a id="{% if link == 'plant-soliciation-list' %}selected-link{% endif %}"
+              href="{% url 'accounts:plant_solicitation_list' %}">Solicitações de planta</a>
+            </li>
+            {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  {% if perms.core.add_highlight %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingThree">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+        Notícias
+      </button>
+    </h2>
+    <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
+      data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">Seção em produção!</div>
+    </div>
+  </div>
+  {% endif %}
+  {% if perms.auth.view_user %}
+  <div class="accordion-item">
+    <h2 class="accordion-header" id="flush-headingFour">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+        data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+        Usuários
+      </button>
+    </h2>
+    <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"
+      data-bs-parent="#accordionFlushExample">
+      <div class="accordion-body">
+        <ul class="list-group">
+          <li class="list-group-item"><a id="{% if link == 'solicitation-list' %}selected-link{% endif %}"
+              href="{% url 'accounts:solicitation_list' %}">Solicitações</a></li>
+          <li class="list-group-item"><a id="{% if link == 'user-list' %}selected-link{% endif %}"
+              href="{% url 'accounts:user_list' %}">Cadastrados</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
