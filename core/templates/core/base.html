@@ -61,7 +61,7 @@
                     <!-- Restante do menu hamburgues -->
                     <a href="{% url 'core:index' %}">Início</a>
                     <a href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
-                    <a href="">Doenças de plantas</a>
+                    <a href="{% url 'disease:disease' %}">Herbário fitopatológico virtual</a>
                     <a href="">Insetos</a>
                     <a href="{% url 'core:subjects' %}">Disciplinas</a>
                     <a href="">Materiais</a>
@@ -86,7 +86,7 @@
                             <a class="nav-link" href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="">Doenças de plantas</a>
+                            <a class="nav-link" href=" {% url 'disease:disease' %}">Herbário fitopatológico virtual</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled" href="">Insetos</a>

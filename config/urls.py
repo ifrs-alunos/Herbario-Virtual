@@ -25,7 +25,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('herbario/', include('herbarium.urls', namespace='herbarium')),
     path('painel/', include('accounts.urls')),
-    path('', include('core.urls',namespace='core')),
+    path('', include('core.urls', namespace='core')),
+    path('fitopatologico/', include('disease.urls', namespace='disease')),
 ]
 
 #Para Imagem ser servida pelo Django
