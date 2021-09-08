@@ -1,0 +1,33 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags static %}
+
+{% block item %}
+
+<div class="alert alert-warning" role="alert">
+    <p>- Insira todos os campos de uma doença por vez;</p>
+    <p>- Este formulário é uma <strong>solicitação</strong>. Um administrador do sistema avaliará o seu envio.</p>
+     <p>- Para inserção do campo 'Condições para ocorrência', deverá preencher o formulário de condições para desenvolvimento, disponibilizado no menu ao lado.</p>
+</div>
+
+{{disease_form.errors}}
+<form method="POST">
+    {% csrf_token %}
+{#        {{disease_form|crispy}}#}
+        <div class="mb-2">{{disease_form.name_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.scientific_name_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.complementary_scientific_name_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.culture_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.symptoms_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.cycle_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.occurrence_regions_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.management_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.source_disease|as_crispy_field }}</div>
+        <div class="mb-2">{{disease_form.published_disease|as_crispy_field }}</div>
+
+
+
+    <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+    <button type="submit" class="btn btn-light">Enviar</button>
+</form>
+
+{% endblock %}
