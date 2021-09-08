@@ -5,6 +5,7 @@ from . import views
 app_name = 'disease'
 
 urlpatterns = [
-    path('', views.DiseaseIndex, name='disease'),
+    path('', views.DiseaseIndex.as_view(), name='disease'),
+    path('<slug:culture>/', views.DiseaseIndex.as_view(), name="diseases"),
 ]
 

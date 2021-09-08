@@ -7,9 +7,9 @@
     <div class ="container">
         <div class="row">
             <div class="col-lg-6 col-md-8">
-                <h4>Filtrar plantas por:</h4>
+                <h4>Filtrar doenças por:</h4>
                 <br/>
-                <h6>Nome comum, científico ou descrição:</h6>
+                <h6>Nome comum, científico, cultura ou descrição:</h6>
 
                 <!-- Formulário para filtrar doenças por texto -->
                 <form method="GET">
@@ -44,7 +44,7 @@
                 <ul class="list-group d-none d-lg-block">
 
                     {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
-                    {% if selected_family == None %}
+                    {% if selected_culture == None %}
                         <li class="list-group-item active"><a href="{% url 'disease:disease' %}">Todas</a></li>
                     {% else %}
                         <li class="list-group-item"><a href="{% url 'disease:disease' %}">Todas</a></li>
@@ -54,10 +54,10 @@
                     {% for culture in cultures %}
 
                         {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
-                        {% if selected_culture == culture.name %}
-                            <li class="list-group-item active"><a href="{% url 'herbarium:plants' culture.name %}">{{culture}}</a></li>
+                        {% if selected_culture == culture.slug %}
+                            <li class="list-group-item active"><a href="{% url 'disease:diseases' culture.slug %}">{{culture}}</a></li>
                         {% else %}
-                            <li class="list-group-item"><a href="{% url 'herbarium:plants' culture.name %}">{{culture}}</a></li>
+                            <li class="list-group-item"><a href="{% url 'disease:diseases' culture.slug %}">{{culture}}</a></li>
                         {% endif %}
 
                     {% endfor %}
@@ -66,7 +66,7 @@
                 <select class="custom-select d-lg-none mb-3" onchange="location=this.value;">
                     {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
 
-                    {% if selected_family == None %}
+                    {% if selected_culture == None %}
                         <option selected value="{% url 'disease:disease' %}">Todas</option>
                     {% else %}
                         <option value="{% url 'disease:disease' %}">Todas</option>
@@ -75,11 +75,11 @@
                     {# Para cada família na lista de famílias #}
                     {% for culture in cultures %}
 
-                        {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
-                        {% if selected_culture == culture.name %}
-                            <option selected value="{% url 'herbarium:plants' culture.name %}">{{culture}}</option>
+                        {# Verifica se o dicionário das famílias na chave 'cultura' corresponde a cultura da lista. Se sim, elemento tem classe active, se não, não a tem #}
+                        {% if selected_culture == culture.slug %}
+                            <option selected value="#{# {% url 'herbarium:plants' culture.name %} #}">{{culture}}</option>
                         {% else %}
-                            <option value="{% url 'herbarium:plants' culture.name %}">{{culture}}</option>
+                            <option value="#{# {% url 'herbarium:plants' culture.name %} #}">{{culture}}</option>
                         {% endif %}
 
                     {% endfor %}
@@ -102,6 +102,7 @@
                     {% endfor %}
                 </ul> -->
                 {% endcomment %}
+
             </div>
 
             <div class="col-lg-9">
