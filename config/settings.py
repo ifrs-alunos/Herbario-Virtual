@@ -129,7 +129,7 @@ MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = '/painel/'
 
-LOGOUT_REDIRECT_URL = '/conta/login/'
+LOGOUT_REDIRECT_URL = '/painel/login/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
