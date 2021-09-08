@@ -5,3 +5,5 @@ from .solicitation_form import SolicitationForm
 from .photo_solicitation_form import PhotoSolicitationModelForm
 from .solicitation_update_form import SolicitationStatusUpdateForm
 from .plant_solicitation_form import PlantSolicitationModelForm
+from .disease_solicitation_form import DiseaseSolicitationModelForm
+from .disease_char_form import DiseaseCharSolicitationModelForm

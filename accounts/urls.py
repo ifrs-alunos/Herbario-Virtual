@@ -22,7 +22,17 @@ urlpatterns = [
     path('atualizar-herbario/', views.HerbariumListView.as_view(), name="herbarium_update"),
     path('lista-usuarios/', views.UserListView.as_view(), name="user_list"),
     path('solicitacao-de-planta/', views.plant_solicitation, name="plant_solicitation"),
+    path('solicitacao-de-doenca/', views.disease_solicitation, name="disease_solicitation"),
+    path('atualizacao-de-doenca/<int:pk>', views.disease_update, name="disease_update"),
+    path('solicitacao-caracteristicas/', views.disease_char_solicitation, name="disease_char_solicitation"),
+    path('caracteristicas-fitopatologico/', views.CharListView.as_view(), name="char_phytopathological"),
+    path('detalhes-caracteristica/<slug:slug>/', views.CharDetailView.as_view(), name='detail-char'),
+    path('atualizar-fitopatologico/', views.DiseaseListView.as_view(), name="disease_update"),
+    path('apagar-doenca/<slug:slug>/', views.DiseaseDeleteView.as_view(), name="delete_disease"),
+    path('detalhes-doencas/<slug:slug>/', views.DiseaseDetailView.as_view(), name='detail-disease'),
+    path('solicitacoes-doencas/', views.DiseaseListView.as_view(), name="disease_solicitation_list"),
     path('solicitacao-de-foto/', views.photo_solicitation, name="photo_solicitation"),
     path('solicitacoes-plantas/', views.PlantSolicitationListView.as_view(), name="plant_solicitation_list"),
     path('solicitacoes-fotos/', views.PhotoSolicitationListView.as_view(), name="photo_solicitation_list"),
+
 ]
