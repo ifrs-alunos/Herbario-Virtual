@@ -1,14 +1,16 @@
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from accounts.forms import ProfileForm, UserUpdateForm, SolicitationForm
-from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation
+from accounts.forms import ProfileForm, UserUpdateForm, SolicitationForm, DiseaseCharSolicitationModelForm
+from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation, DiseaseSolicitation, CharSolicitationModel
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
+from disease.models import Disease
+from disease.forms import DiseaseForm
 from .models import Contribuition
 
 from .forms import  UserForm, SolicitationStatusUpdateForm
@@ -325,6 +327,84 @@ def photo_solicitation(request):
 
     return render(request, 'dashboard/photo_solicitation.html', context)
 
+def disease_solicitation(request):
+    """Essa função cria uma solicitação para cadastrar uma nova doença"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+        disease_form = DiseaseForm(request.POST)
+
+        if disease_form.is_valid():
+            disease = disease_form.save()  # Cria objeto mas nao salva no banco de dados
+            disease.published = False
+
+            disease_solicitation = DiseaseSolicitation(user=request.user, status='sent', new_disease=disease)
+            disease_solicitation.save()
+
+            return redirect('accounts:disease_update')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        disease_form = DiseaseForm()
+
+    context = {
+        'disease_form': disease_form,
+        'link': 'disease-solicitation',
+    }
+
+    return render(request, 'dashboard/disease_solicitation.html', context)
+
+def disease_update(request, pk):
+    """Essa função cria uma solicitação para cadastrar uma nova doença"""
+
+    disease = get_object_or_404(Disease, id=pk)
+
+    disease_form = DiseaseForm(request.POST or None, instance=disease)
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+
+        if disease_form.is_valid():
+            disease_form.save()
+
+            return redirect('accounts:disease_update')
+
+    context = {
+        'disease_form': disease_form,
+        'link': 'disease_update',
+    }
+
+    return render(request, 'dashboard/disease_solicitation.html', context)
+#
+# class DiseaseUpdate(UpdateView):
+#     model = Di
+
+def disease_char_solicitation(request):
+    """Essa função cria uma solicitação para cadastrar uma nova condição para desenvolvimento de doença"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+        disease_char_form = DiseaseCharSolicitationModelForm(request.POST)
+
+        if disease_char_form.is_valid():
+            disease_char = disease_char_form.save()  # Cria objeto mas nao salva no banco de dados
+
+            return redirect('accounts:char_phytopathological')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        disease_condition_form = DiseaseCharSolicitationModelForm()
+
+    context = {
+        'disease_condition_form': disease_condition_form,
+        'link': 'disease-conditions-solicitation',
+    }
+
+    return render(request, 'dashboard/disease_condition_solicitation.html', context)
 
 class PlantSolicitationListView(ListView):
     model = PlantSolicitation
@@ -362,3 +442,80 @@ class PhotoSolicitationListView(ListView):
         queryset = queryset.filter(status=PhotoSolicitation.Status.SENT)
 
         return queryset
+
+# Views relacionadas à doenças
+
+class DiseaseListView(ListView):
+    model = Disease
+    context_object_name = 'diseases'
+    template_name = 'dashboard/phytopathological_update.html'
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'disease-update'  # Cria novo contexto
+
+        return data
+
+class CharListView(ListView):
+    model = CharSolicitationModel
+    context_object_name = 'characteristics'
+    template_name = 'dashboard/phytopathological_char.html'
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'char_phytopathological'  # Cria novo contexto
+
+        return data
+
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     # queryset = queryset.filter(validated=True)
+    #     return queryset
+
+
+class DiseaseSolicitationListView(ListView):
+    model = DiseaseSolicitation
+    context_object_name = 'solicitations'
+    template_name = 'dashboard/disease_solicitation_list.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'disease-solicitation-list'  # Cria novo contexto
+
+        return data
+
+    def get_queryset(self):  # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=DiseaseSolicitation.Status.SENT)
+
+        return queryset
+
+class DiseaseDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = Disease
+    template_name = 'dashboard/disease_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class DiseaseDeleteView(DeleteView):
+    model = Disease
+    success_url = reverse_lazy('accounts:disease_solicitation_list')
+
+class CharDetailView(DetailView):
+    # Mostra detalhes de uma característica em específico. Passa no contexto os dados de UMA característica
+    model = CharSolicitationModel
+    template_name = 'dashboard/char_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
