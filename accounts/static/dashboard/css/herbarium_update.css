@@ -17,4 +17,5 @@ a#plant_view {
 button#new_plant {
     background-color: #A6DDA6;
     color: #2c6b3a;
+    text-decoration: none;
 }
