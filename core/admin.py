@@ -5,3 +5,4 @@ from .models import *
 
 admin.site.register(Highlight)
 admin.site.register(CarouselImage)
+admin.site.register(Colaborators)
