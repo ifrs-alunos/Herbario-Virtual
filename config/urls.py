@@ -27,6 +27,7 @@ urlpatterns = [
     path('painel/', include('accounts.urls')),
     path('', include('core.urls', namespace='core')),
     path('fitopatologico/', include('disease.urls', namespace='disease')),
+    path('afericoes/', include('assessment.urls', namespace='assessment')),
 ]
 
 #Para Imagem ser servida pelo Django
