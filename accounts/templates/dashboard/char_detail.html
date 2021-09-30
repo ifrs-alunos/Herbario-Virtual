@@ -17,8 +17,13 @@
         <div class="card bg-light mb-12">
           <div class="card-header">Dados sobre a característica</div>
           <div class="card-body">
-            <h5 class="card-title">Nome da característica: {{ charsolicitationmodel.char_name }}</h5>
-            <p class="card-text">Tipo de característica: {{ charsolicitationmodel.char_kind }}</p>
+              <h5 class="card-title"><strong>Nome da característica: </strong>{{ charsolicitationmodel.char_name }}</h5>
+              <p class="card-text"><strong> Tipo de característica: </strong>{{ charsolicitationmodel.get_char_kind_display }}</p>
+              <p class="card-text"><strong> Operador relacional de característica: </strong>{{ charsolicitationmodel.get_char_relationals_display }}</p>
+
+              {% if charsolicitationmodel.char_tolerance %}
+                  <p class="card-text"><strong> Valor de tolerância/margem de erro: </strong>{{ charsolicitationmodel.char_tolerance }}</p>
+              {% endif %}
           </div>
         </div>
 

@@ -28,11 +28,16 @@ urlpatterns = [
     path('caracteristicas-fitopatologico/', views.CharListView.as_view(), name="char_phytopathological"),
     path('detalhes-caracteristica/<slug:slug>/', views.CharDetailView.as_view(), name='detail-char'),
     path('atualizar-fitopatologico/', views.DiseaseListView.as_view(), name="disease_update"),
+    path('atualizar-caracteristica/<int:pk>', views.char_update, name="char_update"),
+    path('atualizar-cultura/<int:pk>', views.culture_update, name="culture_update"),
     path('apagar-doenca/<slug:slug>/', views.DiseaseDeleteView.as_view(), name="delete_disease"),
+    path('apagar-caracteristica/<slug:slug>/', views.CharDeleteView.as_view(), name="delete_char"),
     path('detalhes-doencas/<slug:slug>/', views.DiseaseDetailView.as_view(), name='detail-disease'),
-    path('solicitacoes-doencas/', views.DiseaseListView.as_view(), name="disease_solicitation_list"),
     path('solicitacao-de-foto/', views.photo_solicitation, name="photo_solicitation"),
     path('solicitacoes-plantas/', views.PlantSolicitationListView.as_view(), name="plant_solicitation_list"),
     path('solicitacoes-fotos/', views.PhotoSolicitationListView.as_view(), name="photo_solicitation_list"),
+    path('adicionar-cultura/', views.culture_solicitation, name="culture_solicitation"),
+    path('lista-culturas/', views.CultureListView.as_view(), name="culture_list"),
+    path('apagar-cultura/<slug:slug>', views.CultureDeleteView.as_view(), name="delete_culture"),
 
 ]
