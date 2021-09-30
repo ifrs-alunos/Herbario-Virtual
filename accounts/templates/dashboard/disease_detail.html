@@ -18,23 +18,49 @@
           <div class="card-header">Dados sobre a doença</div>
           <div class="card-body">
             <h5 class="card-title">Nome da doença: {{ disease.name_disease }}</h5>
-            <p class="card-text">Nome científico: {{ disease.scientific_name_disease }}</p>
+              <p class="card-text"><strong>Nome científico: </strong>{{ disease.scientific_name_disease }}</p>
 
             {% if disease.complementary_scientific_name_disease %}
-                <p class="card-text">Nome científico complementar: {{ disease.complementary_scientific_name_disease }}</p>
+                <p class="card-text"><strong> Nome científico complementar: </strong>{{ disease.complementary_scientific_name_disease }}</p>
             {% endif %}
 
-            <p class="card-text">Cultura: {{ disease.culture_disease }}</p>
-            <p class="card-text">Sintomas: {{ disease.symptoms_disease }}</p>
+            <p class="card-text"><strong>Cultura: </strong>{{ disease.culture_disease }}</p>
+            <p class="card-text"><strong>Sintomas: </strong>{{ disease.symptoms_disease }}</p>
 
             {% if disease.cycle_disease %}
-                <p class="card-text">Ciclo da doença: {{ disease.cycle_disease }}</p>
+                <p class="card-text"><strong> Ciclo da doença: </strong> {{ disease.cycle_disease }}</p>
             {% endif %}
 
-            <p class="card-text">Regiões de ocorrência: {{ disease.occurrence_regions_disease }}</p>
-            <p class="card-text">Manejo: {{ disease.management_disease }}</p>
-            <p class="card-text">Sintomas: {{ disease.symptoms_disease }}</p>
-            <p class="card-text text-secondary">Referências: {{ disease.source_disease }}</p>
+              <p class="card-text"><strong> Regiões de ocorrência: </strong>{{disease.occurrence_regions_disease.all|join:', '}}</p>
+              <p class="card-text"><strong>Manejo: </strong>{{ disease.management_disease }}</p>
+              <p class="card-text"><strong>Sintomas: </strong>{{ disease.symptoms_disease }}</p>
+
+            <!--  Tabela com condições da doença -->
+                <p class="card-text"><strong>Condições de desenvolvimento: </strong></p>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Nome da condição
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                        </tr>
+                    </thead>
+
+                <tbody>
+                    {% for condition in disease.condition_set.all %}
+                        <tr>
+                            <td scope="row">{{condition.characteristic}}</td>
+                            <td scope="row">{{condition.value}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+            <p class="card-text"><strong>Referências: </strong>{{ disease.source_disease }}</p>
 
           </div>
         </div>

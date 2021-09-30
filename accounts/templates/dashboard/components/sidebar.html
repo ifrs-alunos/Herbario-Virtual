@@ -79,6 +79,7 @@
           </button>
         </h2>
 
+      <!-- Seção no menu para doenças -->
         <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree"
           data-bs-parent="#accordionFlushExample">
           <div class="accordion-body">
@@ -86,26 +87,13 @@
 
                  {% if perms.disease.change_disease %}
 
-                    <li class="list-group-item"><a id="{% if link == 'disease-update' %}selected-link{% endif %}"
+                    <li class="list-group-item"><a id="{% if link == 'disease_update' %}selected-link{% endif %}"
                        href="{% url 'accounts:disease_update' %}">Doenças</a>
                     </li>
 
-{#                     <li class="list-group-item"><a id="{% if link == 'disease-soliciation-list' %}selected-link{% endif %}"#}
-{#                        href="{% url 'accounts:disease_solicitation_list' %}">Solicitações de doenças</a>#}
-{#                     </li>#}
-
- {#                <li class="list-group-item"><a id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"#}
- {#                  href="{% url 'accounts:photo_solicitation_list' %}">Solicitações de foto</a>#}
- {#                </li>#}
-
-
-{#                <li class="list-group-item"><a id="{% if link == 'photo-solicitation' %}selected-link{% endif %}"#}
-{#                  href="{% url 'accounts:photo_solicitation' %}">Adicionar foto</a>#}
-{#                </li>#}
-
-{#                    <li class="list-group-item"><a id="{% if link == 'disease-solicitation' %}selected-link{% endif %}"#}
-{#                      href="{% url 'accounts:disease_solicitation' %}">Adicionar doença</a>#}
-{#                    </li>#}
+                     <li class="list-group-item"><a id="{% if link == 'culture_list' %}selected-link{% endif %}"
+                       href="{% url 'accounts:culture_list' %}">Culturas</a>
+                    </li>
 
                     <li class="list-group-item"><a id="{% if link == 'char_phytopathological' %}selected-link{% endif %}"
                       href="{% url 'accounts:char_phytopathological' %}">Características de desenvolvimento</a>
@@ -133,7 +121,8 @@
   </div>
   {% endif %}
 
-  {% if perms.core.add_highlight %}
+<!-- Seção no menu para editar colaboradores -->
+  {% if perms.core.change_colaborators %}
   <div class="accordion-item">
     <h2 class="accordion-header" id="flush-headingFive">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
