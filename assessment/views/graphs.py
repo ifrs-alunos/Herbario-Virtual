@@ -1,5 +1,6 @@
 import datetime
 
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
@@ -23,6 +24,7 @@ verbose_names = {
     "uv": "Luz ultravioleta"
 }
 
+@staff_member_required
 def render_graph(request, station_id):
     params = request.GET
 
