@@ -1,0 +1,20 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags static %}
+
+{% block item %}
+
+<div class="alert alert-warning" role="alert">
+    <p>- Este formulário é uma <strong>solicitação</strong>. Um administrador do sistema avaliará o seu envio.</p>
+</div>
+
+{{culture_form.errors}}
+<form method="POST">
+    {% csrf_token %}
+        <div class="mb-2">{{culture_form.name|as_crispy_field }}</div>
+
+    <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+    <button type="submit" class="btn btn-light">Enviar</button>
+</form>
+
+{% endblock %}
