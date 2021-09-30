@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.shortcuts import render
 from .models import *
 from django.views.generic import ListView, DetailView
@@ -17,7 +18,7 @@ class DiseaseIndex(ListView):
 
         # Adiciona um contexto novo, o qual pega todos os objetos do tipo Culture
         context["cultures"] = Culture.objects.all()
-        context["selected_culture"] = self.kwargs.get("culture")
+        context["selected_culture"] = self.kwargs.get("culture_disease")
 
         context["search_form"] = SearchForm(self.request.GET)
 
@@ -34,7 +35,7 @@ class DiseaseIndex(ListView):
         if self.kwargs:
 
             # Filtra todas as plantas por uma família passada na chave 'family' do dicionário da requisição
-            diseases = diseases.filter(culture__slug=self.kwargs['culture'])
+            diseases = diseases.filter(culture_disease__slug=self.kwargs['culture_disease'])
 
         # Executa se algum texto tiver sido pesquisado
         if self.request.GET:
@@ -54,3 +55,16 @@ class DiseaseIndex(ListView):
 
         # Retorna a variável que armazena todas as plantas requisitadas pelo usuário (com ou sem filtro)
         return diseases
+
+class DiseaseDetail(DetailView):
+    # Mostra detalhes de uma planta em específico. Passa no contexto os dados de UMA planta
+    model = Disease
+    template_name = 'detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        # Teste pra fazer: adiciona a sigla dos estados
+        # context["initials"] = State.objects.all()
+
+        return context
