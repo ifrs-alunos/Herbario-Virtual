@@ -72,3 +72,10 @@ class CarouselImage(models.Model):
         verbose_name = 'Imagem do Carrossel'
         verbose_name_plural = 'Imagens do Carrossel'
         ordering = ['list_order']
+
+class Colaborators(models.Model):
+
+    text = models.TextField('Texto', blank=False)
+
+    class Meta:
+        verbose_name = 'Colaboradores'

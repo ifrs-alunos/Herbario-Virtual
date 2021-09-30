@@ -38,9 +38,10 @@ INSTALLED_APPS = [
     'herbarium',
     'core',
     'accounts',
-    'dashboard',
     'crispy_forms',
     'django_extensions',
+    'disease',
+    'assessment',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -129,7 +130,7 @@ MEDIA_URL = '/media/'
 
 LOGIN_REDIRECT_URL = '/painel/'
 
-LOGOUT_REDIRECT_URL = '/conta/login/'
+LOGOUT_REDIRECT_URL = '/painel/login/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 

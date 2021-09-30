@@ -7,4 +7,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('saiba-mais/<str:highlight_slug>', views.highlight, name='highlight'),
     path('subjects', views.subjects, name='subjects'),
+    path('colaboradores', views.colaborators, name='about'),
+    path('editar-colaboradores', views.colaborators_edit, name='edit-about')
 ]

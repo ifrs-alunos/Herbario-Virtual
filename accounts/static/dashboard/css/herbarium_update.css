@@ -1,0 +1,21 @@
+button#plant_update {
+    background-color: #ebe992;
+    color: #949442;
+    border-color: #949442;
+}
+
+button#plant_delete {
+    background-color: #ffa4a4;
+    color: #c13b3b;
+}
+
+a#plant_view {
+    background-color: #bacff5;
+    color: #334969;
+}   
+
+button#new_plant {
+    background-color: #A6DDA6;
+    color: #2c6b3a;
+    text-decoration: none;
+}

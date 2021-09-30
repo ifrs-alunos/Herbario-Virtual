@@ -19,4 +19,4 @@ class UserUpdateForm(UserChangeForm):
         fields = ('username', 'email')
         labels = {
             'username': 'Nome de usuário',
-        }     
+        }
