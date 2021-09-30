@@ -6,4 +6,4 @@ class DiseaseCharSolicitationModelForm(forms.ModelForm):
 
     class Meta:
         model = CharSolicitationModel
-        fields = '__all__'
+        exclude = ['slug']
