@@ -39,7 +39,7 @@ def render_graph(request, station_id):
     else:
         filtered_objects = objects.filter(board_time__gte=datetime.datetime.now() - datetime.timedelta(hours=12))
 
-    fields = objects.last().get_fields(exclude=["id", "station_id", "board_time"])
+    fields = objects.last().get_fields(exclude=["id", "station_id", "board_time", "bmp_t", "bmp_p", "bmp_a", "uv"])
 
     plots = []
 
