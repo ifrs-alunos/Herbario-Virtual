@@ -103,7 +103,7 @@ class Disease(models.Model):
     # Booleando representando o estado de publicação desta doença
     published_disease = models.BooleanField(verbose_name="Publicado", null=True)
 
-    characteristic = models.ForeignKey("accounts.CharSolicitationModel", on_delete=models.SET_NULL, blank=True, null=True)
+    characteristic = models.ForeignKey("accounts.CharSolicitationModel", on_delete=models.SET_NULL, default=None, blank=True, null=True)
 
     
     def __str__(self):
