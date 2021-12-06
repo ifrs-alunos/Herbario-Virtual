@@ -105,7 +105,6 @@ class Disease(models.Model):
 
     characteristic = models.ForeignKey("accounts.CharSolicitationModel", on_delete=models.SET_NULL, default=None, blank=True, null=True)
 
-    
     def __str__(self):
         return self.name_disease
 
@@ -214,4 +213,6 @@ class Condition(models.Model):
             self.str_value = value
         else:
             self.bool_value = value
+            
         self.save()
+
