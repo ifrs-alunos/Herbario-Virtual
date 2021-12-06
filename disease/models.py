@@ -214,3 +214,34 @@ class Condition(models.Model):
         else:
             self.bool_value = value
         self.save()
+
+class MathModels(models.Model):
+    '''Essa classe realiza o cadastramento de novos modelos matemáticos'''
+
+    math_model_name = models.CharField('Nome do modelo matemático', max_length=100, blank=False, help_text='Insira o nome do modelo matemático')
+    var1 = models.CharField('Variável 1', max_length=20, help_text='Insira a variável 1 que será utlizada', blank=False)
+    var1_kind = models.CharField('Dado da variável 1', max_length=20, help_text='Insira que dado será utilizado na variável 1 (ex: temperatura mínima, umidade, molhamento foliar', blank=False)
+
+    var2 = models.CharField('Variável 2', max_length=20, help_text='Insira a variável 2 que será utlizada', blank=True)
+    var2_kind = models.CharField('Dado da variável 2', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+
+    var3 = models.CharField('Variável 3', max_length=20, help_text='Insira a variável 3 que será utlizada', blank=True)
+    var3_kind = models.CharField('Dado da variável 3', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+
+    var4 = models.CharField('Variável 4', max_length=20, help_text='Insira a variável 4 que será utlizada', blank=True)
+    var4_kind = models.CharField('Dado da variável 4', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+
+    var5 = models.CharField('Variável 5', max_length=20, help_text='Insira a variável 5 que será utlizada', blank=True)
+    var5_kind = models.CharField('Dado da variável 5', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+
+    equation = models.CharField('Equação', max_length=20, help_text='Insira a equação. Para soma utilize +, para subtração utilize menos, para divisão utilize /, para multiplicação utilize *', blank=True)
+
+    # Retorna variável name caso seja dado um print do objeto
+    def __str__(self):
+        return self.math_model_name
+
+    class Meta:
+        verbose_name = 'Modelo matemático'
+        verbose_name_plural = 'Modelos matemáticos'
+        ordering = ['math_model_name']
+        permissions = [('contribute_with_math_model', 'Pode contribuir com modelos matemáticos')]
