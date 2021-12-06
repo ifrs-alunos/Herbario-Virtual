@@ -92,7 +92,7 @@ class Disease(models.Model):
     culture_disease = models.ForeignKey(Culture, on_delete=models.CASCADE, related_name="cultures", verbose_name="Cultura", help_text='Insira a cultura de lavoura afetada')
     symptoms_disease = models.TextField('Sintomas', blank=False, help_text='Insira uma descrição sobre os sintomas da doença')
     cycle_disease = models.TextField('Ciclo da doença', blank=True, help_text='Descreva o ciclo da doença')
-    occurrence_regions_disease = models.ManyToManyField(Region, verbose_name="Regiões de Ocorrência", help_text='Selecione as regiões de ocorrência desta doença')
+    occurrence_regions_disease = models.ManyToManyField(Region, blank=True, null=True, verbose_name="Regiões de Ocorrência", help_text='Selecione as regiões de ocorrência desta doença')
     management_disease = models.TextField('Medidas de controle', blank = True, help_text = 'Descreva as medidas para controle desta doença')
     source_disease = models.TextField('Referências', blank = False, help_text = 'Insira as referências utilizadas')
 

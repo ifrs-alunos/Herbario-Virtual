@@ -42,8 +42,10 @@
                             <td>{{disease.culture_disease}}</td>
                         </tr>
                         <tr>
-                            <td scope="row">Regiões de Ocorrência</td>
-                            <td>{{disease.occurrence_regions_disease.all|join:', '}}</td>
+                            {% if disease.occurence_regions_diasease %}
+                                <td scope="row">Regiões de Ocorrência</td>
+                                <td>{{disease.occurrence_regions_disease.all|join:', '}}</td>
+                            {% endif %}
                         </tr>
                     </tbody>
                 </table>
