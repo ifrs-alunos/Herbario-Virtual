@@ -9,8 +9,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
-from disease.models import Disease, Culture, Condition
-from disease.forms import DiseaseForm
+from disease.models import Disease, Culture, Condition, MathModels
+from disease.forms import DiseaseForm, MathModelsForm
 from .models import Contribuition
 
 from .forms import  UserForm, SolicitationStatusUpdateForm
@@ -613,5 +613,42 @@ class CultureListView(ListView):
         data = super().get_context_data(**kwargs)
 
         data['link'] = 'culture_list'  # Cria novo contexto
+
+        return data
+
+def math_model_solicitation(request):
+    """Essa função cadastra um novo modelo matemático"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        math_model_form = MathModelsForm(request.POST)
+
+        if math_model_form.is_valid():
+            math_model_form = math_model_form.save()  # Cria objeto mas nao salva no banco de dados
+
+            return redirect('accounts:math_model_solicitation')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        math_model_form = MathModelsForm()
+
+    context = {
+        'math_model_form': math_model_form,
+        'link': 'math_model_solicitation',
+    }
+
+    return render(request, 'dashboard/math_model_add.html', context)
+
+class MathModelsListView(ListView):
+    model = MathModels
+    context_object_name = 'math_model'
+    template_name = 'dashboard/math_model_list.html'
+    paginate_by = 12
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'math_models'  # Cria novo contexto
 
         return data

@@ -228,13 +228,10 @@ class MathModels(models.Model):
     var3 = models.CharField('Variável 3', max_length=20, help_text='Insira a variável 3 que será utlizada', blank=True)
     var3_kind = models.CharField('Dado da variável 3', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
 
-    var4 = models.CharField('Variável 4', max_length=20, help_text='Insira a variável 4 que será utlizada', blank=True)
-    var4_kind = models.CharField('Dado da variável 4', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
-
-    var5 = models.CharField('Variável 5', max_length=20, help_text='Insira a variável 5 que será utlizada', blank=True)
-    var5_kind = models.CharField('Dado da variável 5', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+    #TODO: para variáveis e constantes adicionar campos no formulário dinamicamente
 
     equation = models.CharField('Equação', max_length=20, help_text='Insira a equação. Para soma utilize +, para subtração utilize menos, para divisão utilize /, para multiplicação utilize *', blank=True)
+
 
     # Retorna variável name caso seja dado um print do objeto
     def __str__(self):
