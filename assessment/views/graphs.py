@@ -24,7 +24,6 @@ verbose_names = {
     "uv": "Luz ultravioleta"
 }
 
-@staff_member_required
 def render_graph(request, station_id):
     params = request.GET
 
