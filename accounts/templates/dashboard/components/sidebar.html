@@ -22,11 +22,11 @@
                     <li class="list-group-item"><a id="{% if link == 'change-password' %}selected-link{% endif %}"
                                                    href="{% url 'accounts:change_password' %}">Alteração de senha</a>
                     </li>
-                    {% if perms.herbarium.contribute_with_plants %}
-                        <li class="list-group-item"><a id="{% if link == 'contributions' %}selected-link{% endif %}"
-                                                       href="{% url 'accounts:contributions' %}">Minhas
-                            contribuições</a></li>
-                    {% endif %}
+{#                    {% if perms.herbarium.contribute_with_plants %}#}
+{#                        <li class="list-group-item"><a id="{% if link == 'contributions' %}selected-link{% endif %}"#}
+{#                                                       href="{% url 'accounts:contributions' %}">Minhas#}
+{#                            contribuições</a></li>#}
+{#                    {% endif %}#}
                 </ul>
             </div>
         </div>
@@ -45,11 +45,18 @@
                  data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
                     <ul class="list-group">
-                        {% if perms.herbarium.change_plant %}
+                        {% if perms.herbarium.contribute_with_plants %}
                             <li class="list-group-item"><a
                                     id="{% if link == 'herbarium-update' %}selected-link{% endif %}"
                                     href="{% url 'accounts:herbarium_update' %}">Plantas</a>
                             </li>
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'photo-solicitation' %}selected-link{% endif %}"
+                                    href="{% url 'accounts:photo_solicitation' %}">Adicionar foto</a>
+                            </li>
+                        {% endif %}
+
+                        {% if perms.herbarium.change_plant %}
                             <li class="list-group-item"><a
                                     id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"
                                     href="{% url 'accounts:photo_solicitation_list' %}">Solicitações de foto</a>
@@ -57,12 +64,6 @@
                             <li class="list-group-item"><a
                                     id="{% if link == 'plant-soliciation-list' %}selected-link{% endif %}"
                                     href="{% url 'accounts:plant_solicitation_list' %}">Solicitações de planta</a>
-                            </li>
-                        {% endif %}
-                        {% if perms.herbarium.contribute_with_plants %}
-                            <li class="list-group-item"><a
-                                    id="{% if link == 'photo-solicitation' %}selected-link{% endif %}"
-                                    href="{% url 'accounts:photo_solicitation' %}">Adicionar foto</a>
                             </li>
                         {% endif %}
                     </ul>
