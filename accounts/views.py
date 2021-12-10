@@ -283,7 +283,7 @@ def plant_solicitation(request):
             plant_solicitation = PlantSolicitation(user=request.user, status='sent', new_plant=plant)
             plant_solicitation.save()
 
-            return redirect('accounts:contributions')
+            return redirect('accounts:herbarium_update')
 
     # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
     else:
@@ -505,6 +505,37 @@ class PlantSolicitationListView(ListView):
 
         return queryset
 
+def plant_update(request, pk):
+    """Essa função edita uma doença"""
+
+    plant = get_object_or_404(Plant, id=pk)
+
+    plant_form = PlantForm(request.POST or None, instance=plant)
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+
+        if plant_form.is_valid():
+            plant_form.save()
+
+            return redirect('accounts:herbarium_update')
+
+    context = {
+        'plant_form': plant_form,
+        'link': 'plant_update',
+    }
+
+    return render(request, 'dashboard/plant_solicitation.html', context)
+
+class PlantDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = Plant
+    template_name = 'dashboard/plant_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
 
 class PhotoSolicitationListView(ListView):
     model = PhotoSolicitation
@@ -580,6 +611,10 @@ class DiseaseDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         return context
+
+class PlantDeleteView(DeleteView):
+    model = Plant
+    success_url = reverse_lazy('accounts:herbarium_update')
 
 class DiseaseDeleteView(DeleteView):
     model = Disease
