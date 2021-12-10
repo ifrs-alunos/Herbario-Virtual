@@ -94,6 +94,7 @@ class Disease(models.Model):
     cycle_disease = models.TextField('Ciclo da doença', blank=True, help_text='Descreva o ciclo da doença')
     occurrence_regions_disease = models.ManyToManyField(Region, blank=True, null=True, verbose_name="Regiões de Ocorrência", help_text='Selecione as regiões de ocorrência desta doença')
     management_disease = models.TextField('Medidas de controle', blank = True, help_text = 'Descreva as medidas para controle desta doença')
+    condition_text_disease = models.TextField('Condições ambientais de desenvolvimento', blank=True, help_text='Insira as condições ambientais de desenvolvimento')
     source_disease = models.TextField('Referências', blank = False, help_text = 'Insira as referências utilizadas')
 
     # Dados relacionados à criação e publicação de atualizações
