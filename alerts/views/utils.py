@@ -5,7 +5,7 @@ from django.utils import timezone
 
 tz = timezone.get_current_timezone()
 
-from assessment.models import Report, TempReport
+from alerts.models import Report
 
 
 def mean(array: list) -> float:
@@ -42,49 +42,49 @@ def create_report_from_params(params: dict) -> Report:
     )
 
 
-def get_average_values(temp_reports: QuerySet[TempReport]) -> Report:
-    """
-    processa os valores dos relatórios temporários e retorna um objeto
-    com a média dos valores, excluindo os 10% mais altos e baixo
-
-    :param temp_reports: lista de relatórios temporários
-    :return: relatório com os valores médios de todas os os últimos relatórios temporários
-    """
-
-    dht11_humidity = []
-    dht11_temperature = []
-    dhtt11_heat_index = []
-
-    bmp280_temperature = []
-    bmp280_pressure = []
-    bmp280_altitude = []
-
-    ldr_light = []
-
-    for i in temp_reports.order_by('-board_time'):
-        dht11_humidity.append(i.dht11_humidity)
-        dht11_temperature.append(i.dht11_temperature)
-        dhtt11_heat_index.append(i.dhtt11_heat_index)
-
-        bmp280_temperature.append(i.bmp280_temperature)
-        bmp280_pressure.append(i.bmp280_pressure)
-        bmp280_altitude.append(i.bmp280_altitude)
-
-        ldr_light.append(i.ldr_light)
-
-    return Report.objects.create(
-        dht11_humidity=mean(dht11_humidity),
-        dht11_temperature=mean(dht11_temperature),
-        dhtt11_heat_index=mean(dhtt11_heat_index),
-
-        bmp280_temperature=mean(bmp280_temperature),
-        bmp280_pressure=mean(bmp280_pressure),
-        bmp280_altitude=mean(bmp280_altitude),
-
-        ldr_light=mean(ldr_light),
-
-        board_time=temp_reports.first().board_time
-    )
+# def get_average_values(temp_reports: QuerySet[TempReport]) -> Report:
+#     """
+#     processa os valores dos relatórios temporários e retorna um objeto
+#     com a média dos valores, excluindo os 10% mais altos e baixo
+#
+#     :param temp_reports: lista de relatórios temporários
+#     :return: relatório com os valores médios de todas os os últimos relatórios temporários
+#     """
+#
+#     dht11_humidity = []
+#     dht11_temperature = []
+#     dhtt11_heat_index = []
+#
+#     bmp280_temperature = []
+#     bmp280_pressure = []
+#     bmp280_altitude = []
+#
+#     ldr_light = []
+#
+#     for i in temp_reports.order_by('-board_time'):
+#         dht11_humidity.append(i.dht11_humidity)
+#         dht11_temperature.append(i.dht11_temperature)
+#         dhtt11_heat_index.append(i.dhtt11_heat_index)
+#
+#         bmp280_temperature.append(i.bmp280_temperature)
+#         bmp280_pressure.append(i.bmp280_pressure)
+#         bmp280_altitude.append(i.bmp280_altitude)
+#
+#         ldr_light.append(i.ldr_light)
+#
+#     return Report.objects.create(
+#         dht11_humidity=mean(dht11_humidity),
+#         dht11_temperature=mean(dht11_temperature),
+#         dhtt11_heat_index=mean(dhtt11_heat_index),
+#
+#         bmp280_temperature=mean(bmp280_temperature),
+#         bmp280_pressure=mean(bmp280_pressure),
+#         bmp280_altitude=mean(bmp280_altitude),
+#
+#         ldr_light=mean(ldr_light),
+#
+#         board_time=temp_reports.first().board_time
+#     )
 
 
 def to_datetime(date: str, time: str, until: bool = False) -> datetime.datetime:

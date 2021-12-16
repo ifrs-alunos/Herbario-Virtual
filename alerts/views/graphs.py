@@ -5,9 +5,9 @@ from django.shortcuts import render
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
 
-from assessment.forms import ReportIntervalForm
-from assessment.models import Report
-from assessment.views.utils import to_datetime
+from alerts.forms import ReportIntervalForm
+from alerts.models import Report
+from alerts.views.utils import to_datetime
 
 colors = ("maroon", "orangered", "limegreen", "steelblue", "mediumblue", "indigo", "purple", "crimson", "darkred")*2
 
@@ -28,7 +28,9 @@ verbose_names = {
 def render_graph(request, station_id):
     params = request.GET
 
-    objects = Report.objects.all().filter(station_id=station_id)
+    print(station_id)
+    objects = Report.objects.all().filter(station_id=int(station_id))
+    print(Report.objects.all().filter(station_id=station_id))
 
     # se os parametros estiverem definidos, filtra a partir deles
     if params:

@@ -2,9 +2,12 @@ from django.db import models
 from .base import BaseModel
 from django.core.validators import MaxValueValidator, MinValueValidator
 
+from .station import Station
+
 
 class Report(BaseModel):
-    station_id = models.IntegerField(verbose_name="Identificador da estação")
+    station = models.ForeignKey(Station, verbose_name="Estação", on_delete=models.PROTECT)
+    station_identificator = models.IntegerField(verbose_name="Identificador da estação")
 
     # DHT11
     dht_h = models.FloatField(verbose_name="Umidade DHT",
@@ -36,4 +39,4 @@ class Report(BaseModel):
     board_time = models.DateTimeField()
 
     def __str__(self):
-        return f"Relatório de {self.board_time:%d/%m/%Y} às {self.board_time:%H:%M} horas"
+        return f"{self.station.alias} ─ {self.board_time:%d/%m/%Y} às {self.board_time:%H:%M} horas"
