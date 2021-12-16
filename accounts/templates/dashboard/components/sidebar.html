@@ -118,20 +118,20 @@
         </div>
     {% endif %}
 
-    {% if perms.core.add_highlight %}
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="flush-headingFour">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
-                    Notícias
-                </button>
-            </h2>
-            <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"
-                 data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">Seção em produção!</div>
-            </div>
-        </div>
-    {% endif %}
+{#    {% if perms.core.add_highlight %}#}
+{#        <div class="accordion-item">#}
+{#            <h2 class="accordion-header" id="flush-headingFour">#}
+{#                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"#}
+{#                        data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">#}
+{#                    Notícias#}
+{#                </button>#}
+{#            </h2>#}
+{#            <div id="flush-collapseFour" class="accordion-collapse collapse" aria-labelledby="flush-headingFour"#}
+{#                 data-bs-parent="#accordionFlushExample">#}
+{#                <div class="accordion-body">Seção em produção!</div>#}
+{#            </div>#}
+{#        </div>#}
+{#    {% endif %}#}
 
     <!-- Seção no menu para editar colaboradores -->
     {% if perms.core.change_colaborators %}
