@@ -19,7 +19,9 @@ initial_char = "<article class='row' id=\"char-1\">\n" +
     "            <br><br></article>";
 
 //Applying the initial model
-$("#chars_block").html(initial_char);
+if (cid == 0) {
+    $("#chars_block").html(initial_char);
+}
 
 //When the char type is selected, show his label
 $('#chars_block select').change(function (){
@@ -32,8 +34,6 @@ $('#chars_block select').change(function (){
         }
     });
 
-
-cid = 1;
 
 //add new char in form
 $("#add-char").click(function (){

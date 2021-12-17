@@ -458,3 +458,8 @@ a.page-link, a.page-link:hover {
 #colaboradores-footer:hover,  #siteIF-footer:hover{
     color: #374637;
 }
+
+#footer{
+    clear: both;
+    position: relative;
+}
