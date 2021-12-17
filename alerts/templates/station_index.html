@@ -1,0 +1,41 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div id="map" style="height: 300px; width: 80vw">
+
+        </div>
+    </div>
+
+    <script>
+        let map = L.map('map').setView([-28.51, -50.94], 11)
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoiZm0tbGVvbmFyZG8iLCJhIjoiY2t3cHZuNXl6MGdwNzJ2bThmMHpqbmlnNiJ9.uX-B9pNeRXPtHt3zs2kTEg'
+        }).addTo(map);
+
+        let stations = L.layerGroup([
+            {% for station in stations %}
+                L.marker({{ station.lat_lon }})
+                    .bindPopup("<a href='{% url 'alerts:station_detail' station.slug %}'>{{ station.alias }}</a>"),
+            {% endfor %}
+        ]).addTo(map)
+
+        {% for station in stations %}
+            L.circle({{ station.lat_lon }}, {radius: 10000, stroke: false}).addTo(map)
+        {% endfor %}
+    </script>
+{% endblock %}
