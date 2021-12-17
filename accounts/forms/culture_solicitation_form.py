@@ -1,9 +1,9 @@
 from django import forms
-from accounts.models import CharSolicitationModel
+from disease.models import Culture
 
-class DiseaseCharSolicitationModelForm(forms.ModelForm):
+class CultureSolicitationModelForm(forms.ModelForm):
     '''Formulário acessado por contribuidores para enviar uma solicitação de condição de desenvolvimento de uma doença nova'''
 
     class Meta:
-        model = CharSolicitationModel
-        exclude = ['slug']
+        model = Culture
+        fields = '__all__'

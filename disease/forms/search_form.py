@@ -1,4 +1,4 @@
 from django import forms
 
 class SearchForm(forms.Form):
-    search = forms.CharField(label='Buscar', required=False)
+    text = forms.CharField(label='Buscar', required=False)

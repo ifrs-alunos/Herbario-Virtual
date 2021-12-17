@@ -12,31 +12,34 @@
 
         <!-- Botão para cadastramento de novas características -->
 
-    <a id="{% if link == 'disease_char_solicitation' %}selected-link{% endif %}" href="{% url 'accounts:disease_char_solicitation' %}">
+    <a id="{% if link == 'accounts:culture_solicitation' %}selected-link{% endif %}" href="{% url 'accounts:culture_solicitation' %}">
         <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar características">
-           Adicionar uma característica <i class="fa fa-plus" aria-hidden="true"></i>
+           Adicionar uma cultura <i class="fa fa-plus" aria-hidden="true"></i>
         </button>
     </a>
 
     </div>
 
-    {% if characteristics %}
+    <div class="alert alert-warning" role="alert">
+        <p>Ao <strong>excluir</strong> uma cultura, você deletará todas as doenças atreladas a esta.</p>
+    </div>
 
-        <table class="table table-striped mb-4">
+    {% if culture %}
+
+        <table class="table table-striped mb-2">
             <thead>
             <tr>
-                <th scope="col">Nome da característica</th>
-                <th scope="col">Tipo de característica</th>
-                <th scope="col">Operador relacional</th>
+                <th scope="col">Nome da cultura</th>
                 <th scope="col">Ação</th>
             </tr>
             </thead>
+
             <tbody>
 
-            {% for characteristic in characteristics %} {# Loop na lista de solicitações #}
+            {% for culture in object_list %} {# Loop na lista de solicitações #}
 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal{{ characteristic.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -46,13 +49,13 @@
                         </button>
                       </div>
                       <div class="modal-body">
-                        Deseja excluir '{{ characteristic.char_name }}'?
+                        Deseja excluir '{{ culture.name }}'?
                       </div>
                       <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
 
-                          <!-- Formulário para deletar objeto (doença) -->
-                          <form method="post" action="{% url 'accounts:delete_char' characteristic.slug %}">{% csrf_token %}
+                          <!-- Formulário para deletar objeto (cultura) -->
+                          <form method="post" action="{% url 'accounts:delete_culture' culture.slug %}">{% csrf_token %}
                             <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
                           </form>
 
@@ -62,20 +65,15 @@
                 </div>
 
 
-                <tr id="{{characteristic.char_name}}">
+                <tr id="{{culture.name}}">
 
-                    <td scope="row">{{characteristic.char_name|truncatechars_html:40}}</td>
-                    <td>{{characteristic.get_char_kind_display|truncatechars_html:30}}</td>
-                    <td>{{characteristic.get_char_relationals_display|truncatechars_html:30}}</td>
+                    <td scope="row">{{culture.name|truncatechars_html:100}}</td>
 
                     <td>
-                        <a href="{% url 'accounts:detail-char' characteristic.slug %}" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar característica">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                        </a>
-                        <a  href="{% url 'accounts:char_update' characteristic.id%}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar característica">
+                        <a  href="{% url 'accounts:culture_update' culture.id%}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar cultura">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{characteristic.id}}" title="Excluir característica">
+                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" title="Excluir cultura">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     </td>

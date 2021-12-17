@@ -1,5 +1,5 @@
 {% extends "core/base.html" %}
-{#{% load pagination %}#}
+{% load pagination %}
 {% load static %}
 
 {% block content %}
@@ -21,10 +21,10 @@
                     </div>
 
                     {% if search_form.text.value %}
-                        {% if selected_culture %}
-                            <button type="button" class="btn btn-light"><a href="/herbario/{{selected_culture}}">Limpar Filtro</a></button>
+                        {% if selected_culture_disease %}
+                            <button type="button" class="btn btn-light"><a href="/herbario/{{selected_culture_disease}}">Limpar Filtro</a></button>
                         {% else %}
-                            <button type="button" class="btn btn-light"><a href="/herbario">Limpar Filtro</a></button>
+                            <button type="button" class="btn btn-light"><a href="/fitopatologico/">Limpar Filtro</a></button>
                         {% endif %}
                     {% endif %}
                 </form>
@@ -63,82 +63,66 @@
                     {% endfor %}
                 </ul>
 
-                <select class="custom-select d-lg-none mb-3" onchange="location=this.value;">
-                    {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
+                <label>
+                    <select class="custom-select d-lg-none mb-3" onchange="location=this.value;">
+                        {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
 
-                    {% if selected_culture == None %}
-                        <option selected value="{% url 'disease:disease' %}">Todas</option>
-                    {% else %}
-                        <option value="{% url 'disease:disease' %}">Todas</option>
-                    {% endif %}
-
-                    {# Para cada família na lista de famílias #}
-                    {% for culture in cultures %}
-
-                        {# Verifica se o dicionário das famílias na chave 'cultura' corresponde a cultura da lista. Se sim, elemento tem classe active, se não, não a tem #}
-                        {% if selected_culture == culture.slug %}
-                            <option selected value="#{# {% url 'herbarium:plants' culture.name %} #}">{{culture}}</option>
+                        {% if selected_culture == None %}
+                            <option selected value="{% url 'disease:disease' %}">Todas</option>
                         {% else %}
-                            <option value="#{# {% url 'herbarium:plants' culture.name %} #}">{{culture}}</option>
+                            <option value="{% url 'disease:disease' %}">Todas</option>
                         {% endif %}
 
-                    {% endfor %}
-                </select>
+                        {# Para cada família na lista de famílias #}
+                        {% for culture in cultures %}
 
-                {% comment %}
-                <!-- <h5> Famílias Monocotiledôneas</h5> -->
-<!--                 <ul class="list-group">
+                            {# Verifica se o dicionário das famílias na chave 'cultura' corresponde a cultura da lista. Se sim, elemento tem classe active, se não, não a tem #}
+                            {% if selected_culture == culture.slug %}
+                                <option selected value="#{# {% url 'herbarium:plants' culture.name %} #}">{{culture}}</option>
+                            {% else %}
+                                <option value="#{# {% url 'herbarium:plants' culture.name %} #}">{{culture}}</option>
+                            {% endif %}
 
-                    {% for family in families1 %}
-                    <li class="list-group-item">{{ family }}</li>
-                    {% endfor %}
-                </ul> -->
-
-                <!-- <h5> Famílias Dicotiledôneas</h5> -->
-<!--                 <ul class="list-group">
-
-                    {% for family in families2 %}
-                    <li class="list-group-item">{{ family }}</li>
-                    {% endfor %}
-                </ul> -->
-                {% endcomment %}
-
+                        {% endfor %}
+                    </select>
+                </label>
             </div>
 
             <div class="col-lg-9">
                 <div class="row">
-                    {% if plants %}
+                    {% if diseases %}
                     <!-- Cards das plantas daninhas -->
-                    {% for plant in plants %}
+                    {% for disease in diseases %}
                     <div class="col-lg-4 col-md-6 card-col d-flex col-12">
                         <div class="card col-12">
-                            {# Verifica a planta contém ao menos uma imagem cadastrada #}
-                            {% if plant.photos.first.small_image.url %}
-                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
+
+                            <!-- Verifica a planta contém ao menos uma imagem cadastrada -->
+                            {% if disease.photos.first.small_image.url %}
+                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ disease.photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
-                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
+                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'disease/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
 
                             <div class="card-body">
-                                <a id="card-title" href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
-                                <p class="card-text">{{ plant.description|truncatechars_html:75}}</p>
+                                <a id="card-title" href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><h5 class="card-title">{{ disease.name_disease|truncatechars_html:20}}</h5></a>
+                                <p class="card-text">{{ disease.symptoms_disease|truncatechars_html:75}}</p>
                             </div>
                             <div class="card-body">
-                                <p class="card-text"><small class="text-muted"><i>{{ plant.scientific_name|truncatechars_html:30}}</i></small></p>
+                                <p class="card-text"><small class="text-muted"><i>{{ disease.scientific_name_disease|truncatechars_html:30}}</i></small></p>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
 
                     {% else %}
-                        <h6 id="message-error">Não foi possível encontrar doença(s) com o(s) filtro(s) aplicado(s). Certifique-se que selecionou a cultura correta e/ou digitou corretamente.</h4>
+                        <h6 id="message-error">Não foi possível encontrar doença(s) com o(s) filtro(s) aplicado(s). Certifique-se que selecionou a cultura correta e/ou digitou corretamente.</h6>
                     {% endif %}
                 </div>
 
-{#                <!-- Paginação da listagem de plantas -->#}
-{#                <div class="row">#}
-{#                    {% pagination %}#}
-{#                </div>#}
+                <!-- Paginação da listagem de plantas -->
+                <div class="row">
+                    {% pagination %}
+                </div>
 
             </div>
         </div>

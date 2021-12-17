@@ -1,0 +1,46 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static pagination %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/herbarium_update.css' %}"/>
+{% endblock %}
+
+{% block item %}
+    <div class="container">
+    <div class="row my-4">
+        <div class="col-lg-12">
+            <h4 class="teste">Visualização detalhada de {{ plant.name }}:</h4>
+        </div>
+    </div>
+
+    <!-- Card de detalhamento de planta -->
+    <div class="card bg-light mb-12">
+        <div class="card-header">Dados sobre a planta</div>
+        <div class="card-body">
+            <h5 class="card-title"><strong>Nome da planta: </strong>{{ plant.name }}</h5>
+            <p class="card-text"><strong> Nome científico: </strong>{{ plant.scientific_name }}</p>
+            <p class="card-text"><strong> Nome científico: </strong>{{ plant.scientific_name }}</p>
+
+            {% if plant.complementary_scientific_name %}
+                <p class="card-text"><strong> Nome científico
+                    complementar: </strong>{{ plant.complementary_scientific_name }}</p>
+            {% endif %}
+
+            <p class="card-text"><strong> Família: </strong>{{ plant.family }}</p>
+            <p class="card-text"><strong> Regiões de ocorrência: </strong>{{ plant.occurrence_regions.all|join:', ' }}</p>
+            <p class="card-text"><strong> Descrição: </strong>{{ plant.description }}</p>
+            <p class="card-text"><strong> Importância: </strong>{{ plant.importance }}</p>
+
+
+        </div>
+    </div>
+
+
+{% endblock %}
+{% block scripts %}
+    <!-- Scripts Biblioteca ElevateZoom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+    <script src="{% static 'herbarium/js/gallery.js' %}"></script>
+{% endblock %}

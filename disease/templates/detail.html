@@ -1,0 +1,140 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <h4 class="teste">Visualização detalhada de {{disease.name_disease}}:</h4>
+            </div>  
+        </div>
+        <div class="row">
+            <div class="col-lg-5">
+                <!--  Tabela com os dados da doença -->
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Característica
+                            </th>
+                            <th>
+                                Valor
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td scope="row">Nome comum</td>
+                            <td scope="row">{{disease.name_disease}}</td>
+                        </tr>
+                        <tr>
+                            <td>Nome Científico</td>
+                            <td><i>{{disease.scientific_name_disease}}</i>
+                                {# Verifica se o campo é nulo #} 
+                                {% if disease.complementary_scientific_name_disease %}
+                                    {{disease.complementary_scientific_name_disease}}
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td scope="row">Cultura</td>
+                            <td>{{disease.culture_disease}}</td>
+                        </tr>
+                        <tr>
+                            <td scope="row">Regiões de Ocorrência</td>
+                            <td>{{disease.occurrence_regions_disease.all|join:', '}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Textos informativos sobre planta -->
+
+                {% if disease.cycle_disease %}
+                    <h5>Ciclo da doença:</h5>
+                    <p id="description">{{disease.cycle_disease}}</p>
+                {% endif %}
+
+                <h5>Condições ambientais de desenvolvimento:</h5>
+                <p id="importance">{{disease.condition_text_disease}}</p>
+
+                <h5>Manejo:</h5>
+                <p id="importance">{{disease.management_disease}}</p>
+
+                <h5>Sintomas:</h5>
+                <p id="description">{{disease.symptoms_disease}}</p>
+
+                <!--  Tabela com condições da doença -->
+
+{#                <table class="table table-striped">#}
+{#                    <thead>#}
+{#                        <tr>#}
+{#                            <th>#}
+{#                                Nome da condição#}
+{#                            </th>#}
+{#                            <th>#}
+{#                                Valor#}
+{#                            </th>#}
+{#                        </tr>#}
+{#                    </thead>#}
+{##}
+{#                <tbody>#}
+{#                    {% for condition in disease.condition_set.all %}#}
+{#                        <tr>#}
+{#                            <td scope="row">{{condition.characteristic}}</td>#}
+{#                            <td scope="row">{{condition.value}}</td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                </tbody>#}
+{#                </table>#}
+
+                <h5>Referências:</h5>
+                <p id="description">{{disease.source_disease}}</p>
+            </div>
+
+            <!-- Galeria de imagens da planta -->
+            <div class="col-lg-7 galeria">
+                {# Verifica se a planta contém ao menos uma imagem #}
+                {% if disease.photos.first.small_image.url %}
+                <!-- Imagem em destaque -->
+                <div class="row">
+                    {% comment %}
+    <!--            <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
+                    {% endcomment %}
+                    <img id="zoom" class="imagem_em_destaque" src="{{disease.photos.first.small_image.url}}" data-zoom-image="{{disease.photos.first.image.url}}" width="635px;" height="430px;">
+                </div>
+
+                <!-- Imagens miniaturas -->
+                <div id="galeria" class="row miniaturas">
+                    {% for photo in disease.photos.all %}
+
+                    {# Verifica se a imagem em miniatura é a mesma que a em destaque. Em caso positivo, aplica-se um estilo css #}
+                    {% if disease.image.url == disease.photos.first.image.url %}
+                    <img class="imagem_miniatura imagem_selecionada" src="{{photo.small_image.url}}" 
+                    data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
+                    {% else %}
+                    <img class="imagem_miniatura" src="{{photo.small_image.url}}"
+                    data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
+                    {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% else %}
+                <div class="row">
+                    <div class="col-12">
+                        <img class="w-100 img-fluid" src="{% static 'disease/images/aviso.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens" style="object-fit: contain;">
+                    </div>
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <!-- Scripts Biblioteca ElevateZoom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+    <script src="{% static 'herbarium/js/gallery.js' %}"></script>
+{% endblock %}

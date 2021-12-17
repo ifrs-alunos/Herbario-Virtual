@@ -10,51 +10,88 @@
         Adicionar uma planta <i class="fa fa-plus" aria-hidden="true"></i>
     </button> {% endcomment %}
 
+
     <div class="d-flex justify-content-between mb-4">
         <h5>Lista de plantas cadastradas</h5>
 
-        <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar planta">
-            Adicionar uma planta <i class="fa fa-plus" aria-hidden="true"></i>
-        </button>
+        <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:plant_solicitation' %}">
+            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
+               Adicionar uma doença <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </a>
+
     </div>
 
-    {% if plants %}
-    <table class="table table-striped mb-4">
-        <thead>
-        <tr>
-            <th scope="col">Nome Comum</th>
-            <th scope="col">Nome Científico</th>
-            <th scope="col">Família</th>
-            <th scope="col">Ação</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for plant in plants %} {# Loop na lista de solicitações #}
-            <tr id="{{plant.id}}">
-                <td scope="row">{{plant.name|truncatechars_html:30}}</td>
-                <td>{{plant.scientific_name|truncatechars_html:40}}</td>
-                <td>{{plant.family|truncatechars_html:50}}</td>
-                <td>
-                    <a id="plant_view" href="" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar planta">
-                        <i class="fa fa-eye" aria-hidden="true"></i>
-                    </a>
-                    <button id="plant_update" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar planta">
-                        <i class="fa fa-pencil" aria-hidden="true"></i>
-                    </button>
-                    <button id="plant_delete" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Excluir planta">
-                        <i class="fa fa-times" aria-hidden="true"></i>
-                    </button>
-                </td>
+    {% if perms.herbarium.change_plant %}
+
+        {% if plants %}
+        <table class="table table-striped mb-4">
+            <thead>
+            <tr>
+                <th scope="col">Nome Comum</th>
+                <th scope="col">Nome Científico</th>
+                <th scope="col">Família</th>
+                <th scope="col">Ação</th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <div>
-        {% pagination %}
-    </div>
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-        Nenhuma planta para editar no momento.
+            </thead>
+            <tbody>
+
+            {% for plant in plants %} {# Loop na lista de solicitações #}
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            Deseja excluir '{{ plant.name }}'?
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+
+                              <!-- Formulário para deletar objeto (planta) -->
+                              <form method="post" action="{% url 'accounts:delete_plant' plant.slug%}">{% csrf_token %}
+                                <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
+                              </form>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                <tr id="{{plant.id}}">
+                    <td scope="row">{{plant.name|truncatechars_html:30}}</td>
+                    <td>{{plant.scientific_name|truncatechars_html:40}}</td>
+                    <td>{{plant.family|truncatechars_html:50}}</td>
+                    <td>
+                        <a href="{% url 'accounts:detail-plant' plant.slug %}" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar planta">
+                            <i class="fa fa-eye" aria-hidden="true"></i>
+                        </a>
+                        <a href="{% url 'accounts:plant_update' plant.id %}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar planta">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" title="Excluir planta">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div>
+            {% pagination %}
         </div>
+
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+            Nenhuma planta para editar no momento.
+            </div>
+        {% endif %}
+
     {% endif %}
 {% endblock %}

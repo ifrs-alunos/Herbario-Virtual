@@ -42,3 +42,4 @@ function accept(id) {
 function deny(id) {
     create_request(id, "denied");
 }
+

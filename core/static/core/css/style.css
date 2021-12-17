@@ -449,3 +449,12 @@ a.page-link, a.page-link:hover {
     background-color: #A6DDA6;
     border-color: #84AE84;
 }
+
+#colaboradores-footer, #siteIF-footer{
+    text-decoration: none !important;
+
+}
+
+#colaboradores-footer:hover,  #siteIF-footer:hover{
+    color: #374637;
+}
