@@ -9,7 +9,7 @@ app_name = 'alerts'
 urlpatterns = [
     path('report/post/', save_report, name="save_report"),
     path('board_notify/', board_notify, name="board_notify"),
-    path('stations/', stations.StationIndex.as_view(), name="stations"),
-    path('stations/<str:station_id>', stations.StationDetail.as_view()),
+    path('estacoes/', stations.StationIndex.as_view(), name="stations"),
+    path('estacoes/<slug:slug>', stations.StationDetail.as_view(), name="station_detail"),
     path('graph/<str:station_id>', render_graph, name="render_graph")
 ]
