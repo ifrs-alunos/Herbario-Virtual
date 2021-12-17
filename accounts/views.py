@@ -382,11 +382,13 @@ def disease_update(request, pk):
             disease_form.save()
 
             return redirect('accounts:disease_update')
-
+    print(disease.condition_set.all())
 
     context = {
         'disease_form': disease_form,
         'link': 'disease_update',
+        'conditions': [(x, y) for x, y in enumerate(disease.condition_set.all())],
+        'conditions_lenght': len(disease.condition_set.all())
     }
 
     return render(request, 'dashboard/disease_solicitation.html', context)

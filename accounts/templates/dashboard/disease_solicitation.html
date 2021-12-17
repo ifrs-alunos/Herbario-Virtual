@@ -20,7 +20,25 @@
         <div class="mb-2">{{ disease_form.symptoms_disease|as_crispy_field }}</div>
         <div class="mb-2">{{ disease_form.occurrence_regions_disease|as_crispy_field }}</div>
 
-        <section id="chars_block" class="mb-2 row"></section>
+        <section id="chars_block" class="mb-2 row">
+            {% for condition in conditions %}
+                <article class="row" id="char-{{ condition.0 }}">
+                    <div class="col-md-6"><select name="char-{{ condition.0 }}" data-id="{{ condition.0 }}" class="select form-control">
+                        <option value="" selected="">---------</option>
+
+                        <option value="1">Temperatura mínima (em graus)</option>
+
+                    </select></div>
+                    <div class="col-md-5" id="charlabel-{{ condition.0 }}"><input class="form-control" name="charval-{{ condition.0 }}" type="number"
+                                                                  step="0.01"></div>
+                    {% if condition.0 != 0 %}
+                        <p data-id="{{ condition.0 }}" class="btn btn-rm btn-danger rm-char col-md-1">X</p>
+                    {% endif %}
+                    <br><br></article>
+                {% empty %}
+                Nada a mostrar
+            {% endfor %}
+        </section>
         <p id="add-char" class="btn btn-secondary">Nova Característica</p>
 
         <div style="display: none">
@@ -38,5 +56,11 @@
 
     <script>
         chars_inputs = {{ characteristics_inputs|safe }};
+        if (conditions){
+            cid = {{ conditions_lenght }} ;
+        } else {
+            cid = 0;
+        }
+
     </script>
 {% endblock %}

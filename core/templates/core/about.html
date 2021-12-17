@@ -2,21 +2,56 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="row" id="saiba-mais">
-        <div class="col">
-            <h4>Saiba mais sobre os colaboradores do projeto:</h4>
+    <div class="container">
+        <div class="row" id="saiba-mais">
+            <div class="col">
+                <h4>Saiba mais sobre os colaboradores do projeto:</h4>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div class="card">
-                <div class="card-body">
-                    {{colaborators.text|safe}}
+
+        {% if colaborators %}
+
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Ano</th>
+                                    <th scope="col">Projeto</th>
+                                    <th scope="col">Estudante(s) bolsista(s)</th>
+                                    <th scope="col">Orientador(es)</th>
+                                    <th scope="col">Coorientador(es)</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+
+                                {% for colaborator in colaborators %} {# Loop na lista de doenças #}
+                                    <tr>
+                                        <th scope="row">{{ colaborator.year }}</th>
+                                        <td>{{ colaborator.name_project }}</td>
+                                        <td>{{ colaborator.student_name }}</td>
+                                        <td>{{ colaborator.advisor_name }}</td>
+                                        <td>{{ colaborator.co_advisor_name }}</td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
                 </div>
-              </div>
-        </div>
+            </div>
+
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Nenhum colaborador cadastrado no momento.
+            </div>
+        {% endif %}
+
     </div>
-</div>
 
 {% endblock %}
