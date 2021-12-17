@@ -144,20 +144,18 @@
     </nav>
 </header>
 
-<main>
+<main style="margin-bottom: 10%;">
 
     {% block content %}
 
     {% endblock %}
 </main>
 
-<footer class="mt-3 footer" id="footer">
+<footer id="footer">
     <!-- Redes sociais -->
     <div class="container">
-        <div class="row text-md-left">
-            <div class="col-lg-7 col-md-6">
-
-                <h6>Redes sociais e páginas do Labifito:</h6>
+        <div class="row">
+            <div class="col-3" id="botoes-redes">
                     <a class="link-redes" aria-hidden="true" href="https://www.facebook.com/labifito.ifrsvacaria"
                        target="new-blank">
                         <i class="fa fa-facebook-official" id="facebook-icon"></i>
@@ -178,29 +176,24 @@
                     </a>
             </div>
 
-            <div class="col-lg-5 col-md-6 mt-3 mt-md-0 mb-0">
+            <!-- Informações sobre desenvolvimento do site -->
+            <div id="getdiv" class="col-5">
+                <div style="text-align: center;">
+                    <p>
+                        <a id="colaboradores-footer" href="{% url 'core:about' %}"><strong>Saiba mais sobre os colaboradores</strong></a>
+                    </p>
+                    <p class='text-md-left'>© 2019-
+                        <spam id="ano_atual"></spam>
+                        <a id="siteIF-footer" target="_blank" href="https://ifrs.edu.br/vacaria/">Instituto Federal do Rio Grande do Sul - Campus Vacaria</a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-4">
                 <h6 class="contato">E-mail de contato:</h6>
-                <p class="contato"><a class="link-redes" id="email-labfito"
-                                      href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@
-                    <wbr/>
-                    vacaria.ifrs.edu.br</a></p>
+                <p class="contato"><a class="link-redes" id="email-labfito" href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@<wbr/>vacaria.ifrs.edu.br</a></p>
             </div>
-        </div>
-        <hr>
-        <!-- Informações sobre desenvolvimento do site -->
-        <div id="getdiv" class="row">
-            <div class="col-lg-7 col-md-6">
-                <p>
-                    <a id="colaboradores-footer" href="{% url 'core:about' %}"><strong>Saiba mais sobre os colaboradores</strong></a>
-                </p>
-                <p class='text-md-left'>© 2019-
-                    <spam id="ano_atual"></spam>
-                    <a id="siteIF-footer" href="https://ifrs.edu.br/vacaria/">Instituto Federal do Rio Grande do Sul - Campus Vacaria</a>
-                </p>
-            </div>
-            <div class="col-lg-5 col-md-6 text-md-left">
-                <img id="footer_logo" src="{% static 'core/images/logo_ifrs2.png' %}" alt="Logo do IFRS campus Vacaria">
-            </div>
+
         </div>
     </div>
 </footer>

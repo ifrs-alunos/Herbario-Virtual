@@ -209,7 +209,7 @@ a.navbar-brand {
 }
 
 footer{
-    background-color: #84AE84 !important;
+    background-color: #84c390 !important;
     margin-bottom: 0;
 }
 
@@ -243,6 +243,11 @@ footer .link-redes, footer .link-redes:hover {
 
 #youtube-icon:hover {
     color: #B22222;
+}
+
+#botoes-redes{
+    text-align: center;
+    margin-top: 10px;
 }
 
 #icon-preto:hover {
@@ -460,6 +465,8 @@ a.page-link, a.page-link:hover {
 }
 
 #footer{
-    clear: both;
-    position: relative;
+    position: fixed;   /* posição absoluta */
+    bottom: 0;
+    width: 100%;
+    margin-top: 5%;
 }
