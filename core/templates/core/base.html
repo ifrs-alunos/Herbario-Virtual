@@ -77,6 +77,8 @@
             <img id='logo' alt="Logo do LabFito" src="{% static 'core/images/labfito2.png' %}">
         </a>
 
+    <!-- FINAL MENU HAMBURGUES -->
+
         <!-- Itens da barra de navegação -->
         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
             <ul class="navbar-nav">
@@ -116,6 +118,7 @@
                     <a class="nav-link" href="{% url 'core:about' %}">Colaboradores</a>
                 </li>
             </ul>
+
             <ul class="navbar-nav">
                 {% if user.is_authenticated %}
 
