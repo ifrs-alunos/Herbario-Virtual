@@ -58,17 +58,23 @@
                 <a class="nav-link" href="{% url 'accounts:login' %}">Fazer Login</a>
             {% endif %}
 
+            <br/>
+
 
             <!-- Restante do menu hamburguer -->
             <a href="{% url 'core:index' %}">Início</a>
-            <a href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
-            <a href="{% url 'disease:disease' %}">Herbário fitopatológico virtual</a>
-            <a href="">Insetos</a>
+            <a href="{% url 'herbarium:index' %}">Herbário de plantas daninhas</a>
+            <a href="{% url 'disease:disease' %}">Herbário fitopatológico</a>
             <a href="{% url 'core:subjects' %}">Disciplinas</a>
-            <a href="">Materiais</a>
-            <a href="">Publicações</a>
+            <a href="{% url 'core:about' %}">Colaboradores</a>
 
-            <img class="mt-5" id='logo_sidenav' alt="Logo do LabFito" src="{% static 'core/images/labfito_png2.png' %}">
+            <br/>
+
+
+            <a href="{% url 'core:index' %}">
+                <img class="mt-5" id='logo_sidenav' alt="Logo do LabFito" src="{% static 'core/images/labfito_png2.png' %}">
+            </a>
+
         </div>
 
         <span class="d-lg-none pl-3 pr-3" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
@@ -88,7 +94,7 @@
 
                 <!-- Menu dropdown -->
 
-                <li class="nav-item dropdown">
+                <li> class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Herbários
