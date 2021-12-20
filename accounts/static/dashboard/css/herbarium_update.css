@@ -1,15 +1,15 @@
-button#plant_update {
+#plant_update {
     background-color: #ebe992;
     color: #949442;
     border-color: #949442;
 }
 
-button#plant_delete {
+#plant_delete {
     background-color: #ffa4a4;
     color: #c13b3b;
 }
 
-a#plant_view {
+#plant_view {
     background-color: #bacff5;
     color: #334969;
 }   
