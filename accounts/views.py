@@ -3,14 +3,15 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from accounts.forms import ProfileForm, UserUpdateForm, SolicitationForm, DiseaseCharSolicitationModelForm, CultureSolicitationModelForm
-from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation, DiseaseSolicitation, CharSolicitationModel
+from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation, DiseaseSolicitation, \
+    CharSolicitationModel, DiseasePhotoSolicitation
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
 from disease.models import Disease, Culture, Condition, MathModels
-from disease.forms import DiseaseForm, MathModelsForm
+from disease.forms import DiseaseForm, MathModelsForm, DiseasePhotoForm
 from .models import Contribuition
 
 from .forms import  UserForm, SolicitationStatusUpdateForm
@@ -313,7 +314,7 @@ def photo_solicitation(request):
             photo_solicitation = PhotoSolicitation(user=request.user, status='sent', new_photo=photo)
             photo_solicitation.save()
 
-            return redirect('accounts:contributions')
+            return redirect('accounts:view_dashboard')
 
     # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
     else:
@@ -392,9 +393,35 @@ def disease_update(request, pk):
     }
 
     return render(request, 'dashboard/disease_solicitation.html', context)
-#
-# class DiseaseUpdate(UpdateView):
-#     model = Di
+
+def disease_photo_solicitation(request):
+    """Essa função cria uma solicitação para enviar uma imagem de uma doença"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+        disease_photo_form = DiseasePhotoForm(request.POST, request.FILES)
+
+        if disease_photo_form.is_valid():
+            disease_photo = disease_photo_form.save()  # Cria objeto mas nao salva no banco de dados
+            disease_photo.published = False
+
+            disease_photo_solicitation = DiseasePhotoSolicitation(user=request.user, status='sent', new_photo=disease_photo)
+            disease_photo_solicitation.save()
+
+            return redirect('accounts:view_dashboard')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        disease_photo_form = DiseasePhotoForm()
+
+    context = {
+        'disease_photo_form': disease_photo_form,
+        'link': 'disease-photo-solicitation',
+    }
+
+    return render(request, 'dashboard/disease_photo_solicitation.html', context)
 
 def disease_char_solicitation(request):
     """Essa função cria uma solicitação para cadastrar uma nova condição para desenvolvimento de doença"""

@@ -20,6 +20,7 @@
 
     </div>
 
+    {% if perms.disease.change_disease %}
 
     {% if diseases %}
 
@@ -95,6 +96,8 @@
         <div class="alert alert-warning" role="alert">
         Nenhuma doença para editar no momento.
         </div>
+    {% endif %}
+
     {% endif %}
 
 {% endblock %}

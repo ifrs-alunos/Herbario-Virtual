@@ -89,13 +89,21 @@
                 <div class="accordion-body">
                     <ul class="list-group">
 
-                        {% if perms.disease.change_disease %}
+                        {% if perms.disease.contribute_with_disease %}
 
                             <li class="list-group-item"><a
                                     id="{% if link == 'disease_update' %}selected-link{% endif %}"
                                     href="{% url 'accounts:disease_update' %}">Doenças</a>
                             </li>
 
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'disease-photo-solicitation' %}selected-link{% endif %}"
+                                    href="{% url 'accounts:disease_photo_solicitation' %}">Adicionar foto</a>
+                            </li>
+
+                        {% endif %}
+
+                        {% if perms.disease.change_disease %}
                             <li class="list-group-item"><a id="{% if link == 'culture_list' %}selected-link{% endif %}"
                                                            href="{% url 'accounts:culture_list' %}">Culturas</a>
                             </li>
@@ -105,12 +113,13 @@
                                     href="{% url 'accounts:char_phytopathological' %}">Características de
                                 desenvolvimento</a>
                             </li>
+                        {% endif %}
+
 
 {#                            <li class="list-group-item"><a#}
 {#                                    id="{% if link == 'math_model_list' %}selected-link{% endif %}"#}
 {#                                    href="{% url 'accounts:math_model_list' %}">Modelos matemáticos</a>#}
 {#                            </li>#}
-                        {% endif %}
 
                     </ul>
                 </div>

@@ -1,0 +1,28 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags static %}
+
+{% block item %}
+
+<div class="alert alert-warning" role="alert">
+    <p>- Selecione uma planta e adicione uma foto por vez;</p>
+    <p>- Este formulário é uma <strong>solicitação</strong>. Um administrador do sistema avaliará o seu envio.</p>
+</div>
+
+<div class="alert alert-danger" role="alert">
+    <p>- São permitidas apenas imagens com dimensão Full HD: 1920x1080px;</p>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-4">
+        {{disease_photo_form.disease|as_crispy_field}}
+    </div>
+    <div>
+        {{disease_photo_form.image|as_crispy_field}}
+    </div>
+
+    <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+    <button type="submit" class="btn btn-light">Enviar</button>
+</form>
+
+{% endblock %}
