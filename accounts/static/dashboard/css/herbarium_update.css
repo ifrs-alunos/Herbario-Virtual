@@ -10,9 +10,9 @@
 }
 
 #plant_view {
-    background-color: #bacff5;
+    background-color: #bacff5 !important;
     color: #334969;
-}   
+}
 
 button#new_plant {
     background-color: #A6DDA6;

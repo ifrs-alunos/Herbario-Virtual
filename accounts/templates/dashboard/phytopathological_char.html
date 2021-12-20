@@ -69,13 +69,13 @@
                     <td>{{characteristic.get_char_relationals_display|truncatechars_html:30}}</td>
 
                     <td>
-                        <a href="{% url 'accounts:detail-char' characteristic.slug %}" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar característica">
+                        <a href="{% url 'accounts:detail-char' characteristic.slug %}" id="plant_view" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar característica">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
-                        <a  href="{% url 'accounts:char_update' characteristic.id%}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar característica">
+                        <a  href="{% url 'accounts:char_update' characteristic.id%}" id="plant_update" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar característica">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{characteristic.id}}" title="Excluir característica">
+                        <a class="btn btn-danger" data-toggle="modal" id="plant_delete" data-target="#exampleModal{{characteristic.id}}" title="Excluir característica">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     </td>

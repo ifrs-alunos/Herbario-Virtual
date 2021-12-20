@@ -70,10 +70,10 @@
                     <td scope="row">{{culture.name|truncatechars_html:100}}</td>
 
                     <td>
-                        <a  href="{% url 'accounts:culture_update' culture.id%}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar cultura">
+                        <a  href="{% url 'accounts:culture_update' culture.id%}" id="plant_update" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar cultura">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal{{ culture.id }}" title="Excluir cultura">
+                        <a class="btn btn-danger" data-toggle="modal" id="plant_delete" data-target="#exampleModal{{ culture.id }}" title="Excluir cultura">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     </td>
