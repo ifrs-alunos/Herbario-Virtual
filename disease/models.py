@@ -207,6 +207,9 @@ class Condition(models.Model):
         else:
             return  self.bool_value
 
+    def val_to_str(self):
+        return str(self.value()).replace(",", '.')
+
     def set_value(self, value):
         if self.characteristic.char_kind == 'float':
             self.float_value = value

@@ -380,7 +380,21 @@ def disease_update(request, pk):
         # Cria uma instância com os dados da requisição
 
         if disease_form.is_valid():
-            disease_form.save()
+            disease = disease_form.save()
+
+            disease.condition_set.all().delete()
+
+            chars = {}
+
+            for label in request.POST.keys():
+                if "charval-" in label:
+                    chars[label.replace('charval-', '')]['value'] = request.POST[label]
+                elif "char-" in label:
+                    chars[label.replace('char-', '')] = {'id': int(request.POST[label]), 'value': None}
+
+            for char in chars.keys():
+                c = Condition.objects.create(characteristic_id=int(chars[char]['id']), disease=disease)
+                c.set_value(chars[char]['value'])
 
             return redirect('accounts:disease_update')
     print(disease.condition_set.all())
@@ -389,7 +403,9 @@ def disease_update(request, pk):
         'disease_form': disease_form,
         'link': 'disease_update',
         'conditions': [(x, y) for x, y in enumerate(disease.condition_set.all())],
-        'conditions_lenght': len(disease.condition_set.all())
+        'conditions_lenght': len(disease.condition_set.all()),
+        'characteristics_inputs': [{'id': x.id, 'type': x.get_html_input()} for x in
+                                   CharSolicitationModel.objects.all()]
     }
 
     return render(request, 'dashboard/disease_solicitation.html', context)

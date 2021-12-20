@@ -72,7 +72,8 @@
 
 
             <a href="{% url 'core:index' %}">
-                <img class="mt-5" id='logo_sidenav' alt="Logo do LabFito" src="{% static 'core/images/labfito_png2.png' %}">
+                <img class="mt-5" id='logo_sidenav' alt="Logo do LabFito"
+                     src="{% static 'core/images/labfito_png2.png' %}">
             </a>
 
         </div>
@@ -83,7 +84,7 @@
             <img id='logo' alt="Logo do LabFito" src="{% static 'core/images/labfito2.png' %}">
         </a>
 
-    <!-- FINAL MENU HAMBURGUES -->
+        <!-- FINAL MENU HAMBURGUES -->
 
         <!-- Itens da barra de navegação -->
         <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
@@ -165,42 +166,47 @@
     <div class="container">
         <div class="row">
             <div class="col-3" id="botoes-redes">
-                    <a class="link-redes" aria-hidden="true" href="https://www.facebook.com/labifito.ifrsvacaria"
-                       target="new-blank">
-                        <i class="fa fa-facebook-official" id="facebook-icon"></i>
-                    </a>
-                    <a class="link-redes" aria-hidden="true"
-                       href="https://www.youtube.com/channel/UCT_jS-eefJ_LO7am3j0TE_w/" target="new-blank">
-                        <i class="fa fa-youtube-square" id="youtube-icon"></i>
-                    </a>
+                <a class="link-redes" aria-hidden="true" href="https://www.facebook.com/labifito.ifrsvacaria"
+                   target="new-blank">
+                    <i class="fa fa-facebook-official" id="facebook-icon"></i>
+                </a>
+                <a class="link-redes" aria-hidden="true"
+                   href="https://www.youtube.com/channel/UCT_jS-eefJ_LO7am3j0TE_w/" target="new-blank">
+                    <i class="fa fa-youtube-square" id="youtube-icon"></i>
+                </a>
 
-                    <a class="link-integra"
-                       href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
-                        <img id="icon-laranja" src="{% static 'core/images/logo-integra2.png' %}">
-                    </a>
+                <a class="link-integra"
+                   href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
+                    <img id="icon-laranja" src="{% static 'core/images/logo-integra2.png' %}">
+                </a>
 
-                    <a class="link-integra" id="link-icon-preto"
-                       href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
-                        <img id="icon-preto" src="{% static 'core/images/logo_integra.png' %}">
-                    </a>
+                <a class="link-integra" id="link-icon-preto"
+                   href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
+                    <img id="icon-preto" src="{% static 'core/images/logo_integra.png' %}">
+                </a>
             </div>
 
             <!-- Informações sobre desenvolvimento do site -->
             <div id="getdiv" class="col-5">
                 <div style="text-align: center;">
                     <p>
-                        <a id="colaboradores-footer" href="{% url 'core:about' %}"><strong>Saiba mais sobre os colaboradores</strong></a>
+                        <a id="colaboradores-footer" href="{% url 'core:about' %}"><strong>Saiba mais sobre os
+                            colaboradores</strong></a>
                     </p>
                     <p class='text-md-left'>© 2019-
                         <spam id="ano_atual"></spam>
-                        <a id="siteIF-footer" target="_blank" href="https://ifrs.edu.br/vacaria/">Instituto Federal do Rio Grande do Sul - Campus Vacaria</a>
+                        <a id="siteIF-footer" target="_blank" href="https://ifrs.edu.br/vacaria/">Instituto Federal do
+                            Rio Grande do Sul - Campus Vacaria</a>
                     </p>
                 </div>
             </div>
 
             <div class="col-4">
                 <h6 class="contato">E-mail de contato:</h6>
-                <p class="contato"><a class="link-redes" id="email-labfito" href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@<wbr/>vacaria.ifrs.edu.br</a></p>
+                <p class="contato"><a class="link-redes" id="email-labfito"
+                                      href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@
+                    <wbr/>
+                    vacaria.ifrs.edu.br</a></p>
             </div>
 
         </div>
@@ -234,6 +240,13 @@
 {% endblock %}
 
 <!-- Js Externo -->
+<script>
+    if (!"{{ conditions|safe }}") {
+        cid = -1;
+    }
+</script>
+
 <script src="{% static 'core/js/core.js' %}"></script>
+<script src="{% static 'dashboard/js/sidebar.js' %}"></script>
 
 </html>
