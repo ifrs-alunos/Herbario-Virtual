@@ -620,7 +620,7 @@ class PlantDeleteView(DeleteView):
 
 class DiseaseDeleteView(DeleteView):
     model = Disease
-    success_url = reverse_lazy('accounts:disease_solicitation_list')
+    success_url = reverse_lazy('accounts:disease_update')
 
 class CharDeleteView(DeleteView):
     model = CharSolicitationModel
