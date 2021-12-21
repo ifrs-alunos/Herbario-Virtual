@@ -96,11 +96,6 @@
                                     href="{% url 'accounts:disease_update' %}">Doenças</a>
                             </li>
 
-                            <li class="list-group-item"><a
-                                    id="{% if link == 'disease-photo-solicitation' %}selected-link{% endif %}"
-                                    href="{% url 'accounts:disease_photo_solicitation' %}">Adicionar foto</a>
-                            </li>
-
                         {% endif %}
 
                         {% if perms.disease.change_disease %}
@@ -112,6 +107,15 @@
                                     id="{% if link == 'char_phytopathological' %}selected-link{% endif %}"
                                     href="{% url 'accounts:char_phytopathological' %}">Características de
                                 desenvolvimento</a>
+                            </li>
+
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'disease-soliciation-list' %}selected-link{% endif %}"
+                                    href="{% url 'accounts:disease_solicitation_list' %}">Solicitações de doenças</a>
+                            </li>
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"
+                                    href="{% url 'accounts:photo_solicitation_list' %}">Solicitações de foto</a>
                             </li>
                         {% endif %}
 

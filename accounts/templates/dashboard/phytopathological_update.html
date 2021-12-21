@@ -18,6 +18,12 @@
             </button>
         </a>
 
+        <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:disease_photo_solicitation' %}">
+            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar fotos">
+               Adicionar uma foto de doença <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </a>
+
     </div>
 
     {% if perms.disease.change_disease %}
