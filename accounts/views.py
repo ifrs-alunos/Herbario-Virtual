@@ -602,6 +602,24 @@ class PhotoSolicitationListView(ListView):
 
 # Views relacionadas à doenças
 
+class DiseasePhotoSolicitationListView(ListView):
+    model = DiseasePhotoSolicitation
+    context_object_name = 'solicitations'
+    template_name = 'dashboard/disease_photo_solicitation_list.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'disease-photo-solicitation-list'  # Cria novo contexto
+
+        return data
+
+    def get_queryset(self):  # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=DiseasePhotoSolicitation.Status.SENT)
+
+        return queryset
+
 class DiseaseListView(ListView):
     model = Disease
     context_object_name = 'diseases'
@@ -700,6 +718,16 @@ class PlantPhotoSolicitationDetailView(DetailView):
     # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
     model = PhotoSolicitation
     template_name = 'dashboard/plant_photo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class DiseasePhotoSolicitationDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = DiseasePhotoSolicitation
+    template_name = 'dashboard/disease_photo_solicitation_detail.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
