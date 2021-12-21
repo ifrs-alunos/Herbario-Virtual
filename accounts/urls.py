@@ -38,6 +38,7 @@ urlpatterns = [
     path('apagar-caracteristica/<slug:slug>/', views.CharDeleteView.as_view(), name="delete_char"),
     path('detalhes-doencas/<slug:slug>/', views.DiseaseDetailView.as_view(), name='detail-disease'),
     path('detalhes-solicitacao-doenca/<int:pk>/', views.DiseaseSolicitationDetailView.as_view(), name='detail-solicitation-disease'),
+    path('detalhes-solicitacao-planta/<int:pk>/', views.PlantSolicitationDetailView.as_view(), name='detail-solicitation-plant'),
     path('detalhes-planta/<slug:slug>/', views.PlantDetailView.as_view(), name='detail-plant'),
     path('solicitacao-de-foto-planta/', views.photo_solicitation, name="photo_solicitation"),
     path('solicitacao-de-foto-doenca/', views.disease_photo_solicitation, name="disease_photo_solicitation"),

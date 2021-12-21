@@ -19,7 +19,7 @@
                     <td>{{ solicitation.new_plant.name|truncatechars_html:30 }}</td>
                     <td>{{ solicitation.new_plant.scientific_name|truncatechars_html:30 }}</td>
                     <td>
-                        <a href="{% url 'accounts:solicitation_update' solicitation.id %}" class="btn btn-info" style="background-color: #bacff5; color: #334969" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
+                        <a href="{% url 'accounts:detail-solicitation-plant' solicitation.id %}" class="btn btn-info" style="background-color: #bacff5; color: #334969" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
                             <i class="fa fa-eye" aria-hidden="true"></i>
                         </a>
                         <button type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip"  style="background-color: #A6DDA6; color: green;"

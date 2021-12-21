@@ -686,6 +686,16 @@ class DiseaseSolicitationDetailView(DetailView):
 
         return context
 
+class PlantSolicitationDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = PlantSolicitation
+    template_name = 'dashboard/plant_solicitation_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
 class PlantDeleteView(DeleteView):
     model = Plant
     success_url = reverse_lazy('accounts:herbarium_update')
