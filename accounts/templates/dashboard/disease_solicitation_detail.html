@@ -16,10 +16,11 @@
     <!-- Card de detalhamento de solicitação de doença -->
     <div class="card bg-light mb-12">
         <div class="card-header text-primary">Usuário: {{ object.user.username }}</div>
-        <div class="card-header text-primary">Nome da nova doença doença: {{ object.new_disease.name_disease}}</div>
-        <div class="card-header text-primary">Nome da científico da nova doença: {{ object.new_disease.scientific_name_disease }}</div>
 
         <div class="card-body">
+
+            <p class="card-text"><strong>Nome da nova doença doença: </strong>{{ object.new_disease.name_disease}}</p>
+            <p class="card-text"><strong>Nome da científico da nova doença </strong>{{ object.new_disease.scientific_name_disease }}</p>
 
             {% if object.new_disease.complementary_scientific_name_disease %}
                 <p class="card-text"><strong> Nome científico
