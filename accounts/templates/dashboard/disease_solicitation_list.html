@@ -7,7 +7,7 @@
     <thead>
       <tr>
         <th scope="col">Usuário</th>
-        <th scope="col">Nome da nova planta</th>
+        <th scope="col">Nome da nova doença</th>
         <th scope="col">Nome científico</th>
         <th scope="col">Ação</th>
       </tr>
@@ -16,16 +16,16 @@
       {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
         <tr id="{{solicitation.id}}">
           <td scope="row">{{solicitation.user.username|truncatechars_html:20}}</td>
-          <td>{{solicitation.new_disease.name|truncatechars_html:30}}</td>
-          <td>{{solicitation.new_disease.scientific_name|truncatechars_html:30}}</td>
+          <td>{{solicitation.new_disease.name_disease|truncatechars_html:30}}</td>
+          <td>{{solicitation.new_disease.scientific_name_disease|truncatechars_html:30}}</td>
           <td>
-            <a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
+            <a href="{% url 'accounts:detail-solicitation-disease' solicitation.id %}" class="btn btn-primary" style="background-color: #bacff5; color: #334969" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
               <i class="fa fa-eye" aria-hidden="true"></i>
             </a>
-            <button id="" type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Aceitar solicitação">
+            <button id="" type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip" style="background-color: #A6DDA6; color: green;" data-bs-placement="bottom" title="Aceitar solicitação">
               <i class="fa fa-check-square-o" aria-hidden="true"></i>
             </button>
-            <button id="" type="button" class="btn btn-danger deny_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Negar solicitação">
+            <button id="" type="button" class="btn btn-danger deny_button" data-bs-toggle="tooltip" style="background-color: #ffa4a4; color: #c13b3b;" data-bs-placement="bottom" title="Negar solicitação">
               <i class="fa fa-times" aria-hidden="true"></i>
             </button>
           </td>
