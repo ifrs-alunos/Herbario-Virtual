@@ -694,6 +694,8 @@ class DiseaseDetailView(DetailView):
 
         return context
 
+
+
 class DiseaseSolicitationDetailView(DetailView):
     # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
     model = DiseaseSolicitation
@@ -737,6 +739,22 @@ class DiseasePhotoSolicitationDetailView(DetailView):
 class PlantDeleteView(DeleteView):
     model = Plant
     success_url = reverse_lazy('accounts:herbarium_update')
+
+class PlantSolicitationDeleteView(DeleteView):
+    model = PlantSolicitation
+    success_url = reverse_lazy('accounts:plant_solicitation_list')
+
+class PlantPhotoSolicitationDeleteView(DeleteView):
+    model = PhotoSolicitation
+    success_url = reverse_lazy('accounts:photo_solicitation_list')
+
+class DiseaseSolicitationDeleteView(DeleteView):
+    model = DiseaseSolicitation
+    success_url = reverse_lazy('accounts:disease_solicitation_list')
+
+class DiseasePhotoSolicitationDeleteView(DeleteView):
+    model = DiseasePhotoSolicitation
+    success_url = reverse_lazy('accounts:disease_photo_solicitation_list')
 
 class DiseaseDeleteView(DeleteView):
     model = Disease

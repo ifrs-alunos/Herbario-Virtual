@@ -36,6 +36,7 @@ urlpatterns = [
     path('apagar-doenca/<slug:slug>/', views.DiseaseDeleteView.as_view(), name="delete_disease"),
     path('apagar-planta/<slug:slug>/', views.PlantDeleteView.as_view(), name="delete_plant"),
     path('apagar-caracteristica/<slug:slug>/', views.CharDeleteView.as_view(), name="delete_char"),
+    path('apagar-caracteristica/<slug:slug>/', views.CharDeleteView.as_view(), name="delete_char"),
     path('detalhes-doencas/<slug:slug>/', views.DiseaseDetailView.as_view(), name='detail-disease'),
     path('detalhes-solicitacao-doenca/<int:pk>/', views.DiseaseSolicitationDetailView.as_view(), name='detail-solicitation-disease'),
     path('detalhes-solicitacao-planta/<int:pk>/', views.PlantSolicitationDetailView.as_view(), name='detail-solicitation-plant'),
@@ -51,5 +52,9 @@ urlpatterns = [
     path('adicionar-cultura/', views.culture_solicitation, name="culture_solicitation"),
     path('lista-culturas/', views.CultureListView.as_view(), name="culture_list"),
     path('apagar-cultura/<slug:slug>', views.CultureDeleteView.as_view(), name="delete_culture"),
+    path('apagar-solicitacao-planta/<int:pk>', views.PlantSolicitationDeleteView.as_view(), name="delete_plant_solicitation"),
+    path('apagar-solicitacao-doenca/<int:pk>', views.DiseaseSolicitationDeleteView.as_view(), name="delete_diesase_solicitation"),
+    path('apagar-solicitacao-foto-doenca/<int:pk>', views.DiseasePhotoSolicitationDeleteView.as_view(), name="delete_diesase_photo_solicitation"),
+    path('apagar-solicitacao-foto-planta/<int:pk>', views.PlantPhotoSolicitationDeleteView.as_view(), name="delete_plant_photo_solicitation"),
 
 ]
