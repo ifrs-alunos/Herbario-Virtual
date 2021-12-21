@@ -58,13 +58,15 @@
 
                         {% if perms.herbarium.change_plant %}
                             <li class="list-group-item"><a
-                                    id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"
-                                    href="{% url 'accounts:photo_solicitation_list' %}">Solicitações de foto</a>
-                            </li>
-                            <li class="list-group-item"><a
                                     id="{% if link == 'plant-soliciation-list' %}selected-link{% endif %}"
                                     href="{% url 'accounts:plant_solicitation_list' %}">Solicitações de planta</a>
                             </li>
+
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}"
+                                    href="{% url 'accounts:photo_solicitation_list' %}">Solicitações de foto</a>
+                            </li>
+
                         {% endif %}
                     </ul>
                 </div>
@@ -105,7 +107,7 @@
 
                             <li class="list-group-item"><a
                                     id="{% if link == 'char_phytopathological' %}selected-link{% endif %}"
-                                    href="{% url 'accounts:char_phytopathological' %}">Características de
+                                    href="{% url 'accounts:char_phytopathological' %}">Condições de
                                 desenvolvimento</a>
                             </li>
 
