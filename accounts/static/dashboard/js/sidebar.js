@@ -49,9 +49,10 @@ $("#add-char").click(function (){
     for (label in form){
         name = form[label].split('=')[0];
         value = form[label].split('=')[1];
-
-        $("select[name="+name+"]").val(value);
-        $("input[name="+name+"]").val(value);
+        if (name.includes("char")){
+            $("select[name=" + name + "]").val(value);
+            $("input[name=" + name + "]").val(value);
+        }
 
     };
 
