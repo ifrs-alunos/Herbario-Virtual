@@ -482,6 +482,9 @@ a.page-link, a.page-link:hover {
     margin-top: 5%;
     padding-bottom: 1%;
     z-index: 5;
+    border-style: solid;
+    border-width: thin;
+    border-top-color: #2c6b3a;
 }
 
 /* Estilos de botões */
