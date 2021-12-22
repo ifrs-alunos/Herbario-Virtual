@@ -38,6 +38,7 @@
 
             {% for plant in plants %} {# Loop na lista de solicitações #}
 
+                {% if plant.published == True %}
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
@@ -80,6 +81,7 @@
                         </a>
                     </td>
                 </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>

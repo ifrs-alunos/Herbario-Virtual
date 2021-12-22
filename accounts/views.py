@@ -837,6 +837,11 @@ def accept_plant_solicitation(request, pk):
         plant.status = "accepted"
         plant.save()
 
+        np = plant.new_plant
+
+        np.published = True
+        np.save()
+
     return redirect("accounts:plant_solicitation_list")
 
 
@@ -846,6 +851,11 @@ def accept_disease_solicitation(request, pk):
         disease.status = "accepted"
         disease.save()
 
+        nd = disease.new_disease
+
+        nd.published_disease = True
+        nd.save()
+
     return redirect("accounts:disease_solicitation_list")
 
 def accept_plant_photo_solicitation(request, pk):
@@ -854,6 +864,11 @@ def accept_plant_photo_solicitation(request, pk):
         plant_photo.status = "accepted"
         plant_photo.save()
 
+        np = plant_photo.plant
+
+        np.published = True
+        np.save()
+
     return redirect("accounts:photo_solicitation_list")
 
 def accept_disease_photo_solicitation(request, pk):
@@ -861,5 +876,10 @@ def accept_disease_photo_solicitation(request, pk):
         photo_disease = DiseaseSolicitation.objects.filter(id=pk).first()
         photo_disease.status = "accepted"
         photo_disease.save()
+
+        np = photo_disease.disease
+
+        np.published = True
+        np.save()
 
     return redirect("accounts:disease_photo_solicitation_list")
