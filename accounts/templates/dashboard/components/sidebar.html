@@ -50,10 +50,6 @@
                                     id="{% if link == 'herbarium-update' %}selected-link{% endif %}"
                                     href="{% url 'accounts:herbarium_update' %}">Plantas</a>
                             </li>
-                            <li class="list-group-item"><a
-                                    id="{% if link == 'photo-solicitation' %}selected-link{% endif %}"
-                                    href="{% url 'accounts:photo_solicitation' %}">Adicionar foto</a>
-                            </li>
                         {% endif %}
 
                         {% if perms.herbarium.change_plant %}
