@@ -23,13 +23,13 @@
           <td>{{solicitation.user.profile.name|truncatechars_html:30}}</td>
           <td>{{solicitation.message|truncatechars_html:50}}</td>
           <td>
-            <a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
+            <a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação" style="background-color: #bacff5; color: #334969">
               <i class="fa fa-eye" aria-hidden="true"></i>
             </a>
-            <a type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Aceitar solicitação">
+            <a type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Aceitar solicitação" style="background-color: #A6DDA6; color: green;">
               <i class="fa fa-check-square-o" aria-hidden="true"></i>
             </a>
-            <a id="" type="button" class="btn btn-danger deny_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Negar solicitação">
+            <a id="" type="button" class="btn btn-danger deny_button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Negar solicitação" style="background-color: #ffa4a4; color: #c13b3b;">
               <i class="fa fa-times" aria-hidden="true"></i>
             </a>
           </td>
