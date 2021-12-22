@@ -245,5 +245,3 @@ class MathModels(models.Model):
         verbose_name_plural = 'Modelos matemáticos'
         ordering = ['math_model_name']
         permissions = [('contribute_with_math_model', 'Pode contribuir com modelos matemáticos')]
-        
-        self.save()
