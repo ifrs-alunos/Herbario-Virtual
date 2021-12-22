@@ -43,6 +43,9 @@ class Family(models.Model):
     def __str__(self):
         return self.name
 
+    def get_slug(self):
+        return slugify(self.name)
+
     class Meta:
         verbose_name = 'Família'
         verbose_name_plural = 'Famílias'
@@ -79,6 +82,8 @@ class Plant(models.Model):
             self.slug = slugify(self.name)
         
         super().save(*args, **kwargs)
+
+
 
     class Meta:
         verbose_name = 'Planta'
