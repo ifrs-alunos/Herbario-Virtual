@@ -2,67 +2,79 @@
 {% load static %}
 
 {% block item %}
-  {% if solicitations %}
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th scope="col">Usuário</th>
-        <th scope="col">Nome comum da planta</th>
-        <th scope="col">Nome científico</th>
-        <th scope="col">Ação</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
+    {% if solicitations %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Usuário</th>
+                <th scope="col">Nome comum da planta</th>
+                <th scope="col">Nome científico</th>
+                <th scope="col">Ação</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
+                {% if solicitation.status != "accepted" %}
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal{{ solicitation.id }}" tabindex="-1" role="dialog"
+                         aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Deseja negar solicitação de '{{ solicitation.user.username }}'?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                        Cancelar
+                                    </button>
 
-                          <!-- Modal -->
-                    <div class="modal fade" id="exampleModal{{ solicitation.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                      <div class="modal-dialog modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                              <span aria-hidden="true">&times;</span>
-                            </button>
-                          </div>
-                          <div class="modal-body">
-                            Deseja negar solicitação de '{{ solicitation.user.username }}'?
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
+                                    <!-- Formulário para deletar objeto (planta) -->
+                                    <form method="post"
+                                          action="{% url 'accounts:delete_plant_photo_solicitation' solicitation.id %}">{% csrf_token %}
+                                        <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
+                                    </form>
 
-                              <!-- Formulário para deletar objeto (planta) -->
-                              <form method="post" action="{% url 'accounts:delete_plant_photo_solicitation' solicitation.id%}">{% csrf_token %}
-                                <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
-                              </form>
-
-                          </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
 
-        <tr id="{{solicitation.id}}">
-          <td scope="row">{{solicitation.user.username|truncatechars_html:20}}</td>
-          <td>{{solicitation.new_photo.plant.name|truncatechars_html:30}}</td>
-          <td>{{solicitation.new_photo.plant.scientific_name|truncatechars_html:30}}</td>
-          <td>
-            <a href="{% url 'accounts:detail-solicitation-plant-photo' solicitation.id %}" id="plant_view" class="btn btn-info" style="background-color: #bacff5; color: #334969" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
-              <i class="fa fa-eye" aria-hidden="true"></i>
-            </a>
-            <button id="" type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip" style="background-color: #A6DDA6; color: green;" data-bs-placement="bottom" title="Aceitar solicitação">
-              <i class="fa fa-check-square-o" aria-hidden="true"></i>
-            </button>
-            <a class="btn btn-danger" data-toggle="modal" id="plant_delete" style="background-color: #ffa4a4; color: #c13b3b;" data-target="#exampleModal{{ solicitation.id }}" title="Negar solicitação">
-                <i class="fa fa-times" aria-hidden="true"></i>
-            </a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% else %}
-    <div class="alert alert-warning" role="alert">
-      Nenhuma solicitação para analisar no momento.
-    </div>
-  {% endif %}
+                    <tr id="{{ solicitation.id }}">
+                        <td scope="row">{{ solicitation.user.username|truncatechars_html:20 }}</td>
+                        <td>{{ solicitation.new_photo.plant.name|truncatechars_html:30 }}</td>
+                        <td>{{ solicitation.new_photo.plant.scientific_name|truncatechars_html:30 }}</td>
+                        <td>
+                            <a href="{% url 'accounts:detail-solicitation-plant-photo' solicitation.id %}"
+                               id="plant_view" class="btn btn-info" style="background-color: #bacff5; color: #334969"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <a href="{% url 'accounts:accept_plant_photo' solicitation.id %}" type="button"
+                               class="btn btn-success accept_button" data-bs-toggle="tooltip"
+                               style="background-color: #A6DDA6; color: green;" data-bs-placement="bottom"
+                               title="Aceitar solicitação">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn btn-danger" data-toggle="modal" id="plant_delete"
+                               style="background-color: #ffa4a4; color: #c13b3b;"
+                               data-target="#exampleModal{{ solicitation.id }}" title="Negar solicitação">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nenhuma solicitação para analisar no momento.
+        </div>
+    {% endif %}
 {% endblock %}

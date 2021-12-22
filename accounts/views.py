@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, DeleteView
@@ -827,3 +828,38 @@ class MathModelsListView(ListView):
         data['link'] = 'math_models'  # Cria novo contexto
 
         return data
+
+@login_required
+def accept_plant_solicitation(request, pk):
+
+    if request.method == "GET" and request.user.has_perm('change_plant'):
+        plant = PlantSolicitation.objects.filter(id=pk).first()
+        plant.status = "accepted"
+        plant.save()
+
+    return redirect("accounts:plant_solicitation_list")
+
+
+def accept_disease_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('change_disease'):
+        disease = DiseaseSolicitation.objects.filter(id=pk).first()
+        disease.status = "accepted"
+        disease.save()
+
+    return redirect("accounts:disease_solicitation_list")
+
+def accept_plant_photo_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('change_plant'):
+        plant_photo = DiseaseSolicitation.objects.filter(id=pk).first()
+        plant_photo.status = "accepted"
+        plant_photo.save()
+
+    return redirect("accounts:photo_solicitation_list")
+
+def accept_disease_photo_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('change_disease'):
+        photo_disease = DiseaseSolicitation.objects.filter(id=pk).first()
+        photo_disease.status = "accepted"
+        photo_disease.save()
+
+    return redirect("accounts:disease_photo_solicitation_list")
