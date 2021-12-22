@@ -35,7 +35,7 @@
         ]).addTo(map)
 
         {% for station in stations %}
-            L.circle({{ station.lat_lon }}, {radius: 10000, stroke: false}).addTo(map)
+            L.circle({{ station.lat_lon }}, {stroke: false}).addTo(map)
         {% endfor %}
     </script>
 {% endblock %}
