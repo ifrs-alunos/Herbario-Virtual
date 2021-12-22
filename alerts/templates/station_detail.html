@@ -2,5 +2,51 @@
 {% load static %}
 
 {% block content %}
- 
+    <div class="container">
+        <form action="">
+            <div class="row mt-5">
+                <div class="col-4">
+                    <span class="me-2">
+                        Data inicial:
+                    </span>
+                    {{ form.date_since }}
+                </div>
+                <div class="col-4">
+                    <span class="me-2">
+                        Tempo inicial:
+                    </span>
+                    {{ form.time_since }}
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-4">
+                    <span class="me-2">
+                        Data final:
+                    </span>
+                    {{ form.date_until }}
+                </div>
+                <div class="col-4">
+                    <span class="me-2">
+                        Tempo final:
+                    </span>
+                    {{ form.time_until }}
+                </div>
+            </div>
+            <div class="pt-4">
+                <input class="btn btn-primary" type="submit">
+            </div>
+        </form>
+
+        <div class="row mt-5">
+            {% for plot in plots %}
+                <div class="col-lg-6 col-sm-12">
+                    <h5>{{ plot.1 }}</h5>
+                    {% autoescape off %}
+                        {{ plot.0 }}
+                    {% endautoescape %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
