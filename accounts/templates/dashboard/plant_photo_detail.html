@@ -1,0 +1,38 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static pagination %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/herbarium_update.css' %}"/>
+{% endblock %}
+
+{% block item %}
+    <div class="container">
+    <div class="row my-4">
+        <div class="col-lg-12">
+            <h4>Visualização detalhada de solicitação de foto em planta {{ object.new_photo.plant }}:</h4>
+        </div>
+    </div>
+
+    <!-- Card de detalhamento de solicitação de doença -->
+    <div class="card bg-light mb-12">
+        <div class="card-header text-primary">Usuário: {{ object.user.username }}</div>
+
+        <div class="card-body">
+
+            <p class="card-text"><strong>Nome da nova foto de planta: </strong>{{ object.new_photo.plant}}</p>
+
+            <br/>
+
+            <img src="{{object.new_photo.image.url}}" style="max-width: 100%;">
+
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <!-- Scripts Biblioteca ElevateZoom -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js"></script>
+
+    <script src="{% static 'herbarium/js/gallery.js' %}"></script>
+{% endblock %}

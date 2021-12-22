@@ -2,225 +2,251 @@
 {% load static %}
 
 <html lang="pt-br">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Ícone favicon -->
-        <link rel="icon" type="image/png" href="{% static 'core/images/favicon.png' %}"/>
+    <!-- Ícone favicon -->
+    <link rel="icon" type="image/png" href="{% static 'core/images/favicon2.png' %}"/>
 
-        <title>LabFito</title>
+    <title>LabFito</title>
 
-        <!-- Estilos próprios -->
-        <link rel="stylesheet" href="{% static 'core/css/style.css'%}"/>
+    <!-- Estilos próprios -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}"/>
 
-        <!-- Framework CSS Bootstrap -->
-        <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/> -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <!-- Framework CSS Bootstrap -->
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
-        <!-- Icons por FontAwesome -->
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-        {% block head %}
+    <!-- Icons por FontAwesome -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    {% block head %}
 
 
-        {% endblock %}
-    </head>
-    <body>
-        <header>
-            <!-- Barra de navegação -->
-            <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #A6DDA6;">
-                {% comment %}
+    {% endblock %}
+</head>
+<body>
+<header>
+    <!-- Barra de navegação -->
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #A6DDA6;">
+        {% comment %}
                 <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button> -->
                 {% endcomment %}
 
-                <!-- Menu Hamburguer -->
-                <div id="mySidenav" class="sidenav">
-                    <!-- Itens do menu de navegação -->
-                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <!-- Menu Hamburguer -->
+        <div id="mySidenav" class="sidenav">
+            <!-- Itens do menu de navegação -->
+            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 
 
-                    <!-- Caso usuário estiver autenticado, aparecer seu nome de usuário e botão para deslogar -->
-                        {% if user.is_authenticated %}
-                        <a class="user-link" href="{% url 'accounts:view_dashboard' %}">
-                                <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
-                                {{user.username}}
+            <!-- Caso usuário estiver autenticado, aparecer seu nome de usuário e botão para deslogar -->
+            {% if user.is_authenticated %}
+                <a class="user-link" href="{% url 'accounts:view_dashboard' %}">
+                <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
+                {{ user.username }}
 
-                        <a class="user-link" href="{% url 'accounts:logout' %}">
-                                <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                Encerrar sessão
-                        </a>
-
-                    <!-- Se o usuário não estiver autenticado, aparecer botão para realizar login -->
-                        {% else %}
-                            <a class="nav-link" href="{% url 'accounts:login' %}">Fazer Login</a>
-                        {% endif %}
-
-
-                    <!-- Restante do menu hamburguer -->
-                    <a href="{% url 'core:index' %}">Início</a>
-                    <a href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
-                    <a href="{% url 'disease:disease' %}">Herbário fitopatológico virtual</a>
-                    <a href="">Insetos</a>
-                    <a href="{% url 'core:subjects' %}">Disciplinas</a>
-                    <a href="">Materiais</a>
-                    <a href="">Publicações</a>
-
-                    <img class="mt-5" id='logo_sidenav' alt="Logo do LabFito" src="{%static 'core/images/labfito_png.png'%}">
-                </div>
-                
-                <span class="d-lg-none pl-3 pr-3" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
-        
-                <a class="navbar-brand"> 
-                    <img id='logo' alt="Logo do LabFito" src="{%static 'core/images/labfito.png'%}">
+                <a class="user-link" href="{% url 'accounts:logout' %}">
+                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    Encerrar sessão
                 </a>
 
-                <!-- Itens da barra de navegação -->
-                <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{% url 'core:index' %}">Início</a>
-                        </li>
+                <!-- Se o usuário não estiver autenticado, aparecer botão para realizar login -->
+            {% else %}
+                <a class="nav-link" href="{% url 'accounts:login' %}">Fazer Login</a>
+            {% endif %}
 
-                        <!-- Menu dropdown -->
+            <br/>
 
-                         <li class="nav-item dropdown">
-                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                              Herbários
-                             </a>
 
-                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                              <a class="dropdown-item" href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
-                                 <div class="dropdown-divider"></div>
-                              <a class="dropdown-item" href=" {% url 'disease:disease' %}">Fitopatológico</a>
-                            </div>
+            <!-- Restante do menu hamburguer -->
+            <a href="{% url 'core:index' %}">Início</a>
+            <a href="{% url 'herbarium:index' %}">Herbário de plantas daninhas</a>
+            <a href="{% url 'disease:disease' %}">Herbário fitopatológico</a>
+            <a href="{% url 'core:subjects' %}">Disciplinas</a>
+            <a href="{% url 'core:about' %}">Colaboradores</a>
 
-                         </li>
+            <br/>
 
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Insetos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'core:subjects' %}">Disciplinas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="">Materiais</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled" href="">Publicações</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'core:about' %}">Colaboradores</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav">
-                        {% if user.is_authenticated %}
-                        
-                        <li class="nav-item">
-                            <a class="user-link" href="{% url 'accounts:view_dashboard' %}">
-                                <button type="button" class="btn btn-outline-dark nav-button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Painel de controle">
-                                    <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
-                                    {{user.username}}
-                                </button>
-                            </a>
-                            <a class="user-link" href="{% url 'accounts:logout' %}">
-                                <button type="button" class="btn btn-outline-dark nav-button" data-bs-toggle="tooltip" data-bs-placement="left" title="Sair da sessão">
-                                    <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                </button>
-                            </a>
-                        </li>
-                        {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'accounts:login' %}">Fazer Login</a>
-                        </li>
-                        {% endif %}
-                    </ul>
+
+            <a href="{% url 'core:index' %}">
+                <img class="mt-5" id='logo_sidenav' alt="Logo do LabFito"
+                     src="{% static 'core/images/labfito_png2.png' %}">
+            </a>
+
+        </div>
+
+        <span class="d-lg-none pl-3 pr-3" style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776;</span>
+
+        <a class="navbar-brand">
+            <img id='logo' alt="Logo do LabFito" src="{% static 'core/images/labfito2.png' %}">
+        </a>
+
+        <!-- FINAL MENU HAMBURGUES -->
+
+        <!-- Itens da barra de navegação -->
+        <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'core:index' %}">Início</a>
+                </li>
+
+                <!-- Menu dropdown -->
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Herbários
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="{% url 'herbarium:index' %}">Plantas Daninhas</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href=" {% url 'disease:disease' %}">Fitopatológico</a>
+                    </div>
+
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Insetos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:subjects' %}">Disciplinas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="">Materiais</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="">Publicações</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:about' %}">Colaboradores</a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                {% if user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <a class="user-link" href="{% url 'accounts:view_dashboard' %}">
+                            <button type="button" class="btn btn-outline-dark nav-button" data-bs-toggle="tooltip"
+                                    data-bs-placement="bottom" title="Painel de controle">
+                                <i class="fa fa-user-o fa-6" aria-hidden="true"></i>
+                                {{ user.username }}
+                            </button>
+                        </a>
+                        <a class="user-link" href="{% url 'accounts:logout' %}">
+                            <button type="button" class="btn btn-outline-dark nav-button" data-bs-toggle="tooltip"
+                                    data-bs-placement="left" title="Sair da sessão">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            </button>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'accounts:login' %}">Fazer Login</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<main style="margin-bottom: 10%; margin-top: 3%;">
+
+    {% block content %}
+
+    {% endblock %}
+</main>
+
+<footer id="footer">
+    <!-- Redes sociais -->
+    <div class="container">
+        <div class="row">
+            <div class="col-3" id="botoes-redes">
+                <a class="link-redes" aria-hidden="true" href="https://www.facebook.com/labifito.ifrsvacaria"
+                   target="new-blank">
+                    <i class="fa fa-facebook-official" id="facebook-icon"></i>
+                </a>
+                <a class="link-redes" aria-hidden="true"
+                   href="https://www.youtube.com/channel/UCT_jS-eefJ_LO7am3j0TE_w/" target="new-blank">
+                    <i class="fa fa-youtube-square" id="youtube-icon"></i>
+                </a>
+
+                <a class="link-integra"
+                   href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
+                    <img id="icon-laranja" src="{% static 'core/images/logo-integra2.png' %}">
+                </a>
+
+                <a class="link-integra" id="link-icon-preto"
+                   href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
+                    <img id="icon-preto" src="{% static 'core/images/logo_integra.png' %}">
+                </a>
+            </div>
+
+            <!-- Informações sobre desenvolvimento do site -->
+            <div id="getdiv" class="col-5">
+                <div style="text-align: center;">
+                    <p>
+                        <a id="colaboradores-footer" href="{% url 'core:about' %}"><strong>Saiba mais sobre os
+                            colaboradores</strong></a>
+                    </p>
+                    <p class='text-md-left'>© 2019-
+                        <spam id="ano_atual"></spam>
+                        <a id="siteIF-footer" target="_blank" href="https://ifrs.edu.br/vacaria/">Instituto Federal do
+                            Rio Grande do Sul - Campus Vacaria</a>
+                    </p>
                 </div>
-            </nav>
-        </header>
+            </div>
 
-        <main>
+            <div class="col-4">
+                <h6 class="contato">E-mail de contato:</h6>
+                <p class="contato"><a class="link-redes" id="email-labfito"
+                                      href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@
+                    <wbr/>
+                    vacaria.ifrs.edu.br</a></p>
+            </div>
 
-            {% block content  %}
+        </div>
+    </div>
+</footer>
+</body>
 
-            {% endblock %}
-        </main>
-
-        <footer class="mt-3">
-            <!-- Redes sociais -->
-            <div class="container">
-                <div class="row text-md-left">
-                    <div class="col-lg-7 col-md-6">
-                        <h6>Redes sociais e páginas do Labifito:</h6>
-                        <a class="link-redes" aria-hidden="true" href="https://www.facebook.com/labifito.ifrsvacaria" target="new-blank">
-                            <i class="fa fa-facebook-official" id="facebook-icon"></i>
-                        </a>
-                        <a class="link-redes" aria-hidden="true" href="https://www.youtube.com/channel/UCT_jS-eefJ_LO7am3j0TE_w/" target="new-blank">
-                            <i class="fa fa-youtube-square" id="youtube-icon"></i>
-                        </a>
-
-                        <a class="link-integra" href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
-                            <img id="icon-laranja" src="{% static 'core/images/logo-integra2.png' %}">
-                        </a>
-                        
-                        <a class="link-integra" id="link-icon-preto" href="https://integra.ifrs.edu.br/portfolio/laboratorios/labfito-campus-vacaria">
-                            <img id="icon-preto" src="{% static 'core/images/logo_integra.png' %}">
-                        </a>
-                    </div>
-                    <div class="col-lg-5 col-md-6 mt-3 mt-md-0 mb-0">
-                        <h6 class="contato">E-mail de contato:</h6>                        
-                        <p class="contato"><a class="link-redes" id="email-labfito" href="mailto:laboratorio.fitossanidade@vacaria.ifrs.edu.br">laboratorio.fitossanidade@<wbr/>vacaria.ifrs.edu.br</a></p>
-                    </div>
-                </div>
-                <hr>
-                <!-- Informações sobre desenvolvimento do site -->
-                <div id="getdiv" class="row">
-                    <div class="col-lg-7 col-md-6">
-                        <p>
-                            Sistema desenvolvido pelo IFRS - <i>Campus</i> Vacaria.
-                        </p>
-                        <p>
-                            <a href="{% url 'core:about' %}"><strong>Saiba mais sobre os colaboradores.</strong></a>
-                        </p>
-{#                            <ul>#}
-{#                                <li>Júlia Fonseca de Aguiar (bolsista)</li>#}
-{#                                <li>Luísa de Almeida Marcolin (bolsista)</li>#}
-{#                                <li>Matheus Mathyas Hofman (bolsista)</li>#}
-{#                                <li>Rafael Dallegrave Negretti (professor)</li>#}
-{#                                <li>Ricardo Luis dos Santos (professor)</li>#}
-{#                            </ul> #}
-                        </p>
-                        <p class='text-md-left'>© 2019-<spam id="ano_atual"></spam> Instituto Federal do Rio Grande do Sul - Campus Vacaria</p>
-                    </div>
-                    <div class="col-lg-5 col-md-6 text-md-left">
-                        <img id="footer_logo" src="{% static 'core/images/logo_ifrs2.png'%}" alt="Logo do IFRS campus Vacaria">
-                    </div>
-                </div>
-            </div>    
-        </footer>
-    </body>
-
-    <!-- Respectivamente, jQuery, Popper.js e Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>-->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
+<!-- Respectivamente, jQuery, Popper.js e Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>-->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
 
 
-    {% comment %}
+{% comment %}
 <!--     <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.min.js" integrity="sha512-egjn0g4nyX3074dTJbuzFHdPDu17RP8ElcYpQuQbl9VUu6RKQaqlX4dJJ/l7Z5fFniqLSOJgytwP0FiKf4MEfA==" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/elevatezoom/3.0.8/jquery.elevatezoom.js" integrity="sha512-ZewoOcnKwYlbLtvwOHyviu/wr3HeGa53p2HEwZBdCscAsQVnwbZZzLfaE2aDVmAJ7lzjujxKL2SgdP8uj69q7Q==" crossorigin="anonymous"></script>
  -->
     {% endcomment %}
 
-    {% block scripts %}
+{% block scripts %}
 
-    {% endblock %}
+{% endblock %}
 
-    <!-- Js Externo -->
-    <script src="{% static 'core/js/core.js' %}"></script>
+<!-- Js Externo -->
+<script>
+    if (!"{{ conditions|safe }}") {
+        cid = -1;
+    }
+</script>
+
+<script src="{% static 'core/js/core.js' %}"></script>
+<script src="{% static 'dashboard/js/sidebar.js' %}"></script>
 
 </html>

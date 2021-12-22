@@ -1,0 +1,16 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags static %}
+
+{% block item %}
+
+{{math_model_form.errors}}
+<form method="POST">
+    {% csrf_token %}
+        <div class="mb-2">{{math_model_form|crispy}}</div>
+
+    <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+    <button type="submit" class="btn btn-light">Enviar</button>
+</form>
+
+{% endblock %}

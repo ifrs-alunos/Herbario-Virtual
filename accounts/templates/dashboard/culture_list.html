@@ -39,7 +39,7 @@
             {% for culture in object_list %} {# Loop na lista de solicitações #}
 
                 <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal{{ culture.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                   <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
@@ -70,10 +70,10 @@
                     <td scope="row">{{culture.name|truncatechars_html:100}}</td>
 
                     <td>
-                        <a  href="{% url 'accounts:culture_update' culture.id%}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar cultura">
+                        <a  href="{% url 'accounts:culture_update' culture.id%}" id="plant_update" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar cultura">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" title="Excluir cultura">
+                        <a class="btn btn-danger" data-toggle="modal" id="plant_delete" data-target="#exampleModal{{ culture.id }}" title="Excluir cultura">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
                     </td>

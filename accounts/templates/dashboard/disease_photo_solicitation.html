@@ -15,10 +15,10 @@
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="mb-4">
-        {{photo_form.plant|as_crispy_field}}
+        {{disease_photo_form.disease|as_crispy_field}}
     </div>
     <div>
-        {{photo_form.image|as_crispy_field}}
+        {{disease_photo_form.image|as_crispy_field}}
     </div>
 
     <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>

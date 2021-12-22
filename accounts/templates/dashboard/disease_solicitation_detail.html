@@ -9,30 +9,32 @@
     <div class="container">
     <div class="row my-4">
         <div class="col-lg-12">
-            <h4 class="teste">Visualização detalhada de {{ disease.name_disease }}:</h4>
+            <h4>Visualização detalhada de solicitação de doença {{ object.new_disease.name_disease }}:</h4>
         </div>
     </div>
 
-    <!-- Card de detalhamento de característica -->
+    <!-- Card de detalhamento de solicitação de doença -->
     <div class="card bg-light mb-12">
-        <div class="card-header">Dados sobre a doença</div>
-        <div class="card-body">
-            <h5 class="card-title">Nome da doença: {{ disease.name_disease }}</h5>
-            <p class="card-text"><strong>Nome científico: </strong>{{ disease.scientific_name_disease }}</p>
+        <div class="card-header text-primary">Usuário: {{ object.user.username }}</div>
 
-            {% if disease.complementary_scientific_name_disease %}
+        <div class="card-body">
+
+            <p class="card-text"><strong>Nome da nova doença doença: </strong>{{ object.new_disease.name_disease}}</p>
+            <p class="card-text"><strong>Nome da científico da nova doença </strong>{{ object.new_disease.scientific_name_disease }}</p>
+
+            {% if object.new_disease.complementary_scientific_name_disease %}
                 <p class="card-text"><strong> Nome científico
-                    complementar: </strong>{{ disease.complementary_scientific_name_disease }}</p>
+                    complementar: </strong>{{ object.new_disease.complementary_scientific_name_disease }}</p>
             {% endif %}
 
-            <p class="card-text"><strong>Cultura: </strong>{{ disease.culture_disease }}</p>
+            <p class="card-text"><strong>Cultura: </strong>{{ object.new_disease.culture_disease }}</p>
 
-            {% if disease.cycle_disease %}
-                <p class="card-text"><strong> Ciclo da doença: </strong> {{ disease.cycle_disease }}</p>
+            {% if object.new_disease.cycle_disease %}
+                <p class="card-text"><strong> Ciclo da doença: </strong> {{ object.new_disease.cycle_disease }}</p>
             {% endif %}
 
             <p class="card-text"><strong>Condições ambientais de
-                desenvolvimento: </strong>{{ disease.condition_text_disease }}</p>
+                desenvolvimento: </strong>{{ object.new_disease.condition_text_disease }}</p>
 
             <!--  Tabela com condições da doença -->
             <p class="card-text"><strong>Condições de desenvolvimento para sistema de alarmes: </strong></p>
@@ -49,7 +51,7 @@
                 </thead>
 
                 <tbody>
-                {% for condition in disease.condition_set.all %}
+                {% for condition in object.new_disease.condition_set.all %}
                     <tr>
                         <td scope="row">{{ condition.characteristic }}</td>
                         <td scope="row">{{ condition.value }}</td>
@@ -59,13 +61,13 @@
 
             </table>
 
-            <p class="card-text"><strong>Manejo: </strong>{{ disease.management_disease }}</p>
+            <p class="card-text"><strong>Manejo: </strong>{{ object.new_disease.management_disease }}</p>
 
-            <p class="card-text"><strong> Regiões de ocorrência: </strong>{{ disease.occurrence_regions_disease.all|join:', ' }}</p>
+            <p class="card-text"><strong> Regiões de ocorrência: </strong>{{ object.new_disease.occurrence_regions_disease.all|join:', ' }}</p>
 
-            <p class="card-text"><strong>Sintomas: </strong>{{ disease.symptoms_disease }}</p>
+            <p class="card-text"><strong>Sintomas: </strong>{{ object.new_disease.symptoms_disease }}</p>
 
-            <p class="card-text"><strong>Referências: </strong>{{ disease.source_disease }}</p>
+            <p class="card-text"><strong>Referências: </strong>{{ object.new_disease.source_disease }}</p>
 
         </div>
     </div>

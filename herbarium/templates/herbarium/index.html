@@ -51,9 +51,9 @@
 
                     {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == family.name %}
-                        <li class="list-group-item active"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
+                        <li class="list-group-item active"><a href="{% url 'herbarium:plants' family.get_slug %}">{{family}}</a></li>
                     {% else %}
-                        <li class="list-group-item"><a href="{% url 'herbarium:plants' family.name %}">{{family}}</a></li>
+                        <li class="list-group-item"><a href="{% url 'herbarium:plants' family.get_slug %}">{{family}}</a></li>
                     {% endif %}
                     {% endfor %}
                 </ul> 
@@ -71,9 +71,9 @@
 
                     {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == family.name %}
-                        <option selected value="{% url 'herbarium:plants' family.name %}">{{family}}</option>
+                        <option selected value="{% url 'herbarium:plants' family.get_slug %}">{{family}}</option>
                     {% else %}
-                        <option value="{% url 'herbarium:plants' family.name %}">{{family}}</option>
+                        <option value="{% url 'herbarium:plants' family.get_slug %}">{{family}}</option>
                     {% endif %}
                     {% endfor %}
                 </select>

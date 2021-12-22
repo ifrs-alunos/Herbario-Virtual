@@ -92,8 +92,9 @@ class Disease(models.Model):
     culture_disease = models.ForeignKey(Culture, on_delete=models.CASCADE, related_name="cultures", verbose_name="Cultura", help_text='Insira a cultura de lavoura afetada')
     symptoms_disease = models.TextField('Sintomas', blank=False, help_text='Insira uma descrição sobre os sintomas da doença')
     cycle_disease = models.TextField('Ciclo da doença', blank=True, help_text='Descreva o ciclo da doença')
-    occurrence_regions_disease = models.ManyToManyField(Region, verbose_name="Regiões de Ocorrência", help_text='Selecione as regiões de ocorrência desta doença')
+    occurrence_regions_disease = models.ManyToManyField(Region, blank=True, null=True, verbose_name="Regiões de Ocorrência", help_text='Selecione as regiões de ocorrência desta doença')
     management_disease = models.TextField('Medidas de controle', blank = True, help_text = 'Descreva as medidas para controle desta doença')
+    condition_text_disease = models.TextField('Condições ambientais de desenvolvimento', blank=True, help_text='Insira as condições ambientais de desenvolvimento')
     source_disease = models.TextField('Referências', blank = False, help_text = 'Insira as referências utilizadas')
 
     # Dados relacionados à criação e publicação de atualizações
@@ -206,6 +207,9 @@ class Condition(models.Model):
         else:
             return  self.bool_value
 
+    def val_to_str(self):
+        return str(self.value()).replace(",", '.')
+
     def set_value(self, value):
         if self.characteristic.char_kind == 'float':
             self.float_value = value
@@ -213,6 +217,33 @@ class Condition(models.Model):
             self.str_value = value
         else:
             self.bool_value = value
-            
-        self.save()
 
+class MathModels(models.Model):
+    '''Essa classe realiza o cadastramento de novos modelos matemáticos'''
+
+    math_model_name = models.CharField('Nome do modelo matemático', max_length=100, blank=False, help_text='Insira o nome do modelo matemático')
+    var1 = models.CharField('Variável 1', max_length=20, help_text='Insira a variável 1 que será utlizada', blank=False)
+    var1_kind = models.CharField('Dado da variável 1', max_length=20, help_text='Insira que dado será utilizado na variável 1 (ex: temperatura mínima, umidade, molhamento foliar', blank=False)
+
+    var2 = models.CharField('Variável 2', max_length=20, help_text='Insira a variável 2 que será utlizada', blank=True)
+    var2_kind = models.CharField('Dado da variável 2', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+
+    var3 = models.CharField('Variável 3', max_length=20, help_text='Insira a variável 3 que será utlizada', blank=True)
+    var3_kind = models.CharField('Dado da variável 3', max_length=20, help_text='Insira que dado será utilizado na variável 2 (ex: temperatura mínima, umidade, molhamento foliar', blank=True)
+
+    #TODO: para variáveis e constantes adicionar campos no formulário dinamicamente
+
+    equation = models.CharField('Equação', max_length=20, help_text='Insira a equação. Para soma utilize +, para subtração utilize menos, para divisão utilize /, para multiplicação utilize *', blank=True)
+
+
+    # Retorna variável name caso seja dado um print do objeto
+    def __str__(self):
+        return self.math_model_name
+
+    class Meta:
+        verbose_name = 'Modelo matemático'
+        verbose_name_plural = 'Modelos matemáticos'
+        ordering = ['math_model_name']
+        permissions = [('contribute_with_math_model', 'Pode contribuir com modelos matemáticos')]
+        
+        self.save()

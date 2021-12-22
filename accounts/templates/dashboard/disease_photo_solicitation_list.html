@@ -7,7 +7,7 @@
             <thead>
             <tr>
                 <th scope="col">Usuário</th>
-                <th scope="col">Nome da nova doença</th>
+                <th scope="col">Nome comum da planta</th>
                 <th scope="col">Nome científico</th>
                 <th scope="col">Ação</th>
             </tr>
@@ -36,7 +36,7 @@
 
                                     <!-- Formulário para deletar objeto (planta) -->
                                     <form method="post"
-                                          action="{% url 'accounts:delete_diesase_solicitation' solicitation.id %}">{% csrf_token %}
+                                          action="{% url 'accounts:delete_diesase_photo_solicitation' solicitation.id %}">{% csrf_token %}
                                         <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
                                     </form>
 
@@ -48,15 +48,15 @@
 
                     <tr id="{{ solicitation.id }}">
                         <td scope="row">{{ solicitation.user.username|truncatechars_html:20 }}</td>
-                        <td>{{ solicitation.new_disease.name_disease|truncatechars_html:30 }}</td>
-                        <td>{{ solicitation.new_disease.scientific_name_disease|truncatechars_html:30 }}</td>
+                        <td>{{ solicitation.new_photo.disease.name_disease|truncatechars_html:30 }}</td>
+                        <td>{{ solicitation.new_photo.disease.scientific_name_disease|truncatechars_html:30 }}</td>
                         <td>
-                            <a href="{% url 'accounts:detail-solicitation-disease' solicitation.id %}"
-                               class="btn btn-primary" style="background-color: #bacff5; color: #334969"
+                            <a href="{% url 'accounts:detail-solicitation-disease-photo' solicitation.id %}"
+                               id="plant_view" class="btn btn-info" style="background-color: #bacff5; color: #334969"
                                data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação">
                                 <i class="fa fa-eye" aria-hidden="true"></i>
                             </a>
-                            <a href="{% url 'accounts:accept_disease' solicitation.id %}" type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip"
+                            <a href="{% url 'accounts:accept_disease_photo' solicitation.id %} type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip"
                                     style="background-color: #A6DDA6; color: green;" data-bs-placement="bottom"
                                     title="Aceitar solicitação">
                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>

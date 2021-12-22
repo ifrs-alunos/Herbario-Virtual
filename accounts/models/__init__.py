@@ -6,3 +6,4 @@ from .disease_solicitation import DiseaseSolicitation
 from .char_solicitation_model import CharSolicitationModel
 from .char import Characteristic
 from .contribuition import Contribuition
+from .disease_photo_solicitation import DiseasePhotoSolicitation

@@ -55,38 +55,38 @@
                     <p id="description">{{disease.cycle_disease}}</p>
                 {% endif %}
 
-                <h5>Sintomas:</h5>
-                <p id="description">{{disease.symptoms_disease}}</p>
+                <h5>Condições ambientais de desenvolvimento:</h5>
+                <p id="importance">{{disease.condition_text_disease}}</p>
 
                 <h5>Manejo:</h5>
                 <p id="importance">{{disease.management_disease}}</p>
 
-                <h5>Condições:</h5>
+                <h5>Sintomas:</h5>
+                <p id="description">{{disease.symptoms_disease}}</p>
 
                 <!--  Tabela com condições da doença -->
 
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>
-                                Nome da condição
-                            </th>
-                            <th>
-                                Valor
-                            </th>
-                        </tr>
-                    </thead>
-
-                <tbody>
-                    {% for condition in disease.condition_set.all %}
-                        <tr>
-                            <td scope="row">{{condition.characteristic}}</td>
-                            <td scope="row">{{condition.value}}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-
-                </table>
+{#                <table class="table table-striped">#}
+{#                    <thead>#}
+{#                        <tr>#}
+{#                            <th>#}
+{#                                Nome da condição#}
+{#                            </th>#}
+{#                            <th>#}
+{#                                Valor#}
+{#                            </th>#}
+{#                        </tr>#}
+{#                    </thead>#}
+{##}
+{#                <tbody>#}
+{#                    {% for condition in disease.condition_set.all %}#}
+{#                        <tr>#}
+{#                            <td scope="row">{{condition.characteristic}}</td>#}
+{#                            <td scope="row">{{condition.value}}</td>#}
+{#                        </tr>#}
+{#                    {% endfor %}#}
+{#                </tbody>#}
+{#                </table>#}
 
                 <h5>Referências:</h5>
                 <p id="description">{{disease.source_disease}}</p>
@@ -103,6 +103,7 @@
                     {% endcomment %}
                     <img id="zoom" class="imagem_em_destaque" src="{{disease.photos.first.small_image.url}}" data-zoom-image="{{disease.photos.first.image.url}}" width="635px;" height="430px;">
                 </div>
+
                 <!-- Imagens miniaturas -->
                 <div id="galeria" class="row miniaturas">
                     {% for photo in disease.photos.all %}
@@ -117,6 +118,7 @@
                     {% endif %}
                     {% endfor %}
                 </div>
+
                 {% else %}
                 <div class="row">
                     <div class="col-12">
@@ -124,6 +126,7 @@
                     </div>
                 </div>
                 {% endif %}
+
             </div>
         </div>
     </div>
