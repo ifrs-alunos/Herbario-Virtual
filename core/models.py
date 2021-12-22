@@ -75,7 +75,7 @@ class CarouselImage(models.Model):
 
 class Colaborators(models.Model):
 
-    year = models.IntegerField('Ano de início do projeto', blank=True, help_text='Insira o ano de início do projeto')
+    year = models.IntegerField('Ano de início do projeto', blank=True, default=0, help_text='Insira o ano de início do projeto')
     name_project = models.CharField('Nome do projeto', blank=True, max_length=100, help_text='Insira o nome do projeto')
     student_name = models.CharField('Nome do(s) bolsista(s)', blank=True, max_length=200, help_text='Insira o nome do(s) bolsista(s) do projeto')
     advisor_name = models.CharField('Nome do(s) orientador(es)', blank=True, max_length=200, help_text='Insira o nome do(s) orientador(es) do projeto')
