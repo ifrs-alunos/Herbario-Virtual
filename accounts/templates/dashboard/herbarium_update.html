@@ -16,10 +16,14 @@
 
         <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:plant_solicitation' %}">
             <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
-               Adicionar uma doença <i class="fa fa-plus" aria-hidden="true"></i>
+               Adicionar uma planta <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
-
+        <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:photo_solicitation' %}">
+            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
+               Adicionar uma foto de planta <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </a>
     </div>
 
     {% if perms.herbarium.change_plant %}
