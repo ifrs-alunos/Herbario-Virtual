@@ -104,7 +104,7 @@ class Disease(models.Model):
     # Booleando representando o estado de publicação desta doença
     published_disease = models.BooleanField(verbose_name="Publicado", null=True)
 
-    characteristic = models.ForeignKey("accounts.CharSolicitationModel", blank=True, null=True, on_delete=models.DO_NOTHING)
+    characteristic = models.ForeignKey("accounts.CharSolicitationModel", on_delete=models.SET_NULL, default=None, blank=True, null=True)
 
     def __str__(self):
         return self.name_disease
@@ -217,7 +217,6 @@ class Condition(models.Model):
             self.str_value = value
         else:
             self.bool_value = value
-        self.save()
 
 class MathModels(models.Model):
     '''Essa classe realiza o cadastramento de novos modelos matemáticos'''
