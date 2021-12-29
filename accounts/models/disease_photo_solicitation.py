@@ -11,8 +11,7 @@ class DiseasePhotoSolicitation(models.Model):
         ACCEPTED = ('accepted', 'Aceita')
         DENIED = ('denied', 'Negada')
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário',
-                             related_name="disease_photo_solicitations")
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário', related_name="disease_photo_solicitations")
     date = models.DateField(verbose_name="Data de envio", auto_now_add=True)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.SENT)
     new_photo = models.ForeignKey(PhotoDisease, on_delete=models.CASCADE, verbose_name='Nova Foto')

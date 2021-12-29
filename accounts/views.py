@@ -879,11 +879,11 @@ def accept_disease_solicitation(request, pk):
 
 def accept_plant_photo_solicitation(request, pk):
     if request.method == "GET" and request.user.has_perm('change_plant'):
-        plant_photo = DiseaseSolicitation.objects.filter(id=pk).first()
+        plant_photo = PhotoSolicitation.objects.filter(id=pk).first()
         plant_photo.status = "accepted"
         plant_photo.save()
 
-        np = plant_photo.plant
+        np = plant_photo.new_photo
 
         np.published = True
         np.save()
@@ -892,11 +892,11 @@ def accept_plant_photo_solicitation(request, pk):
 
 def accept_disease_photo_solicitation(request, pk):
     if request.method == "GET" and request.user.has_perm('change_disease'):
-        photo_disease = DiseaseSolicitation.objects.filter(id=pk).first()
+        photo_disease = DiseasePhotoSolicitation.objects.filter(id=pk).first()
         photo_disease.status = "accepted"
         photo_disease.save()
 
-        np = photo_disease.disease
+        np = photo_disease.new_photo
 
         np.published = True
         np.save()
