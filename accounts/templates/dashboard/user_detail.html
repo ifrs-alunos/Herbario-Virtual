@@ -9,22 +9,20 @@
     <div class="container">
     <div class="row my-4">
         <div class="col-lg-12">
-            <h4>Visualização detalhada de solicitação de foto em planta {{ object.new_photo.plant }}:</h4>
+            <h4 class="teste">Visualização detalhada do perfil {{ user.username }}:</h4>
         </div>
     </div>
 
-    <!-- Card de detalhamento de solicitação de doença -->
+    <!-- Card de detalhamento de usuário -->
     <div class="card bg-light mb-12">
-        <div class="card-header text-primary">Usuário: {{ object.user.username }}</div>
-
+        <div class="card-header">Dados sobre o usuário</div>
         <div class="card-body">
+            <h5 class="card-title">Nome de usuário: {{ user.profile.name }}</h5>
 
-            <p class="card-text"><strong>Nome da nova foto de planta: </strong>{{ object.new_photo.plant}}</p>
-{#            <p class="card-text"><strong>Referência da foto: </strong>{{ object.new_photo.source_plant_photo}}</p>#}
-
-            <br/>
-
-            <img src="{{object.new_photo.image.url}}" style="max-width: 100%;">
+            <p class="card-text"><strong>Nome completo: </strong>{{ user.profile.name }}</p>
+            <p class="card-text"><strong>Instituição: </strong>{{ user.profile.institution }}</p>
+            <p class="card-text"><strong>Cargo de ofício: </strong>{{ user.profile.role }}</p>
+            <p class="card-text"><strong>E-mail: </strong>{{ user.email }}</p>
 
         </div>
     </div>

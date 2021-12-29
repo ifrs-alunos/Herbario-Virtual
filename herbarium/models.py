@@ -134,6 +134,8 @@ class Photo(models.Model):
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores 
     small_image = models.ImageField(upload_to=small_plant_directory_path, editable=False, null=True)
 
+    # source_plant_photo = models.CharField('Referência da foto', blank=True, help_text='Insira a referência utilizada', default='Desconhecido', max_length=100)
+
     published = models.BooleanField(verbose_name="Publicado", null=True)
 
     def __str__(self):

@@ -541,7 +541,7 @@ class PlantSolicitationListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'plant-solicitation-list'  # Cria novo contexto
+        data['link'] = 'plant-soliciation-list'  # Cria novo contexto
 
         return data
 
@@ -572,6 +572,17 @@ def plant_update(request, pk):
     }
 
     return render(request, 'dashboard/plant_solicitation.html', context)
+
+class UserDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = Profile
+    template_name = 'dashboard/user_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
 
 class PlantDetailView(DetailView):
     # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
@@ -630,7 +641,7 @@ class DiseaseListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'disease-update'  # Cria novo contexto
+        data['link'] = 'disease_update'  # Cria novo contexto
 
         return data
 
@@ -737,6 +748,10 @@ class DiseasePhotoSolicitationDetailView(DetailView):
 
         return context
 
+class ProfileDeleteView(DeleteView):
+    model = Profile
+    success_url = reverse_lazy('accounts:user_list')
+
 class PlantDeleteView(DeleteView):
     model = Plant
     success_url = reverse_lazy('accounts:herbarium_update')
@@ -768,6 +783,10 @@ class CharDeleteView(DeleteView):
 class CultureDeleteView(DeleteView):
     model = Culture
     success_url = reverse_lazy('accounts:culture_list')
+
+class SolicitationDeleteView(DeleteView):
+        model = Solicitation
+        success_url = reverse_lazy('accounts:solicitation_list')
 
 class CharDetailView(DetailView):
     # Mostra detalhes de uma característica em específico. Passa no contexto os dados de UMA característica
@@ -860,11 +879,11 @@ def accept_disease_solicitation(request, pk):
 
 def accept_plant_photo_solicitation(request, pk):
     if request.method == "GET" and request.user.has_perm('change_plant'):
-        plant_photo = DiseaseSolicitation.objects.filter(id=pk).first()
+        plant_photo = PhotoSolicitation.objects.filter(id=pk).first()
         plant_photo.status = "accepted"
         plant_photo.save()
 
-        np = plant_photo.plant
+        np = plant_photo.new_photo
 
         np.published = True
         np.save()
@@ -873,13 +892,21 @@ def accept_plant_photo_solicitation(request, pk):
 
 def accept_disease_photo_solicitation(request, pk):
     if request.method == "GET" and request.user.has_perm('change_disease'):
-        photo_disease = DiseaseSolicitation.objects.filter(id=pk).first()
+        photo_disease = DiseasePhotoSolicitation.objects.filter(id=pk).first()
         photo_disease.status = "accepted"
         photo_disease.save()
 
-        np = photo_disease.disease
+        np = photo_disease.new_photo
 
         np.published = True
         np.save()
 
     return redirect("accounts:disease_photo_solicitation_list")
+
+def accept_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('change_solicitation'):
+        solicitation = Solicitation.objects.filter(id=pk).first()
+        solicitation.status = "accepted"
+        solicitation.save()
+
+    return redirect("accounts:solicitation_list")
