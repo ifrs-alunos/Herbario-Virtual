@@ -45,7 +45,7 @@ def colaborators_edit(request):
 
     context = {
         'colaborators_form': colaborators_form,
-        'link': 'about',
+        'link': 'edit-about',
     }
 
     return render(request, 'core/edit-about.html', context)

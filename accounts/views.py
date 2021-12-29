@@ -541,7 +541,7 @@ class PlantSolicitationListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'plant-solicitation-list'  # Cria novo contexto
+        data['link'] = 'plant-soliciation-list'  # Cria novo contexto
 
         return data
 
@@ -630,7 +630,7 @@ class DiseaseListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'disease-update'  # Cria novo contexto
+        data['link'] = 'disease_update'  # Cria novo contexto
 
         return data
 
