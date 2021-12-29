@@ -769,6 +769,10 @@ class CultureDeleteView(DeleteView):
     model = Culture
     success_url = reverse_lazy('accounts:culture_list')
 
+class SolicitationDeleteView(DeleteView):
+        model = Solicitation
+        success_url = reverse_lazy('accounts:solicitation_list')
+
 class CharDetailView(DetailView):
     # Mostra detalhes de uma característica em específico. Passa no contexto os dados de UMA característica
     model = CharSolicitationModel
@@ -883,3 +887,11 @@ def accept_disease_photo_solicitation(request, pk):
         np.save()
 
     return redirect("accounts:disease_photo_solicitation_list")
+
+def accept_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('change_solicitation'):
+        solicitation = Solicitation.objects.filter(id=pk).first()
+        solicitation.status = "accepted"
+        solicitation.save()
+
+    return redirect("accounts:solicitation_list")
