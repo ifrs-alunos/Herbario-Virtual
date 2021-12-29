@@ -40,7 +40,7 @@ def create_user(request):
             profile.save()
 
             # Tornando todos usuários comuns
-            group = Group.objects.get_or_create(name="common_users")
+            group, _ = Group.objects.get_or_create(name="common_users")
             user.groups.add(group)
 
             return redirect('accounts:login')
