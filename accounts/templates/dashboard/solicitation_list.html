@@ -9,7 +9,18 @@
 
     {% if solicitations %}
 
-        {% for solicitation in solicitations %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Instituição</th>
+                    <th scope="col">Nome do usuário</th>
+                    <th scope="col">Mensagem</th>
+                    <th scope="col">Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
             <!-- Modal -->
                         <div class="modal fade" id="exampleModal{{ solicitation.id }}" tabindex="-1" role="dialog"
                              aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -41,17 +52,6 @@
                         </div>
 
 
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Instituição</th>
-                    <th scope="col">Nome do usuário</th>
-                    <th scope="col">Mensagem</th>
-                    <th scope="col">Ação</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
                     <tr id="{{ solicitation.id }}">
                         <td scope="row">{{ solicitation.user.profile.institution|truncatechars_html:20 }}</td>
                         <td>{{ solicitation.user.profile.name|truncatechars_html:30 }}</td>
@@ -68,6 +68,7 @@
                                 <i class="fa fa-check-square-o" aria-hidden="true"></i>
                             </a>
                             <a id=""
+                               data-toggle="modal" data-target="#exampleModal{{ solicitation.id }}"
                                class="btn btn-danger deny_button" data-bs-toggle="tooltip" data-bs-placement="bottom"
                                title="Negar solicitação"
                                style="background-color: #ffa4a4; color: #c13b3b;">
@@ -78,7 +79,6 @@
                 {% endfor %}
                 </tbody>
             </table>
-        {% endfor %}
     {% else %}
         <div class="alert alert-warning" role="alert">
             Nenhuma solicitação para analisar no momento.

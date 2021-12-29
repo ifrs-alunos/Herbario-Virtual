@@ -573,6 +573,17 @@ def plant_update(request, pk):
 
     return render(request, 'dashboard/plant_solicitation.html', context)
 
+class UserDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = Profile
+    template_name = 'dashboard/user_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+
 class PlantDetailView(DetailView):
     # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
     model = Plant
@@ -736,6 +747,10 @@ class DiseasePhotoSolicitationDetailView(DetailView):
         context = super().get_context_data(**kwargs)
 
         return context
+
+class ProfileDeleteView(DeleteView):
+    model = Profile
+    success_url = reverse_lazy('accounts:user_list')
 
 class PlantDeleteView(DeleteView):
     model = Plant
