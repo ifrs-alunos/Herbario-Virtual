@@ -9,7 +9,7 @@
     <div class="container">
     <div class="row my-4">
         <div class="col-lg-12">
-            <h4 class="teste">Visualização detalhada do perfil {{ user.username }}:</h4>
+            <h4 class="teste">Visualização detalhada do perfil {{ object.user.username }}:</h4>
         </div>
     </div>
 
@@ -17,12 +17,12 @@
     <div class="card bg-light mb-12">
         <div class="card-header">Dados sobre o usuário</div>
         <div class="card-body">
-            <h5 class="card-title">Nome de usuário: {{ user.profile.name }}</h5>
+            <h5 class="card-title">Nome de usuário: {{ object.name }}</h5>
 
-            <p class="card-text"><strong>Nome completo: </strong>{{ user.profile.name }}</p>
-            <p class="card-text"><strong>Instituição: </strong>{{ user.profile.institution }}</p>
-            <p class="card-text"><strong>Cargo de ofício: </strong>{{ user.profile.role }}</p>
-            <p class="card-text"><strong>E-mail: </strong>{{ user.email }}</p>
+            <p class="card-text"><strong>Nome completo: </strong>{{ object.name }}</p>
+            <p class="card-text"><strong>Instituição: </strong>{{ object.institution }}</p>
+            <p class="card-text"><strong>Cargo de ofício: </strong>{{ object.role }}</p>
+            <p class="card-text"><strong>E-mail: </strong>{{ object.user.email }}</p>
 
         </div>
     </div>
