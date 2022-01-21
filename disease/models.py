@@ -109,6 +109,10 @@ class Disease(models.Model):
     def __str__(self):
         return self.name_disease
 
+    # função que retorna uma queryset com fotos aceitas pelo adminstrador
+    def published_photos(self):
+        return self.photos.all().filter(published=True)
+
     def save(self, *args, **kwargs):
         if self.slug == None:
             self.slug = slugify(self.name_disease)

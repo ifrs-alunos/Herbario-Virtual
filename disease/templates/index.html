@@ -95,10 +95,9 @@
                     {% for disease in diseases %}
                     <div class="col-lg-4 col-md-6 card-col d-flex col-12">
                         <div class="card col-12">
-
                             <!-- Verifica a planta contém ao menos uma imagem cadastrada -->
-                            {% if disease.photos.first.small_image.url %}
-                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ disease.photos.first.small_image.url }}" alt="Card image cap"></a>
+                            {% if disease.published_photos.first.small_image.url  %}
+                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ disease.published_photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
                                 <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'disease/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
