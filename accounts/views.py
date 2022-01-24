@@ -193,8 +193,8 @@ class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Update
             old_group = Group.objects.get_or_create(name="common_users")
             new_group = Group.objects.get_or_create(name="contributors")
 
-            user.groups.remove(old_group)  # Retira o grupo de usuário comum
-            user.groups.add(new_group)  # Adiciona o grupo de contribuidor
+            user.groups.remove(old_group[0])  # Retira o grupo de usuário comum
+            user.groups.add(new_group[0])  # Adiciona o grupo de contribuidor
 
         return redirect("accounts:solicitation_list")
 
