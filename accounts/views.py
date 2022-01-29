@@ -851,7 +851,7 @@ class MathModelsListView(ListView):
 @login_required
 def accept_plant_solicitation(request, pk):
 
-    if request.method == "GET" and request.user.has_perm('change_plant'):
+    if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
         plant = PlantSolicitation.objects.filter(id=pk).first()
         plant.status = "accepted"
         plant.save()
@@ -865,7 +865,7 @@ def accept_plant_solicitation(request, pk):
 
 
 def accept_disease_solicitation(request, pk):
-    if request.method == "GET" and request.user.has_perm('change_disease'):
+    if request.method == "GET" and request.user.has_perm('disease.change_disease'):
         disease = DiseaseSolicitation.objects.filter(id=pk).first()
         disease.status = "accepted"
         disease.save()
@@ -878,7 +878,7 @@ def accept_disease_solicitation(request, pk):
     return redirect("accounts:disease_solicitation_list")
 
 def accept_plant_photo_solicitation(request, pk):
-    if request.method == "GET" and request.user.has_perm('change_plant'):
+    if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
         plant_photo = PhotoSolicitation.objects.filter(id=pk).first()
         plant_photo.status = "accepted"
         plant_photo.save()
@@ -891,7 +891,7 @@ def accept_plant_photo_solicitation(request, pk):
     return redirect("accounts:photo_solicitation_list")
 
 def accept_disease_photo_solicitation(request, pk):
-    if request.method == "GET" and request.user.has_perm('change_disease'):
+    if request.method == "GET" and request.user.has_perm('disease.change_disease'):
         photo_disease = DiseasePhotoSolicitation.objects.filter(id=pk).first()
         photo_disease.status = "accepted"
         photo_disease.save()
@@ -900,11 +900,10 @@ def accept_disease_photo_solicitation(request, pk):
 
         np.published = True
         np.save()
-
     return redirect("accounts:disease_photo_solicitation_list")
 
 def accept_solicitation(request, pk):
-    if request.method == "GET" and request.user.has_perm('change_solicitation'):
+    if request.method == "GET" and request.user.has_perm('accounts.change_solicitation'):
         solicitation = Solicitation.objects.filter(id=pk).first()
         solicitation.status = "accepted"
         solicitation.save()
