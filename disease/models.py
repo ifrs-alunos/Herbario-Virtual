@@ -8,7 +8,7 @@ from django.utils.text import slugify
 class Region(models.Model):
     '''Esta classe define uma região de um país'''
 
-    name = models.CharField('Região', blank=True, max_length=20)
+    name = models.CharField('Região', blank=True, max_length=200)
 
     def __str__(self):
         return self.name
