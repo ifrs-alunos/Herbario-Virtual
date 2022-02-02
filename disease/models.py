@@ -115,7 +115,9 @@ class Disease(models.Model):
 
     def save(self, *args, **kwargs):
         if self.slug == None:
-            self.slug = slugify(self.name_disease)
+            # variavel que permite existir doenças iguais para culturas diferentes
+            new_slug = f'{self.culture_disease}-{self.name_disease}'
+            self.slug = slugify(new_slug)
 
         super().save(*args, **kwargs)
 
