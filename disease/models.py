@@ -86,7 +86,7 @@ class Disease(models.Model):
     complementary_scientific_name_disease = models.CharField(verbose_name="Nome Científico Complementar", max_length=60, blank=True, null=True, help_text='Insira o nome científico complementar, caso houver')
 
     # Torna um conjunto de palavras passíveis para serem usadas como um URL
-    slug = models.SlugField('Identificador', blank=True, null=True, unique=True)
+    slug = models.SlugField('Identificador', blank=True, null=True, unique=True, max_length=255)
 
     # Informações relacionados à doença, sintomas, plantas afetadas, etc
     culture_disease = models.ForeignKey(Culture, on_delete=models.CASCADE, related_name="cultures", verbose_name="Cultura", help_text='Insira a cultura de lavoura afetada')
