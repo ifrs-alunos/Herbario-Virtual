@@ -95,7 +95,7 @@ class Disease(models.Model):
 															 help_text='Insira o nome científico complementar, caso houver')
 
 	# Torna um conjunto de palavras passíveis para serem usadas como um URL
-	slug = models.SlugField('Identificador', blank=True, null=True, unique=True, max_length=255)
+	slug = models.SlugField('Identificador', blank=True, null=True, unique=False, max_length=255)
 
 	# Informações relacionados à doença, sintomas, plantas afetadas, etc
 	culture_disease = models.ForeignKey(Culture, on_delete=models.CASCADE, related_name="cultures",

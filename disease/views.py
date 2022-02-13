@@ -65,9 +65,10 @@ class DiseaseDetail(DetailView):
 	template_name = 'detail.html'
 
 	def get_object(self):
+
 		return Disease.objects.get(
 			slug=self.kwargs['slug'],
-			culture_disease__name=self.kwargs['culture'])
+			culture_disease__slug=self.kwargs['culture'])
 
 
 
