@@ -388,11 +388,12 @@ def disease_update(request, pk):
             chars = {}
 
             for label in request.POST.keys():
-                if "charval-" in label:
-                    chars[label.replace('charval-', '')]['value'] = request.POST[label]
-                elif "char-" in label:
-                    chars[label.replace('char-', '')] = {'id': int(request.POST[label]), 'value': None}
-
+                if request.POST[label]:
+                    if "charval-" in label:
+                        chars[label.replace('charval-', '')]['value'] = request.POST[label]
+                    elif "char-" in label:
+                        print(request.POST[label])
+                        chars[label.replace('char-', '')] = {'id': int(request.POST[label]), 'value': None}
             for char in chars.keys():
                 c = Condition.objects.create(characteristic_id=int(chars[char]['id']), disease=disease)
                 c.set_value(chars[char]['value'])

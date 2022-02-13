@@ -97,13 +97,17 @@
                         <div class="card col-12">
                             <!-- Verifica a planta contém ao menos uma imagem cadastrada -->
                             {% if disease.published_photos.first.small_image.url  %}
-                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ disease.published_photos.first.small_image.url }}" alt="Card image cap"></a>
+                                <a href="{% url 'disease:disease-detail' disease.culture_disease disease.slug %}"
+                                   target="_blank"><img
+                                        class="card-img-top text-center" src="{{ disease.published_photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
-                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'disease/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
+                                <a href="{% url 'disease:disease-detail' disease.culture_disease disease.slug %}"
+                                   target="_blank"><img class="card-img-top text-center" src="{% static 'disease/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
 
                             <div class="card-body">
-                                <a id="card-title" href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><h5 class="card-title">{{ disease.name_disease|truncatechars_html:20}}</h5></a>
+                                <a id="card-title" href="{% url 'disease:disease-detail' disease.culture_disease disease.slug %}"
+                                   target="_blank"><h5 class="card-title">{{ disease.name_disease|truncatechars_html:20}}</h5></a>
                                 <p class="card-text">{{ disease.symptoms_disease|truncatechars_html:75}}</p>
                             </div>
                             <div class="card-body">
