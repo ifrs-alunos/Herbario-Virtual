@@ -6,6 +6,7 @@
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="teste">Visualização detalhada de {{disease.name_disease}}:</h4>
+                <h5><small class="text-muted" >Contribuidor: {{ disease.get_contributor }}</small></h5>
             </div>  
         </div>
         <div class="row">
@@ -120,13 +121,19 @@
                         {# Verifica se a imagem em miniatura é a mesma que a em destaque. Em caso positivo, aplica-se um estilo css #}
                         {% if photo.image.url == disease.published_photos.first.image.url %}
                         <img class="imagem_miniatura imagem_selecionada" src="{{photo.small_image.url}}"
-                        data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
+                        data-zoom-image="{{photo.image.url}}" contri="{{ photo.get_contributor }}" width="155px;" height="100px;">
                         {% else %}
                         <img class="imagem_miniatura" src="{{photo.small_image.url}}"
-                        data-zoom-image="{{photo.image.url}}" width="155px;" height="100px;">
+                        data-zoom-image="{{photo.image.url}}" contri="{{ photo.get_contributor }}" width="155px;" height="100px;">
                         {% endif %}
                     {% endfor %}
+                    <h5 class="p-0">
+                        <small class="text-muted">
+                            Contribuidor da foto: <spam id="imagem_selecionada_texto">{{ disease.published_photos.first.get_contributor }}</spam>
+                        </small>
+                    </h5>
                 </div>
+
 
                 {% else %}
                 <div class="row">
