@@ -14,7 +14,10 @@ class SolicitationForm(forms.ModelForm):
 
         # Inserindo atributo "placeholder" ao campo do form "message"
         self.fields['message'].widget = forms.Textarea(attrs={"placeholder": "Escreva aqui uma mensagem breve que justifique a sua intenção de se tornar contribuidor do Herbário Virtual. É possível citar o envolvimento em estudos e/ou trabalhos relacionados com plantas daninhas."})
-        
+
+        # Adicionando o * ao atributo "term"
+        label_term = self.fields['term'].label
+        self.fields['term'].label = f'{label_term}*'
     class Meta:
         model = Solicitation
-        fields = ['user', 'message']
+        fields = ['user', 'message','term']

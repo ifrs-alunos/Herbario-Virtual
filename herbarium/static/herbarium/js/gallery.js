@@ -96,7 +96,6 @@ $("#zoom").elevateZoom({
     zoomWindowFadeOut: 600
 });
 
-
 // Adiciona o texto de contribuidor embaixo da imagem (pega o contribuidor de um atributo da imagem)
 function add_contri_text(imagem_selecionada) {
     var texto_contribuidor = imagem_selecionada.getAttribute('contri')

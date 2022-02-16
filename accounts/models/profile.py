@@ -10,6 +10,8 @@ class Profile(models.Model):
     institution = models.CharField(max_length=150, verbose_name="Instituição de trabalho e/ou estudo", help_text="Caso possuia mais de uma, escreva a que atua principalmente.")
     role = models.CharField(max_length=100, verbose_name="Cargo de ofício", help_text="Utilize como base seu cargo na instituição citada.")
     phone = models.CharField(max_length=11, verbose_name="Telefone fixo ou celular", help_text="Informe o DDD e, em seguida, seu número.")
+    cpf = models.CharField(max_length=11, verbose_name="CPF", help_text="Informe o CPF somente com números.")
+    rg = models.CharField(max_length=10, verbose_name="RG")
 
     def can_send_solicitation(self):
         # Selecionando solicitações de um usuário
