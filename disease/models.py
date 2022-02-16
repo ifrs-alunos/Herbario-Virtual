@@ -205,9 +205,10 @@ class PhotoDisease(models.Model):
 
 	@property
 	def get_contributor(self):
-		contributor = f'Fonte: {self.diseasephotosolicitation_set.all()[0].user.profile.name }'\
-			if self.diseasephotosolicitation_set.all() \
-			else 'Desconhecido'
+
+		query = self.diseasephotosolicitation_set.all()
+		contributor_name = self.diseasephotosolicitation_set.all()[0].user.profile.name if query else False
+		contributor = 'Fonte: ' + str(contributor_name if contributor_name else 'Desconhecido')
 		return contributor
 
 	# Sobreescreve o método save da classe
