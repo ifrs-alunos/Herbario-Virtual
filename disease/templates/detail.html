@@ -1,12 +1,16 @@
 {% extends "core/base.html" %}
 {% load static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'disease/css/disease_detail.css' %}"/>
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <div class="row my-4">
             <div class="col-lg-12">
                 <h4 class="teste">Visualização detalhada de {{disease.name_disease}}:</h4>
-                <h5><small class="text-muted" >Contribuidor: {{ disease.get_contributor }}</small></h5>
+                <h6><small class="text-muted" >Fonte: {{ disease.get_contributor }}</small></h6>
             </div>  
         </div>
         <div class="row">
@@ -106,12 +110,15 @@
                 {# Verifica se a planta contem fotos validas #}
                 {% if disease.published_photos %}
                 <!-- Imagem em destaque -->
-                <div class="row">
+                <div class="row "id="image_with_text">
                     {% comment %}
     <!--            <img id="zoom" class="imagem_em_destaque" src="{% static 'herbarium/images/planta_teste_pequena1.jpg' %}" data-zoom-image="{{plant.photos.first.image.url}}" width="635px;" height="430px;"> -->
                     {% endcomment %}
                     <img id="zoom" class="imagem_em_destaque" src="{{ disease.published_photos.first.small_image.url}}"
                          data-zoom-image="{{ disease.published_photos.first.image.url}}" width="635px;" height="430px;">
+                    <h6 id="imagem_selecionada_texto" class="p-0">
+                        {{ disease.published_photos.first.get_contributor }}
+                    </h6>
                 </div>
 
                 <!-- Imagens miniaturas -->
@@ -127,11 +134,7 @@
                         data-zoom-image="{{photo.image.url}}" contri="{{ photo.get_contributor }}" width="155px;" height="100px;">
                         {% endif %}
                     {% endfor %}
-                    <h5 class="p-0">
-                        <small class="text-muted">
-                            Contribuidor da foto: <spam id="imagem_selecionada_texto">{{ disease.published_photos.first.get_contributor }}</spam>
-                        </small>
-                    </h5>
+
                 </div>
 
 

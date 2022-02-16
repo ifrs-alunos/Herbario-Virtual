@@ -1,5 +1,5 @@
 from django.db import models
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from io import BytesIO
 from django.core.files import File
 from django.utils.text import slugify
@@ -16,7 +16,7 @@ class Region(models.Model):
 	class Meta:
 		verbose_name = 'Região'
 		verbose_name_plural = 'Regiões'
-		# ordering = ['name_disease']
+	# ordering = ['name_disease']
 
 
 class State(models.Model):
@@ -34,7 +34,7 @@ class State(models.Model):
 	class Meta:
 		verbose_name = 'Estado'
 		verbose_name_plural = 'Estados'
-		# ordering = ['name_disease']
+	# ordering = ['name_disease']
 
 
 class Culture(models.Model):
@@ -184,7 +184,7 @@ def make_small_image(image, size=(854, 480)):
 
 
 class PhotoDisease(models.Model):
-	'''Esta classe define os atributos que compõem uma foto de uma planta, permitindo que ela tenha múltiplas imagens'''
+	'''Esta classe define os atributos que compõem uma foto de uma doença, permitindo que ela tenha múltiplas imagens'''
 
 	# Relaciona as fotos com a planta
 	disease = models.ForeignKey(Disease, on_delete=models.CASCADE, related_name='photos', verbose_name="Doença")
@@ -195,7 +195,8 @@ class PhotoDisease(models.Model):
 	# Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores
 	small_image = models.ImageField(upload_to=small_disease_directory_path, editable=False, null=True)
 
-	# source_disease_photo = models.CharField('Referência da foto', blank=True, help_text='Insira a referência utilizada', default='Desconhecido', max_length=100)
+	# source_disease_photo = models.CharField('Referência da foto', blank=True, help_text='Insira a referência
+	# utilizada', default='Desconhecido', max_length=100)
 
 	published = models.BooleanField(verbose_name="Publicado", null=True)
 
@@ -204,7 +205,7 @@ class PhotoDisease(models.Model):
 
 	@property
 	def get_contributor(self):
-		contributor = self.diseasephotosolicitation_set.all()[0].user.profile.name \
+		contributor = f'Fonte: {self.diseasephotosolicitation_set.all()[0].user.profile.name }'\
 			if self.diseasephotosolicitation_set.all() \
 			else 'Desconhecido'
 		return contributor
@@ -217,7 +218,7 @@ class PhotoDisease(models.Model):
 		pillow_img_width, pillow_img_height = pillow_img.size
 
 		# Especificando tamanho mínimo como Full HD
-		if (pillow_img_width >= 1920 and pillow_img_height >= 1080):
+		if pillow_img_width >= 1920 and pillow_img_height >= 1080:
 			# Cria a imagem pequena e insere no campo do modelo
 			self.small_image = make_small_image(self.image)
 			super().save(*args, **kwargs)

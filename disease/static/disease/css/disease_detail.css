@@ -1,0 +1,10 @@
+#imagem_selecionada_texto{
+    position: absolute;
+    bottom: 0;
+    margin-left: 10px;
+    color: white;
+}
+
+#image_with_text{
+    position: relative;
+}

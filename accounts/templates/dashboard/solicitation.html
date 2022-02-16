@@ -1,4 +1,6 @@
 {% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_filters %}
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block item %}
@@ -9,6 +11,75 @@
         Sua última solicitação foi negada. No entanto, você pode enviar outra.
     </div>
     {% endif %}
+
+
+    <!-- MODAL -->
+    <div class="modal fade" id="termoModal" tabindex="-1" role="dialog"
+         aria-labelledby="termoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termoModalLabel">
+                        TERMO DE CESSÃO DE USO DE MATERIAIS AUDIOVISUAIS
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class=" row personal-info">
+                        <h5>Nome completo: {{ user.profile.name }}</h5>
+                        <div class="row">
+                            <div class="col">
+                                <h5>CPF: {{ user.profile.cpf }}</h5>
+                            </div>
+                            <div class="col">
+                                <h5>RG: {{ user.profile.rg }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class=" term-info">
+                            <h5>
+                                AUTORIZO a cedência dos materiais audiovisuais (fotos, áudios ou vídeos) de minha autoria ao Campus Vacaria do Instituto Federal de Educação,
+                                Ciência e Tecnologia do Rio Grande do Sul (IFRS), para divulgação no Web site &lt;http://labfito.vacaria.ifrs.edu.br/&gt;,
+                                do campus Vacaria, desde que não haja desvirtuamento da sua finalidade e seja mencionada a autoria.
+                                A presente autorização é concedida a título gratuito, abrangendo o uso de todas as
+                                imagens que enviar, em todo território nacional e no exterior, em todas as suas modalidades,
+                                inclusive na internet. Por esta ser a expressão da minha vontade, declaro que autorizo o uso das imagens sem que nada haja a ser reclamado a título de direitos autorais,
+                                em caráter definitivo e irrevogável, sem limite de prazo para a utilização das imagens, desde que respeitados os termos acima citados.
+                            </h5>
+                            <br>
+
+                            <h5 class="float-end">
+                                {{ term_date }}
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="div" id="term_form_errors">
+                        </div>
+                        <form method="post" id="term_form">
+                            {% csrf_token %}
+                            <div class=" row">
+                                <div class="col-8">
+                                    {{term_form|crispy}}
+
+                                </div>
+                                <div class="col-auto mt-auto align-self-center">
+                                    <button type="submit" id="term_button"  class="btn btn-success">
+                                        Assinar
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END MODAL -->
 
     <form method="POST">
         {% csrf_token %}
@@ -26,4 +97,13 @@
     </div>
 
     {% endif %}
+
 {% endblock item %}
+
+{% block scripts %}
+    <script src="{% static 'accounts/js/term_modal.js' %}"></script>
+    <script>
+    {# Chama a função que se encontra no term_modal    #}
+    submitForm($('#term_form'),"{% url 'accounts:term_check_password' %}")
+    </script>
+{% endblock %}

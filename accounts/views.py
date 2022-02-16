@@ -1,6 +1,12 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.defaultfilters import date
 from django.urls import reverse_lazy, reverse
+from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from accounts.forms import ProfileForm, UserUpdateForm, SolicitationForm, DiseaseCharSolicitationModelForm, CultureSolicitationModelForm
@@ -13,6 +19,7 @@ from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
 from disease.models import Disease, Culture, Condition, MathModels
 from disease.forms import DiseaseForm, MathModelsForm, DiseasePhotoForm
+from .forms.term_form import TermForm
 from .models import Contribuition
 
 from .forms import  UserForm, SolicitationStatusUpdateForm
@@ -124,6 +131,8 @@ class SolicitationCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
     def get_initial(self):
         initial = super().get_initial()
         initial['user'] = self.request.user
+
+
         return initial
 
     def get_context_data(self, **kwargs):
@@ -135,12 +144,21 @@ class SolicitationCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
         # Cria novos contextos
         data['link'] = 'solicitation'
         data['solicitation'] = solicitation
+        # Gambiarra pro tempo que por algum motivo n tem jeito de colocar dia 'de' mes 'de' 2020
+        date_gambi = datetime.datetime.now()
+        d = date(date_gambi,'d')
+        m = date(date_gambi,'F')
+        y = date(date_gambi,'Y')
+        data['term_date'] = f'{d} de {m} de {y}'
+
+        data['term_form'] = TermForm()
 
         return data
 
     def post(self, request, *args, **kwargs):
         # Verifica se o usuário logado tem permissão para enviar uma NOVA solicitação por método POST
         if request.user.profile.can_send_solicitation() == True:
+
             return super().post(request, *args, **kwargs)
         else:
             return self.handle_no_permission()
@@ -910,3 +928,12 @@ def accept_solicitation(request, pk):
         solicitation.save()
 
     return redirect("accounts:solicitation_list")
+
+
+def term_check_password(request):
+    """Essa função verifica se a senha dada no request é a mesma do usuario do request"""
+
+    password = request.POST['password']
+    user = User.objects.get(id=request.POST['user'])
+    match = True if check_password(password, user.password) else False
+    return JsonResponse(match, safe=False)
