@@ -488,3 +488,9 @@ a.page-link, a.page-link:hover {
 }
 
 /* Estilos de botões */
+
+
+/* Texto justificado */
+.text-justify {
+  text-align: justify;
+}
