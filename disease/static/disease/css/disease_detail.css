@@ -1,10 +1,18 @@
+#imagem_texto_container {
+    display: flex;
+}
+
 #imagem_selecionada_texto{
     position: absolute;
     bottom: 0;
     margin-left: 10px;
     color: white;
+    background-color: rgba(0, 0, 0, 0.1);
+
 }
 
 #image_with_text{
     position: relative;
 }
+
+

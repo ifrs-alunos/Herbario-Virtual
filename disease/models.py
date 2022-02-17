@@ -152,7 +152,7 @@ class Disease(models.Model):
 def disease_directory_path(instance, filename):
 	'''Esta função retorna o diretório onde as imagens grandes de uma planta devem ser armazenadas'''
 
-	disease_name = slugify(instance.disease.name_disease)
+	disease_name = slugify({instance.disease.name_disease})
 
 	return 'doencas/imagens-grandes/{}/{}'.format(disease_name, filename)
 
@@ -160,7 +160,10 @@ def disease_directory_path(instance, filename):
 def small_disease_directory_path(instance, filename):
 	'''Esta função retorna o diretório onde as imagens pequenas de uma planta devem ser armazenadas'''
 
-	disease_name = slugify(instance.disease.name_disease)
+	disease_name = slugify({instance.disease.name_disease})
+
+	# Arruma um pequeno bug de redundancia de path
+	filename = filename.split('/')[-1]
 
 	return 'doencas/imagens-pequenas/{}/{}'.format(disease_name, filename)
 
