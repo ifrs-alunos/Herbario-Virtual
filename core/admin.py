@@ -6,3 +6,5 @@ from .models import *
 admin.site.register(Highlight)
 admin.site.register(CarouselImage)
 admin.site.register(Colaborators)
+admin.site.register(Content)
+admin.site.register(Book)
