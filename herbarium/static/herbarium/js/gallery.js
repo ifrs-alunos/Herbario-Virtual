@@ -99,7 +99,8 @@ $("#zoom").elevateZoom({
 // Adiciona o texto de contribuidor embaixo da imagem (pega o contribuidor de um atributo da imagem)
 function add_contri_text(imagem_selecionada) {
     var texto_contribuidor = imagem_selecionada.getAttribute('contri')
+    if (texto_contribuidor) {
     var small_text = document.getElementById('imagem_selecionada_texto')
     small_text.innerText = texto_contribuidor
-
+    }
 }

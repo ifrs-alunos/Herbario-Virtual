@@ -8,5 +8,6 @@ urlpatterns = [
     path('saiba-mais/<str:highlight_slug>', views.highlight, name='highlight'),
     path('subjects', views.subjects, name='subjects'),
     path('colaboradores', views.ColaboratorsListView.as_view(), name='about'),
-    path('editar-colaboradores', views.colaborators_edit, name='edit-about')
+    path('editar-colaboradores', views.colaborators_edit, name='edit-about'),
+    path('contents', views.ContentListView.as_view(), name='contents'),
 ]
