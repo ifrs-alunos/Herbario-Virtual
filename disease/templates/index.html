@@ -55,9 +55,27 @@
 
                         {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
                         {% if selected_culture == culture.slug %}
-                            <li class="list-group-item active"><a href="{% url 'disease:diseases' culture.slug %}">{{culture}}</a></li>
+                            <li class="list-group-item active">
+                                <a href="{% url 'disease:diseases' culture.slug %}">
+                                    {% if culture.icon %}
+                                        <img class="" width='25px' h src="{{ culture.icon.url }}" alt="culture
+                                        icon">
+                                    {% endif %}
+                                    {{culture}}
+
+                                </a>
+                            </li>
                         {% else %}
-                            <li class="list-group-item"><a href="{% url 'disease:diseases' culture.slug %}">{{culture}}</a></li>
+                            <li class="list-group-item">
+                                <a href="{% url 'disease:diseases' culture.slug %}">
+                                    {% if culture.icon %}
+                                        <img class="" width='25px' h src="{{ culture.icon.url }}" alt="culture
+                                        icon">
+                                    {% endif %}
+                                    {{culture}}
+
+                                </a>
+                            </li>
                         {% endif %}
 
                     {% endfor %}
@@ -111,6 +129,10 @@
                                 <p class="card-text">{{ disease.symptoms_disease|truncatechars_html:75}}</p>
                             </div>
                             <div class="card-body">
+                                {% if disease.culture_disease.icon %}
+                                <img class="" width='20px' h src="{{ disease.culture_disease.icon.url }}" alt="culture
+                                icon"> {{ disease.culture_disease }}
+                                {% endif %}
                                 <p class="card-text"><small class="text-muted"><i>{{ disease.scientific_name_disease|truncatechars_html:30}}</i></small></p>
                             </div>
                         </div>
