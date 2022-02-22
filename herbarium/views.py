@@ -40,7 +40,9 @@ class HerbariumIndex(ListView):
         # Executa se alguma família tiver sido selecionada
         if self.kwargs:
             # Filtra todas as plantas por uma família passada na chave 'family' do dicionário da requisição
-            plants = plants.filter(family__name=self.kwargs['family'])
+            # plants = plants.filter(family__name=self.kwargs['family'])
+            # Filtra todas as plantas por uma família com o slug passada na chave 'family' do dicionário da requisição
+            plants = [x for x in plants if x.family.get_slug() == self.kwargs['family']]
         
         # Executa se algum texto tiver sido pesquisado
         if self.request.GET:
