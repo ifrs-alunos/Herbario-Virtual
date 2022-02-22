@@ -50,7 +50,7 @@
                     {% for family in families %}
 
                     {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
-                    {% if selected_family == family.name %}
+                    {% if selected_family == family.get_slug %}
                         <li class="list-group-item active"><a href="{% url 'herbarium:plants' family.get_slug %}">{{family}}</a></li>
                     {% else %}
                         <li class="list-group-item"><a href="{% url 'herbarium:plants' family.get_slug %}">{{family}}</a></li>
@@ -70,7 +70,7 @@
                     {% for family in families %}
 
                     {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
-                    {% if selected_family == family.name %}
+                    {% if selected_family == family.get_slug %}
                         <option selected value="{% url 'herbarium:plants' family.get_slug %}">{{family}}</option>
                     {% else %}
                         <option value="{% url 'herbarium:plants' family.get_slug %}">{{family}}</option>
