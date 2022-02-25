@@ -1,0 +1,57 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <form method="post" action="{% url 'alerts:create_formula' %}">
+            {% csrf_token %}
+            {% if form.errors %}
+                <span class="text-danger">
+                {{ form.errors }}
+                </span>
+            {% endif %}
+            <div class="col">
+                <div class="row pt-2">
+                    Nome:
+                    <br>
+                    {{ form.name }}
+                </div>
+                <div class="row pt-2">
+                    Constantes (no formato nome=valor), uma constante por linha:
+                    <br>
+                    {{ form.constants }}
+                </div>
+                <div class="row pt-2">
+                    Expressão, permite o uso das constantes definidas anteriormente e também variáveis de cada aferição,
+                    suporta código python e funções da biblioteca math, as
+                    variáveis que podem usadas são:
+                    <ul>
+                        <li>
+                            self.dht_h - Umidade relativa do ar
+                        </li>
+                        <li>
+                            self.dht_t - Temperatura do ar
+                        </li>
+                        <li>
+                            self.dht_hi - Sensaç�o t�rmica
+                        </li>
+                        <li>
+                            self.ldr - Luminosidade
+                        </li>
+                        <li>
+                            self.rain - Molhamento
+                        </li>
+                        <li>
+                            self.soil - Umidade do solo
+                        </li>
+                    </ul>
+                    {{ form.expression }}
+                </div>
+            </div>
+
+            <button class="btn btn-success">
+                Enviar
+            </button>
+        </form>
+    </div>
+{% endblock %}

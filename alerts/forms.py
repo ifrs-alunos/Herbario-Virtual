@@ -11,3 +11,9 @@ class StationAndIntervalForm(forms.Form):
 
     date_until = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
     time_until = forms.DateTimeField(widget=forms.DateInput(attrs={'type': 'time'}), required=False)
+
+
+class FormulaForm(forms.Form):
+    name = forms.CharField(max_length=100, required=True)
+    constants = forms.CharField(max_length=500, required=False, widget=forms.Textarea)
+    expression = forms.CharField(max_length=1000, required=True, widget=forms.Textarea)
