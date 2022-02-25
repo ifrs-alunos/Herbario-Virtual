@@ -7,7 +7,7 @@ from django.shortcuts import render
 from plotly.offline import plot
 from plotly.graph_objs import Scatter
 
-from alerts.forms import ReportIntervalForm
+from alerts.forms import StationAndIntervalForm
 from alerts.models import Report
 from alerts.views.utils import to_datetime
 
@@ -49,7 +49,7 @@ class StationDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["form"] = ReportIntervalForm
+        context["form"] = StationAndIntervalForm
 
         report_objects = Report.objects.filter(station__id=self.get_object().id)
 
