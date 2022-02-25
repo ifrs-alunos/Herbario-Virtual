@@ -11,7 +11,7 @@ span.d-lg-none {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 9999999;
+    z-index: 2;
     top: 0;
     left: 0;
     background-color: #A6DDA6;
@@ -34,7 +34,7 @@ span.d-lg-none {
 .sidenav a:hover{
     color: #000000;
 }
-  
+
 .sidenav .closebtn {
     position: absolute;
     top: 0;
@@ -136,6 +136,16 @@ nav.navbar {
     margin-bottom: 3%;
     padding-top: 0;
     padding-bottom: 0;
+    position: fixed;
+    width: 100vw;
+    top: 0;
+    z-index: 5;
+    padding-right: 2%;
+    padding-left: 2%;
+}
+
+body {
+ padding-top: 13vh;
 }
 
 a.navbar-brand {
@@ -209,7 +219,7 @@ a.navbar-brand {
 }
 
 footer{
-    background-color: #84AE84 !important;
+    background-color: #84c390 !important;
     margin-bottom: 0;
 }
 
@@ -243,6 +253,11 @@ footer .link-redes, footer .link-redes:hover {
 
 #youtube-icon:hover {
     color: #B22222;
+}
+
+#botoes-redes{
+    text-align: center;
+    margin-top: 10px;
 }
 
 #icon-preto:hover {
@@ -460,6 +475,22 @@ a.page-link, a.page-link:hover {
 }
 
 #footer{
-    clear: both;
-    position: relative;
+    position: fixed;   /* posição absoluta */
+    bottom: 0;
+    width: 100%;
+    max-height: 11%;
+    margin-top: 5%;
+    padding-bottom: 1%;
+    z-index: 5;
+    border-style: solid;
+    border-width: thin;
+    border-top-color: #2c6b3a;
+}
+
+/* Estilos de botões */
+
+
+/* Texto justificado */
+.text-justify {
+  text-align: justify;
 }

@@ -8,5 +8,6 @@ plants_poaceae.json
 local_settings.py
 /static/
 .idea
-migrations
+*migrations*
+venv
 backups

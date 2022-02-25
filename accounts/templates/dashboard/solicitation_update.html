@@ -26,8 +26,8 @@
     <button type="submit" class="btn btn-light mt-4">Enviar</button>
 </form> {% endcomment %}
 
-<button id="accept_button" type="button" class="btn btn-success">Aceitar <i class="fa fa-check-square-o" aria-hidden="true"></i></button>
-<button id="deny_button" type="button" class="btn btn-danger">Negar <i class="fa fa-times" aria-hidden="true"></i></button>
+<a href="{% url 'accounts:accept_solicitation' solicitation.id %}" style="background-color: #A6DDA6; color: green;" id="accept_button" type="button" class="btn btn-success">Aceitar <i class="fa fa-check-square-o" aria-hidden="true"></i></a>
+<a style="background-color: #ffa4a4; color: #c13b3b;" id="deny_button" type="button" class="btn btn-danger">Negar <i class="fa fa-times" aria-hidden="true"></i></a>
 
 {% endblock %}
 

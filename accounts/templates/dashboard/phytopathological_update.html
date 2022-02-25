@@ -12,92 +12,116 @@
 
         <!-- Botão para cadastramento de novas doenças -->
 
-        <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:disease_solicitation' %}">
-            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
-               Adicionar uma doença <i class="fa fa-plus" aria-hidden="true"></i>
+        <a id="{% if link == 'disease-update' %}selected-link{% endif %}"
+           href="{% url 'accounts:disease_solicitation' %}">
+            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" title="Atualizar doenças">
+                Adicionar uma doença <i class="fa fa-plus" aria-hidden="true"></i>
+            </button>
+        </a>
+
+        <a id="{% if link == 'disease-update' %}selected-link{% endif %}"
+           href="{% url 'accounts:disease_photo_solicitation' %}">
+            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" title="Atualizar fotos">
+                Adicionar uma foto de doença <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
 
     </div>
 
+    {% if perms.disease.change_disease %}
 
-    {% if diseases %}
+        {% if diseases %}
 
-        <table class="table table-striped mb-4">
-            <thead>
-            <tr>
-                <th scope="col">Nome Comum</th>
-                <th scope="col">Nome Científico</th>
-                <th scope="col">Cultura</th>
-                <th scope="col">Ação</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            {% for disease in diseases %} {# Loop na lista de doenças #}
-
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        Deseja excluir '{{ disease.name_disease }}'?
-                      </div>
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancelar</button>
-
-                          <!-- Formulário para deletar objeto (doença) -->
-                          <form method="post" action="{% url 'accounts:delete_disease' disease.slug%}">{% csrf_token %}
-                            <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
-                          </form>
-
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <tr id="{{disease.name_disease}}">
-
-                    <td scope="row">{{disease.name_disease|truncatechars_html:30}}</td>
-                    <td>{{disease.scientific_name_disease|truncatechars_html:40}}</td>
-                    <td>{{disease.culture_disease|truncatechars_html:50}}</td>
-
-                    <td>
-                        <a href="{% url 'accounts:detail-disease' disease.slug %}" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar doença">
-                            <i class="fa fa-eye" aria-hidden="true"></i>
-                        </a>
-                        <a href="{% url 'accounts:disease_update' disease.id%}" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doença">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </a>
-                        <a class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" title="Excluir doença">
-                            <i class="fa fa-times" aria-hidden="true"></i>
-                        </a>
-
-                    </td>
-
+            <table class="table table-striped mb-4">
+                <thead>
+                <tr>
+                    <th scope="col">Nome Comum</th>
+                    <th scope="col">Nome Científico</th>
+                    <th scope="col">Cultura</th>
+                    <th scope="col">Ação</th>
                 </tr>
-            {% endfor %}
+                </thead>
+                <tbody>
 
-            </tbody>
-        </table>
+                {% for disease in diseases %} {# Loop na lista de doenças #}
 
-    <div>
-        {% pagination %}
-    </div>
+                    {% if disease.published_disease == True %}
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal{{ disease.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Deseja excluir '{{ disease.name_disease }}'?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                            Cancelar
+                                        </button>
 
-    {% else %}
-        <div class="alert alert-warning" role="alert">
-        Nenhuma doença para editar no momento.
-        </div>
+                                        <!-- Formulário para deletar objeto (doença) -->
+                                        <form method="post"
+                                              action="{% url 'accounts:delete_disease' disease.slug %}">{% csrf_token %}
+                                            <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <tr id="{{ disease.name_disease }}">
+
+                            <td scope="row">{{ disease.name_disease|truncatechars_html:30 }}</td>
+                            <td>{{ disease.scientific_name_disease|truncatechars_html:40 }}</td>
+                            <td>{{ disease.culture_disease|truncatechars_html:50 }}</td>
+
+                            <td>
+                                <a href="{% url 'accounts:detail-disease' disease.slug %}" id="plant_view"
+                                   class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                   title="Visualizar doença">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                </a>
+                                <a href="{% url 'accounts:disease_update' disease.id %}" id="plant_update"
+                                   class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                   title="Atualizar doença">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                                <a class="btn btn-danger" data-toggle="modal" id="plant_delete"
+                                   data-target="#exampleModal{{ disease.id }}" title="Excluir doença" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                                    <i class="fa fa-times" aria-hidden="true"></i>
+                                </a>
+
+                            </td>
+
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+            <div>
+                {% pagination %}
+            </div>
+
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Nenhuma doença para editar no momento.
+            </div>
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}
 
 <!-- Js Externo -->
-    <script src="{% static 'accounts/dashboard/js/modal.js' %}"></script>
+<script src="{% static 'accounts/dashboard/js/modal.js' %}"></script>

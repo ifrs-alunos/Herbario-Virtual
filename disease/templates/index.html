@@ -55,9 +55,27 @@
 
                         {# Verifica se o dicionário das famílias na chave 'familia' corresponde a familia da lista. Se sim, elemento tem classe active, se não, não a tem #}
                         {% if selected_culture == culture.slug %}
-                            <li class="list-group-item active"><a href="{% url 'disease:diseases' culture.slug %}">{{culture}}</a></li>
+                            <li class="list-group-item active">
+                                <a href="{% url 'disease:diseases' culture.slug %}">
+                                    {% if culture.icon %}
+                                        <img class="" width='25px' h src="{{ culture.icon.url }}" alt="culture
+                                        icon">
+                                    {% endif %}
+                                    {{culture}}
+
+                                </a>
+                            </li>
                         {% else %}
-                            <li class="list-group-item"><a href="{% url 'disease:diseases' culture.slug %}">{{culture}}</a></li>
+                            <li class="list-group-item">
+                                <a href="{% url 'disease:diseases' culture.slug %}">
+                                    {% if culture.icon %}
+                                        <img class="" width='25px' h src="{{ culture.icon.url }}" alt="culture
+                                        icon">
+                                    {% endif %}
+                                    {{culture}}
+
+                                </a>
+                            </li>
                         {% endif %}
 
                     {% endfor %}
@@ -95,19 +113,26 @@
                     {% for disease in diseases %}
                     <div class="col-lg-4 col-md-6 card-col d-flex col-12">
                         <div class="card col-12">
-
                             <!-- Verifica a planta contém ao menos uma imagem cadastrada -->
-                            {% if disease.photos.first.small_image.url %}
-                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ disease.photos.first.small_image.url }}" alt="Card image cap"></a>
+                            {% if disease.published_photos.first.small_image.url  %}
+                                <a href="{% url 'disease:disease-detail' disease.culture_disease.slug disease.slug %}"
+                                   target="_blank"><img
+                                        class="card-img-top text-center" src="{{ disease.published_photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
-                                <a href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'disease/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
+                                <a href="{% url 'disease:disease-detail' disease.culture_disease.slug disease.slug %}"
+                                   target="_blank"><img class="card-img-top text-center" src="{% static 'disease/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
 
                             <div class="card-body">
-                                <a id="card-title" href="{% url 'disease:disease-detail' disease.slug %}" target="_blank"><h5 class="card-title">{{ disease.name_disease|truncatechars_html:20}}</h5></a>
+                                <a id="card-title" href="{% url 'disease:disease-detail' disease.culture_disease.slug disease.slug %}"
+                                   target="_blank"><h5 class="card-title">{{ disease.name_disease|truncatechars_html:20}}</h5></a>
                                 <p class="card-text">{{ disease.symptoms_disease|truncatechars_html:75}}</p>
                             </div>
                             <div class="card-body">
+                                {% if disease.culture_disease.icon %}
+                                <img class="" width='20px' h src="{{ disease.culture_disease.icon.url }}" alt="culture
+                                icon"> {{ disease.culture_disease }}
+                                {% endif %}
                                 <p class="card-text"><small class="text-muted"><i>{{ disease.scientific_name_disease|truncatechars_html:30}}</i></small></p>
                             </div>
                         </div>

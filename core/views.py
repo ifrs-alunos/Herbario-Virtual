@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 
-from .models import Highlight, CarouselImage, Colaborators
+from .models import Highlight, CarouselImage, Colaborators, Content
 from .forms import ColaboratorsModelForm
 
 
@@ -24,6 +24,7 @@ def subjects(request):
 
     return render(request, template_name, {})
 
+
 def colaborators_edit(request):
     """Essa função cria uma solicitação para enviar uma nova planta"""
 
@@ -45,10 +46,11 @@ def colaborators_edit(request):
 
     context = {
         'colaborators_form': colaborators_form,
-        'link': 'about',
+        'link': 'edit-about',
     }
 
     return render(request, 'core/edit-about.html', context)
+
 
 class ColaboratorsListView(ListView):
     model = Colaborators
@@ -62,9 +64,16 @@ class ColaboratorsListView(ListView):
 
         return data
 
+
 def highlight(request, highlight_slug):
     template_name = 'core/highlights.html'
 
     highlight = Highlight.objects.get(slug=highlight_slug)
 
     return render(request, template_name, {'highlight': highlight})
+
+
+class ContentListView(ListView):
+    model = Content
+    context_object_name = 'contents'
+    template_name = 'core/content_list.html'

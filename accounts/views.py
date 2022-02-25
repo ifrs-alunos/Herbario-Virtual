@@ -1,16 +1,25 @@
+import datetime
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import check_password
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.defaultfilters import date
 from django.urls import reverse_lazy, reverse
+from django.utils import timezone
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from accounts.forms import ProfileForm, UserUpdateForm, SolicitationForm, DiseaseCharSolicitationModelForm, CultureSolicitationModelForm
-from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation, DiseaseSolicitation, CharSolicitationModel
+from accounts.models import Profile, Solicitation, PlantSolicitation, PhotoSolicitation, DiseaseSolicitation, \
+    CharSolicitationModel, DiseasePhotoSolicitation
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
 from disease.models import Disease, Culture, Condition, MathModels
-from disease.forms import DiseaseForm, MathModelsForm
+from disease.forms import DiseaseForm, MathModelsForm, DiseasePhotoForm
+from .forms.term_form import TermForm
 from .models import Contribuition
 
 from .forms import  UserForm, SolicitationStatusUpdateForm
@@ -38,7 +47,7 @@ def create_user(request):
             profile.save()
 
             # Tornando todos usuários comuns
-            group = Group.objects.get_or_create(name="common_users")
+            group, _ = Group.objects.get_or_create(name="common_users")
             user.groups.add(group)
 
             return redirect('accounts:login')
@@ -122,6 +131,8 @@ class SolicitationCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
     def get_initial(self):
         initial = super().get_initial()
         initial['user'] = self.request.user
+
+
         return initial
 
     def get_context_data(self, **kwargs):
@@ -133,12 +144,21 @@ class SolicitationCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
         # Cria novos contextos
         data['link'] = 'solicitation'
         data['solicitation'] = solicitation
+        # Gambiarra pro tempo que por algum motivo n tem jeito de colocar dia 'de' mes 'de' 2020
+        date_gambi = datetime.datetime.now()
+        d = date(date_gambi,'d')
+        m = date(date_gambi,'F')
+        y = date(date_gambi,'Y')
+        data['term_date'] = f'{d} de {m} de {y}'
+
+        data['term_form'] = TermForm()
 
         return data
 
     def post(self, request, *args, **kwargs):
         # Verifica se o usuário logado tem permissão para enviar uma NOVA solicitação por método POST
         if request.user.profile.can_send_solicitation() == True:
+
             return super().post(request, *args, **kwargs)
         else:
             return self.handle_no_permission()
@@ -191,8 +211,8 @@ class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Update
             old_group = Group.objects.get_or_create(name="common_users")
             new_group = Group.objects.get_or_create(name="contributors")
 
-            user.groups.remove(old_group)  # Retira o grupo de usuário comum
-            user.groups.add(new_group)  # Adiciona o grupo de contribuidor
+            user.groups.remove(old_group[0])  # Retira o grupo de usuário comum
+            user.groups.add(new_group[0])  # Adiciona o grupo de contribuidor
 
         return redirect("accounts:solicitation_list")
 
@@ -313,7 +333,7 @@ def photo_solicitation(request):
             photo_solicitation = PhotoSolicitation(user=request.user, status='sent', new_photo=photo)
             photo_solicitation.save()
 
-            return redirect('accounts:contributions')
+            return redirect('accounts:view_dashboard')
 
     # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
     else:
@@ -379,7 +399,22 @@ def disease_update(request, pk):
         # Cria uma instância com os dados da requisição
 
         if disease_form.is_valid():
-            disease_form.save()
+            disease = disease_form.save()
+
+            disease.condition_set.all().delete()
+
+            chars = {}
+
+            for label in request.POST.keys():
+                if request.POST[label]:
+                    if "charval-" in label:
+                        chars[label.replace('charval-', '')]['value'] = request.POST[label]
+                    elif "char-" in label:
+                        print(request.POST[label])
+                        chars[label.replace('char-', '')] = {'id': int(request.POST[label]), 'value': None}
+            for char in chars.keys():
+                c = Condition.objects.create(characteristic_id=int(chars[char]['id']), disease=disease)
+                c.set_value(chars[char]['value'])
 
             return redirect('accounts:disease_update')
     print(disease.condition_set.all())
@@ -388,13 +423,41 @@ def disease_update(request, pk):
         'disease_form': disease_form,
         'link': 'disease_update',
         'conditions': [(x, y) for x, y in enumerate(disease.condition_set.all())],
-        'conditions_lenght': len(disease.condition_set.all())
+        'conditions_lenght': len(disease.condition_set.all()),
+        'characteristics_inputs': [{'id': x.id, 'type': x.get_html_input()} for x in
+                                   CharSolicitationModel.objects.all()]
     }
 
     return render(request, 'dashboard/disease_solicitation.html', context)
-#
-# class DiseaseUpdate(UpdateView):
-#     model = Di
+
+def disease_photo_solicitation(request):
+    """Essa função cria uma solicitação para enviar uma imagem de uma doença"""
+
+    # Se o usuário mandar dados, ou seja, se a requisição for POST
+    if request.method == "POST":
+        # Cria uma instância com os dados da requisição
+        disease_photo_form = DiseasePhotoForm(request.POST, request.FILES)
+
+        if disease_photo_form.is_valid():
+            disease_photo = disease_photo_form.save()  # Cria objeto mas nao salva no banco de dados
+            disease_photo.published = False
+
+            disease_photo_solicitation = DiseasePhotoSolicitation(user=request.user, status='sent', new_photo=disease_photo)
+            disease_photo_solicitation.save()
+
+            return redirect('accounts:view_dashboard')
+
+    # Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
+    else:
+        # Cria um formulário em branco
+        disease_photo_form = DiseasePhotoForm()
+
+    context = {
+        'disease_photo_form': disease_photo_form,
+        'link': 'disease-photo-solicitation',
+    }
+
+    return render(request, 'dashboard/disease_photo_solicitation.html', context)
 
 def disease_char_solicitation(request):
     """Essa função cria uma solicitação para cadastrar uma nova condição para desenvolvimento de doença"""
@@ -497,7 +560,7 @@ class PlantSolicitationListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'plant-solicitation-list'  # Cria novo contexto
+        data['link'] = 'plant-soliciation-list'  # Cria novo contexto
 
         return data
 
@@ -529,6 +592,17 @@ def plant_update(request, pk):
 
     return render(request, 'dashboard/plant_solicitation.html', context)
 
+class UserDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = Profile
+    template_name = 'dashboard/user_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+
 class PlantDetailView(DetailView):
     # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
     model = Plant
@@ -559,6 +633,24 @@ class PhotoSolicitationListView(ListView):
 
 # Views relacionadas à doenças
 
+class DiseasePhotoSolicitationListView(ListView):
+    model = DiseasePhotoSolicitation
+    context_object_name = 'solicitations'
+    template_name = 'dashboard/disease_photo_solicitation_list.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'disease-photo-solicitation-list'  # Cria novo contexto
+
+        return data
+
+    def get_queryset(self):  # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=DiseasePhotoSolicitation.Status.SENT)
+
+        return queryset
+
 class DiseaseListView(ListView):
     model = Disease
     context_object_name = 'diseases'
@@ -568,9 +660,28 @@ class DiseaseListView(ListView):
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'disease-update'  # Cria novo contexto
+        data['link'] = 'disease_update'  # Cria novo contexto
 
         return data
+
+
+class DiseaseSolicitationListView(ListView):
+    model = DiseaseSolicitation
+    context_object_name = 'solicitations'
+    template_name = 'dashboard/disease_solicitation_list.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+
+        data['link'] = 'disease-solicitation-list'  # Cria novo contexto
+
+        return data
+
+    def get_queryset(self):  # Filtra as solicitações que estão com o status "enviada"
+        queryset = super().get_queryset()
+        queryset = queryset.filter(status=DiseaseSolicitation.Status.SENT)
+
+        return queryset
 
 class CharListView(ListView):
     model = CharSolicitationModel
@@ -614,13 +725,75 @@ class DiseaseDetailView(DetailView):
 
         return context
 
+
+
+class DiseaseSolicitationDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = DiseaseSolicitation
+    template_name = 'dashboard/disease_solicitation_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class PlantSolicitationDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = PlantSolicitation
+    template_name = 'dashboard/plant_solicitation_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class PlantPhotoSolicitationDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = PhotoSolicitation
+    template_name = 'dashboard/plant_photo_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class DiseasePhotoSolicitationDetailView(DetailView):
+    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+    model = DiseasePhotoSolicitation
+    template_name = 'dashboard/disease_photo_solicitation_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
+
+class ProfileDeleteView(DeleteView):
+    model = Profile
+    success_url = reverse_lazy('accounts:user_list')
+
 class PlantDeleteView(DeleteView):
     model = Plant
     success_url = reverse_lazy('accounts:herbarium_update')
 
+class PlantSolicitationDeleteView(DeleteView):
+    model = PlantSolicitation
+    success_url = reverse_lazy('accounts:plant_solicitation_list')
+
+class PlantPhotoSolicitationDeleteView(DeleteView):
+    model = PhotoSolicitation
+    success_url = reverse_lazy('accounts:photo_solicitation_list')
+
+class DiseaseSolicitationDeleteView(DeleteView):
+    model = DiseaseSolicitation
+    success_url = reverse_lazy('accounts:disease_solicitation_list')
+
+class DiseasePhotoSolicitationDeleteView(DeleteView):
+    model = DiseasePhotoSolicitation
+    success_url = reverse_lazy('accounts:disease_photo_solicitation_list')
+
 class DiseaseDeleteView(DeleteView):
     model = Disease
-    success_url = reverse_lazy('accounts:disease_solicitation_list')
+    success_url = reverse_lazy('accounts:disease_update')
 
 class CharDeleteView(DeleteView):
     model = CharSolicitationModel
@@ -629,6 +802,10 @@ class CharDeleteView(DeleteView):
 class CultureDeleteView(DeleteView):
     model = Culture
     success_url = reverse_lazy('accounts:culture_list')
+
+class SolicitationDeleteView(DeleteView):
+        model = Solicitation
+        success_url = reverse_lazy('accounts:solicitation_list')
 
 class CharDetailView(DetailView):
     # Mostra detalhes de uma característica em específico. Passa no contexto os dados de UMA característica
@@ -689,3 +866,74 @@ class MathModelsListView(ListView):
         data['link'] = 'math_models'  # Cria novo contexto
 
         return data
+
+@login_required
+def accept_plant_solicitation(request, pk):
+
+    if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
+        plant = PlantSolicitation.objects.filter(id=pk).first()
+        plant.status = "accepted"
+        plant.save()
+
+        np = plant.new_plant
+
+        np.published = True
+        np.save()
+
+    return redirect("accounts:plant_solicitation_list")
+
+
+def accept_disease_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('disease.change_disease'):
+        disease = DiseaseSolicitation.objects.filter(id=pk).first()
+        disease.status = "accepted"
+        disease.save()
+
+        nd = disease.new_disease
+
+        nd.published_disease = True
+        nd.save()
+
+    return redirect("accounts:disease_solicitation_list")
+
+def accept_plant_photo_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
+        plant_photo = PhotoSolicitation.objects.filter(id=pk).first()
+        plant_photo.status = "accepted"
+        plant_photo.save()
+
+        np = plant_photo.new_photo
+
+        np.published = True
+        np.save()
+
+    return redirect("accounts:photo_solicitation_list")
+
+def accept_disease_photo_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('disease.change_disease'):
+        photo_disease = DiseasePhotoSolicitation.objects.filter(id=pk).first()
+        photo_disease.status = "accepted"
+        photo_disease.save()
+
+        np = photo_disease.new_photo
+
+        np.published = True
+        np.save()
+    return redirect("accounts:disease_photo_solicitation_list")
+
+def accept_solicitation(request, pk):
+    if request.method == "GET" and request.user.has_perm('accounts.change_solicitation'):
+        solicitation = Solicitation.objects.filter(id=pk).first()
+        solicitation.status = "accepted"
+        solicitation.save()
+
+    return redirect("accounts:solicitation_list")
+
+
+def term_check_password(request):
+    """Essa função verifica se a senha dada no request é a mesma do usuario do request"""
+
+    password = request.POST['password']
+    user = User.objects.get(id=request.POST['user'])
+    match = True if check_password(password, user.password) else False
+    return JsonResponse(match, safe=False)

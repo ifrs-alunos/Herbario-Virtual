@@ -20,6 +20,8 @@
             <div class="mb-2">{{profile_form.institution|as_crispy_field }}</div>
             <div class="mb-2">{{profile_form.role|as_crispy_field }}</div>
             <div class="mb-2">{{profile_form.phone|as_crispy_field }}</div>
+            <div class="mb-2">{{profile_form.cpf|as_crispy_field }}</div>
+            <div class="mb-2">{{profile_form.rg|as_crispy_field }}</div>
 
         <!-- <div class="text-right"> -->
             <p class="font-weight-light mt-4">Campos marcados com * são obrigatórios</p>
@@ -37,4 +39,5 @@
     <!-- Plugin Jquery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js" integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw==" crossorigin="anonymous"></script>
     <script src="{% static 'accounts/js/create.js' %}"></script>
+
 {% endblock %}
