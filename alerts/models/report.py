@@ -39,6 +39,24 @@ class Report(BaseModel):
     # client-side report time
     board_time = models.DateTimeField()
 
+    def __str__(self):
+        try:
+            return f"{self.station.alias} ─ {self.board_time:%d/%m/%Y} às {self.board_time:%H:%M} horas"
+        except Exception:
+            return "Aferição"
+
+    def save(self, *args, **kwargs):
+        if not self.station:
+            station = Station.objects.get(station_id=self.station_identificator)
+            if not station:
+                station = Station.objects.create(station_id=self.station_identificator,
+                                                 alias=self.station_identificator)
+                station.save()
+
+            self.station = station
+
+        super().save(*args, **kwargs)
+
     def match_condition(self, condition: Formula) -> float:
         import math
         exp = condition.expression
