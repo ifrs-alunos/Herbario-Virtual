@@ -1,0 +1,51 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+
+        <form>
+            <div class="col-4">
+                {% for field in form %}
+                    <div class="row">
+                        {{ field.label }}
+                        {{ field }}
+                    </div>
+                {% endfor %}
+            </div>
+            <br>
+            <button class="btn btn-success">Enviar</button>
+        </form>
+    </div>
+    {% if alerts %}
+        <div class="container">
+            <table>
+                <tr>
+                    <th>Estação</th>
+                    <th>Temperatura</th>
+                    <th>Resultado do modelo</th>
+                </tr>
+                {% for alert in alerts %}
+                    <tr>
+                        <td>
+                            {{ alert.obj }}
+                        </td>
+                        <td>
+                            {{ alert.obj.dht_t }}
+                        </td>
+                        <td>
+                            {{ alert.condition_match }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endif %}
+    <div class="container">
+        <div class="row">
+            {% autoescape off %}
+                {{ graph }}
+            {% endautoescape %}
+        </div>
+    </div>
+{% endblock %}
