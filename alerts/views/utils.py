@@ -1,11 +1,13 @@
 import datetime
 
-from django.db.models import QuerySet
+import django
+from django.db.models import QuerySet, Q
 from django.utils import timezone
+from typing import List
 
 tz = timezone.get_current_timezone()
 
-from assessment.models import Report, TempReport
+from alerts.models import Report, Station
 
 
 def mean(array: list) -> float:
@@ -31,8 +33,6 @@ def create_report_from_params(params: dict) -> Report:
 
     m_params = dict(params)
 
-    print(m_params)
-
     return Report.objects.create(
         station_id=int(m_params.pop("chip_id", None)[0]),
 
@@ -42,49 +42,39 @@ def create_report_from_params(params: dict) -> Report:
     )
 
 
-def get_average_values(temp_reports: QuerySet[TempReport]) -> Report:
-    """
-    processa os valores dos relatórios temporários e retorna um objeto
-    com a média dos valores, excluindo os 10% mais altos e baixo
+def get_average_object_per_hour(model,
+                                start_date: datetime.datetime,
+                                end_date: datetime.datetime) -> List[django.db.models.Model]:
+    objects = model.objects.filter(Q(board_time__gte=start_date) & Q(board_time__lte=end_date))
 
-    :param temp_reports: lista de relatórios temporários
-    :return: relatório com os valores médios de todas os os últimos relatórios temporários
-    """
+    first_object_date = objects.first().board_time
+    object_fields = objects.first().get_fields(exclude=['id', 'station', 'station_id', 'board_time'])
 
-    dht11_humidity = []
-    dht11_temperature = []
-    dhtt11_heat_index = []
+    average_object_list = []
 
-    bmp280_temperature = []
-    bmp280_pressure = []
-    bmp280_altitude = []
+    tz_object = timezone.get_current_timezone()
 
-    ldr_light = []
+    start_hour = first_object_date.replace(minute=0, second=0, microsecond=0)
+    hour_count = (objects.last().board_time.replace(
+        minute=0, second=0, microsecond=0) - start_hour).seconds // 3600
+    datetime_range = [start_hour + datetime.timedelta(hours=i) for i in range(hour_count)]
+    for dt in datetime_range:
+        objects_in_hour = objects.filter(board_time__gte=dt, board_time__lt=dt + datetime.timedelta(hours=1))
+        if objects_in_hour.count() > 0:
+            values = {
+                "station": Station.objects.get(id=objects_in_hour.first().station_id),
+                "station_id": objects_in_hour.first().station_id,
+                "board_time": dt
+            }
+            for field in object_fields:
+                field_values = objects_in_hour.values_list(field, flat=True)
+                if field_values[0] is not None:
+                    values[field] = (sum(field_values) / len(field_values))
+                else:
+                    values[field] = None
+            average_object_list.append(model(**values))
 
-    for i in temp_reports.order_by('-board_time'):
-        dht11_humidity.append(i.dht11_humidity)
-        dht11_temperature.append(i.dht11_temperature)
-        dhtt11_heat_index.append(i.dhtt11_heat_index)
-
-        bmp280_temperature.append(i.bmp280_temperature)
-        bmp280_pressure.append(i.bmp280_pressure)
-        bmp280_altitude.append(i.bmp280_altitude)
-
-        ldr_light.append(i.ldr_light)
-
-    return Report.objects.create(
-        dht11_humidity=mean(dht11_humidity),
-        dht11_temperature=mean(dht11_temperature),
-        dhtt11_heat_index=mean(dhtt11_heat_index),
-
-        bmp280_temperature=mean(bmp280_temperature),
-        bmp280_pressure=mean(bmp280_pressure),
-        bmp280_altitude=mean(bmp280_altitude),
-
-        ldr_light=mean(ldr_light),
-
-        board_time=temp_reports.first().board_time
-    )
+    return average_object_list
 
 
 def to_datetime(date: str, time: str, until: bool = False) -> datetime.datetime:
@@ -136,5 +126,3 @@ def clean_fields(params) -> dict:
             params[key] = None
 
     return params
-
-
