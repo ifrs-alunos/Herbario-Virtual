@@ -77,6 +77,7 @@ class Plant(models.Model):
     def __str__(self):
         return self.name
 
+
     def save(self, *args, **kwargs):
         if self.slug == None:
             self.slug = slugify(self.name)
@@ -140,6 +141,14 @@ class Photo(models.Model):
 
     def __str__(self):
         return self.image.name
+
+    @property
+    def get_contributor(self):
+
+        query = self.photosolicitation_set.all()
+        contributor_name = self.photosolicitation_set.all()[0].user.profile.name if query else False
+        contributor = 'Fonte: ' + str(contributor_name if contributor_name else 'Desconhecido')
+        return contributor
 
     # Sobreescreve o método save da classe
     def save(self, *args, **kwargs):

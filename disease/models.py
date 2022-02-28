@@ -140,12 +140,6 @@ class Disease(models.Model):
     def published_photos(self):
         return self.photos.all().filter(published=True)
 
-    @property
-    def get_contributor(self):
-        contributor = self.diseasesolicitation_set.all()[0].user.profile.name \
-            if self.diseasesolicitation_set.all() \
-            else 'Desconhecido'
-        return contributor
 
     def save(self, *args, **kwargs):
         if self.slug is None:

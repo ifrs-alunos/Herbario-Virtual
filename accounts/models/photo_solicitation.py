@@ -13,7 +13,7 @@ class PhotoSolicitation(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário', related_name="photo_solicitations")
     date = models.DateField(verbose_name="Data de envio", auto_now_add=True)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.SENT)
-    new_photo = models.ForeignKey(Photo, on_delete=models.CASCADE, verbose_name='Nova Foto', related_name="+")
+    new_photo = models.ForeignKey(Photo, on_delete=models.CASCADE, verbose_name='Nova Foto')
 
     def __str__(self):
         return 'Solicitação: {}'.format(self.user)
