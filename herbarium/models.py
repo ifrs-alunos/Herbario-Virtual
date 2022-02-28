@@ -147,7 +147,8 @@ class Photo(models.Model):
 
         query = self.photosolicitation_set.all()
         contributor_name = self.photosolicitation_set.all()[0].user.profile.name if query else False
-        contributor = 'Fonte: ' + str(contributor_name if contributor_name else 'Desconhecido')
+        contributor = str(f'Fonte: {contributor_name}' if contributor_name else '')
+
         return contributor
 
     # Sobreescreve o método save da classe
