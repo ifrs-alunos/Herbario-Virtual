@@ -17,12 +17,13 @@ def generate_bar_graph(x_data, y_data):
     for obj, condition_match in zip(x_data, y_data):
         if (obj.dht_h / 4095) >= 0.7:
             sum_ += condition_match
-            y_data_copy[i] = sum_
         else:
             sum_ = 0
+        y_data_copy[i] = sum_
 
     return plot(
-        [Bar(x=x_data, y=y_data_copy)],
+        [Bar(x=[i.board_time for i in x_data],
+             y=y_data_copy)],
         output_type='div'
     )
 
@@ -37,7 +38,7 @@ class AlertsView(ListView):
         context['form'] = StationAndIntervalForm()
         context['graph'] = generate_bar_graph(
             y_data=[i.get("condition_match") for i in self.get_queryset()],
-            x_data=[i.get("obj").board_time for i in self.get_queryset()],
+            x_data=[i.get("obj") for i in self.get_queryset()],
         )
         return context
 
