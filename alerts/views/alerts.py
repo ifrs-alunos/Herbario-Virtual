@@ -13,13 +13,12 @@ from plotly.graph_objs import Bar
 def generate_bar_graph(x_data, y_data):
     y_data_copy = []
     sum_ = 0
-    i = 0
     for obj, condition_match in zip(x_data, y_data):
-        if (obj.dht_h / 4095) >= 0.7:
+        if (obj.dht_h / 4095) >= 0.6:
             sum_ += condition_match
         else:
             sum_ = 0
-        y_data_copy[i] = sum_
+        y_data_copy.append(sum_)
 
     return plot(
         [Bar(x=[i.board_time for i in x_data],
