@@ -34,7 +34,7 @@ def create_report_from_params(params: dict) -> Report:
     m_params = dict(params)
 
     return Report.objects.create(
-        station_id=int(m_params.pop("chip_id", None)[0]),
+        station_identificator=int(m_params.pop("chip_id", None)[0]),
 
         board_time=datetime.datetime.now(tz=tz),
 
