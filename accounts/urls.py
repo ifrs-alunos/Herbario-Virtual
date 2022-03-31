@@ -65,5 +65,11 @@ urlpatterns = [
     path('apagar-solicitacao-foto-doenca/<int:pk>', views.DiseasePhotoSolicitationDeleteView.as_view(), name="delete_diesase_photo_solicitation"),
     path('apagar-solicitacao-foto-planta/<int:pk>', views.PlantPhotoSolicitationDeleteView.as_view(), name="delete_plant_photo_solicitation"),
     path('checar-senha/', views.term_check_password, name="term_check_password"),
+    path('editar-publicacoes/', views.PublicationListView.as_view(), name="publication_update"),
+    path('editar-de-publicacao/<int:pk>', views.publication_update, name="publication_update"),
+    path('solicitacao-de-publi/', views.PublicationCreateView.as_view(), name="publication_add"),
+    path('apagar-publicacao/<int:pk>/', views.PublicationDeleteView.as_view(), name="delete_publication"),
+    path('solicitacao-foto-publi/', views.publication_photo_solicitation, name="publication_photo_add"),
+
 
 ]

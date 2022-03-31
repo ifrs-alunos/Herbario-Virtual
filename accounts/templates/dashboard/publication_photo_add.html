@@ -1,0 +1,33 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags static %}
+
+{% block item %}
+
+<div class="alert alert-warning" role="alert">
+    <p>- Selecione uma publicação e adicione uma foto por vez;</p>
+</div>
+
+<div class="alert alert-danger" role="alert">
+    <p>- São permitidas apenas imagens com dimensão Full HD: 1920x1080px;</p>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-4">
+        {{publication_photo_form.publication|as_crispy_field}}
+    </div>
+
+    <div>
+        {{publication_photo_form.image|as_crispy_field}}
+    </div>
+{#<br/>#}
+{##}
+{#    <div>#}
+{#        {{disease_photo_form.source_disease_photo|as_crispy_field}}#}
+{#    </div>#}
+
+    <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+    <button type="submit" class="btn btn-light">Enviar</button>
+</form>
+
+{% endblock %}

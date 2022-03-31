@@ -1,0 +1,48 @@
+{% extends "core/base.html" %}
+{% load pagination %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+    <div class ="container">
+    <h1>Publicações sobre fitossanidade: </h1>
+    {% if publications %}
+        {% for publication in publications %}
+            <div class="row mt-5 mb-4">
+
+                <div class=" image col-lg-4 d-flex justify-content-center">
+                    {% if publication.photos.first.small_image.url  %}
+                        <img class="rounded " width="300px;" src="{{ publication.photos.first.small_image.url }}"
+                             alt="Publication">
+                    {% else %}
+                        <a ><img  class="card-img-top text-center" src=
+                                "{% static 'disease/images/aviso_publicacao.png' %}" alt="Imagem de Aviso Sobre Falta de
+                                Imagens"></a>
+                    {% endif %}
+
+                </div>
+                <div class="publication-info col-lg">
+                    <h2>{{ publication.title }}</h2>
+                    <p class="text-secondary">{{publication.posted_at| naturaltime }}</p>
+                    <p class="text-justify text-break">{{ publication.get_content_preview|truncatechars:300 }}</p>
+                    <h6><a  href="{% url 'core:publication-detail' publication.slug %}">Ler mais →</a></h6>
+
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h6 id="message-error">Não foi possível encontrar publicações</h6>
+
+    {% endif %}
+    <div class="row">
+        {% pagination %}
+    </div>
+    
+
+{#    <div class="row">#}
+{#        {% pagination %}#}
+{#    </div>#}
+    </div>
+
+{% endblock %}
