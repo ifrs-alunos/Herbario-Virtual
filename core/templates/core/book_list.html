@@ -1,0 +1,80 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+    <div class ="container">
+        <div class="row mt-lg-4 mt-2">
+            <div class="col">
+                <h5>Material:</h5>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-lg-3 ">
+                <!-- Filtro por conteudos dos livros -->
+                <ul class="list-group d-none d-lg-block">
+                    {# Verifica se o dicionário de conteudos está vazio. Se sim, elemento tem classe active, se não, não a tem #}
+                    {% if selected_content == None %}
+                        <li class="list-group-item active"><a href="{% url 'core:content' %}">Todos</a></li>
+                    {% else %}
+                        <li class="list-group-item"><a href="{% url 'core:content' %}">Todos</a></li>
+                    {% endif %}
+
+                    {# Para cada conteudo na lista de conteudos #}
+                    {% for content in contents %}
+                        {# Verifica se o dicionário dos conteudos na chave 'content' corresponde ao conteudo da lista. Se sim, elemento tem classe active, se não, não a tem #}
+                        {% if selected_content == content.slug %}
+                            <li class="list-group-item active">
+                                <a href="{% url 'core:contents' content.slug %}">
+                                    {{content}}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="list-group-item">
+                                <a href="{% url 'core:contents' content.slug %}">
+                                    {{content}}
+                                </a>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                <label>
+                        <select class="custom-select d-lg-none mb-3" onchange="location=this.value;">
+                            {# Verifica se o dicionário de conteudos está vazio. Se sim, elemento tem classe active, se não, não a tem #}
+
+                            {% if selected_content == None %}
+                                <option selected value="{% url 'core:content' %}">Todos</option>
+                            {% else %}
+                                <option value="{% url 'core:content' %}">Todos</option>
+                            {% endif %}
+
+                            {# Para cada família na lista de famílias #}
+                            {% for content in contents %}
+
+                                {# Verifica se o dicionário das famílias na chave 'cultura' corresponde a cultura da lista. Se sim, elemento tem classe active, se não, não a tem #}
+                                {% if selected_content == content.slug %}
+                                    <option selected value="{% url 'core:contents' content.slug %}">{{content}}</option>
+                                {% else %}
+                                    <option value="{% url 'core:contents' content.slug %}">{{content}}</option>#}
+                                {% endif %}
+
+                            {% endfor %}
+                        </select>
+                </label>
+            </div>
+            <div class="col-lg-9">
+                {% if books %}
+                        {% for book in books %}
+                            <div class="card mb-4">
+                                <h6 class="card-header">{{ book.content.name }}</h6>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ book.name }}</h5>
+                                    <a href="{{ book.link }}" class="stretched-link">{{ book.link }}</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

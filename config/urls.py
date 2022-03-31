@@ -28,6 +28,8 @@ urlpatterns = [
     path('', include('core.urls', namespace='core')),
     path('fitopatologico/', include('disease.urls', namespace='disease')),
     path('alertas/', include('alerts.urls', namespace='alerts')),
+    path('afericoes/', include('assessment.urls', namespace='assessment')),
+    path('tinymce/', include('tinymce.urls')),
 ]
 
 #Para Imagem ser servida pelo Django

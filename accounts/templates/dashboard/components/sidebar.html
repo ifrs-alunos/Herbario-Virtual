@@ -161,6 +161,32 @@
         </div>
     {% endif %}
 
+    <!-- Seção relacionada as publicações -->
+    {% if perms.publication.add_publication %}
+        <div class="accordion-item">
+
+            <h2 class="accordion-header" id="flush-headingSeven">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseSeven" aria-expanded="false" aria-controls="flush-headingSeven">
+                    Publicações
+                </button>
+            </h2>
+
+            <!-- Seção no menu para publicações -->
+            <div id="flush-collapseSeven" class="accordion-collapse collapse" aria-labelledby="flush-headingSeven"
+                 data-bs-parent="#accordionFlushExample">
+                <div class="accordion-body">
+                    <ul class="list-group">
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'publication_update' %}selected-link{% endif %}"
+                                    href="{% url 'accounts:publication_update' %}">Listar</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     {% if perms.auth.view_user %}
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-headingSix">

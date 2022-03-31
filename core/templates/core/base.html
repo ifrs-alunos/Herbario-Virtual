@@ -66,6 +66,8 @@
             <a href="{% url 'herbarium:index' %}">Herbário de plantas daninhas</a>
             <a href="{% url 'disease:disease' %}">Herbário fitopatológico</a>
             <a href="{% url 'core:subjects' %}">Disciplinas</a>
+            <a href="{% url 'core:content' %}">Materiais</a>
+            <a href="{% url 'core:publications' %}">Publicações</a>
             <a href="{% url 'core:about' %}">Colaboradores</a>
 
             <br/>
@@ -116,10 +118,10 @@
                     <a class="nav-link" href="{% url 'core:subjects' %}">Disciplinas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'core:contents' %}">Materiais</a>
+                    <a class="nav-link" href="{% url 'core:content' %}">Materiais</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" href="">Publicações</a>
+                    <a class="nav-link" href="{% url 'core:publications' %}">Publicações</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'core:about' %}">Colaboradores</a>

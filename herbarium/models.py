@@ -102,7 +102,10 @@ def plant_directory_path(instance, filename):
 def small_plant_directory_path(instance, filename):
     '''Esta função retorna o diretório onde as imagens pequenas de uma planta devem ser armazenadas'''
 
-    plant_name = slugify(instance.plant.name)
+    plant_name = slugify({instance.plant.name})
+
+    # Arruma um pequeno bug de redundancia de path
+    filename = filename.split('/')[-1]
 
     return 'plantas/imagens-pequenas/{}/{}'.format(plant_name, filename)
 
