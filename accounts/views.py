@@ -18,8 +18,8 @@ from django.contrib.auth.views import PasswordChangeView
 from django.contrib import messages
 from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
-from disease.models import Disease, Culture, Condition, MathModels
-from disease.forms import DiseaseForm, MathModelsForm, DiseasePhotoForm
+from disease.models import Disease, Culture, Condition
+from disease.forms import DiseaseForm, DiseasePhotoForm
 from .forms.term_form import TermForm
 from .models import Contribuition
 from core.models import Publication
@@ -889,20 +889,6 @@ def math_model_solicitation(request):
 	}
 
 	return render(request, 'dashboard/math_model_add.html', context)
-
-
-class MathModelsListView(ListView):
-	model = MathModels
-	context_object_name = 'math_model'
-	template_name = 'dashboard/math_model_list.html'
-	paginate_by = 12
-
-	def get_context_data(self, **kwargs):
-		data = super().get_context_data(**kwargs)
-
-		data['link'] = 'math_models'  # Cria novo contexto
-
-		return data
 
 
 @login_required
