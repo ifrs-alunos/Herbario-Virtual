@@ -5,7 +5,7 @@ from tinymce.models import HTMLField
 from bs4 import BeautifulSoup
 
 # Create your models here.
-from disease.models import make_small_image
+from disease.models.photo_disease import make_small_image
 
 
 def highlight_directory_path(instance, filename):
