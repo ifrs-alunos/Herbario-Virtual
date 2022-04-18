@@ -16,3 +16,16 @@ SENSOR_TYPE_CHOICES = [
     ('soil', 'Umidade do solo'),
     ('uv', 'Luz UV'),
 ]
+
+RELATIONAL_TYPE_CHOICES = [
+    ('>', 'Maior que'),
+    ('<', 'Menor que'),
+    ('>=', 'Maior ou igual que'),
+    ('<=', 'Menor ou igual que'),
+    ('==', 'Igual que'),
+    ('!=', 'Diferente que')
+]
+
+METRIC_TYPE_CHOICES = [
+    ('', ''),
+]
