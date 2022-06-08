@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 
 from alerts.forms import FormulaForm
-from alerts.models import Formula, Report
+from alerts.models import Formula, ReportOld
 
 
 def create_formula(request):
@@ -27,7 +27,7 @@ def create_formula(request):
         form = FormulaForm()
 
     context = {'form': form,
-               'report_fields': Report.objects.last().get_fields(
+               'report_fields': ReportOld.objects.last().get_fields(
                    ["id", "station", "station_identificator", "board_time"])}
 
     return render(request, 'create_formula.html', context)

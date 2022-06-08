@@ -137,7 +137,7 @@ class Publication(models.Model):
 
 	content = HTMLField('Conteúdo', )
 
-	slug = models.SlugField(verbose_name="Slug", unique=True, null=True, blank=True)
+	slug = models.SlugField(verbose_name="Slug", unique=True, null=True, blank=True, max_length=255)
 
 	posted_at = models.DateTimeField('Postado em', auto_now_add=True, null=False)
 

@@ -27,5 +27,9 @@ RELATIONAL_TYPE_CHOICES = [
 ]
 
 METRIC_TYPE_CHOICES = [
-    ('', ''),
+    ('float', 'mm'),
+    ('float', 'ºC'),
+    ('bool', 'Booleano'),
+    ('bool', 'Sensor Humano'),
+    ('float','%')
 ]

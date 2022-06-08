@@ -37,12 +37,6 @@ class HerbariumIndex(ListView):
         plants = Plant.objects.all()
         plants = plants.filter(published=True)
 
-        # Executa se alguma família tiver sido selecionada
-        if self.kwargs:
-            # Filtra todas as plantas por uma família passada na chave 'family' do dicionário da requisição
-            # plants = plants.filter(family__name=self.kwargs['family'])
-            # Filtra todas as plantas por uma família com o slug passada na chave 'family' do dicionário da requisição
-            plants = [x for x in plants if x.family.get_slug() == self.kwargs['family']]
         
         # Executa se algum texto tiver sido pesquisado
         if self.request.GET:
@@ -57,7 +51,13 @@ class HerbariumIndex(ListView):
 
                 # Filtra plantas pelo filtro de texto
                 plants = plants.filter(filter)
-        
+                # Executa se alguma família tiver sido selecionada
+
+        if self.kwargs:
+            # Filtra todas as plantas por uma família passada na chave 'family' do dicionário da requisição
+            # plants = plants.filter(family__name=self.kwargs['family'])
+            # Filtra todas as plantas por uma família com o slug passada na chave 'family' do dicionário da requisição
+            plants = [x for x in plants if x.family.get_slug() == self.kwargs['family']]
         # Retorna a variável que armazena todas as plantas requisitadas pelo usuário (com ou sem filtro)
         return plants
 

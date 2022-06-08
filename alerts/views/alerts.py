@@ -1,7 +1,7 @@
 from django.views.generic import ListView
 
 from alerts.views.utils import get_average_object_per_hour, to_datetime
-from alerts.models import Report, Formula
+from alerts.models import ReportOld, Formula
 from alerts.forms import StationAndIntervalForm
 
 import datetime
@@ -28,7 +28,7 @@ def generate_bar_graph(x_data, y_data):
 
 
 class AlertsView(ListView):
-    model = Report
+    model = ReportOld
     context_object_name = "alerts"
     template_name = 'alerts.html'
 
@@ -47,11 +47,11 @@ class AlertsView(ListView):
         if params:
             datetime_since = to_datetime(params.get("date_since"), params.get("time_since"))
             datetime_until = to_datetime(params.get("date_until"), params.get("time_until"), until=True)
-            average_object_per_hour = get_average_object_per_hour(Report, datetime_since, datetime_until)
+            average_object_per_hour = get_average_object_per_hour(ReportOld, datetime_since, datetime_until)
         # se não, mostra os relatórios desde 12 horas atrás
         else:
             average_object_per_hour = get_average_object_per_hour(
-                Report, datetime.datetime.now() - datetime.timedelta(days=120), datetime.datetime.now())
+                ReportOld, datetime.datetime.now() - datetime.timedelta(days=120), datetime.datetime.now())
 
         condition_object = Formula.objects.first()
         return [{"obj": obj, "condition_match": obj.match_condition(condition_object)}
