@@ -4,7 +4,6 @@ import django
 from django.db.models import QuerySet, Q
 from django.utils import timezone
 from typing import List
-import pandas as pd
 from django.utils.timezone import make_aware
 
 tz = timezone.get_current_timezone()
