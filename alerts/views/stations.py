@@ -8,7 +8,7 @@ from plotly.offline import plot
 from plotly.graph_objs import Scatter
 
 from alerts.forms import StationAndIntervalForm
-from alerts.models import Report
+from alerts.models import ReportOld
 from alerts.views.utils import to_datetime
 
 colors = ("maroon", "orangered", "limegreen", "steelblue", "mediumblue", "indigo", "purple", "crimson", "darkred") * 2
@@ -51,7 +51,7 @@ class StationDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = StationAndIntervalForm
 
-        report_objects = Report.objects.filter(station__id=self.get_object().id)
+        report_objects = ReportOld.objects.filter(station__id=self.get_object().id)
 
         params = self.request.GET
         # se os parametros estiverem definidos, filtra a partir deles

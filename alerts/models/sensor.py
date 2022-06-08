@@ -1,13 +1,14 @@
 from django.db import models
+from django.db.models import Avg
+from django.utils import timezone
 
-from . import Station
+from . import TypeSensor, Station
 from .base import BaseModel
-from .choices import SENSOR_TYPE_CHOICES, METRIC_TYPE_CHOICES
 
 
 class Sensor(BaseModel):
-	type = models.CharField(max_length=10, choices=SENSOR_TYPE_CHOICES, )
-	metric = models.CharField(max_length=10, choices=METRIC_TYPE_CHOICES, )
+	name = models.CharField('Nome', max_length=100, )
+	type = models.ForeignKey(TypeSensor, verbose_name="Tipo do sensor", on_delete=models.PROTECT)
 	station = models.ForeignKey(Station, verbose_name="Estação", on_delete=models.PROTECT, null=True, blank=True)
 
 	def __str__(self):
