@@ -7,7 +7,7 @@ class Constant(models.Model):
     """Esta classe define os dados de uma constante da doença."""
     name = models.CharField("Nome", max_length=100)
     value = models.FloatField(verbose_name="Valor")
-    disease = models.ForeignKey(Disease, on_delete=models.CASCADE)
+    disease = models.ForeignKey(Disease, on_delete=models.CASCADE, null=True)
 
 
     def __str__(self):
