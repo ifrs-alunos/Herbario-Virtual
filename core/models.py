@@ -189,10 +189,11 @@ class PhotoPublication(models.Model):
 									verbose_name="Publicação")
 
 	# Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
-	image = models.ImageField(upload_to=publication_directory_path, verbose_name="Imagens")
+	image = models.ImageField(upload_to=publication_directory_path, verbose_name="Imagens", max_length=500)
 
 	# Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores
-	small_image = models.ImageField(upload_to=small_publication_directory_path, editable=False, null=True)
+	small_image = models.ImageField(upload_to=small_publication_directory_path, editable=False, null=True,
+									max_length=500)
 
 	def __str__(self):
 		return self.image.name

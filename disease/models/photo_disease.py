@@ -51,10 +51,10 @@ class PhotoDisease(models.Model):
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE, related_name='photos', verbose_name="Doença")
 
     # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
-    image = models.ImageField(upload_to=disease_directory_path, verbose_name="Imagens")
+    image = models.ImageField(upload_to=disease_directory_path, verbose_name="Imagens",max_length=500)
 
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores
-    small_image = models.ImageField(upload_to=small_disease_directory_path, editable=False, null=True)
+    small_image = models.ImageField(upload_to=small_disease_directory_path, editable=False, null=True, max_length=500)
 
     # source_disease_photo = models.CharField('Referência da foto', blank=True, help_text='Insira a referência
     # utilizada', default='Desconhecido', max_length=100)
@@ -68,7 +68,10 @@ class PhotoDisease(models.Model):
     def get_contributor(self):
 
         query = self.diseasephotosolicitation_set.all()
-        contributor_name = self.diseasephotosolicitation_set.all()[0].user.profile.name if query else False
+        try:
+            contributor_name = self.diseasephotosolicitation_set.all()[0].user.profile.name if query else False
+        except:
+            contributor_name = False
         contributor = str(f'Fonte: {contributor_name}' if contributor_name else '')
 
         return contributor
