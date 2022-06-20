@@ -1,5 +1,6 @@
+from django.db import connection
 from django.views.generic import DetailView
-from alerts.models import MathModel, Report
+from alerts.models import MathModel, Report, Sensor
 from alerts.views.utils import to_datetime
 from django.utils import timezone
 from datetime import datetime
@@ -10,6 +11,49 @@ from plotly.offline import plot
 from plotly.graph_objs import Scatter
 
 colors = ("maroon", "orangered", "limegreen", "steelblue", "mediumblue", "indigo", "purple", "crimson", "darkred") * 2
+
+def verify_require(requirements, value):
+    r = [eval(re.replace('x', str(value))) for re in requirements]
+    if False in r:
+        return False
+    else:
+        return True
+
+
+def get_reports(start, end, time_interval, sensors_type, requirements, mathmodel):
+    sensors = Sensor.objects.all().filter(id__in=sensors_type)
+    data = []
+    data_x = []
+    data_y = []
+
+    for sensor in sensors:
+        re = requirements.filter(sensor=sensor)
+        requires = [x.value_in_relation() for x in re]
+        reports = sensor.report_set.filter(time__range=[start, end]).values('time').annotate(avg_value=Avg(
+            'value'))
+        repo = [x['avg_value'] if verify_require(requires, x['avg_value']) else 0 for x in reports]
+        data.append(repo)
+        data_y = [localtime(x['time']) for x in reports]
+
+    exp = mathmodel.source_code
+    for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
+        exp = exp.replace(key, str(value))
+
+    value = 0
+    for y, x in enumerate(data[0]):
+        if x != 0 and data[1][y] != 0:
+            exp_with_mean = exp
+            exp_with_mean = exp_with_mean.replace('graus', str(x))
+            eval_exp = eval(exp_with_mean)
+            value += eval_exp
+            data_x.append(value)
+        else:
+            value = 0
+            data_x.append(value)
+
+    return [data_x, data_y]
+
+
 
 
 # Função que pega todos os reports do sensor no range por time_interval
@@ -100,25 +144,26 @@ class MathModelView(DetailView):
 			start = make_aware(start,timezone=timezone.utc)
 			end = datetime.fromisoformat(params.get("date_until"))
 			end = make_aware(end,timezone=timezone.utc)
-
-			get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
-
-			exp = mathmodel.source_code
-			for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-				exp = exp.replace(key, str(value))
-
-			data_in_graph = set_reports_data_to_graph(get_rp, exp)
+			# get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
+			get_rp = get_reports(start, end, 5, sensors_type, requirements, mathmodel)
+			#
+			# exp = mathmodel.source_code
+			# for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
+			# 	exp = exp.replace(key, str(value))
+			#
+			# data_in_graph = set_reports_data_to_graph(get_rp, exp)
 		# se não, mostra os relatórios desde 12 horas atrás
 		else:
 			start = timezone.datetime(2022, 2, 1, 3, 0, 0, tzinfo=timezone.utc)
 			end = timezone.datetime(2022, 3, 1, 2, 59, 59, tzinfo=timezone.utc)
-			get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
-			exp = mathmodel.source_code
-			for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-				exp = exp.replace(key, str(value))
+			get_rp = get_reports(start, end, 5, sensors_type, requirements, mathmodel)
+			# get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
+			# exp = mathmodel.source_code
+			# for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
+			# 	exp = exp.replace(key, str(value))
 
-			data_in_graph = set_reports_data_to_graph(get_rp, exp)
-		plot_element = plot([Scatter(x=data_in_graph[0], y=data_in_graph[1],
+			# data_in_graph = set_reports_data_to_graph(get_rp, exp)
+		plot_element = plot([Scatter(x=get_rp[1], y=get_rp[0],
 									 mode="lines", opacity=0.8,
 									 line={"color": colors[0]})],
 							output_type='div'
