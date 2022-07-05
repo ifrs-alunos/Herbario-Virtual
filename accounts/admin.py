@@ -1,6 +1,6 @@
 from accounts.models.solicitation import Solicitation
 from django.contrib import admin
-from .models import Solicitation, Profile, PhotoSolicitation, PlantSolicitation, DiseaseSolicitation, Characteristic,\
+from .models import Solicitation, Profile, PhotoSolicitation, PlantSolicitation, DiseaseSolicitation,\
 	CharSolicitationModel, DiseasePhotoSolicitation
 
 # Register your models here.
