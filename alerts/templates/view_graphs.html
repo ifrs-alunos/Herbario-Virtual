@@ -1,0 +1,24 @@
+{% extends "core/base.html" %}
+{% load crispy_forms_filters %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form action="">
+                {{ form_range|crispy }}
+                {{ form_choose|crispy }}
+                <div class="pt-4">
+                    <input class="btn btn-primary" type="submit" value="Adicionar">
+                </div>
+            </form>
+            </div>
+        </div>
+        <div class="row">
+            {% autoescape off %}
+                        {{ plot }}
+                    {% endautoescape %}
+        </div>
+    </div>
+{% endblock %}

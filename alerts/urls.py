@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import save_report, board_notify, formula
+from .views import save_report, board_notify, formula, view_graphs
 from .views import stations
 from .views import alerts, mathmodel
 
@@ -14,4 +14,5 @@ urlpatterns = [
     path('', alerts.AlertsView.as_view(), name="alerts"),
     path('formula/criar/', formula.create_formula, name="create_formula"),
     path('modelo/<int:pk>', mathmodel.MathModelView.as_view(), name="mathmodel"),
+    path('visualizar/graficos',view_graphs,name="view_graphs"),
 ]

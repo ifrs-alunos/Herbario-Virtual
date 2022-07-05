@@ -20,10 +20,11 @@ from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
 from disease.models import Disease, Culture, Condition
 from disease.forms import DiseaseForm, DiseasePhotoForm
+from .forms.sensor_human_form import SensorHumanForm
 from .forms.term_form import TermForm
 from .models import Contribuition
 from core.models import Publication
-
+from alerts.models import MathModel, Sensor
 from .forms import UserForm, SolicitationStatusUpdateForm
 
 
@@ -866,31 +867,6 @@ class CultureListView(ListView):
 		return data
 
 
-def math_model_solicitation(request):
-	"""Essa função cadastra um novo modelo matemático"""
-
-	# Se o usuário mandar dados, ou seja, se a requisição for POST
-	if request.method == "POST":
-		math_model_form = MathModelsForm(request.POST)
-
-		if math_model_form.is_valid():
-			math_model_form = math_model_form.save()  # Cria objeto mas nao salva no banco de dados
-
-			return redirect('accounts:math_model_solicitation')
-
-	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
-	else:
-		# Cria um formulário em branco
-		math_model_form = MathModelsForm()
-
-	context = {
-		'math_model_form': math_model_form,
-		'link': 'math_model_solicitation',
-	}
-
-	return render(request, 'dashboard/math_model_add.html', context)
-
-
 @login_required
 def accept_plant_solicitation(request, pk):
 	if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
@@ -1046,3 +1022,71 @@ def publication_photo_solicitation(request):
 	}
 
 	return render(request, 'dashboard/publication_photo_add.html', context)
+
+
+class MathModelListView(ListView):
+	model = MathModel
+	context_object_name = 'mathmodels'
+	template_name = 'dashboard/mathmodel_update.html'
+	paginate_by = 12
+
+	def get_context_data(self, **kwargs):
+		data = super().get_context_data(**kwargs)
+
+		data['link'] = 'mathmodel-update'  # Cria novo contexto
+
+		return data
+
+
+class SensorListView(ListView):
+	model = Sensor
+	context_object_name = 'sensors'
+	template_name = 'dashboard/sensor_update.html'
+	paginate_by = 12
+
+	def get_context_data(self, **kwargs):
+		data = super().get_context_data(**kwargs)
+
+		data['link'] = 'sensor-update'  # Cria novo contexto
+
+		return data
+
+
+class SensorHumanListView(ListView):
+	model = Sensor
+	context_object_name = 'sensors'
+	template_name = 'dashboard/sensor_human_update.html'
+	paginate_by = 12
+
+	def get_context_data(self, **kwargs):
+		data = super().get_context_data(**kwargs)
+
+		data['link'] = 'sensor-human-update'  # Cria novo contexto
+
+		return data
+
+	def get_queryset(self):
+		qs = Sensor.objects.all().filter(type__metric='bool')
+		return qs
+
+
+def create_sensor_human(request, pk):
+	"""Função que cria um novo sensor humano"""
+
+	if request.method == "POST":
+		form = SensorHumanForm(request.POST)
+
+		if form.is_valid() :
+			form.save()
+
+			return redirect('accounts:sensor_human_update')
+
+	else:
+		form = SensorHumanForm()
+
+	context = {
+		'form': form,
+	}
+
+	# Renderiza a página de criar turma
+	return render(request, 'dashboard/sensor_human_add.html', context)

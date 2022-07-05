@@ -1,0 +1,119 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static pagination %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/herbarium_update.css' %}"/>
+{% endblock %}
+
+{% block item %}
+
+    <div class="d-flex justify-content-between mb-4">
+        <h5>Lista de sensores humanos</h5>
+
+
+{#        <a id="{% if link == 'publication_update' %}selected-link{% endif %}"#}
+{#           href="{% url 'accounts:publication_add' %}">#}
+{#            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"#}
+{#                    data-bs-placement="bottom" title="Adicionar publicação">#}
+{#                Adicionar uma publicação <i class="fa fa-plus" aria-hidden="true"></i>#}
+{#            </button>#}
+{#        </a>#}
+{##}
+{#        <a id="{% if link == 'publication-photo-solicitation' %}selected-link{% endif %}"#}
+{#           href="{% url 'accounts:publication_photo_add'  %}">#}
+{#            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"#}
+{#                    data-bs-placement="bottom" title="Adicionar foto">#}
+{#                Adicionar uma foto de uma publicação <i class="fa fa-plus" aria-hidden="true"></i>#}
+{#            </button>#}
+{#        </a>#}
+
+    </div>
+
+    {% if perms.core.change_sensor %}
+
+        {% if sensors %}
+
+            <table class="table table-striped mb-4">
+                <thead>
+                <tr>
+                    <th scope="col">Nome</th>
+                     <th scope="col">Tipo</th>
+                    <th scope="col">Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for sensor in sensors %} {# Loop na lista de publicações #}
+
+                        <!-- Modal -->
+{#                        <div class="modal fade" id="exampleModal{{ publication.id }}" tabindex="-1" role="dialog"#}
+{#                             aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+{#                            <div class="modal-dialog modal-dialog-centered" role="document">#}
+{#                                <div class="modal-content">#}
+{#                                    <div class="modal-header">#}
+{#                                        <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>#}
+{#                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">#}
+{#                                            <span aria-hidden="true">&times;</span>#}
+{#                                        </button>#}
+{#                                    </div>#}
+{#                                    <div class="modal-body">#}
+{#                                        Deseja excluir '{{ publication.title }}'?#}
+{#                                    </div>#}
+{#                                    <div class="modal-footer">#}
+{#                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">#}
+{#                                            Cancelar#}
+{#                                        </button>#}
+{##}
+{#                                        <!-- Formulário para deletar objeto (doença) -->#}
+{#                                        <form method="post"#}
+{#                                              action="{% url 'accounts:delete_publication' publication.id %}"#}
+{#                                        >{% csrf_token %}#}
+{#                                            <input type="submit" value="Confirmar exclusão" class="btn btn-danger">#}
+{#                                        </form>#}
+{##}
+{#                                    </div>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+
+                        <tr id="{{ sensor.name }}">
+
+                            <td scope="row">{{ sensor.name }}</td>
+                            <td >{{ sensor.type }}/{{ sensor.type.metric }}</td>
+                            <td>
+                                <a href="{% url 'accounts:sensor_human_add' sensor.id %}" id="sensor_human_add"
+                                   class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                   title="Adicionar Report">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+
+                                </a>
+{#                                <a class="btn btn-danger" data-toggle="modal" id="plant_delete"#}
+{#                                   data-target="#exampleModal{{ publication.id }}" title="Excluir Publicação"#}
+{#                                   data-bs-toggle="tooltip" data-bs-placement="bottom">#}
+{#                                    <i class="fa fa-times" aria-hidden="true"></i>#}
+{#                                </a>#}
+
+                            </td>
+
+                        </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+
+            <div>
+                {% pagination %}
+            </div>
+
+        {% else %}
+            <div class="alert alert-warning" role="alert">
+                Nenhum sensor para editar no momento.
+            </div>
+        {% endif %}
+
+    {% endif %}
+
+{% endblock %}
+
+<!-- Js Externo -->
+<script src="{% static 'accounts/dashboard/js/modal.js' %}"></script>
