@@ -15,7 +15,7 @@ class DiseasePhotoSolicitation(models.Model):
                              related_name="disease_photo_solicitations",null=True)
     date = models.DateField(verbose_name="Data de envio", auto_now_add=True)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.SENT)
-    new_photo = models.ForeignKey(PhotoDisease, on_delete=models.CASCADE, verbose_name='Nova Foto')
+    new_photo = models.ForeignKey(PhotoDisease, on_delete=models.CASCADE, verbose_name='Nova Foto',null=True)
 
     def __str__(self):
         return 'Solicitação: {}'.format(self.user)
