@@ -5,4 +5,4 @@ from .condition_solicitation import ConditionSolicitation
 from .disease import Disease
 from .photo_disease import PhotoDisease
 from .condition import Condition
-from .constant import Constant
+
