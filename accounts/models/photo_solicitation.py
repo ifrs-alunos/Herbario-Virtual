@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from herbarium.models import Photo
 
+
 class PhotoSolicitation(models.Model):
     """Essa classe define uma solicitação de uma nova foto de planta por um contribuidor"""
     

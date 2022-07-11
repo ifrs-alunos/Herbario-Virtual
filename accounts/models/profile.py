@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from .solicitation import Solicitation
 
+
 class Profile(models.Model):
     """Essa classe define um perfil de um usuário"""
     
@@ -12,6 +13,9 @@ class Profile(models.Model):
     phone = models.CharField(max_length=11, verbose_name="Telefone fixo ou celular", help_text="Informe o DDD e, em seguida, seu número.")
     cpf = models.CharField(max_length=11, verbose_name="CPF", help_text="Informe o CPF somente com números.")
     rg = models.CharField(max_length=10, verbose_name="RG")
+
+    def __str__(self):
+        return self.name
 
     def can_send_solicitation(self):
         # Selecionando solicitações de um usuário

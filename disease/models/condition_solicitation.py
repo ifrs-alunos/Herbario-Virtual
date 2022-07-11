@@ -2,7 +2,7 @@ from django.db import models
 
 
 class ConditionSolicitation(models.Model):
-    '''Essa classe realiza a solicitação para cadastramento de nova condições'''
+    """Essa classe realiza a solicitação para cadastramento de nova condições"""
 
     CONDITIONS_KIND_CHOICES = (
         ("int", "Número inteiro"),

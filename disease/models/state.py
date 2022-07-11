@@ -3,7 +3,7 @@ from .region import Region
 
 
 class State(models.Model):
-    '''Esta classe define um estado (unidade federativa) que pertence à uma região'''
+    """Esta classe define um estado (unidade federativa) que pertence à uma região"""
 
     name = models.CharField('Nome', blank=False, max_length=20)
     initials = models.CharField('Sigla', blank=False, max_length=2, null=True)

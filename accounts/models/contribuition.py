@@ -1,6 +1,7 @@
 from django.db import models
 from . profile import Profile
 
+
 class Contribuition(models.Model):
     """Essa classe especifica os dados referentes a uma contribuição"""
 

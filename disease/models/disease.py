@@ -5,7 +5,7 @@ from disease.models import Culture, Region
 
 
 class Disease(models.Model):
-    '''Esta classe define os dados de doença de uma planta. Estes serão catalogados e adicionados ao herbário'''
+    """Esta classe define os dados de doença de uma planta. Estes serão catalogados e adicionados ao herbário"""
 
     name_disease = models.CharField('Nome da doença', blank=False, max_length=100, help_text='Insira o nome da doença')
     scientific_name_disease = models.CharField('Nome científico', blank=False, max_length=200,
@@ -60,4 +60,3 @@ class Disease(models.Model):
         verbose_name_plural = 'Doenças'
         ordering = ['name_disease']
         permissions = [('contribute_with_disease', 'Pode contribuir com doenças')]
-
