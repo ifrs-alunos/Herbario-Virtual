@@ -1,10 +1,9 @@
 from django.db import models
-
 from disease.models.disease import Disease
 
 
 class Condition(models.Model):
-    '''Esta classe define os dados de uma condição de uma doença.'''
+    """Esta classe define os dados de uma condição de uma doença."""
 
     characteristic = models.ForeignKey("accounts.CharSolicitationModel", null=True, on_delete=models.CASCADE)
     float_value = models.FloatField(blank=True, null=True)

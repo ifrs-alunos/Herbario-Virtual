@@ -51,4 +51,5 @@ class CharSolicitationModel(models.Model):
         elif self.char_kind == 'str':
             return '<input class="form-control" name="charval" type="text">'
         else:
-            return '<select name="charval" class="select form-control"><option value="1">Verdadeiro</option><option value="0">Falso</option></select>'
+            return '<select name="charval" class="select form-control"><option value="1">Verdadeiro</option>' \
+                   '<option value="0">Falso</option></select>'

@@ -3,13 +3,13 @@ from django.utils.text import slugify
 
 
 def culture_icon_directory_path(instance, filename):
-    '''Esta função retorna o diretório onde os icones de uma cultura deve ser armazenada'''
+    """Esta função retorna o diretório onde os icones de uma cultura deve ser armazenada"""
 
     return 'culturas/icones/{}/{}'.format(instance.slug, filename)
 
 
 class Culture(models.Model):
-    '''Esta classe define a cultura da lavoura'''
+    """Esta classe define a cultura da lavoura"""
 
     # Cria uma variável do tipo texto com máximo de 100 caracteres
     slug = models.SlugField(blank=True, null=True)

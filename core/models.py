@@ -3,8 +3,6 @@ from django.db import models
 from django.utils.text import slugify
 from tinymce.models import HTMLField
 from bs4 import BeautifulSoup
-
-# Create your models here.
 from disease.models.photo_disease import make_small_image
 
 
@@ -14,30 +12,14 @@ def highlight_directory_path(instance, filename):
 
 	return 'destaques/noticias/{}/{}'.format(folder_name, filename)
 
-
-'''
-def more_highlight_path(instance, filename):
-
-	# Transforma a string passada como parâmetro em um slug
-	folder_name = slugify(instance.title)
-
-	return 'destaques/noticias/{}/mais-imagens/{}'.format(folder_name, filename)
-'''
-
-
 class Highlight(models.Model):
-	# keyword = models.CharField('Palavra-chave', blank=False, max_length=10, null=True)
+	"""Essa classe define um destaque que será exibido na página inicial"""
 
 	title = models.CharField('Título', blank=False, max_length=50)
-
 	text = models.TextField('Texto', blank=False)
-
 	image = models.ImageField('Imagem', upload_to=highlight_directory_path)
-
 	slug = models.SlugField(verbose_name="Slug", unique=True, null=True, blank=True)
-
 	more_information = models.TextField(verbose_name='Mais Informações', null=True)
-
 	# more_photos = models.ImageField(verbose_name='Mais Imagens', upload_to=more_highlight_path)
 
 	def __str__(self):
@@ -56,6 +38,8 @@ class Highlight(models.Model):
 
 
 def carousel_image_directory_path(instance, filename):
+	"""Retorna o diretório onde são armazenadas as imagens do carossel da página inicial"""
+
 	image_order = slugify(instance.list_order)
 	image_title = slugify(instance.title)
 
@@ -63,12 +47,11 @@ def carousel_image_directory_path(instance, filename):
 
 
 class CarouselImage(models.Model):
+	"""Essa classe define os atributos de uma imagem que é exibida no carrossel da página inicial"""
+
 	title = models.CharField('Título', max_length=25, blank=False, null=True)
-
 	description = models.CharField('Descrição Rápida', max_length=60, blank=False, null=True)
-
 	image = models.ImageField('Imagem', upload_to=carousel_image_directory_path, blank=False)
-
 	list_order = models.IntegerField('Ordem no Carrossel', blank=False, null=True, unique=True)
 
 	def __str__(self):
@@ -81,6 +64,8 @@ class CarouselImage(models.Model):
 
 
 class Colaborators(models.Model):
+	"""Essa classe define os atributos de um colaborador do projeto"""
+
 	year = models.IntegerField('Ano de início do projeto', blank=True, default=0,
 							   help_text='Insira o ano de início do projeto')
 	name_project = models.CharField('Nome do projeto', blank=True, max_length=200, help_text='Insira o nome do projeto')
@@ -97,9 +82,9 @@ class Colaborators(models.Model):
 		ordering = ['year']
 
 
-# Modelos dos livros recomendados
-
 class Content(models.Model):
+	"""Essa classe define o conteúdo de um livro"""
+
 	name = models.CharField('Nome', max_length=400, )
 	slug = models.SlugField('Identificador', blank=True, null=True, max_length=255)
 
@@ -118,6 +103,8 @@ class Content(models.Model):
 
 
 class Book(models.Model):
+	"""Essa classe define os atributos de um livro"""
+
 	name = models.CharField('Nome', max_length=400, )
 	link = models.URLField('Link', max_length=400)
 	content = models.ForeignKey(Content, on_delete=models.CASCADE, verbose_name="Cultura")
@@ -162,7 +149,7 @@ class Publication(models.Model):
 
 
 def publication_directory_path(instance, filename):
-	'''Esta função retorna o diretório onde as imagens grandes de uma publicação devem ser armazenadas'''
+	"""Esta função retorna o diretório onde as imagens grandes de uma publicação devem ser armazenadas"""
 
 	publication_name = slugify({instance.publication.title})
 
@@ -170,7 +157,7 @@ def publication_directory_path(instance, filename):
 
 
 def small_publication_directory_path(instance, filename):
-	'''Esta função retorna o diretório onde as imagens pequenas de uma publicação devem ser armazenadas'''
+	"""Esta função retorna o diretório onde as imagens pequenas de uma publicação devem ser armazenadas"""
 
 	publication_name = slugify({instance.publication.title})
 

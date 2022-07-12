@@ -4,8 +4,9 @@ from io import BytesIO
 from django.core.files import File
 from django.utils.text import slugify
 
+
 class Region(models.Model):
-    '''Esta classe define uma região de um país'''
+    """Esta classe define uma região de um país"""
 
     name = models.CharField('Região', blank=True, max_length=20)
 
@@ -17,8 +18,9 @@ class Region(models.Model):
         verbose_name_plural = 'Regiões'
         ordering = ['name']
 
+
 class State(models.Model):
-    '''Esta classe define um estado (unidade federativa) que pertence à uma região'''
+    """Esta classe define um estado (unidade federativa) que pertence à uma região"""
 
     name = models.CharField('Nome', blank=False, max_length=20)
     initials = models.CharField('Sigla', blank=False, max_length=2, null=True)
@@ -33,8 +35,9 @@ class State(models.Model):
         verbose_name_plural = 'Estados'
         ordering = ['name']
 
+
 class Family(models.Model):
-    '''Esta classe define uma família de uma planta'''
+    """Esta classe define uma família de uma planta"""
 
     # Cria uma variável do tipo texto com máximo de 100 caracteres
     name = models.CharField('Nome', blank=False, max_length=100)
@@ -51,8 +54,9 @@ class Family(models.Model):
         verbose_name_plural = 'Famílias'
         ordering = ['name']
 
+
 class Plant(models.Model):
-    '''Esta classe define uma planta cujas informações serão utilizadas em um herbário virtual'''
+    """Esta classe define uma planta cujas informações serão utilizadas em um herbário virtual"""
 
     name = models.CharField('Nome', blank=False, max_length=100)
     scientific_name = models.CharField('Nome científico', blank=False, max_length=200)
@@ -77,14 +81,11 @@ class Plant(models.Model):
     def __str__(self):
         return self.name
 
-
     def save(self, *args, **kwargs):
         if self.slug == None:
             self.slug = slugify(self.name)
         
         super().save(*args, **kwargs)
-
-
 
     class Meta:
         verbose_name = 'Planta'
@@ -92,15 +93,17 @@ class Plant(models.Model):
         ordering = ['name']
         permissions = [('contribute_with_plants', 'Pode contribuir com plantas')]
 
+
 def plant_directory_path(instance, filename):
-    '''Esta função retorna o diretório onde as imagens grandes de uma planta devem ser armazenadas'''
+    """Esta função retorna o diretório onde as imagens grandes de uma planta devem ser armazenadas"""
 
     plant_name = slugify(instance.plant.name)
 
     return 'plantas/imagens-grandes/{}/{}'.format(plant_name, filename)
 
+
 def small_plant_directory_path(instance, filename):
-    '''Esta função retorna o diretório onde as imagens pequenas de uma planta devem ser armazenadas'''
+    """Esta função retorna o diretório onde as imagens pequenas de uma planta devem ser armazenadas"""
 
     plant_name = slugify({instance.plant.name})
 
@@ -109,9 +112,9 @@ def small_plant_directory_path(instance, filename):
 
     return 'plantas/imagens-pequenas/{}/{}'.format(plant_name, filename)
 
-def make_small_image(image, size=(854, 480)):
-    '''Esta função retorna uma imagem miniatura com um tamanho específico a partir de uma imagem maior'''
 
+def make_small_image(image, size=(854, 480)):
+    """Esta função retorna uma imagem miniatura com um tamanho específico a partir de uma imagem maior"""
     im = Image.open(image) # Abre a imagem com o Pillow
 
     im.convert('RGB')
@@ -126,8 +129,9 @@ def make_small_image(image, size=(854, 480)):
 
     return thumbnail
 
+
 class Photo(models.Model):
-    '''Esta classe define os atributos que compõem uma foto de uma planta, permitindo que ela tenha múltiplas imagens'''
+    """Esta classe define os atributos que compõem uma foto de uma planta, permitindo que ela tenha múltiplas imagens"""
 
     # Relaciona as fotos com a planta
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name= 'photos', verbose_name="Planta")
@@ -137,8 +141,6 @@ class Photo(models.Model):
 
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores 
     small_image = models.ImageField(upload_to=small_plant_directory_path, editable=False, null=True)
-
-    # source_plant_photo = models.CharField('Referência da foto', blank=True, help_text='Insira a referência utilizada', default='Desconhecido', max_length=100)
 
     published = models.BooleanField(verbose_name="Publicado", null=True)
 

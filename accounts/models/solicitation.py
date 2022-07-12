@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
+
 class Solicitation(models.Model):
     """Essa classe define uma solicitação para um usuário comum se tornar contribuidor do sistema"""
     

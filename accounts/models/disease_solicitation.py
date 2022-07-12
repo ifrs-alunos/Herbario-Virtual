@@ -11,11 +11,12 @@ class DiseaseSolicitation(models.Model):
         ACCEPTED = ('accepted', 'Aceita')
         DENIED = ('denied', 'Negada')
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário', related_name="diseases_solicitations",null=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Usuário',
+                             related_name="diseases_solicitations",null=True)
     date = models.DateField(verbose_name="Data de envio", auto_now_add=True)
     status = models.CharField(max_length=8, choices=Status.choices, default=Status.SENT)
-    new_disease = models.ForeignKey(Disease, on_delete=models.CASCADE, verbose_name='Nova Doença', help_text="Dados "
-                                                                                                             "relacionados à doença", null=True)
+    new_disease = models.ForeignKey(Disease, on_delete=models.CASCADE, verbose_name='Nova Doença',
+                                    help_text="Dados relacionados à doença", null=True)
 
     def __str__(self):
         return 'Solicitação: {}'.format(self.user)
