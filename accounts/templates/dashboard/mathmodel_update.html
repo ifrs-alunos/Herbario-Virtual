@@ -14,14 +14,11 @@
     <div class="d-flex justify-content-between mb-4">
         <h5>Lista de modelos matemáticos cadastrados</h5>
 
-        <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:plant_solicitation' %}">
-            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
+
+        <a id="{% if link == 'mathmodel-update' %}selected-link{% endif %}" href="{% url 'accounts:mathmodel_add' %}">
+            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"
+                    data-bs-placement="bottom" title="Adicionar modelo">
                Adicionar um modelo <i class="fa fa-plus" aria-hidden="true"></i>
-            </button>
-        </a>
-        <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'accounts:photo_solicitation' %}">
-            <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
-               Adicionar uma foto de planta <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
     </div>
@@ -67,18 +64,22 @@
 {#                    </div>#}
 
                 <tr id="{{mathmodel.id}}">
-                    <td scope="row">{{mathmodel.name|truncatechars_html:30}}</td>
+                    <td scope="row">{{mathmodel.name}}</td>
                     <td>{{mathmodel.disease|truncatechars_html:40}}</td>
                     <td>
 {#                        <a href="{% url 'accounts:detail-plant' plant.slug %}" id="plant_view" class="btn btn-info" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar planta">#}
 {#                            <i class="fa fa-eye" aria-hidden="true"></i>#}
 {#                        </a>#}
-{#                        <a href="{% url 'accounts:plant_update' plant.id %}" id="plant_update" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar planta">#}
-{#                            <i class="fa fa-pencil" aria-hidden="true"></i>#}
-{#                        </a>#}
-{#                        <a class="btn btn-danger" data-toggle="modal" id="plant_delete" data-target="#exampleModal" title="Excluir planta" data-bs-toggle="tooltip" data-bs-placement="bottom">#}
-{#                            <i class="fa fa-times" aria-hidden="true"></i>#}
-{#                        </a>#}
+                        <a href="{% url 'accounts:mathmodel_edit' mathmodel.id %}" id="mathmodel_update" class="btn
+                        btn-warning ml-2 "
+                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar Modelo">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                        <a class="btn btn-danger" href="
+{% url 'accounts:mathmodel_delete' mathmodel.id %}" id="mathmodel_delete" title="Excluir
+                        modelo" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                            <i class="fa fa-times" aria-hidden="true"></i>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

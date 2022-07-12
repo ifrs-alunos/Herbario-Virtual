@@ -69,6 +69,9 @@ urlpatterns = [
     path('apagar-publicacao/<int:pk>/', views.PublicationDeleteView.as_view(), name="delete_publication"),
     path('solicitacao-foto-publi/', views.publication_photo_solicitation, name="publication_photo_add"),
     path('editar-modelos/', views.MathModelListView.as_view(), name="mathmodel_update"),
+    path('adicionar-modelo/', views.CreateMathModel.as_view(), name="mathmodel_add"),
+    path('editar-modelo/<int:pk>', views.UpdateMathModel.as_view(), name="mathmodel_edit"),
+    path('deletar-modelo/<int:pk>', views.DeleteMathModel.as_view(), name="mathmodel_delete"),
     path('editar-sensores-humanos/', views.SensorHumanListView.as_view(), name="sensor_human_update"),
     path('adicionar-sensor-humano/<int:pk>', views.create_sensor_human, name="sensor_human_add"),
 

@@ -88,10 +88,9 @@ def get_reports(start, end, time_interval, requirements, mathmodel, fig):
 						  annotation_text=sensor_name, annotation_font_size=20)
 
 
-
 def view_graphs(request):
 	fig = go.Figure()
-	if request.method == 'GET':
+	if request.GET.get("date_since") is not None:
 		start = datetime.fromisoformat(request.GET.get("date_since"))
 		start = make_aware(start, timezone=timezone.utc)
 		end = datetime.fromisoformat(request.GET.get("date_until"))

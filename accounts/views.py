@@ -1038,6 +1038,26 @@ class MathModelListView(ListView):
 		return data
 
 
+class CreateMathModel(CreateView):
+	model = MathModel
+	template_name = 'dashboard/mathmodel_create_form.html'
+	fields = '__all__'
+	success_url = reverse_lazy('accounts:mathmodel_update')
+
+
+class UpdateMathModel(UpdateView):
+	model = MathModel
+	template_name = 'dashboard/mathmodel_create_form.html'
+	fields = '__all__'
+	success_url = reverse_lazy('accounts:mathmodel_update')
+
+
+class DeleteMathModel(DeleteView):
+	model = MathModel
+	template_name = 'dashboard/mathmodel_confirm_delete.html'
+	success_url = reverse_lazy('accounts:mathmodel_update')
+
+
 class SensorListView(ListView):
 	model = Sensor
 	context_object_name = 'sensors'
@@ -1074,9 +1094,12 @@ def create_sensor_human(request, pk):
 	"""Função que cria um novo sensor humano"""
 
 	if request.method == "POST":
-		form = SensorHumanForm(request.POST)
+		updated_request = request.POST.copy()
+		if updated_request['choice']:
+			updated_request.update({'value': '1','sensor':pk})
+		form = SensorHumanForm(updated_request)
 
-		if form.is_valid() :
+		if form.is_valid():
 			form.save()
 
 			return redirect('accounts:sensor_human_update')
@@ -1088,5 +1111,5 @@ def create_sensor_human(request, pk):
 		'form': form,
 	}
 
-	# Renderiza a página de criar turma
+	# Renderiza a página de criar sensor
 	return render(request, 'dashboard/sensor_human_add.html', context)
