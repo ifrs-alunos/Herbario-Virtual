@@ -1,9 +1,8 @@
 from django.contrib import admin
 
-from .models import ReportOld, Station, Formula, Sensor, MathModel, Requirement, TypeSensor, Report, \
+from .models import Station, Formula, Sensor, MathModel, Requirement, TypeSensor, Report, \
 	SensorInMathModel, Constant
 
-admin.site.register(ReportOld)
 admin.site.register(Station)
 admin.site.register(Formula)
 admin.site.register(TypeSensor)

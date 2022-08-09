@@ -37,13 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'tinymce',
-    'herbarium',
+    'django_extensions',
+    'crispy_forms',
     'core',
     'accounts',
-    'crispy_forms',
-    'django_extensions',
+    'herbarium',
     'disease',
     'alerts',
+    # dashboard deve ficar por ultimo na lista
+    'dashboard'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
