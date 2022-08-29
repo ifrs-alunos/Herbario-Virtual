@@ -1,0 +1,43 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/solicitation.css' %}"/>
+{% endblock %}
+
+{% block item %}
+
+{# Lista de campos que não serão editados pelo admin #}
+<h5 class="mb-4">Solicitação #{{solicitation.id}}</h5>
+<p><span class="fw-bold">Nome de usuário:</span> {{solicitation.user}}</p>
+<p><span class="fw-bold">Nome completo:</span> {{solicitation.user.profile.name}}</p>
+<p><span class="fw-bold">Instituição:</span> {{solicitation.user.profile.institution}}</p>
+<p><span class="fw-bold">Cargo de ofício:</span> {{solicitation.user.profile.role}}</p>
+<p><span class="fw-bold">E-mail:</span> {{solicitation.user.email}}</p>
+<p><span class="fw-bold">Mensagem:</span> {{solicitation.message}}</p>
+<p><span class="fw-bold">Data de envio:</span> {{solicitation.date}}</p>
+
+<p class="fw-bold">Aceitar ou negar solicitação:</p>
+
+{# Formulário para editar o status da solicitação #}
+{% comment %} <form method="POST">
+    {% csrf_token %}
+    {{form|crispy}}
+    <button type="submit" class="btn btn-light mt-4">Enviar</button>
+</form> {% endcomment %}
+
+<a href="{% url 'dashboard:accept_solicitation' solicitation.id %}" style="background-color: #A6DDA6; color: green;" id="accept_button" type="button" class="btn btn-success">Aceitar <i class="fa fa-check-square-o" aria-hidden="true"></i></a>
+<a style="background-color: #ffa4a4; color: #c13b3b;" id="deny_button" type="button" class="btn btn-danger">Negar <i class="fa fa-times" aria-hidden="true"></i></a>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'dashboard/js/solicitation.js' %}"></script>
+    <script>
+        var id = {{solicitation.id}};
+        $("#accept_button").click(function(){accept(id)})
+        $("#deny_button").click(function(){deny(id)})
+        {% comment %} Chamar onclick e passar como parÂmetro o id certo de cada solicitacao {% endcomment %}
+    </script>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.views.generic import DetailView
-from alerts.models import MathModel, SensorInMathModel
+from alerts.models import MathModel
+	# SensorInMathModel
 
 from django.utils import timezone
 from datetime import datetime
@@ -22,7 +23,8 @@ def verify_require(requirements, value):
 
 
 def get_reports(start, end, time_interval, requirements, mathmodel):
-	sensors_in_math = SensorInMathModel.objects.filter(mathmodel=mathmodel)
+	# sensors_in_math = SensorInMathModel.objects.filter(mathmodel=mathmodel)
+	sensors_in_math = ''
 	data = {}
 	data_x = []
 	data_y = []

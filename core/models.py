@@ -3,7 +3,8 @@ from django.db import models
 from django.utils.text import slugify
 from tinymce.models import HTMLField
 from bs4 import BeautifulSoup
-from disease.models.photo_disease import make_small_image
+
+from core.utils import make_small_image
 
 
 def highlight_directory_path(instance, filename):

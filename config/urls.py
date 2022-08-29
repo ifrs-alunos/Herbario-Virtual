@@ -24,7 +24,7 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('herbario/', include('herbarium.urls', namespace='herbarium')),
-    path('painel/', include('accounts.urls')),
+    path('painel/', include('dashboard.urls')),
     path('', include('core.urls', namespace='core')),
     path('fitopatologico/', include('disease.urls', namespace='disease')),
     path('alertas/', include('alerts.urls', namespace='alerts')),
