@@ -1,0 +1,23 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static pagination %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/herbarium_update.css' %}"/>
+{% endblock %}
+
+{% block item %}
+
+    <div class="d-flex justify-content-between mb-4">
+        <h5>Lista de características cadastradas</h5>
+
+        <!-- Botão para cadastramento de novas características -->
+
+    <a id="{% if link == 'disease_char_solicitation' %}selected-link{% endif %}" href="{% url 'dashboard:math_model_solicitation' %}">
+        <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar características">
+           Adicionar modelo matemático <i class="fa fa-plus" aria-hidden="true"></i>
+        </button>
+    </a>
+
+    </div>
+
+{% endblock %}

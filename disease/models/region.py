@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Region(models.Model):
-    '''Esta classe define uma região de um país'''
+    """Esta classe define uma região de um país"""
 
     name = models.CharField('Região', blank=True, max_length=200)
 

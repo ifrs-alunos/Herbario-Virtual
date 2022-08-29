@@ -4,11 +4,12 @@ from io import BytesIO
 from django.core.files import File
 from django.utils.text import slugify
 
+from core.utils import make_small_image
 from disease.models.disease import Disease
 
 
 def disease_directory_path(instance, filename):
-    '''Esta função retorna o diretório onde as imagens grandes de uma planta devem ser armazenadas'''
+    """Esta função retorna o diretório onde as imagens grandes de uma planta devem ser armazenadas"""
 
     disease_name = slugify({instance.disease.name_disease})
 
@@ -16,7 +17,7 @@ def disease_directory_path(instance, filename):
 
 
 def small_disease_directory_path(instance, filename):
-    '''Esta função retorna o diretório onde as imagens pequenas de uma planta devem ser armazenadas'''
+    """Esta função retorna o diretório onde as imagens pequenas de uma planta devem ser armazenadas"""
 
     disease_name = slugify({instance.disease.name_disease})
 
@@ -25,27 +26,8 @@ def small_disease_directory_path(instance, filename):
 
     return 'doencas/imagens-pequenas/{}/{}'.format(disease_name, filename)
 
-
-def make_small_image(image, size=(854, 480)):
-    '''Esta função retorna uma imagem miniatura com um tamanho específico a partir de uma imagem maior'''
-
-    im = Image.open(image)  # Abre a imagem com o Pillow
-
-    im.convert('RGB')
-
-    im.thumbnail(size)  # Redimensiona a imagem com o tamanho padrão descrito nos parâmetros
-
-    thumb_io = BytesIO()  # Cria um objeto BytesIO
-
-    im.save(thumb_io, 'JPEG', quality=100)  # Salva imagem para um objeto BytesIO
-
-    thumbnail = File(thumb_io, name=image.name)  # Cria um objeto File 'amigável' ao Django
-
-    return thumbnail
-
-
 class PhotoDisease(models.Model):
-    '''Esta classe define os atributos que compõem uma foto de uma doença, permitindo que ela tenha múltiplas imagens'''
+    """Esta classe define os atributos que compõem uma foto de uma doença, permitindo que ela tenha múltiplas imagens"""
 
     # Relaciona as fotos com a planta
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE, related_name='photos', verbose_name="Doença")
@@ -95,4 +77,3 @@ class PhotoDisease(models.Model):
     class Meta:
         verbose_name = 'Foto'
         verbose_name_plural = 'Fotos'
-

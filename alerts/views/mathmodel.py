@@ -1,129 +1,98 @@
-from django.db import connection
 from django.views.generic import DetailView
-from alerts.models import MathModel, Report, Sensor
-from alerts.views.utils import to_datetime
+from alerts.models import MathModel
+	# SensorInMathModel
+
 from django.utils import timezone
 from datetime import datetime
 from django.utils.timezone import localtime, make_aware
 from alerts.forms import MathModelForm
 from django.db.models import Avg
 from plotly.offline import plot
-from plotly.graph_objs import Scatter
+import plotly.graph_objects as go
+import datetime
 
 colors = ("maroon", "orangered", "limegreen", "steelblue", "mediumblue", "indigo", "purple", "crimson", "darkred") * 2
 
+
 def verify_require(requirements, value):
-    r = [eval(re.replace('x', str(value))) for re in requirements]
-    if False in r:
-        return False
-    else:
-        return True
-
-
-def get_reports(start, end, time_interval, sensors_type, requirements, mathmodel):
-    sensors = Sensor.objects.all().filter(id__in=sensors_type)
-    data = []
-    data_x = []
-    data_y = []
-
-    for sensor in sensors:
-        re = requirements.filter(sensor=sensor)
-        requires = [x.value_in_relation() for x in re]
-        reports = sensor.report_set.filter(time__range=[start, end]).values('time').annotate(avg_value=Avg(
-            'value'))
-        repo = [x['avg_value'] if verify_require(requires, x['avg_value']) else 0 for x in reports]
-        data.append(repo)
-        data_y = [localtime(x['time']) for x in reports]
-
-    exp = mathmodel.source_code
-    for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-        exp = exp.replace(key, str(value))
-
-    value = 0
-    for y, x in enumerate(data[0]):
-        if x != 0 and data[1][y] != 0:
-            exp_with_mean = exp
-            exp_with_mean = exp_with_mean.replace('graus', str(x))
-            eval_exp = eval(exp_with_mean)
-            value += eval_exp
-            data_x.append(value)
-        else:
-            value = 0
-            data_x.append(value)
-
-    return [data_x, data_y]
-
-
-
-
-# Função que pega todos os reports do sensor no range por time_interval
-
-def get_reports_requirement_sensor_per_time_interval(report, start, end, time_interval, sensors_type, requirements):
-	reports = report.objects.all().filter(time__range=[start, end]).filter(
-		sensor__id__in=sensors_type).values()
-
-	first_report = localtime(reports[0]['time']).replace(minute=0, second=0, microsecond=0)
-	last_report = (localtime(reports[len(reports) - 1]['time']).replace(minute=59, second=59, microsecond=0))
-	report_range = range(0, ((last_report - first_report).days * 1440), time_interval)
-	report_time_interval = [(first_report + timezone.timedelta(minutes=x)).replace(second=0, microsecond=0)
-							for x in report_range]
-	sensors_reports = {}
-	for time_int in report_time_interval:
-		sensors_reports[time_int] = {}
-		for x in sensors_type:
-			media = reports.filter(sensor__id=x).filter(time__range=[time_int, time_int + timezone.timedelta(
-				minutes=time_interval - 1, seconds=59)]).aggregate(Avg('value'))
-			sensors_reports[time_int].update({x: media['value__avg']})
-		sensors = sensors_reports[time_int]
-
-		if not check_requires(sensors, requirements):
-			sensors_reports[time_int] = {}
-
-	return sensors_reports
-
-
-def check_requires(dict_sensor, requirements):
-	conditions = []
-	for x in dict_sensor:
-		report_in = dict_sensor[x]
-		re = requirements.filter(sensor__id=x)
-		requires = [x.value_in_relation() for x in re]
-		for require in requires:
-			r = require.replace('x', str(report_in))
-			re = eval(r)
-			if re:
-				conditions.append(True)
-			else:
-				conditions.append(False)
-	if False in conditions:
+	r = [eval(re.replace('x', str(value))) for re in requirements]
+	if False in r:
 		return False
 	else:
 		return True
 
 
-def set_reports_data_to_graph(reports, exp):
-	x_data = []
-	y_data = []
-	reports_in_time_split = []
-	sum_t = 0
-	for x in reports:
-		if reports[x]:
-			for y in reports[x]:
+def get_reports(start, end, time_interval, requirements, mathmodel):
+	# sensors_in_math = SensorInMathModel.objects.filter(mathmodel=mathmodel)
+	sensors_in_math = ''
+	data = {}
+	data_x = []
+	data_y = []
+	sensors_in_graph = sensors_in_math.filter(in_graph=True).first()
+	sensors_in_divider = sensors_in_math.filter(divider=True)
 
-				if y == 5:
-					mtemp = reports[x][y]
-					exp_with_mean = exp
-					exp_with_mean = exp_with_mean.replace('graus', str(mtemp))
-					eval_exp = eval(exp_with_mean)
-					sum_t += eval_exp
-					y_data.append(sum_t)
-					x_data.append(x)
-		else:
-			sum_t = 0
-			y_data.append(sum_t)
-			x_data.append(x)
+	data_in_graph = {}
+	graphs = []
 
-	return [x_data, y_data]
+	for sensor_in_math in sensors_in_math:
+		if sensor_in_math.mean:
+			sensor = sensor_in_math.sensor
+			re = requirements.filter(sensor=sensor)
+			requires = [x.value_in_relation() for x in re]
+
+			reports = sensor.report_set.filter(time__range=[start, end]).values('time').annotate(avg_value=Avg(
+			'value'))
+
+			repo = [x['avg_value'] if verify_require(requires, x['avg_value']) else 0 for x in reports]
+			if sensor_in_math.in_graph:
+				data_in_graph[sensor.type.name] = repo
+			else:
+				data[sensor.type.name] = repo
+			data_x = [localtime(x['time']) for x in reports]
+
+	exp = mathmodel.source_code
+	for key, value in mathmodel.constant_set.all().values_list('name', 'value'):
+		exp = exp.replace(key, str(value))
+
+	value = 0
+	sig_name = sensors_in_graph.sensor.type.name
+
+	for y, x in enumerate(data_in_graph[sig_name]):
+		for d in data:
+			if x != 0 and data[d][y] != 0:
+				exp_with_mean = exp
+				exp_with_mean = exp_with_mean.replace(sig_name, str(x))
+				eval_exp = eval(exp_with_mean).real
+
+				value += eval_exp
+				data_y.append(value)
+			else:
+				value = 0
+				data_y.append(value)
+
+	fig = go.Figure()
+	fig.add_scatter(x=data_x, y=data_y,
+					mode="lines", opacity=0.8,
+					line={"color": colors[0]},
+					)
+
+	for x in sensors_in_divider:
+		sensor = x.sensor
+		sensor_name = sensor.type.name
+		re = requirements.filter(sensor=sensor)
+		requires = [x.value_in_relation() for x in re]
+		reports = sensor.report_set.filter(time__range=[start, end]).values('time').annotate(avg_value=Avg(
+			'value'))
+		for x in reports:
+			if x['avg_value'] == 1:
+				time_divider = localtime(x['time'])
+
+				fig.add_vline(x=time_divider.timestamp() * 1000, line_width=3, line_dash="dash", line_color="green",
+							  annotation_text=sensor_name, annotation_font_size=20)
+
+	plot_element = plot(fig, output_type='div')
+
+	return plot_element
 
 
 class MathModelView(DetailView):
@@ -141,33 +110,32 @@ class MathModelView(DetailView):
 		sensors_type = list(set([x.sensor.id for x in requirements]))
 		if params:
 			start = datetime.fromisoformat(params.get("date_since"))
-			start = make_aware(start,timezone=timezone.utc)
+			start = make_aware(start, timezone=timezone.utc)
 			end = datetime.fromisoformat(params.get("date_until"))
-			end = make_aware(end,timezone=timezone.utc)
+			end = make_aware(end, timezone=timezone.utc)
+
 			# get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
-			get_rp = get_reports(start, end, 5, sensors_type, requirements, mathmodel)
-			#
-			# exp = mathmodel.source_code
-			# for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-			# 	exp = exp.replace(key, str(value))
-			#
-			# data_in_graph = set_reports_data_to_graph(get_rp, exp)
+			get_rp = get_reports(start, end, 5, requirements, mathmodel)
+		#
+		# exp = mathmodel.source_code
+		# for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
+		# 	exp = exp.replace(key, str(value))
+		#
+		# data_in_graph = set_reports_data_to_graph(get_rp, exp)
 		# se não, mostra os relatórios desde 12 horas atrás
 		else:
 			start = timezone.datetime(2022, 2, 1, 3, 0, 0, tzinfo=timezone.utc)
 			end = timezone.datetime(2022, 3, 1, 2, 59, 59, tzinfo=timezone.utc)
-			get_rp = get_reports(start, end, 5, sensors_type, requirements, mathmodel)
-			# get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
-			# exp = mathmodel.source_code
-			# for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-			# 	exp = exp.replace(key, str(value))
 
-			# data_in_graph = set_reports_data_to_graph(get_rp, exp)
-		plot_element = plot([Scatter(x=get_rp[1], y=get_rp[0],
-									 mode="lines", opacity=0.8,
-									 line={"color": colors[0]})],
-							output_type='div'
-							)
+			get_rp = get_reports(start, end, 15, requirements, mathmodel)
+		# get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
+		# exp = mathmodel.source_code
+		# for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
+		# 	exp = exp.replace(key, str(value))
+
+		# data_in_graph = set_reports_data_to_graph(get_rp, exp)
+
+		plot_element = get_rp
 
 		context["plot"] = plot_element
 

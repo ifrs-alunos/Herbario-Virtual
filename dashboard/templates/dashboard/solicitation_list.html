@@ -1,0 +1,108 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/solicitation_list.css' %}"/>
+{% endblock %}
+
+{% block item %}
+
+    {% if solicitations %}
+
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Instituição</th>
+                    <th scope="col">Nome do usuário</th>
+                    <th scope="col">Mensagem</th>
+                    <th scope="col">Ação</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for solicitation in solicitations %} {# Loop na lista de solicitações #}
+            <!-- Modal -->
+                        <div class="modal fade" id="exampleModal{{ solicitation.id }}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Excluir item</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Deseja negar solicitação de '{{ solicitation.user.username }}'?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">
+                                            Cancelar
+                                        </button>
+
+                                        <!-- Formulário para deletar objeto (planta) -->
+                                        <form method="post"
+                                              action="{% url 'dashboard:delete_solicitation' solicitation.id %}">{% csrf_token %}
+                                            <input type="submit" value="Confirmar exclusão" class="btn btn-danger">
+                                        </form>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <tr id="{{ solicitation.id }}">
+                        <td scope="row">{{ solicitation.user.profile.institution|truncatechars_html:20 }}</td>
+                        <td>{{ solicitation.user.profile.name|truncatechars_html:30 }}</td>
+                        <td>{{ solicitation.message|truncatechars_html:50 }}</td>
+                        <td>
+                            <a href="{% url 'dashboard:solicitation_update' solicitation.id %}" class="btn btn-primary"
+                               data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualizar solicitação"
+                               style="background-color: #bacff5; color: #334969">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <a href="{% url 'dashboard:accept_solicitation' solicitation.id %}" type="button" class="btn btn-success accept_button" data-bs-toggle="tooltip"
+                               data-bs-placement="bottom" title="Aceitar solicitação"
+                               style="background-color: #A6DDA6; color: green;">
+                                <i class="fa fa-check-square-o" aria-hidden="true"></i>
+                            </a>
+                            <a id=""
+                               data-toggle="modal" data-target="#exampleModal{{ solicitation.id }}"
+                               class="btn btn-danger deny_button" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                               title="Negar solicitação"
+                               style="background-color: #ffa4a4; color: #c13b3b;">
+                                <i class="fa fa-times" aria-hidden="true"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nenhuma solicitação para analisar no momento.
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script src="{% static 'dashboard/js/solicitation.js' %}"></script>
+    <script>
+        // Verifica se há solicitações
+        if ({{solicitations|length}} !=
+        0
+        )
+        {
+            $(".accept_button").click(function (event) {
+                const id = $(event.currentTarget).closest("tr").attr("id");
+                accept(id);
+            });
+            $(".deny_button").click(function (event) {
+                const id = $(event.currentTarget).closest("tr").attr("id");
+                deny(id);
+            });
+        }
+    </script>
+{% endblock %}

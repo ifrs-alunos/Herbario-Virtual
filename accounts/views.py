@@ -20,10 +20,11 @@ from herbarium.models import Plant
 from herbarium.forms import PlantForm, PhotoForm
 from disease.models import Disease, Culture, Condition
 from disease.forms import DiseaseForm, DiseasePhotoForm
+from .forms.sensor_human_form import SensorHumanForm
 from .forms.term_form import TermForm
 from .models import Contribuition
 from core.models import Publication
-
+from alerts.models import MathModel, Sensor
 from .forms import UserForm, SolicitationStatusUpdateForm
 
 
@@ -55,7 +56,7 @@ def create_user(request):
 			group, _ = Group.objects.get_or_create(name="common_users")
 			user.groups.add(group)
 
-			return redirect('accounts:login')
+			return redirect('dashboard:login')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -94,7 +95,7 @@ def update_profile(request):
 			profile_form.save()
 
 			# Retorna para a página de lista de turmas
-			return redirect("accounts:view_dashboard")
+			return redirect("dashboard:view_dashboard")
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -131,7 +132,7 @@ class SolicitationCreateView(LoginRequiredMixin, PermissionRequiredMixin, Create
 	form_class = SolicitationForm
 	permission_required = 'accounts.add_solicitation'
 	template_name = 'dashboard/solicitation.html'
-	success_url = reverse_lazy('accounts:solicitation')
+	success_url = reverse_lazy('dashboard:solicitation')
 
 	def get_initial(self):
 		initial = super().get_initial()
@@ -197,7 +198,7 @@ class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Update
 	form_class = SolicitationStatusUpdateForm
 	permission_required = 'auth.view_user'
 	template_name = 'dashboard/solicitation_update.html'
-	success_url = reverse_lazy('accounts:solicitation_list')
+	success_url = reverse_lazy('dashboard:solicitation_list')
 
 	def get_context_data(self, **kwargs):
 		data = super().get_context_data(**kwargs)
@@ -218,7 +219,7 @@ class SolicitationUpdateView(LoginRequiredMixin, PermissionRequiredMixin, Update
 			user.groups.remove(old_group[0])  # Retira o grupo de usuário comum
 			user.groups.add(new_group[0])  # Adiciona o grupo de contribuidor
 
-		return redirect("accounts:solicitation_list")
+		return redirect("dashboard:solicitation_list")
 
 
 class ChangePassword(PasswordChangeView):
@@ -232,7 +233,7 @@ class ChangePassword(PasswordChangeView):
 		return data
 
 	def get_success_url(self):
-		return reverse('accounts:profile')
+		return reverse('dashboard:profile')
 
 	def form_valid(self, form):
 		messages.success(self.request, "Sua senha foi alterada com sucesso!")
@@ -307,7 +308,7 @@ def plant_solicitation(request):
 			plant_solicitation = PlantSolicitation(user=request.user, status='sent', new_plant=plant)
 			plant_solicitation.save()
 
-			return redirect('accounts:herbarium_update')
+			return redirect('dashboard:herbarium_update')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -337,7 +338,7 @@ def photo_solicitation(request):
 			photo_solicitation = PhotoSolicitation(user=request.user, status='sent', new_photo=photo)
 			photo_solicitation.save()
 
-			return redirect('accounts:view_dashboard')
+			return redirect('dashboard:view_dashboard')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -378,7 +379,7 @@ def disease_solicitation(request):
 				c = Condition.objects.create(characteristic_id=int(chars[char]['id']), disease=disease)
 				c.set_value(chars[char]['value'])
 
-			return redirect('accounts:disease_update')
+			return redirect('dashboard:disease_update')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -423,7 +424,7 @@ def disease_update(request, pk):
 				c = Condition.objects.create(characteristic_id=int(chars[char]['id']), disease=disease)
 				c.set_value(chars[char]['value'])
 
-			return redirect('accounts:disease_update')
+			return redirect('dashboard:disease_update')
 	print(disease.condition_set.all())
 
 	context = {
@@ -454,7 +455,7 @@ def disease_photo_solicitation(request):
 																  new_photo=disease_photo)
 			disease_photo_solicitation.save()
 
-			return redirect('accounts:view_dashboard')
+			return redirect('dashboard:view_dashboard')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -479,7 +480,7 @@ def disease_char_solicitation(request):
 
 		if disease_char_form.is_valid():
 			disease_char = disease_char_form.save()  # Cria objeto mas nao salva no banco de dados
-			return redirect('accounts:char_phytopathological')
+			return redirect('dashboard:char_phytopathological')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -507,7 +508,7 @@ def char_update(request, pk):
 		if char_form.is_valid():
 			char_form.save()
 
-			return redirect('accounts:char_phytopathological')
+			return redirect('dashboard:char_phytopathological')
 
 	context = {
 		'disease_char_form': char_form,
@@ -528,7 +529,7 @@ def culture_solicitation(request):
 		if culture_form.is_valid():
 			culture_form = culture_form.save()  # Cria objeto mas nao salva no banco de dados
 
-			return redirect('accounts:culture_list')
+			return redirect('dashboard:culture_list')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -556,7 +557,7 @@ def culture_update(request, pk):
 		if culture_form.is_valid():
 			culture_form.save()
 
-			return redirect('accounts:culture_list')
+			return redirect('dashboard:culture_list')
 
 	context = {
 		'culture_form': culture_form,
@@ -598,7 +599,7 @@ def plant_update(request, pk):
 		if plant_form.is_valid():
 			plant_form.save()
 
-			return redirect('accounts:herbarium_update')
+			return redirect('dashboard:herbarium_update')
 
 	context = {
 		'plant_form': plant_form,
@@ -793,52 +794,52 @@ class DiseasePhotoSolicitationDetailView(DetailView):
 
 class ProfileDeleteView(DeleteView):
 	model = Profile
-	success_url = reverse_lazy('accounts:user_list')
+	success_url = reverse_lazy('dashboard:user_list')
 
 
 class PlantDeleteView(DeleteView):
 	model = Plant
-	success_url = reverse_lazy('accounts:herbarium_update')
+	success_url = reverse_lazy('dashboard:herbarium_update')
 
 
 class PlantSolicitationDeleteView(DeleteView):
 	model = PlantSolicitation
-	success_url = reverse_lazy('accounts:plant_solicitation_list')
+	success_url = reverse_lazy('dashboard:plant_solicitation_list')
 
 
 class PlantPhotoSolicitationDeleteView(DeleteView):
 	model = PhotoSolicitation
-	success_url = reverse_lazy('accounts:photo_solicitation_list')
+	success_url = reverse_lazy('dashboard:photo_solicitation_list')
 
 
 class DiseaseSolicitationDeleteView(DeleteView):
 	model = DiseaseSolicitation
-	success_url = reverse_lazy('accounts:disease_solicitation_list')
+	success_url = reverse_lazy('dashboard:disease_solicitation_list')
 
 
 class DiseasePhotoSolicitationDeleteView(DeleteView):
 	model = DiseasePhotoSolicitation
-	success_url = reverse_lazy('accounts:disease_photo_solicitation_list')
+	success_url = reverse_lazy('dashboard:disease_photo_solicitation_list')
 
 
 class DiseaseDeleteView(DeleteView):
 	model = Disease
-	success_url = reverse_lazy('accounts:disease_update')
+	success_url = reverse_lazy('dashboard:disease_update')
 
 
 class CharDeleteView(DeleteView):
 	model = CharSolicitationModel
-	success_url = reverse_lazy('accounts:char_phytopathological')
+	success_url = reverse_lazy('dashboard:char_phytopathological')
 
 
 class CultureDeleteView(DeleteView):
 	model = Culture
-	success_url = reverse_lazy('accounts:culture_list')
+	success_url = reverse_lazy('dashboard:culture_list')
 
 
 class SolicitationDeleteView(DeleteView):
 	model = Solicitation
-	success_url = reverse_lazy('accounts:solicitation_list')
+	success_url = reverse_lazy('dashboard:solicitation_list')
 
 
 class CharDetailView(DetailView):
@@ -866,31 +867,6 @@ class CultureListView(ListView):
 		return data
 
 
-def math_model_solicitation(request):
-	"""Essa função cadastra um novo modelo matemático"""
-
-	# Se o usuário mandar dados, ou seja, se a requisição for POST
-	if request.method == "POST":
-		math_model_form = MathModelsForm(request.POST)
-
-		if math_model_form.is_valid():
-			math_model_form = math_model_form.save()  # Cria objeto mas nao salva no banco de dados
-
-			return redirect('accounts:math_model_solicitation')
-
-	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
-	else:
-		# Cria um formulário em branco
-		math_model_form = MathModelsForm()
-
-	context = {
-		'math_model_form': math_model_form,
-		'link': 'math_model_solicitation',
-	}
-
-	return render(request, 'dashboard/math_model_add.html', context)
-
-
 @login_required
 def accept_plant_solicitation(request, pk):
 	if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
@@ -903,7 +879,7 @@ def accept_plant_solicitation(request, pk):
 		np.published = True
 		np.save()
 
-	return redirect("accounts:plant_solicitation_list")
+	return redirect("dashboard:plant_solicitation_list")
 
 
 def accept_disease_solicitation(request, pk):
@@ -917,7 +893,7 @@ def accept_disease_solicitation(request, pk):
 		nd.published_disease = True
 		nd.save()
 
-	return redirect("accounts:disease_solicitation_list")
+	return redirect("dashboard:disease_solicitation_list")
 
 
 def accept_plant_photo_solicitation(request, pk):
@@ -931,7 +907,7 @@ def accept_plant_photo_solicitation(request, pk):
 		np.published = True
 		np.save()
 
-	return redirect("accounts:photo_solicitation_list")
+	return redirect("dashboard:photo_solicitation_list")
 
 
 def accept_disease_photo_solicitation(request, pk):
@@ -944,7 +920,7 @@ def accept_disease_photo_solicitation(request, pk):
 
 		np.published = True
 		np.save()
-	return redirect("accounts:disease_photo_solicitation_list")
+	return redirect("dashboard:disease_photo_solicitation_list")
 
 
 def accept_solicitation(request, pk):
@@ -953,7 +929,7 @@ def accept_solicitation(request, pk):
 		solicitation.status = "accepted"
 		solicitation.save()
 
-	return redirect("accounts:solicitation_list")
+	return redirect("dashboard:solicitation_list")
 
 
 def term_check_password(request):
@@ -995,7 +971,7 @@ def publication_update(request, pk):
 		if publication_form.is_valid():
 			publication_form.save()
 
-			return redirect('accounts:publication_update')
+			return redirect('dashboard:publication_update')
 
 	context = {
 		'publication_form': publication_form,
@@ -1009,7 +985,7 @@ class PublicationCreateView(CreateView):
 	model = Publication
 	fields = ['title', 'content']
 	template_name = "dashboard/publication_add.html"
-	success_url = reverse_lazy('accounts:publication_update')
+	success_url = reverse_lazy('dashboard:publication_update')
 
 	def get_context_data(self, **kwargs):
 		context = super().get_context_data(**kwargs)
@@ -1019,7 +995,7 @@ class PublicationCreateView(CreateView):
 
 class PublicationDeleteView(DeleteView):
 	model = Publication
-	success_url = reverse_lazy('accounts:publication_update')
+	success_url = reverse_lazy('dashboard:publication_update')
 
 
 def publication_photo_solicitation(request):
@@ -1033,7 +1009,7 @@ def publication_photo_solicitation(request):
 		if publication_photo_form.is_valid():
 			publication_photo_form.save()  # Cria objeto e salva no banco de dados
 
-			return redirect('accounts:publication_update')
+			return redirect('dashboard:publication_update')
 
 	# Se o usuário apenas solicitar para acessar a página, ou seja, se a requisição for GET
 	else:
@@ -1046,3 +1022,94 @@ def publication_photo_solicitation(request):
 	}
 
 	return render(request, 'dashboard/publication_photo_add.html', context)
+
+
+class MathModelListView(ListView):
+	model = MathModel
+	context_object_name = 'mathmodels'
+	template_name = 'dashboard/mathmodel_update.html'
+	paginate_by = 12
+
+	def get_context_data(self, **kwargs):
+		data = super().get_context_data(**kwargs)
+
+		data['link'] = 'mathmodel-update'  # Cria novo contexto
+
+		return data
+
+
+class CreateMathModel(CreateView):
+	model = MathModel
+	template_name = 'dashboard/mathmodel_create_form.html'
+	fields = '__all__'
+	success_url = reverse_lazy('dashboard:mathmodel_update')
+
+
+class UpdateMathModel(UpdateView):
+	model = MathModel
+	template_name = 'dashboard/mathmodel_create_form.html'
+	fields = '__all__'
+	success_url = reverse_lazy('dashboard:mathmodel_update')
+
+
+class DeleteMathModel(DeleteView):
+	model = MathModel
+	template_name = 'dashboard/mathmodel_confirm_delete.html'
+	success_url = reverse_lazy('dashboard:mathmodel_update')
+
+
+class SensorListView(ListView):
+	model = Sensor
+	context_object_name = 'sensors'
+	template_name = 'dashboard/sensor_update.html'
+	paginate_by = 12
+
+	def get_context_data(self, **kwargs):
+		data = super().get_context_data(**kwargs)
+
+		data['link'] = 'sensor-update'  # Cria novo contexto
+
+		return data
+
+
+class SensorHumanListView(ListView):
+	model = Sensor
+	context_object_name = 'sensors'
+	template_name = 'dashboard/sensor_human_update.html'
+	paginate_by = 12
+
+	def get_context_data(self, **kwargs):
+		data = super().get_context_data(**kwargs)
+
+		data['link'] = 'sensor-human-update'  # Cria novo contexto
+
+		return data
+
+	def get_queryset(self):
+		qs = Sensor.objects.all().filter(type__metric='bool')
+		return qs
+
+
+def create_sensor_human(request, pk):
+	"""Função que cria um novo sensor humano"""
+
+	if request.method == "POST":
+		updated_request = request.POST.copy()
+		if updated_request['choice']:
+			updated_request.update({'value': '1','sensor':pk})
+		form = SensorHumanForm(updated_request)
+
+		if form.is_valid():
+			form.save()
+
+			return redirect('dashboard:sensor_human_update')
+
+	else:
+		form = SensorHumanForm()
+
+	context = {
+		'form': form,
+	}
+
+	# Renderiza a página de criar sensor
+	return render(request, 'dashboard/sensor_human_add.html', context)
