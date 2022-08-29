@@ -8,7 +8,7 @@ from plotly.offline import plot
 from datetime import datetime
 from django.db.models import Avg
 
-from alerts.models import SensorInMathModel, MathModel
+from alerts.models import MathModel, SensorInMathModel
 
 colors = ("maroon", "orangered", "limegreen", "steelblue", "mediumblue", "indigo", "purple", "crimson", "darkred") * 2
 

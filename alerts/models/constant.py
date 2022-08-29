@@ -15,3 +15,4 @@ class Constant(models.Model):
     class Meta:
         verbose_name = 'Constante'
         verbose_name_plural = 'Constantes'
+        managed = True

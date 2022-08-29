@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Station, Formula, Sensor, MathModel, Requirement, TypeSensor, Report, \
-	SensorInMathModel, Constant
+    SensorInMathModel, Constant
 
 admin.site.register(Station)
 admin.site.register(Formula)
