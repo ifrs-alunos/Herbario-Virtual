@@ -2,6 +2,8 @@ from django.urls import path
 
 from .views import board_notify, formula, view_graphs
 from .views import  mathmodel
+from .views.map import get_map
+
 
 app_name = 'alerts'
 
@@ -14,4 +16,5 @@ urlpatterns = [
     # path('formula/criar/', formula.create_formula, name="create_formula"),
     path('modelo/<int:pk>', mathmodel.MathModelView.as_view(), name="mathmodel"),
     path('visualizar/graficos',view_graphs,name="view_graphs"),
+    path('mapa', get_map, name='map_url'),
 ]
