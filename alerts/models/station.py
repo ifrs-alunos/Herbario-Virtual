@@ -7,8 +7,8 @@ class Station(BaseModel):
     station_id = models.IntegerField(verbose_name="Identificador da estação")
     slug = models.SlugField(unique=True, null=True)
     alias = models.CharField(max_length=100, verbose_name="Nome", null=True, blank=True)
-    lat_coordinate = models.FloatField(verbose_name="Latitude")
-    lon_coordinate = models.FloatField(verbose_name="Longitude")
+    lat_coordinate = models.FloatField(verbose_name="Latitude", null=True)
+    lon_coordinate = models.FloatField(verbose_name="Longitude", null=True)
     description = models.TextField('Descrição da estação', max_length=400, help_text='Endereço, ponto de referência, responsável...', null=True)
 
     @property
