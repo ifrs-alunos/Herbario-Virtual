@@ -244,4 +244,34 @@
             </div>
         </div>
     {% endif %}
+
+     {% if perms.core.view_mathmodel %}
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingTwenty">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseTwenty" aria-expanded="false" aria-controls="flush-collapseTwenty">
+                    Módulos em desenvolvimento
+                </button>
+            </h2>
+            <div id="flush-collapseTwenty" class="accordion-collapse collapse" aria-labelledby="flush-headingTwenty"
+                 data-bs-parent="#accordionFlushExample">
+             <div class="accordion-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a id="{% if link == 'seila' %}selected-link{% endif %}"
+                           href="{% url 'alerts:collect_data_cepadi' %}">Url cepadi</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a id="{% if link == 'seila' %}selected-link{% endif %}"
+                           href="{% url 'alerts:view_graphs' %}">Grafico de modelos matematicos</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a id="{% if link == 'seila' %}selected-link{% endif %}"
+                           href="{% url 'alerts:map_url' %}">Mapa</a>
+                    </li>
+                </ul>
+             </div>
+            </div>
+        </div>
+    {% endif %}
 </div>
