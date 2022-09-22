@@ -1,5 +1,7 @@
 from django.urls import path
 
+from .views.map import get_map
+
 from .views import board_notify, formula, view_graphs, collect_data_cepadi
 from .views import mathmodel
 
@@ -13,6 +15,8 @@ urlpatterns = [
     # path('', alerts.AlertsView.as_view(), name="alerts"),
     # path('formula/criar/', formula.create_formula, name="create_formula"),
     path('modelo/<int:pk>', mathmodel.MathModelView.as_view(), name="mathmodel"),
+    path('visualizar/graficos',view_graphs,name="view_graphs"),
+    path('mapa', get_map, name='map_url'),
     path('visualizar/graficos', view_graphs, name="view_graphs"),
     path('coletar_dados/cepadi', collect_data_cepadi, name="collect_data_cepadi"),
 ]

@@ -1,0 +1,29 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="map-container">
+            <h1>Localização das estações:</h1>
+        </div>
+        <div class="map-container">
+            <div class="map">
+                {{ mapa|safe }}
+            </div>
+
+        </div>
+        <div class="container">
+            <div class="map-legend">
+                <div class="legend">
+                    <i id='pin-green' class="fa fa-map-marker" aria-hidden="true"> </i>
+                    <p>Dados disponíveis</p>                  
+                    <i id='pin-gray' class="fa fa-map-marker" aria-hidden="true"> </i>
+                    <p>Dados indisponíveis</p>
+                    <i id='pin-red' class="fa fa-map-marker" aria-hidden="true"> </i>
+                    <p>Esporos de ferrugem detectados</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
