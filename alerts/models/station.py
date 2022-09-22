@@ -9,7 +9,7 @@ class Station(BaseModel):
     alias = models.CharField(max_length=100, verbose_name="Nome", null=True, blank=True)
     lat_coordinate = models.FloatField(verbose_name="Latitude")
     lon_coordinate = models.FloatField(verbose_name="Longitude")
-    description = models.TextField('Descrição da estação', max_length=400, help_text='Endereço, ponto de referência, responsável...')
+    description = models.TextField('Descrição da estação', max_length=400, help_text='Endereço, ponto de referência, responsável...', null=True)
 
     @property
     def lat_lon(self):
