@@ -1,23 +1,69 @@
+{#{% extends "core/base.html" %}#}
+{#{% load static %}#}
+{##}
+{#{% block content %}#}
+{##}
+{#    <div class="container">#}
+{#        <div class="map-container">#}
+{#            <h1>Localização das estações:</h1>#}
+{#        </div>#}
+{#        <div class="map-container">#}
+{#            <div class="map">#}
+{#                {{ mapa|safe }}#}
+{#            </div>#}
+{##}
+{#        </div>#}
+{#        <div class="container">#}
+{#            <div class="map-legend">#}
+{#                <div class="legend">#}
+{#                    <i id='pin-green' class="fa fa-map-marker" aria-hidden="true"> </i>#}
+{#                    <p>Dados disponíveis</p>                  #}
+{#                    <i id='pin-gray' class="fa fa-map-marker" aria-hidden="true"> </i>#}
+{#                    <p>Dados indisponíveis</p>#}
+{#                    <i id='pin-red' class="fa fa-map-marker" aria-hidden="true"> </i>#}
+{#                    <p>Esporos de ferrugem detectados</p>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#  </div>#}
+{##}
+{#{% endblock %}#}
+{#{% block scripts %}#}
+{#{% endblock %}#}
+
 {% extends "core/base.html" %}
 {% load static %}
+{% block head %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+            crossorigin=""></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
+    <link rel="stylesheet" href="{% static 'alerts/css/map.css' %}"/>
+{% endblock %}
 
 {% block content %}
-
     <div class="container">
         <div class="map-container">
             <h1>Localização das estações:</h1>
         </div>
         <div class="map-container">
-            <div class="map">
-                {{ mapa|safe }}
+            <div id="map" style="width: 100%;height: 600px;margin:0;padding:0;position: relative;z-index: 1">
             </div>
-
         </div>
         <div class="container">
             <div class="map-legend">
                 <div class="legend">
                     <i id='pin-green' class="fa fa-map-marker" aria-hidden="true"> </i>
-                    <p>Dados disponíveis</p>                  
+                    <p>Dados disponíveis</p>
                     <i id='pin-gray' class="fa fa-map-marker" aria-hidden="true"> </i>
                     <p>Dados indisponíveis</p>
                     <i id='pin-red' class="fa fa-map-marker" aria-hidden="true"> </i>
@@ -25,5 +71,161 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal  fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-centered" style="    min-width: auto;
+    max-width: fit-content;" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <div class="row">
+                    <div class="col-3" id="modal-body-col">
+                    </div>
+                    <div class="col-9" id="modal-body-col2">
+                        <ul id="sensor-list" class="nav nav-pills">
+                        </ul>
+                        <br>
+                        <div id="graph-sensor" style="width:100%;">
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
+    <script>
+        const InitGraph= document.getElementById('graph-sensor');
+        const layout = {
+          autosize: false,
+          width: 700,
+          height: 500,
+        };
+        Plotly.newPlot( InitGraph, [{}], layout);
+    </script>
+    <script>
+        var redMarker = L.AwesomeMarkers.icon({
+            prefix:'fa',
+            icon: 'fa-circle',
+            markerColor: 'red'
+     });
+        var greenMarker = L.AwesomeMarkers.icon({
+            prefix:'fa',
+            icon: 'fa-circle',
+            markerColor: 'green'
+     });
+        var lightGreyMarker = L.AwesomeMarkers.icon({
+            prefix:'fa',
+            icon: 'fa-circle',
+            markerColor: 'lightgray'
+     });
+
+      let map = L.map('map').setView([-28.43, -50.921371], 10);
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: 'pk.eyJ1IjoiZm0tbGVvbmFyZG8iLCJhIjoiY2t3cHZuNXl6MGdwNzJ2bThmMHpqbmlnNiJ9.uX-B9pNeRXPtHt3zs2kTEg'
+        }).addTo(map);
+
+        let stations = L.layerGroup([
+            {#loop para cada estação no sistema#}
+            {% for station in stations %}
+                {#     adiciona o marcador no mapa  #}
+                L.marker({{ station.lat_lon }}, {icon:lightGreyMarker})
+                {# condicionais que verificam caso tenha sensor humano o marcador e o tooltip mudam#}
+                {% if station.get_human_sensor_condition %}
+                    .bindTooltip('<b> Estação {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>:  {% if sensor.type.metric == 'bool' and sensor.report_set.last.value_in_type == 1.00 %} DETECTADOS {% else %} {{ sensor.report_set.last.value}} {% endif %}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
+                    .setIcon(redMarker)
+                {% elif not station.get_human_sensor_condition and station.sensor_set.all  %}
+                    .bindTooltip('<b> Estação {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>: {{ sensor.report_set.last.value|floatformat:"2"  }} {{ sensor.type.metric}}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
+                    .setIcon(greenMarker)
+                {% else %}
+                    .bindTooltip("<b> Estação {{ station.alias }}</b> <br><br> Sem dados para esta estação no momento")
+                {% endif %}
+                {#     quando é clicado na estação no mapa     #}
+                .on('click', function(e) {
+                    {#  coloca os dados da estação clicada no modal#}
+                    const modalStation = $('#exampleModalCenter');
+                    modalStation.find('.modal-title').text('Dados sobre a estação {{ station.alias }}');
+                    {#  pill navbar com os sensores #}
+                    const sensorList = document.createElement('div');
+                    {% for sensor in station.sensor_set.all %}
+                        $(sensorList).append($('<li class="nav-item"><a class="nav-link sensor-button" sensor_id="{{ sensor.id }}" href="#">{{ sensor.name }}</a> </li>'));
+                    {% endfor %}
+                    {#  então...sensorList é uma div então $(sensorList).html() é pra pegar o que tem dentro #}
+                    {#       caso contrario entraria um div no meio         #}
+                    modalStation.find('#sensor-list').html($(sensorList).html());
+                    {# coloca as informações no modal #}
+                    modalStation.find('#modal-body-col').html("" +
+                        "Nome da estação: {{ station.alias }} <br><br>" +
+                        "Latitude: {{ station.lat_coordinate }} <br><br>"  +
+                        "Longitude: {{ station.lon_coordinate }}<br><br>" +
+                        "Descrição da estação: {{ station.description }}<br><br>"
+
+                    );
+                    {# -----Parte do código que adiciona no grafico os dados do sensor-----#}
+                    const graphElement = document.getElementById('graph-sensor');
+                    const sensorsButton = document.getElementsByClassName("sensor-button");
+                    for (let i = 0; i < sensorsButton.length; i++){
+                            sensorsButton[i].onclick = function(){
+                            const sensorButtonId = sensorsButton[i].getAttribute("sensor_id");
+                            const urlAjax = "{% url 'alerts:get_sensor_data' sensor_id=0 %}".replace('0', sensorButtonId);
+                            const layout = {
+                              autosize: false,
+                              width: 700,
+                              height: 500,
+                            };
+                            $.ajax({
+                                url: urlAjax,
+                                success : function(data) {
+                                    let dataSensor = [{
+                                        x: data.x,
+                                        y: data.y,
+                                        type: 'scatter'
+                                    }];
+                                    Plotly.newPlot(graphElement,dataSensor, layout);
+                                }
+                            })
+                        };
+                    {# -----Fim da parte do código que adiciona no grafico os dados do sensor-----#}
+                    }
+                    {#  Aciona o modal, os trechos anteriores são antes do modal aparecer para o usuario#}
+                    modalStation.modal('toggle');
+                    })
+                {# essa virgula se tirada quebra tudo XD#}
+                ,
+
+            {% endfor %}
+
+        ]).addTo(map);
+
+        {% for station in stations %}
+            L.circle({{ station.lat_lon }}, {stroke: false}).addTo(map)
+        {% endfor %}
+
+        {#   trecho de código para tornar o mapa responsivo     #}
+        var mapmargin = 50;
+        $('#map').css("height", ($(window).height() - mapmargin));
+        $(window).on("resize", resize);
+        resize();
+        function resize(){
+
+            if($(window).width()>=980){
+                $('#map').css("height", ($(window).height() - mapmargin));
+                $('#map').css("margin-top",50);
+            }else{
+                $('#map').css("height", ($(window).height() - (mapmargin+12)));
+                $('#map').css("margin-top",-21);
+            }
+}
+    </script>
 {% endblock %}
+
