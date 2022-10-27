@@ -1,0 +1,11 @@
+.sensor-button{
+    color: #fff;
+    background-color: grey !important;
+    margin-right: 20px;
+}
+
+.sensor-button:hover{
+    color: #fff;
+    background-color: #0d6efd !important;
+
+}
