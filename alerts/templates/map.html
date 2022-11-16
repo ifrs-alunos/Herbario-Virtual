@@ -73,22 +73,32 @@
         </div>
 
         <div class="modal  fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-          <div class="modal-dialog modal-lg modal-dialog-centered" style="    min-width: auto;
-    max-width: fit-content;" role="document">
+          <div class="modal-dialog  modal-dialog-centered" style="    min-width: auto;
+    max-width: fit-content; padding-left: 15px;" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle"></h5>
+                <h5 class="modal-title mx-2" id="exampleModalLongTitle"></h5>
+                   <ul id="data-list" class="nav nav-pills">
+                       <li class="nav-item"><a class="nav-link display-button-active"  href="#">Dados meteorológicos</a> </li>
+                       <li class="nav-item"><a class="nav-link"  href="#">Modelos matemáticos</a> </li>
+                    </ul>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
                 <div class="row">
-                    <div class="col-3" id="modal-body-col">
-                    </div>
-                    <div class="col-9" id="modal-body-col2">
+                    <div class="col" id="modal-body-col2">
                         <ul id="sensor-list" class="nav nav-pills">
                         </ul>
+                        <ul id="date-list" class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
+                             <li class="nav-item"><a class="nav-link date-button"   date_filter="week" href="#">Semana</a> </li>
+                             <li class="nav-item"><a class="nav-link date-button"   date_filter="month" href="#">Mês</a> </li>
+                             <li class="nav-item"><a class="nav-link date-button"   date_filter="year" href="#">Ano</a> </li>
+                             <li class="nav-item"><a class="nav-link date-button"   date_filter="all" href="#">Total</a> </li>
+                        </ul>
+
                         <br>
                         <div id="graph-sensor" style="width:100%;">
                         </div>
@@ -102,9 +112,7 @@
     <script>
         const InitGraph= document.getElementById('graph-sensor');
         const layout = {
-          autosize: false,
-          width: 700,
-          height: 500,
+          autosize: true,
         };
         Plotly.newPlot( InitGraph, [{}], layout);
     </script>
@@ -154,7 +162,7 @@
                 .on('click', function(e) {
                     {#  coloca os dados da estação clicada no modal#}
                     const modalStation = $('#exampleModalCenter');
-                    modalStation.find('.modal-title').text('Dados sobre a estação {{ station.alias }}');
+                    modalStation.find('.modal-title').text('Dados sobre a estação {{ station.alias }} (Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }} )');
                     {#  pill navbar com os sensores #}
                     const sensorList = document.createElement('div');
                     {% for sensor in station.sensor_set.all %}
@@ -163,25 +171,21 @@
                     {#  então...sensorList é uma div então $(sensorList).html() é pra pegar o que tem dentro #}
                     {#       caso contrario entraria um div no meio         #}
                     modalStation.find('#sensor-list').html($(sensorList).html());
-                    {# coloca as informações no modal #}
-                    modalStation.find('#modal-body-col').html("" +
-                        "Nome da estação: {{ station.alias }} <br><br>" +
-                        "Latitude: {{ station.lat_coordinate }} <br><br>"  +
-                        "Longitude: {{ station.lon_coordinate }}<br><br>" +
-                        "Descrição da estação: {{ station.description }}<br><br>"
-
-                    );
                     {# -----Parte do código que adiciona no grafico os dados do sensor-----#}
                     const graphElement = document.getElementById('graph-sensor');
                     const sensorsButton = document.getElementsByClassName("sensor-button");
                     for (let i = 0; i < sensorsButton.length; i++){
                             sensorsButton[i].onclick = function(){
+                            $(sensorsButton).each(function() {
+                                $(this).removeClass("sensor-button-active")
+                            })
+                            $(sensorsButton[i]).addClass(" sensor-button-active");
                             const sensorButtonId = sensorsButton[i].getAttribute("sensor_id");
-                            const urlAjax = "{% url 'alerts:get_sensor_data' sensor_id=0 %}".replace('0', sensorButtonId);
+                            const dateButton = document.getElementsByClassName("date-active")[0].getAttribute("date_filter");
+                            const urlAjax = "{% url 'alerts:get_sensor_data' sensor_id=0 date_filter="day" %}".replace('0', sensorButtonId).replace('day', dateButton);
                             const layout = {
-                              autosize: false,
-                              width: 700,
-                              height: 500,
+                              autosize: true,
+
                             };
                             $.ajax({
                                 url: urlAjax,
@@ -197,6 +201,8 @@
                         };
                     {# -----Fim da parte do código que adiciona no grafico os dados do sensor-----#}
                     }
+                    {#      clica no primeiro sensor para mostrar os dados              #}
+                    $(sensorsButton[0]).click();
                     {#  Aciona o modal, os trechos anteriores são antes do modal aparecer para o usuario#}
                     modalStation.modal('toggle');
                     })
@@ -226,6 +232,20 @@
                 $('#map').css("margin-top",-21);
             }
 }
+    </script>
+     <script>
+    {#  script para o botão da data  #}
+    const dateButtons = document.getElementsByClassName("date-button");
+    for (let i = 0; i < dateButtons.length; i++){
+            dateButtons[i].onclick = function(){
+                $(dateButtons).each(function() {
+                    $(this).removeClass(" date-active")
+                })
+                $(dateButtons[i]).addClass(" date-active");
+                const sensorButton = document.getElementsByClassName("sensor-button-active")[0];
+                $(sensorButton).click();
+        }
+    }
     </script>
 {% endblock %}
 

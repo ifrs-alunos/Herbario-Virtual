@@ -28,7 +28,12 @@ RELATIONAL_TYPE_CHOICES = [
 
 METRIC_TYPE_CHOICES = [
     ('mm', 'Milímetros'),
-    ('Cº', 'Graus ºC'),
+    ('C', 'Graus ºC'),
     ('bool', 'Sensor Humano'),
-    ('%','Umidade %')
+    ('%', 'Umidade %'),
+    ('wm2', 'Wm2'),
+    ('K', 'Graus ºK'),
+    ('m/s', 'm/s'),
+    ('mbar', 'milibares'),
+    ('v', 'volts'),
 ]

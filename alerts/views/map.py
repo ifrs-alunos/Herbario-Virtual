@@ -10,7 +10,7 @@ def get_map(request):
     """Esta função cria um mapa mostrando todas as estações cadastradas
     e suas respectivas situações. Consulte a codumentação do Folium para saber mais sobre poup, icons, tooltips, markers..."""
 
-    query_station = Station.objects.all() # Lista de todas as estações
+    query_station = Station.objects.all().prefetch_related('sensor_set') # Lista de todas as estações
 
     # m = folium.Map(location=[-28.43, -50.921371], zoom_start=10) # Cria o mapa base
     #
