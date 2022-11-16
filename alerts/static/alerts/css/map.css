@@ -1,11 +1,26 @@
 .sensor-button{
-    color: #fff;
-    background-color: grey !important;
-    margin-right: 20px;
+    color: black;
+    margin-bottom: 10px;
+
 }
 
 .sensor-button:hover{
     color: #fff;
     background-color: #0d6efd !important;
 
+}
+
+.sensor-button-active{
+    color: #fff;
+    background-color: #0d6efd !important;
+}
+
+.date-active{
+    color: #fff;
+    background-color: #0d6efd !important;
+}
+
+.display-button-active{
+    color: #fff;
+    background-color: #0d6efd !important;
 }
