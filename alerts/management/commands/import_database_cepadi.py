@@ -64,6 +64,8 @@ class Command(BaseCommand):
         for x in sensors_name:
             report_list = []
             sensor = Sensor.objects.get(name=x)
+            print(sensor)
+            print(data[x])
             for y in data[x]:
                 local_tz = pytz.timezone('America/Sao_Paulo')
 
