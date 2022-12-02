@@ -64,8 +64,8 @@ class Command(BaseCommand):
         for x in sensors_name:
             report_list = []
             sensor = Sensor.objects.get(name=x)
-
-            for y in data[x][387770:]:
+            # metade do valor dos requests é [:387770]
+            for y in data[x]:
                 local_tz = pytz.timezone('America/Sao_Paulo')
 
                 dateteste = data['datahora'][col].replace(tzinfo=local_tz)
