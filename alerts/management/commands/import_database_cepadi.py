@@ -60,6 +60,7 @@ class Command(BaseCommand):
             Sensor.objects.bulk_create(list_sensors)
         datas = data['datahora'].tolist()
         col = 0
+        print(data)
         for x in sensors_name:
             report_list = []
             sensor = Sensor.objects.get(name=x)
@@ -72,5 +73,6 @@ class Command(BaseCommand):
                 col += 1
             col = 0
             Report.objects.bulk_create(report_list)
+            print(f"Sensor {x} com reports! ")
 
         print("Acabou")
