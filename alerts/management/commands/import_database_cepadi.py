@@ -64,9 +64,8 @@ class Command(BaseCommand):
         for x in sensors_name:
             report_list = []
             sensor = Sensor.objects.get(name=x)
-            print(sensor)
-            print(data[x])
-            for y in data[x]:
+
+            for y in data[x][:387770]:
                 local_tz = pytz.timezone('America/Sao_Paulo')
 
                 dateteste = data['datahora'][col].replace(tzinfo=local_tz)
@@ -74,7 +73,7 @@ class Command(BaseCommand):
                 report_list.append(report)
                 col += 1
             col = 0
-            Report.objects.bulk_create(report_list)
+            # Report.objects.bulk_create(report_list)
             print(f"Sensor {x} com reports! ")
 
         print("Acabou")
