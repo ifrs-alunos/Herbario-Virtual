@@ -73,7 +73,7 @@ class Command(BaseCommand):
                 report_list.append(report)
                 col += 1
             col = 0
-            # Report.objects.bulk_create(report_list)
+            Report.objects.bulk_create(report_list)
             print(f"Sensor {x} com reports! ")
 
         print("Acabou")
