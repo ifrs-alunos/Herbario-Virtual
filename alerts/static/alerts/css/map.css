@@ -1,26 +1,31 @@
-.sensor-button{
+.sensor-button, .date-button, .display-button{
     color: black;
-    margin-bottom: 10px;
 
 }
-
-.sensor-button:hover{
+.sensor-button:hover, .date-button:hover, .display-button:hover {
     color: #fff;
-    background-color: #0d6efd !important;
-
+    background-color: #2c6b3a !important;
 }
 
-.sensor-button-active{
+.display-button-active, .date-active, .sensor-button-active{
     color: #fff;
-    background-color: #0d6efd !important;
+    background-color: #2c6b3a !important;
 }
 
-.date-active{
-    color: #fff;
-    background-color: #0d6efd !important;
+body {
+    padding: 0;
+    margin: 0;
+}
+html, body, #map {
+    height: 100%;
+    width: 100%;
 }
 
-.display-button-active{
-    color: #fff;
-    background-color: #0d6efd !important;
+#labfito-sidebar {
+  height: 32px;
+  width: 36px;
+}
+
+#labfito-sidebar > span > span {
+    font-size: 30px;
 }

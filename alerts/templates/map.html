@@ -1,83 +1,86 @@
-{#{% extends "core/base.html" %}#}
-{#{% load static %}#}
-{##}
-{#{% block content %}#}
-{##}
-{#    <div class="container">#}
-{#        <div class="map-container">#}
-{#            <h1>Localização das estações:</h1>#}
-{#        </div>#}
-{#        <div class="map-container">#}
-{#            <div class="map">#}
-{#                {{ mapa|safe }}#}
-{#            </div>#}
-{##}
-{#        </div>#}
-{#        <div class="container">#}
-{#            <div class="map-legend">#}
-{#                <div class="legend">#}
-{#                    <i id='pin-green' class="fa fa-map-marker" aria-hidden="true"> </i>#}
-{#                    <p>Dados disponíveis</p>                  #}
-{#                    <i id='pin-gray' class="fa fa-map-marker" aria-hidden="true"> </i>#}
-{#                    <p>Dados indisponíveis</p>#}
-{#                    <i id='pin-red' class="fa fa-map-marker" aria-hidden="true"> </i>#}
-{#                    <p>Esporos de ferrugem detectados</p>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-{##}
-{#  </div>#}
-{##}
-{#{% endblock %}#}
-{#{% block scripts %}#}
-{#{% endblock %}#}
-
-{% extends "core/base.html" %}
 {% load static %}
-{% block head %}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-          integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
-          crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
-            integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
-            crossorigin=""></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
-    <link rel="stylesheet" href="{% static 'alerts/css/map.css' %}"/>
-{% endblock %}
+<!doctype html>
+<html>
+    <head>
+            <meta charset="utf-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-{% block content %}
-    <div class="container">
-        <div class="map-container">
-            <h1>Localização das estações:</h1>
+            <!-- Ícone favicon -->
+            <link rel="icon" type="image/png" href="{% static 'core/images/favicon2.png' %}"/>
+
+            <title>LabFito</title>
+
+            <!-- Estilos próprios -->
+            <link rel="stylesheet" href="{% static 'core/css/style.css' %}"/>
+
+            <!-- Framework CSS Bootstrap -->
+            <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/> -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+                  integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+
+            <!-- Icons por FontAwesome -->
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+            <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+                  integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+                  crossorigin=""/>
+            <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                    crossorigin=""></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+        <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
+        <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.js"></script>
+
+
+        <link rel="stylesheet" href="{% static 'alerts/css/map.css' %}"/>
+    </head>
+    <body>
+        <div id="map" style="">
         </div>
-        <div class="map-container">
-            <div id="map" style="width: 100%;height: 600px;margin:0;padding:0;position: relative;z-index: 1">
-            </div>
-        </div>
-        <div class="container">
-            <div class="map-legend">
-                <div class="legend">
-                    <i id='pin-green' class="fa fa-map-marker" aria-hidden="true"> </i>
-                    <p>Dados disponíveis</p>
-                    <i id='pin-gray' class="fa fa-map-marker" aria-hidden="true"> </i>
-                    <p>Dados indisponíveis</p>
-                    <i id='pin-red' class="fa fa-map-marker" aria-hidden="true"> </i>
-                    <p>Esporos de ferrugem detectados</p>
+
+        {#   ------SIDEBAR-----     #}
+        <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+            <div class="offcanvas-header">
+                <div class="row">
+                    <div class="col-3">
+                        <a href="{% url 'core:index' %}">
+                            <img src="{% static 'core/images/labfito_png2.png' %}" alt="Voltar ao site" width="70px">
+                        </a>
+                    </div>
+                    <div class="col">
+                        <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
+                            Mapa de estações meteorológicas
+                        </h5>
+                    </div>
                 </div>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <h4>Previsão de doenças disponiveis:</h4>
+                {% for mathmodel in mathmodels %}
+                    <a>{{ mathmodel }}</a>
+                {% endfor %}
             </div>
         </div>
-
+        {#   -------FIM SIDEBAR---------     #}
+        {#   -------MODAL---------       #}
         <div class="modal  fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog  modal-dialog-centered" style="    min-width: auto;
     max-width: fit-content; padding-left: 15px;" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title mx-2" id="exampleModalLongTitle"></h5>
+                  <div class="row">
+                      <div class="row">
+                          <h5 class="modal-title mx-2" id="exampleModalLongTitle"></h5>
+                      </div>
+                      <div class="row">
+                          <small class="modal-latlong mx-2 text-muted"></small>
+                      </div>
+                  </div>
                    <ul id="data-list" class="nav nav-pills">
                        <li class="nav-item"><a class="nav-link display-button-active"  href="#">Dados meteorológicos</a> </li>
                        <li class="nav-item"><a class="nav-link"  href="#">Modelos matemáticos</a> </li>
@@ -89,7 +92,7 @@
               <div class="modal-body">
                 <div class="row">
                     <div class="col" id="modal-body-col2">
-                        <ul id="sensor-list" class="nav nav-pills">
+                        <ul id="sensor-list" class="nav nav-pills mb-2">
                         </ul>
                         <ul id="date-list" class="nav nav-pills">
                             <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
@@ -108,7 +111,7 @@
             </div>
           </div>
         </div>
-    </div>
+        {#   -------FIM MODAL---------       #}
     <script>
         const InitGraph= document.getElementById('graph-sensor');
         const layout = {
@@ -132,8 +135,21 @@
             icon: 'fa-circle',
             markerColor: 'lightgray'
      });
+      {# Inicia o mapa #}
+      let map = L.map('map', { zoomControl: false}).setView([-28.43, -50.921371], 10);
 
-      let map = L.map('map').setView([-28.43, -50.921371], 10);
+      {# Adiciona os controles de zoom pro topo direita#}
+      L.control.zoom({
+            position: 'topright'
+      }).addTo(map);
+
+      {# Adicionar um botão de acionamento da barra lateral no mapa#}
+      L.easyButton('fa-solid fa-bars', function(btn, map){
+          const offcanvasElement = document.getElementById("offcanvasScrolling");
+          const bsOffcanvas = new bootstrap.Offcanvas(offcanvasElement)
+          bsOffcanvas.show();
+      }, 'Barra lateral de ações', 'labfito-sidebar').addTo( map );
+
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
@@ -150,19 +166,21 @@
                 L.marker({{ station.lat_lon }}, {icon:lightGreyMarker})
                 {# condicionais que verificam caso tenha sensor humano o marcador e o tooltip mudam#}
                 {% if station.get_human_sensor_condition %}
-                    .bindTooltip('<b> Estação {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>:  {% if sensor.type.metric == 'bool' and sensor.report_set.last.value_in_type == 1.00 %} DETECTADOS {% else %} {{ sensor.report_set.last.value}} {% endif %}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
+                    .bindTooltip('<b> {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>:  {% if sensor.type.metric == 'bool' and sensor.report_set.last.value_in_type == 1.00 %} DETECTADOS {% else %} {{ sensor.report_set.last.value}} {% endif %}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
                     .setIcon(redMarker)
                 {% elif not station.get_human_sensor_condition and station.sensor_set.all  %}
-                    .bindTooltip('<b> Estação {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>: {{ sensor.report_set.last.value|floatformat:"2"  }} {{ sensor.type.metric}}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
+                    .bindTooltip('<b> {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>: {{ sensor.report_set.last.value|floatformat:"2"  }} {{ sensor.type.metric}}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
                     .setIcon(greenMarker)
                 {% else %}
-                    .bindTooltip("<b> Estação {{ station.alias }}</b> <br><br> Sem dados para esta estação no momento")
+                    .bindTooltip("<b> {{ station.alias }}</b> <br><br> Sem dados para esta estação no momento")
                 {% endif %}
                 {#     quando é clicado na estação no mapa     #}
                 .on('click', function(e) {
                     {#  coloca os dados da estação clicada no modal#}
                     const modalStation = $('#exampleModalCenter');
-                    modalStation.find('.modal-title').text('Dados sobre a estação {{ station.alias }} (Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }} )');
+                    modalStation.find('.modal-title').text('{{ station.alias }}');
+                    modalStation.find('.modal-latlong').text('Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }}');
+
                     {#  pill navbar com os sensores #}
                     const sensorList = document.createElement('div');
                     {% for sensor in station.sensor_set.all %}
@@ -216,22 +234,6 @@
         {% for station in stations %}
             L.circle({{ station.lat_lon }}, {stroke: false}).addTo(map)
         {% endfor %}
-
-        {#   trecho de código para tornar o mapa responsivo     #}
-        var mapmargin = 50;
-        $('#map').css("height", ($(window).height() - mapmargin));
-        $(window).on("resize", resize);
-        resize();
-        function resize(){
-
-            if($(window).width()>=980){
-                $('#map').css("height", ($(window).height() - mapmargin));
-                $('#map').css("margin-top",50);
-            }else{
-                $('#map').css("height", ($(window).height() - (mapmargin+12)));
-                $('#map').css("margin-top",-21);
-            }
-}
     </script>
      <script>
     {#  script para o botão da data  #}
@@ -247,5 +249,21 @@
         }
     }
     </script>
-{% endblock %}
+
+<!-- Respectivamente, jQuery, Popper.js e Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>-->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+            crossorigin="anonymous"></script>
+
+
+    </body>
+</html>
 
