@@ -4,6 +4,7 @@ import pytz
 from django.core.management.base import BaseCommand, CommandError
 import pandas as pd
 from django.utils import timezone
+from django.utils.timezone import make_aware
 
 from alerts.models import Station, Sensor, TypeSensor, Report
 
@@ -65,10 +66,14 @@ class Command(BaseCommand):
             report_list = []
             sensor = Sensor.objects.get(name=x)
             # metade do valor dos requests é [:387770]
-            for y in data[x]:
+            for y in data[x][:387770]:
                 local_tz = pytz.timezone('America/Sao_Paulo')
 
                 dateteste = data['datahora'][col].replace(tzinfo=local_tz)
+                # naive = datetime(2017, 10, 11, 9, 30).replace(tzinfo=local_tz)
+                # if naive < dateteste:
+                #     print(dateteste)
+                # aware = make_aware(naive, timezone=pytz.timezone("America/Sao_Paulo"))
                 report = Report(value=y, sensor=sensor, time=dateteste)
                 report_list.append(report)
                 col += 1
