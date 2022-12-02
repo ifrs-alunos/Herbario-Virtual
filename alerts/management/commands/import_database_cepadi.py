@@ -66,16 +66,15 @@ class Command(BaseCommand):
             report_list = []
             sensor = Sensor.objects.get(name=x)
             # metade do valor dos requests é [:387770]
-            for y in data[x][:387770]:
+            for y in data[x]:
                 local_tz = pytz.timezone('America/Sao_Paulo')
 
                 dateteste = data['datahora'][col].replace(tzinfo=local_tz)
-                # naive = datetime(2017, 10, 11, 9, 30).replace(tzinfo=local_tz)
-                # if naive < dateteste:
-                #     print(dateteste)
-                # aware = make_aware(naive, timezone=pytz.timezone("America/Sao_Paulo"))
-                report = Report(value=y, sensor=sensor, time=dateteste)
-                report_list.append(report)
+                naive = datetime(2017, 10, 11, 9, 30).replace(tzinfo=local_tz)
+                if naive < dateteste:
+                    print(dateteste)
+                    report = Report(value=y, sensor=sensor, time=dateteste)
+                    report_list.append(report)
                 col += 1
             col = 0
             Report.objects.bulk_create(report_list)
