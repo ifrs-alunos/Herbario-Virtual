@@ -7,7 +7,7 @@
     background-color: #2c6b3a !important;
 }
 
-.display-button-active, .date-active, .sensor-button-active{
+.display-button-active, .date-active, .sensor-button-active, .btn-download{
     color: #fff;
     background-color: #2c6b3a !important;
 }

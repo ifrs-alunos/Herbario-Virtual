@@ -46,23 +46,25 @@
         <div class="offcanvas offcanvas-start" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
             <div class="offcanvas-header">
                 <div class="row">
-                    <div class="col-3">
+                    <div class="col">
                         <a href="{% url 'core:index' %}">
                             <img src="{% static 'core/images/labfito_png2.png' %}" alt="Voltar ao site" width="70px">
                         </a>
+
                     </div>
                     <div class="col">
                         <h5 class="offcanvas-title" id="offcanvasScrollingLabel">
-                            Mapa de estações meteorológicas
+                            LABFITO
                         </h5>
                     </div>
                 </div>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <h4>Previsão de doenças disponiveis:</h4>
+                <h4>Favorabilidade de doenças disponiveis:</h4>
+                <br>
                 {% for mathmodel in mathmodels %}
-                    <a>{{ mathmodel }}</a>
+                    <a>{{ mathmodel.disease.culture_disease }} - {{ mathmodel.disease }} - {{ mathmodel }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -83,7 +85,7 @@
                   </div>
                    <ul id="data-list" class="nav nav-pills">
                        <li class="nav-item"><a class="nav-link display-button-active"  href="#">Dados meteorológicos</a> </li>
-                       <li class="nav-item"><a class="nav-link"  href="#">Modelos matemáticos</a> </li>
+                       <li class="nav-item"><a class="nav-link"  href="#">Modelo matemático</a> </li>
                     </ul>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -94,14 +96,20 @@
                     <div class="col" id="modal-body-col2">
                         <ul id="sensor-list" class="nav nav-pills mb-2">
                         </ul>
-                        <ul id="date-list" class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
-                             <li class="nav-item"><a class="nav-link date-button"   date_filter="week" href="#">Semana</a> </li>
-                             <li class="nav-item"><a class="nav-link date-button"   date_filter="month" href="#">Mês</a> </li>
-                             <li class="nav-item"><a class="nav-link date-button"   date_filter="year" href="#">Ano</a> </li>
-                             <li class="nav-item"><a class="nav-link date-button"   date_filter="all" href="#">Total</a> </li>
-                        </ul>
-
+                        <div class="row">
+                            <div class="col">
+                                <ul id="date-list" class="nav nav-pills">
+                                    <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
+                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="week" href="#">Semana</a> </li>
+                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="month" href="#">Mês</a> </li>
+                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="year" href="#">Ano</a> </li>
+                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="all" href="#">Total</a> </li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                               <button type="button" class="btn btn-download btn-success float-end">Baixar dados</button>
+                            </div>
+                        </div>
                         <br>
                         <div id="graph-sensor" style="width:100%;">
                         </div>
@@ -164,16 +172,37 @@
             {% for station in stations %}
                 {#     adiciona o marcador no mapa  #}
                 L.marker({{ station.lat_lon }}, {icon:lightGreyMarker})
-                {# condicionais que verificam caso tenha sensor humano o marcador e o tooltip mudam#}
-                {% if station.get_human_sensor_condition %}
-                    .bindTooltip('<b> {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>:  {% if sensor.type.metric == 'bool' and sensor.report_set.last.value_in_type == 1.00 %} DETECTADOS {% else %} {{ sensor.report_set.last.value}} {% endif %}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
-                    .setIcon(redMarker)
-                {% elif not station.get_human_sensor_condition and station.sensor_set.all  %}
-                    .bindTooltip('<b> {{ station.alias }}</b> <br><br> {% for sensor in station.sensor_set.all %} <b>{{ sensor.name }}</b>: {{ sensor.report_set.last.value|floatformat:"2"  }} {{ sensor.type.metric}}<br> Atualizado: {{  sensor.report_set.last.time|date:'d/m/Y H:m'}} <br>{% endfor %}')
-                    .setIcon(greenMarker)
-                {% else %}
-                    .bindTooltip("<b> {{ station.alias }}</b> <br><br> Sem dados para esta estação no momento")
-                {% endif %}
+
+                {#Tooltip do marcador#}
+                .bindTooltip(() => {
+
+                    const el = document.createElement('div');
+                    $(el).html("<b>Aguardando dados...</b>") ;
+                    let html = document.createElement('div');
+                    {# Funcao que coloca na variavel (el) os dados da estacao #}
+                    const getData = async (url) => {
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            const data = await response.json();
+                            const isEmpty = Object.keys(data).length === 0;
+                            $(html).append(`<b>{{ station.alias }}</b> <br><br>`)
+                            if (isEmpty){
+                                $(html).append(`Sem dados para esta estação no momento.<br>`);
+                            }else{
+                                for (const sensor in data) {
+                                $(html).append($(`<b>${data[sensor]["sensor_name"]}</b>: ${data[sensor]["last_report"]} ${data[sensor]["sensor_metric"]}<br> Atualizado: ${data[sensor]["updated"]} <br><br>`));
+                                }
+                            }
+                            el.innerHTML = $(html).html();
+                        }
+                    }
+
+                    const urlAjax = "{% url 'alerts:get_station_data' station_id=0 %}".replace('0', {{ station.id }});
+
+                    getData(urlAjax);
+                    return el;
+                })
+
                 {#     quando é clicado na estação no mapa     #}
                 .on('click', function(e) {
                     {#  coloca os dados da estação clicada no modal#}
@@ -248,6 +277,9 @@
                 $(sensorButton).click();
         }
     }
+    </script>
+    <script>
+
     </script>
 
 <!-- Respectivamente, jQuery, Popper.js e Bootstrap JS -->
