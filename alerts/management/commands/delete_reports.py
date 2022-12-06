@@ -18,7 +18,7 @@ class Command(BaseCommand):
         sensors_name = ["PTemp", "cnr4_T_C_Avg"]
 
         for x in sensors_name:
-            sensor = Sensor.objects.get(name=x)
+            sensor = Sensor.objects.get(type__sensor__name=x)
             sensor.report_set.all().delete()
 
 
