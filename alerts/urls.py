@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views.map import get_map
 
-from .views import board_notify, formula, view_graphs, collect_data_cepadi, get_sensor_data, collect_data_stationif
+from .views import board_notify, formula, view_graphs, collect_data_cepadi, get_sensor_data, collect_data_stationif, get_station_data
 from .views import mathmodel
 app_name = 'alerts'
 
@@ -19,5 +19,6 @@ urlpatterns = [
     path('coletar_dados/cepadi', collect_data_cepadi, name="collect_data_cepadi"),
     path('coletar_dados/estacaoif', collect_data_stationif, name="collect_data_stationif"),
     path('get/sensor/<int:sensor_id>/<str:date_filter>/data', get_sensor_data, name="get_sensor_data"),
+    path('get/estacao/<int:station_id>', get_station_data, name="get_station_data"),
 
 ]
