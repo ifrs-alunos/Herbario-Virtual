@@ -177,7 +177,7 @@
                 .bindTooltip(() => {
 
                     const el = document.createElement('div');
-                    $(el).html("<b>Aguardando dados...</b>") ;
+                    $(el).html("<b>{{ station.alias }}</b><br><br><b>Aguardando dados...</b>") ;
                     let html = document.createElement('div');
                     {# Funcao que coloca na variavel (el) os dados da estacao #}
                     const getData = async (url) => {
