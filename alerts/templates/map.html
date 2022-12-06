@@ -61,7 +61,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <h4>Favorabilidade de doenças disponiveis:</h4>
+                <h4>Favorabilidade de doenças disponíveis:</h4>
                 <br>
                 {% for mathmodel in mathmodels %}
                     <a>{{ mathmodel.disease.culture_disease }} - {{ mathmodel.disease }} - {{ mathmodel }}</a>
@@ -82,10 +82,13 @@
                       <div class="row">
                           <small class="modal-latlong mx-2 text-muted"></small>
                       </div>
+                      <div class="row">
+                           <small class="modal-description mx-2 text-muted"></small>
+                      </div>
                   </div>
-                   <ul id="data-list" class="nav nav-pills">
-                       <li class="nav-item"><a class="nav-link display-button-active"  href="#">Dados meteorológicos</a> </li>
-                       <li class="nav-item"><a class="nav-link"  href="#">Modelo matemático</a> </li>
+                   <ul id="data-list" class="nav nav-pills me-2">
+                       <li class="nav-item"><a class="nav-link display-button display-button-active"  href="#">Dados meteorológicos</a> </li>
+                       <li class="nav-item"><a class="nav-link display-button"  href="#">Modelo matemático</a> </li>
                     </ul>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -94,22 +97,22 @@
               <div class="modal-body">
                 <div class="row">
                     <div class="col" id="modal-body-col2">
-                        <ul id="sensor-list" class="nav nav-pills mb-2">
-                        </ul>
                         <div class="row">
-                            <div class="col">
-                                <ul id="date-list" class="nav nav-pills">
-                                    <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
-                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="week" href="#">Semana</a> </li>
-                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="month" href="#">Mês</a> </li>
-                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="year" href="#">Ano</a> </li>
-                                    <li class="nav-item"><a class="nav-link date-button"   date_filter="all" href="#">Total</a> </li>
+                            <div class="col-10">
+                                <ul id="sensor-list" class="nav nav-pills mb-2">
                                 </ul>
                             </div>
                             <div class="col">
                                <button type="button" class="btn btn-download btn-success float-end">Baixar dados</button>
                             </div>
                         </div>
+                        <ul id="date-list" class="nav nav-pills">
+                            <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
+                            <li class="nav-item"><a class="nav-link date-button"   date_filter="week" href="#">Semana</a> </li>
+                            <li class="nav-item"><a class="nav-link date-button"   date_filter="month" href="#">Mês</a> </li>
+                            <li class="nav-item"><a class="nav-link date-button"   date_filter="year" href="#">Ano</a> </li>
+                            <li class="nav-item"><a class="nav-link date-button"   date_filter="all" href="#">Total</a> </li>
+                        </ul>
                         <br>
                         <div id="graph-sensor" style="width:100%;">
                         </div>
@@ -209,6 +212,8 @@
                     const modalStation = $('#exampleModalCenter');
                     modalStation.find('.modal-title').text('{{ station.alias }}');
                     modalStation.find('.modal-latlong').text('Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }}');
+                    modalStation.find('.modal-description').text('{{ station.description }}');
+
 
                     {#  pill navbar com os sensores #}
                     const sensorList = document.createElement('div');
