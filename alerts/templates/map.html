@@ -77,7 +77,7 @@
               <div class="modal-header">
                   <div class="row">
                       <div class="row">
-                          <h5 class="modal-title mx-2" id="exampleModalLongTitle"></h5>
+                          <h5 class="modal-title mx-2" style="display: inline-block" id="exampleModalLongTitle"></h5>
                       </div>
                       <div class="row">
                           <small class="modal-latlong mx-2 text-muted"></small>
@@ -103,7 +103,7 @@
                                 </ul>
                             </div>
                             <div class="col">
-                               <button type="button" class="btn btn-download btn-success float-end">Baixar dados</button>
+                               <a href="" class="btn btn-download btn-success float-end">Baixar dados</a>
                             </div>
                         </div>
                         <ul id="date-list" class="nav nav-pills">
@@ -192,8 +192,9 @@
                             if (isEmpty){
                                 $(html).append(`Sem dados para esta estação no momento.<br>`);
                             }else{
+                                $(html).append($(`<b>Data de atualização:</b> ${data[1]["updated"]} <br>`));
                                 for (const sensor in data) {
-                                $(html).append($(`<b>${data[sensor]["sensor_name"]}</b>: ${data[sensor]["last_report"]} ${data[sensor]["sensor_metric"]}<br> Atualizado: ${data[sensor]["updated"]} <br><br>`));
+                                $(html).append($(`<b>${data[sensor]["sensor_name"]}</b>: ${data[sensor]["last_report"]} ${data[sensor]["sensor_metric"]}<br>`));
                                 }
                             }
                             el.innerHTML = $(html).html();
@@ -210,9 +211,12 @@
                 .on('click', function(e) {
                     {#  coloca os dados da estação clicada no modal#}
                     const modalStation = $('#exampleModalCenter');
-                    modalStation.find('.modal-title').text('{{ station.alias }}');
+                    modalStation.find('.modal-title').html('{{ station.alias }} <small class=" mx-2 text-muted">dados desde: {{ station.sensor_set.first.report_set.first.time|date:"d/m/Y H:i" }}</small>');
                     modalStation.find('.modal-latlong').text('Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }}');
                     modalStation.find('.modal-description').text('{{ station.description }}');
+                    $(modalStation.find('.btn-download')).attr("href", "{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', {{ station.station_id }}))
+                    {#modalStation.find('.btn-download').href("");#}
+                    {#modalStation.find('.btn-download').href("{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', {{ station.id }}));#}
 
 
                     {#  pill navbar com os sensores #}
