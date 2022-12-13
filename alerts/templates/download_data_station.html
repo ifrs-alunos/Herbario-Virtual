@@ -1,0 +1,18 @@
+{% extends "core/base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <div class="container">
+        <h5>{{ error_message }}</h5>
+        <br>
+        <form method="GET">
+            {{ form|crispy }}
+
+            <div class="pt-4">
+                <input class="btn btn-primary" type="submit" value="Baixar dados">
+            </div>
+        </form>
+        <br>
+    </div>
+{% endblock %}

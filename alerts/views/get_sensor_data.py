@@ -35,7 +35,6 @@ def get_sensor_data(request, sensor_id, date_filter):
         # end_week = start_week + timezone.timedelta(7)
         end_week = last_report_date - timezone.timedelta(last_report_date.weekday())
         start_week = end_week - timezone.timedelta(7)
-        print(start_week,end_week)
         reports = sensor.report_set.filter(time__range=[start_week, end_week]).values('time', 'value').annotate(
             value_float=Cast('value', output_field=FloatField())) \
             .annotate(day=TruncDay('time')) \

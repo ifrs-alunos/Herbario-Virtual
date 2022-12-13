@@ -6,3 +6,5 @@ from .collect_data_cepadi import *
 from .get_sensor_data import *
 from .collect_data_stationif import *
 from .get_station_data import *
+from .download_data_station import *
+
