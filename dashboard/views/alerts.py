@@ -58,14 +58,14 @@ class CreateMathModel(CreateView):
             sensor_rh = station.sensor_set.get(type__metric="%")
             reports_sensor_t = sensor_t.report_set.annotate(
                 value_float=Cast('value', output_field=FloatField())) \
-                .annotate(hour=TruncHour('time')) \
+                .annotate(hour=TruncHour('time', is_dst=False)) \
                 .values('hour') \
                 .annotate(avg_value=Avg('value_float')) \
                 .order_by("hour")
 
             reports_sensor_rh = sensor_rh.report_set.annotate(
                 value_float=Cast('value', output_field=FloatField())) \
-                .annotate(hour=TruncHour('time')) \
+                .annotate(hour=TruncHour('time', is_dst=False)) \
                 .values('hour') \
                 .annotate(avg_value=Avg('value_float')) \
                 .order_by("hour")
@@ -132,14 +132,14 @@ class UpdateMathModel(UpdateView):
             sensor_rh = station.sensor_set.get(type__metric="%")
             reports_sensor_t = sensor_t.report_set.annotate(
                 value_float=Cast('value', output_field=FloatField())) \
-                .annotate(hour=TruncHour('time')) \
+                .annotate(hour=TruncHour('time', is_dst=False)) \
                 .values('hour') \
                 .annotate(avg_value=Avg('value_float')) \
                 .order_by("hour")
 
             reports_sensor_rh = sensor_rh.report_set.annotate(
                 value_float=Cast('value', output_field=FloatField())) \
-                .annotate(hour=TruncHour('time')) \
+                .annotate(hour=TruncHour('time', is_dst=False)) \
                 .values('hour') \
                 .annotate(avg_value=Avg('value_float')) \
                 .order_by("hour")
