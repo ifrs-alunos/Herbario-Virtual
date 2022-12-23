@@ -31,6 +31,9 @@ class Station(BaseModel):
                     else:
                         return False
 
+    def get_mathmodels_id(self):
+        mathmodels_id = self.mathmodel_set.all().values_list("id",flat=True)
+        return list(mathmodels_id)
     def __str__(self):
         return f"{self.alias} {self.lat_lon}"
 

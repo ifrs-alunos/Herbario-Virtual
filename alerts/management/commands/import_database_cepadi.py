@@ -18,7 +18,7 @@ class Command(BaseCommand):
         #                 "WS_ms_S_WVT", "WindDir_D1_WVT", "WindDir_SD1_WVT", "WS_ms_Max", "WS_ms_Min", "WindDir",
         #                 "AirTC_Avg", "AirTC_Max", "AirTC_Min", "RH", "AirTC_2_Avg", "AirTC_2_Max", "AirTC_2_Min",
         #                 "RH_2", "BP_mbar", "T108_C_Avg", "VW_Avg", "FlxSolo_Avg", "Rain_mm_Tot"]
-        sensors_name = ["PTemp", "cnr4_T_C_Avg", "AirTC_Avg", "RH", "T108_C_Avg", "Rain_mm_Tot"]
+        sensors_name = ["AirTC_Avg", "RH"]
 
         data = pd.read_csv("alerts/cepadi.csv")
         data['datahora'] = pd.to_datetime(data['datahora'])
