@@ -19,17 +19,17 @@
                   integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
 
             <!-- Icons por FontAwesome -->
-            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+{#            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>#}
+            <script src="https://kit.fontawesome.com/db4137df4b.js" crossorigin="anonymous"></script>
             <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
                   integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
                   crossorigin=""/>
             <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
                     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
                     crossorigin=""></script>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+{#        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>#}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+        <script src="{% static 'alerts/js/awesome-markers.js' %}"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
         <script src="https://cdn.plot.ly/plotly-2.14.0.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2/src/easy-button.css">
@@ -64,31 +64,31 @@
                 <h4>Favorabilidade de doenças disponíveis:</h4>
                 <br>
                 {% for mathmodel in mathmodels %}
-                    <a>{{ mathmodel.disease.culture_disease }} - {{ mathmodel.disease }} - {{ mathmodel }}</a>
+                    <a href="?mathmodel={{ mathmodel.id }}">{{ mathmodel.disease.culture_disease }} - {{ mathmodel.disease }} - {{ mathmodel }}</a>
                 {% endfor %}
             </div>
         </div>
         {#   -------FIM SIDEBAR---------     #}
         {#   -------MODAL---------       #}
-        <div class="modal  fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal  fade" station_id="" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
           <div class="modal-dialog  modal-dialog-centered" style="    min-width: auto;
     max-width: fit-content; padding-left: 15px;" role="document">
             <div class="modal-content">
               <div class="modal-header">
                   <div class="row">
-                      <div class="row">
+                      <div class="row-7">
                           <h5 class="modal-title mx-2" style="display: inline-block" id="exampleModalLongTitle"></h5>
                       </div>
-                      <div class="row">
+                      <div class="row-7">
                           <small class="modal-latlong mx-2 text-muted"></small>
                       </div>
-                      <div class="row">
+                      <div class="row-7">
                            <small class="modal-description mx-2 text-muted"></small>
                       </div>
                   </div>
                    <ul id="data-list" class="nav nav-pills me-2">
-                       <li class="nav-item"><a class="nav-link display-button display-button-active"  href="#">Dados meteorológicos</a> </li>
-                       <li class="nav-item"><a class="nav-link display-button"  href="#">Modelo matemático</a> </li>
+                       <li class="nav-item"><a class="nav-link display-button display-button-active"  href="#" id="meteorological_button">Dados meteorológicos</a> </li>
+                       <li class="nav-item"><a class="nav-link display-button"  href="#"id="mathmodel_button" >Modelo matemático</a> </li>
                     </ul>
                 <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -96,27 +96,27 @@
               </div>
               <div class="modal-body">
                 <div class="row">
-                    <div class="col" id="modal-body-col2">
-                        <div class="row">
-                            <div class="col-10">
-                                <ul id="sensor-list" class="nav nav-pills mb-2">
-                                </ul>
-                            </div>
-                            <div class="col">
-                               <a href="" class="btn btn-download btn-success float-end">Baixar dados</a>
-                            </div>
-                        </div>
-                        <ul id="date-list" class="nav nav-pills">
-                            <li class="nav-item"><a class="nav-link date-button date-active" date_filter="day" href="#">Dia</a> </li>
-                            <li class="nav-item"><a class="nav-link date-button"   date_filter="week" href="#">Semana</a> </li>
-                            <li class="nav-item"><a class="nav-link date-button"   date_filter="month" href="#">Mês</a> </li>
-                            <li class="nav-item"><a class="nav-link date-button"   date_filter="year" href="#">Ano</a> </li>
-                            <li class="nav-item"><a class="nav-link date-button"   date_filter="all" href="#">Total</a> </li>
-                        </ul>
-                        <br>
-                        <div id="graph-sensor" style="width:100%;">
-                        </div>
-                    </div>
+{#                    <div class="col" id="modal-body-col2">#}
+{#                        <div class="row">#}
+{#                            <div class="col-10">#}
+{#                                <ul id="sensor-list" class="nav nav-pills mb-2">#}
+{#                                </ul>#}
+{#                            </div>#}
+{#                            <div class="col">#}
+{#                                <a href="" class="btn btn-download btn-success float-end">Baixar dados</a>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                        <ul id="date-list" class="nav nav-pills">#}
+{#                            <li class="nav-item"><a class="nav-link date-button date-active" onclick="add_active_class(this)" date_filter="day" href="#">Dia</a> </li>#}
+{#                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"   date_filter="week" href="#">Semana</a> </li>#}
+{#                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"  date_filter="month" href="#">Mês</a> </li>#}
+{#                            <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="year" href="#">Ano</a> </li>#}
+{#                            <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="all" href="#">Total</a> </li>#}
+{#                        </ul>#}
+{#                        <br>#}
+{#                        <div id="graph-sensor" style="width:100%;">#}
+{#                        </div>#}
+{#                    </div>#}
                 </div>
               </div>
             </div>
@@ -133,17 +133,26 @@
     <script>
         var redMarker = L.AwesomeMarkers.icon({
             prefix:'fa',
-            icon: 'fa-circle',
+            extraClasses: 'fa-solid',
+            icon: 'fa-wheat-awn-circle-exclamation',
             markerColor: 'red'
      });
         var greenMarker = L.AwesomeMarkers.icon({
             prefix:'fa',
-            icon: 'fa-circle',
+            extraClasses: 'fa-solid',
+            icon: 'fa-wheat-awn-circle-exclamation',
             markerColor: 'green'
+     });
+         var yellowMarker = L.AwesomeMarkers.icon({
+            prefix:'fa',
+            extraClasses: 'fa-solid',
+            icon: 'fa-wheat-awn-circle-exclamation',
+            markerColor: 'yellow'
      });
         var lightGreyMarker = L.AwesomeMarkers.icon({
             prefix:'fa',
-            icon: 'fa-circle',
+            extraClasses: 'fa-solid',
+            icon: 'fa-wheat-awn-circle-exclamation',
             markerColor: 'lightgray'
      });
       {# Inicia o mapa #}
@@ -169,16 +178,45 @@
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiZm0tbGVvbmFyZG8iLCJhIjoiY2t3cHZuNXl6MGdwNzJ2bThmMHpqbmlnNiJ9.uX-B9pNeRXPtHt3zs2kTEg'
         }).addTo(map);
+        function return_color(station_id) {
+            let marker = greenMarker;
+            if (window.location.toString().includes("mathmodel={{ mathmodel }}")){
+                const replaceChars={ "0":`${station_id}` , "10":"{{ mathmodel }}" };
+                var regex = new RegExp( Object.keys(replaceChars).join("|"), "g");
+                const urlAjax = "{% url 'alerts:get_station_mathmodel_color' station_id=0 mathmodel_id=10  %}"
+                const urlAjax_replaced = urlAjax.replace(regex,function(match) {return replaceChars[match];})
+                const getData = async (url) => {
+                        let marker = greenMarker
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            const data = await response.json();
+                            const result = data['result']
+                            if (result <= 0.3){
+                                marker = greenMarker
+                            }else if (result <= 0.6){
+                                marker = yellowMarker
+                            }else {
+                                marker = redMarker
+                            }
 
+                        }
+                    }
+
+
+               getData(urlAjax_replaced)
+
+            }
+            return marker
+        }
         let stations = L.layerGroup([
             {#loop para cada estação no sistema#}
             {% for station in stations %}
                 {#     adiciona o marcador no mapa  #}
-                L.marker({{ station.lat_lon }}, {icon:lightGreyMarker})
-
+                L.marker({{ station.lat_lon }}, {icon:lightGreyMarker,})
+                .setIcon(return_color("{{ station.id }}"))
                 {#Tooltip do marcador#}
                 .bindTooltip(() => {
-
+                    const params = new URLSearchParams();
                     const el = document.createElement('div');
                     $(el).html("<b>{{ station.alias }}</b><br><br><b>Aguardando dados...</b>") ;
                     let html = document.createElement('div');
@@ -192,7 +230,7 @@
                             if (isEmpty){
                                 $(html).append(`Sem dados para esta estação no momento.<br>`);
                             }else{
-                                $(html).append($(`<b>Data de atualização:</b> ${data[1]["updated"]} <br>`));
+                                $(html).append($(`<b>Data de atualização:</b> ${data[Object.keys(data)[0]]["updated"]} <br>`));
                                 for (const sensor in data) {
                                 $(html).append($(`<b>${data[sensor]["sensor_name"]}</b>: ${data[sensor]["last_report"]} ${data[sensor]["sensor_metric"]}<br>`));
                                 }
@@ -209,57 +247,19 @@
 
                 {#     quando é clicado na estação no mapa     #}
                 .on('click', function(e) {
+
                     {#  coloca os dados da estação clicada no modal#}
                     const modalStation = $('#exampleModalCenter');
                     modalStation.find('.modal-title').html('{{ station.alias }} <small class=" mx-2 text-muted">dados desde: {{ station.sensor_set.first.report_set.first.time|date:"d/m/Y H:i" }}</small>');
                     modalStation.find('.modal-latlong').text('Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }}');
                     modalStation.find('.modal-description').text('{{ station.description }}');
-                    $(modalStation.find('.btn-download')).attr("href", "{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', {{ station.station_id }}))
-                    {#modalStation.find('.btn-download').href("");#}
-                    {#modalStation.find('.btn-download').href("{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', {{ station.id }}));#}
-
-
-                    {#  pill navbar com os sensores #}
-                    const sensorList = document.createElement('div');
-                    {% for sensor in station.sensor_set.all %}
-                        $(sensorList).append($('<li class="nav-item"><a class="nav-link sensor-button" sensor_id="{{ sensor.id }}" href="#">{{ sensor.name }}</a> </li>'));
-                    {% endfor %}
-                    {#  então...sensorList é uma div então $(sensorList).html() é pra pegar o que tem dentro #}
-                    {#       caso contrario entraria um div no meio         #}
-                    modalStation.find('#sensor-list').html($(sensorList).html());
-                    {# -----Parte do código que adiciona no grafico os dados do sensor-----#}
-                    const graphElement = document.getElementById('graph-sensor');
-                    const sensorsButton = document.getElementsByClassName("sensor-button");
-                    for (let i = 0; i < sensorsButton.length; i++){
-                            sensorsButton[i].onclick = function(){
-                            $(sensorsButton).each(function() {
-                                $(this).removeClass("sensor-button-active")
-                            })
-                            $(sensorsButton[i]).addClass(" sensor-button-active");
-                            const sensorButtonId = sensorsButton[i].getAttribute("sensor_id");
-                            const dateButton = document.getElementsByClassName("date-active")[0].getAttribute("date_filter");
-                            const urlAjax = "{% url 'alerts:get_sensor_data' sensor_id=0 date_filter="day" %}".replace('0', sensorButtonId).replace('day', dateButton);
-                            const layout = {
-                              autosize: true,
-
-                            };
-                            $.ajax({
-                                url: urlAjax,
-                                success : function(data) {
-                                    let dataSensor = [{
-                                        x: data.x,
-                                        y: data.y,
-                                        type: 'scatter'
-                                    }];
-                                    Plotly.newPlot(graphElement,dataSensor, layout);
-                                }
-                            })
-                        };
-                    {# -----Fim da parte do código que adiciona no grafico os dados do sensor-----#}
-                    }
-                    {#      clica no primeiro sensor para mostrar os dados              #}
-                    $(sensorsButton[0]).click();
+                    modalStation.attr("station_id", {{ station.id }})
+                    {#$(modalStation.find('.btn-download')).attr("href", "{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', {{ station.station_id }}))#}
                     {#  Aciona o modal, os trechos anteriores são antes do modal aparecer para o usuario#}
+                    const meteorological_button = document.getElementById("meteorological_button")
+                    meteorological_button.click();
+
+
                     modalStation.modal('toggle');
                     })
                 {# essa virgula se tirada quebra tudo XD#}
@@ -274,22 +274,175 @@
         {% endfor %}
     </script>
      <script>
-    {#  script para o botão da data  #}
-    const dateButtons = document.getElementsByClassName("date-button");
-    for (let i = 0; i < dateButtons.length; i++){
-            dateButtons[i].onclick = function(){
-                $(dateButtons).each(function() {
-                    $(this).removeClass(" date-active")
-                })
-                $(dateButtons[i]).addClass(" date-active");
-                const sensorButton = document.getElementsByClassName("sensor-button-active")[0];
-                $(sensorButton).click();
-        }
-    }
-    </script>
-    <script>
+         function add_active_class(a) {
+             const dateButtons = document.getElementsByClassName("date-button");
+             $(dateButtons).each(function () {
+                 $(this).removeClass(" date-active")
+             })
+             $(a).addClass(" date-active");
+             const sensorButton = document.getElementsByClassName("sensor-button-active")[0];
+             $(sensorButton).click();
+         }
 
     </script>
+    <script>
+        meteorological_button = document.getElementById("meteorological_button")
+        mathmodel_button = document.getElementById("mathmodel_button")
+        function change_display_active_class(el) {
+            const displayButtons = document.getElementsByClassName("display-button");
+             $(displayButtons).each(function () {
+                 $(this).removeClass(" display-button-active")
+             })
+             $(el).addClass(" display-button-active");
+        }
+        meteorological_button.addEventListener('click', () => {
+            change_display_active_class(meteorological_button)
+            updateModal();
+        })
+        mathmodel_button.addEventListener('click', () => {
+            change_display_active_class(mathmodel_button)
+            updateModal();
+        })
+        async function updateModal() {
+            const modalStation = $('#exampleModalCenter');
+            const stationId = modalStation.attr("station_id");
+            const stationDict = await returnStationDict(stationId);
+            if ($(meteorological_button).hasClass("display-button-active")){
+                const meteorological_section = '<div class="col" id="modal-body-col2">\
+                        <div class="row">\
+                            <div class="col-10">\
+                                <ul id="sensor-list" class="nav nav-pills mb-2">\
+                                </ul>\
+                            </div>\
+                            <div class="col">\
+                                <a href="" class="btn btn-download btn-success float-end">Baixar dados</a>\
+                            </div>\
+                        </div>\
+                        <ul id="date-list" class="nav nav-pills">\
+                            <li class="nav-item"><a class="nav-link date-button date-active" onclick="add_active_class(this)" date_filter="day" href="#">Dia</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"   date_filter="week" href="#">Semana</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"  date_filter="month" href="#">Mês</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="year" href="#">Ano</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="all" href="#">Total</a> </li>\
+                        </ul>\
+                        <br>\
+                        <div id="graph-sensor" style="width:100%;">\
+                        </div>\
+                    </div>'
+                modalStation.find('.modal-body .row').html(meteorological_section);
+                $(modalStation.find('.btn-download')).attr("href", "{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', stationDict['station_id']))
+
+                {#  pill navbar com os sensores #}
+                const sensorList = document.createElement('div');
+                for (const sensor in stationDict['sensors']) {
+                    $(sensorList).append($(`<li class="nav-item"><a class="nav-link sensor-button" sensor_id="${sensor}" href="#">${stationDict['sensors'][sensor]}</a> </li>`));
+
+                }
+{#                {% for sensor in station_modal.sensor_set.all %}#}
+{#                    $(sensorList).append($('<li class="nav-item"><a class="nav-link sensor-button" sensor_id="{{ sensor.id }}" href="#">{{ sensor.name }}</a> </li>'));#}
+{#                {% endfor %}#}
+                {#  então...sensorList é uma div então $(sensorList).html() é pra pegar o que tem dentro #}
+                {#       caso contrario entraria um div no meio         #}
+                $(modalStation).find('#sensor-list').html($(sensorList).html());
+                {# -----Parte do código que adiciona no grafico os dados do sensor-----#}
+                const graphElement = document.getElementById('graph-sensor');
+                const sensorsButton = document.getElementsByClassName("sensor-button");
+                for (let i = 0; i < sensorsButton.length; i++){
+                        sensorsButton[i].onclick = function(){
+                        $(sensorsButton).each(function() {
+                            $(this).removeClass("sensor-button-active")
+                        })
+                        $(sensorsButton[i]).addClass(" sensor-button-active");
+                        const sensorButtonId = sensorsButton[i].getAttribute("sensor_id");
+                        const dateButton = document.getElementsByClassName("date-active")[0].getAttribute("date_filter");
+                        const urlAjax = "{% url 'alerts:get_sensor_data' sensor_id=0 date_filter="day" %}".replace('0', sensorButtonId).replace('day', dateButton);
+                        const layout = {
+                          autosize: true,
+
+                        };
+                        $.ajax({
+                            url: urlAjax,
+                            success : function(data) {
+                                let dataSensor = [{
+                                    x: data.x,
+                                    y: data.y,
+                                    type: 'scatter'
+                                }];
+                                Plotly.newPlot(graphElement,dataSensor, layout);
+                            }
+                        })
+                    };
+                {# -----Fim da parte do código que adiciona no grafico os dados do sensor-----#}
+                }
+                {#      clica no primeiro sensor para mostrar os dados              #}
+                $(sensorsButton[0]).click();
+            }
+            if ($(mathmodel_button).hasClass("display-button-active")){
+                const graph_mathmodel = '\
+                <div id="graph-sensor" style="width:100%;">\
+                </div>'
+                modalStation.find('.modal-body .row').html(graph_mathmodel);
+                const graphElement = document.getElementById('graph-sensor');
+                const urlAjax = "{% url 'alerts:get_mathmodels' %}";
+                        const layout = {
+                          autosize: true,
+                            shapes: [
+                                                    {
+
+                          type: 'line',
+                            xref: 'x',
+
+                        yref: 'paper',
+                          x0: '{{human_sensor.report_set.last.time|escapejs}}',
+                          y0: 0,
+                          x1: '{{human_sensor.report_set.last.time|escapejs}}',
+                          y1: 1,
+                          line: {
+                              dash: "dot",
+                            color: 'red',
+                            width: 3
+                          },
+                           name: "{{ human_sensor.name }}"
+                                                    }
+
+                            ]
+
+                        };
+                        $.ajax({
+                            url: urlAjax,
+                            success : function(data) {
+                                const list_mathmodel = []
+                                for (const mathmodel in data) {
+                                    const mathmodel_scatter = {
+                                    x: data[mathmodel].x,
+                                    y: data[mathmodel].y,
+                                    type: 'scatter',
+                                    name: data[mathmodel].name,
+                                    }
+                                    list_mathmodel.push(mathmodel_scatter);
+                                }
+                                Plotly.newPlot(graphElement,list_mathmodel, layout);
+                            }
+                        })
+
+            }
+
+        }
+    </script>
+        <script>
+            function returnStationDict(station_id) {
+                const urlAjax = "{% url 'alerts:get_station' station_id=0  %}".replace('0', station_id)
+                const getData = async (url) => {
+                        const response = await fetch(url);
+                        if (response.ok) {
+                            return await response.json();
+                        }
+                    }
+
+                return getData(urlAjax)
+
+            }
+        </script>
 
 <!-- Respectivamente, jQuery, Popper.js e Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

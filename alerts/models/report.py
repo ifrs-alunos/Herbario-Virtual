@@ -1,9 +1,11 @@
 from datetime import datetime
 
 from django.db import models
+from django.db.models import FloatField, Avg
+from django.db.models.functions import TruncHour, Cast
 from django.utils.timezone import localtime
 
-from . import Sensor
+from . import Sensor, MathModel
 from .base import BaseModel
 from django.utils import timezone
 

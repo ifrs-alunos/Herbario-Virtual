@@ -4,6 +4,7 @@ from django.utils import timezone
 from .base import BaseModel
 from .math_model import MathModel
 
+
 class MathModelResult(BaseModel):
     value = models.FloatField(verbose_name="Valor")
     date = models.DateTimeField(default=timezone.now)

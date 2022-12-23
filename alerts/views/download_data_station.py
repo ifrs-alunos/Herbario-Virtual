@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 import csv
 
+
 from django.contrib.postgres.aggregates import ArrayAgg
 from django.db.models import Count, Q
 from django.http import HttpResponse
@@ -26,6 +27,8 @@ def download_data_station(request, station_id):
         )
         writer = csv.writer(response)
         sensors_name = ["Data"]
+        writer.writerow([station.alias,])
+        writer.writerow(" ")
         for x in sensors:
             sensors_name.append(x.name)
         writer.writerow(sensors_name)

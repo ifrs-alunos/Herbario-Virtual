@@ -10,3 +10,4 @@ from .disease_solicitation_form import DiseaseSolicitationModelForm
 from .culture_solicitation_form import CultureSolicitationModelForm
 from .publication_form import PublicationForm
 from .publication_photo_form import PublicationPhotoForm
+from .mathmodel_form import MathModelForm

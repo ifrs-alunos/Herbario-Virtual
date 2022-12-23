@@ -4,7 +4,7 @@ from django.utils.timezone import localtime
 from alerts.models import Station
 
 
-def get_station_data(request, station_id):
+def get_station_sensors_data(request, station_id):
     station = Station.objects.get(id=station_id)
     sensores = station.sensor_set.all()
     dict_sensors = {}

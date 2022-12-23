@@ -15,11 +15,14 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         station_cepadi = Station.objects.get(station_id=23)
-        sensors_name = ["PTemp", "cnr4_T_C_Avg"]
-
-        for x in sensors_name:
-            sensor = Sensor.objects.get(type__name=x)
-            sensor.report_set.all().delete()
+        maths = station_cepadi.mathmodel_set.all()
+        for math in maths:
+            math.mathmodelresult_set.all().delete()
+        # sensors_name = ["PTemp", "cnr4_T_C_Avg"]
+        #
+        # for x in sensors_name:
+        #     sensor = Sensor.objects.get(type__name=x)
+        #     sensor.report_set.all().delete()
 
 
 

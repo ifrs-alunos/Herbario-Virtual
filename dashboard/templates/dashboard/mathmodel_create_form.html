@@ -3,10 +3,18 @@
 {% load crispy_forms_tags static %}
 
 {% block item %}
-    <form method="POST">
+    <form method="POST" id="form-mathmodel">
         {% csrf_token %}
         {{ form|crispy }}
         <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
-        <button type="submit" class="btn btn-light">Enviar</button>
+        <button type="button" id="btn-mathmodel-create" class="btn  btn-light">Enviar</button>
     </form>
+
+    <script>
+    const btnMathModel = document.getElementById("btn-mathmodel-create");
+    const form = document.getElementById('form-mathmodel')
+    btnMathModel.addEventListener('click', () => {
+        form.submit()
+    })
+    </script>
 {% endblock %}
