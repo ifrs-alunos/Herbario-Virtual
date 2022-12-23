@@ -18,7 +18,7 @@ class Command(BaseCommand):
         #                 "WS_ms_S_WVT", "WindDir_D1_WVT", "WindDir_SD1_WVT", "WS_ms_Max", "WS_ms_Min", "WindDir",
         #                 "AirTC_Avg", "AirTC_Max", "AirTC_Min", "RH", "AirTC_2_Avg", "AirTC_2_Max", "AirTC_2_Min",
         #                 "RH_2", "BP_mbar", "T108_C_Avg", "VW_Avg", "FlxSolo_Avg", "Rain_mm_Tot"]
-        sensors_name = ["Temperatura", "Umidade do ar"]
+        sensors_name = [10, 11]
 
         data = pd.read_csv("alerts/cepadi.csv")
         data['datahora'] = pd.to_datetime(data['datahora'])
@@ -64,7 +64,7 @@ class Command(BaseCommand):
         print(sensors_name)
         for x in sensors_name:
             report_list = []
-            sensor = Sensor.objects.get(name=x)
+            sensor = Sensor.objects.get(id=x)
             # metade do valor dos requests é [:387770]
             for y in data[x]:
                 local_tz = pytz.timezone('America/Sao_Paulo')
