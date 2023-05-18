@@ -2,8 +2,6 @@ from datetime import datetime, timezone
 import csv
 
 
-from django.contrib.postgres.aggregates import ArrayAgg
-from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import make_aware, localtime

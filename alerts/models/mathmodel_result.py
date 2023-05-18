@@ -16,3 +16,4 @@ class MathModelResult(BaseModel):
     class Meta:
         verbose_name = 'Resultado de modelo matematico'
         verbose_name_plural = 'Resultado dos modelos matematicos'
+        ordering = ['date']
