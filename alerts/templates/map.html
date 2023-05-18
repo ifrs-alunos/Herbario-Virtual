@@ -378,12 +378,38 @@
                 $(sensorsButton[0]).click();
             }
             if ($(mathmodel_button).hasClass("display-button-active")){
+                const mathmodel_filter_section = '<div class="col" id="modal-body-col2">\
+                        <div class="row">\
+                        </div>\
+                        <ul id="date-list" class="nav nav-pills">\
+                            <li class="nav-item"><a class="nav-link date-button date-active" onclick="add_active_class(this)" date_filter="day" href="#">Dia</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"   date_filter="week" href="#">Semana</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"  date_filter="month" href="#">Mês</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="year" href="#">Ano</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="all" href="#">Total</a> </li>\
+                        </ul>\
+                        <br>\
+                        <div id="graph-sensor" style="width:100%;">\
+                        </div>\
+                    </div>'
                 const graph_mathmodel = '\
                 <div id="graph-sensor" style="width:100%;">\
                 </div>'
-                modalStation.find('.modal-body .row').html(graph_mathmodel);
+                modalStation.find('.modal-body .row').html(mathmodel_filter_section);
+
                 const graphElement = document.getElementById('graph-sensor');
-                const urlAjax = "{% url 'alerts:get_mathmodels' %}";
+
+                {#Botões de filtros de data para o modelo matemático #}
+                const datesButton = document.getElementsByClassName("date-button");
+                 console.log(datesButton)
+                for (let i = 0; i < datesButton.length; i++) {
+                    datesButton[i].onclick = function () {
+                        $(datesButton).each(function () {
+                            $(this).removeClass("date-active")
+                        })
+                        $(datesButton[i]).addClass(" date-active");
+                        const dateButton = document.getElementsByClassName("date-active")[0].getAttribute("date_filter");
+
                         const layout = {
                           autosize: true,
                             shapes: [
@@ -408,6 +434,8 @@
                             ]
 
                         };
+                        const urlAjax = "{% url 'alerts:get_mathmodels' date_filter="day" %}".replace('day', dateButton);
+
                         $.ajax({
                             url: urlAjax,
                             success : function(data) {
@@ -424,7 +452,9 @@
                                 Plotly.newPlot(graphElement,list_mathmodel, layout);
                             }
                         })
-
+                    };
+                }
+                 $(datesButton[0]).click();
             }
 
         }
