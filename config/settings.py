@@ -39,12 +39,13 @@ INSTALLED_APPS = [
     'tinymce',
     'django_extensions',
     'crispy_forms',
+    # somente esses abaixo vão ser necessários migrar um por um na primeira vez (dashboard incluso).
     'core',
     'accounts',
     'herbarium',
     'disease',
     'alerts',
-    # dashboard deve ficar por ultimo na lista
+    # dashboard deve ficar por ultimo na lista SEMPRE, qualquer outro modulo adicional coloque ANTES
     'dashboard'
 ]
 

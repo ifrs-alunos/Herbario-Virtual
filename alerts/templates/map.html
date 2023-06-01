@@ -270,7 +270,7 @@
         ]).addTo(map);
 
         {% for station in stations %}
-            L.circle({{ station.lat_lon }}, {stroke: false}).addTo(map)
+            L.circle({{ station.lat_lon }}, 20000, {stroke: false}).addTo(map)
         {% endfor %}
     </script>
      <script>
@@ -306,6 +306,7 @@
         async function updateModal() {
             const modalStation = $('#exampleModalCenter');
             const stationId = modalStation.attr("station_id");
+            console.log(stationId)
             const stationDict = await returnStationDict(stationId);
             if ($(meteorological_button).hasClass("display-button-active")){
                 const meteorological_section = '<div class="col" id="modal-body-col2">\
@@ -401,7 +402,6 @@
 
                 {#Botões de filtros de data para o modelo matemático #}
                 const datesButton = document.getElementsByClassName("date-button");
-                 console.log(datesButton)
                 for (let i = 0; i < datesButton.length; i++) {
                     datesButton[i].onclick = function () {
                         $(datesButton).each(function () {
@@ -434,7 +434,8 @@
                             ]
 
                         };
-                        const urlAjax = "{% url 'alerts:get_mathmodels' date_filter="day" %}".replace('day', dateButton);
+                        const urlAjax = "{% url 'alerts:get_mathmodels' station_id="0" date_filter="day" %}".replace('day', dateButton).replace('0', stationId);
+                        console.log(urlAjax)
 
                         $.ajax({
                             url: urlAjax,

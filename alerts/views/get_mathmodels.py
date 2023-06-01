@@ -5,13 +5,13 @@ from django.utils import timezone
 
 from django.utils.timezone import localtime, make_aware
 
-from alerts.models import MathModel
+from alerts.models import MathModel, Station
 
 
-def get_mathmodels(request, date_filter):
+def get_mathmodels(request, station_id, date_filter):
 
     date = date_filter
-    mathmodels = MathModel.objects.all()
+    mathmodels = MathModel.objects.all().filter(stations__id=station_id)
     mathmodels_response = {}
     for mathmodel in mathmodels:
         mathmodels_response[mathmodel.id] = {}
