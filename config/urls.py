@@ -29,6 +29,7 @@ urlpatterns = [
     path('fitopatologico/', include('disease.urls', namespace='disease')),
     path('alertas/', include('alerts.urls', namespace='alerts')),
     path('tinymce/', include('tinymce.urls')),
+    path('webhook/', include('whatsapp_messages.urls')),
 ]
 
 #Para Imagem ser servida pelo Django
