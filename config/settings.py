@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'tinymce',
     'django_extensions',
     'crispy_forms',
-    'crispy_bootstrap4',
+#    'crispy_bootstrap4',
     'core',
     'accounts',
     'herbarium',
@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'dashboard'
 ]
 
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+#CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -142,7 +142,11 @@ LOGOUT_REDIRECT_URL = '/painel/login/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-
+WHATSAPP_URL = 'https://graph.facebook.com/v17.0/105127199343176/messages'
+WHATSAPP_TOKEN = 'Bearer EAAIsxY9GIEkBO1ZBn1LqU70ZBjZCZBpwsZAZACApAcyuAv0kfzs0n7VhZBg9EduuRoAO9EgbjMVnNscQgzkazZAFLFiwu4HTVV94bQe2DVk8Iuv0I4EToOOJ9EVq6wVbpy9Ed9k16mDvUtKpTZBpE3i4g4duhyh6HrZAcykhhTlaMGAIYWxXI0DWLZCzhgRrLv2z5AFxQGNLiRsWNaddsDf'
+#100612956408068 -> Phone number ID do número que é usado na API (esse é do numero teste do meta). Pode virar variável para cada numero diferente
+#Número LabFito -> 555481289190 (o app do meta cadastrou sem o 9)
+#105127199343176 -> Phone number ID do número do LabFito
 
 
 from .local_settings import *
