@@ -37,7 +37,8 @@
                 <thead>
                 <tr>
                     <th scope="col">Nome</th>
-                     <th scope="col">Tipo</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Estação</th>
                     <th scope="col">Ação</th>
                 </tr>
                 </thead>
@@ -80,6 +81,7 @@
 
                             <td scope="row">{{ sensor.name }}</td>
                             <td >{{ sensor.type }}/{{ sensor.type.metric }}</td>
+                            <td>{{sensor.station}}</td>
                             <td>
                                 <a href="{% url 'dashboard:sensor_human_add' sensor.id %}" id="sensor_human_add"
                                    class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom"
