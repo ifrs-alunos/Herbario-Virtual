@@ -13,3 +13,4 @@ tenacity==8.0.1
 typing-extensions==3.10.0.2
 beautifulsoup4~=4.10.0
 folium==0.12.1.post1
+numexpr==2.10.0
