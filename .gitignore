@@ -11,3 +11,4 @@ local_settings.py
 *migrations*
 venv
 backups
+.env
