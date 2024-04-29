@@ -3,7 +3,7 @@ from django.urls import path
 from .views.map import get_map
 
 from .views import board_notify, formula, view_graphs, collect_data_cepadi, get_sensor_data, collect_data_stationif, \
-    get_station_sensors_data, download_data_station, get_station, get_mathmodels, get_station_mathmodel_color
+    get_station_sensors_data, download_data_station, get_station, get_mathmodels, get_station_mathmodel_color, webhooks
 from .views import mathmodel
 app_name = 'alerts'
 
@@ -25,5 +25,5 @@ urlpatterns = [
     path('get/estacao/<int:station_id>', get_station, name="get_station"),
     path('get/mathmodels/<str:date_filter>', get_mathmodels, name="get_mathmodels"),
     path('get/station/<int:station_id>/mathmodel/<int:mathmodel_id>/color', get_station_mathmodel_color, name="get_station_mathmodel_color"),
-
+    path('webhooks/whatsapp', webhooks.whatsapp, name="whatsapp")
 ]
