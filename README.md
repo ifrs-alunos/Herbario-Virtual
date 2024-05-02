@@ -47,6 +47,6 @@ Siga as instruções do site oficial: https://docs.docker.com/get-docker/
 
 7. Para executar comandos de gerenciamento do Django, execute o comando `docker-compose run web python manage.py <comando>`
    #### Exemplos: 
-   - Criar super usuário `docker-compose run web python manage.py createsuperuser`
-   - Criar migrações `docker-compose run web python manage.py makemigrations`
-   - Aplicar migrações `docker-compose run web python manage.py migrate`
+   - Criar super usuário `docker-compose run labfito python manage.py createsuperuser`
+   - Criar migrações `docker-compose run labfito python manage.py makemigrations`
+   - Aplicar migrações `docker-compose run labfito python manage.py migrate`
