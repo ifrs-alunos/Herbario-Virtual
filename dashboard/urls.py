@@ -70,7 +70,4 @@ urlpatterns = [
     path('editar-sensores-humanos/', views.SensorHumanListView.as_view(), name="sensor_human_update"),
     path('adicionar-sensor-humano/<int:pk>', views.create_sensor_human, name="sensor_human_add"),
 
-    # whatsapp
-    path('whatsapp/status/', views.WhatsappStatusView.as_view(), name="whatsapp_status"),
-    path('whatsapp/logout/', views.WhatsappLogoutView.as_view(), name="whatsapp_logout")
 ]
