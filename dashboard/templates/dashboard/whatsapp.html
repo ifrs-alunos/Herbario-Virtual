@@ -1,0 +1,53 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% load format_phone_number %}
+
+{% block head %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nphbeZ04Sc13ka07paqdeTu0WR1IM4kNcpmBAUSHSQX0FslNhTDadL4O5SAGapGt4FodqL8My0mA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block item %}
+    <h3>
+    Status do bot: {% if bot_connected %} <span class="text-success">Conectado</span> {% else %} <span class="text-danger">Desconectado</span> {% endif %}
+    </h3>
+
+    <div class="container">
+        {% if errors %}
+            <div class="text-danger">
+            {% for error in errors %}
+            	{{ error }}
+            {% endfor %}
+            </div>
+        {% endif %}
+        <div class="row">
+            
+        </div>
+        <div class="row">
+            {% if not bot_connected %}
+                <div id="qrcode"></div>
+
+                <script>
+                    new QRCode(document.getElementById("qrcode"), {
+                        text: "{{ qrcode }}",
+                        width: 256,
+                        height: 256,
+                        colorDark : "#000000",
+                        colorLight : "#ffffff",
+                        correctLevel : QRCode.CorrectLevel.H
+                    });
+                </script>
+            {% else %}
+                Número: {{ status.info.wid.user|format_phone_number }}
+            {% endif %}
+        </div>
+        <div class="row">
+            {% if bot_connected %}
+                <div class="container">
+                    <a class="btn btn-danger text-white" href="{% url 'dashboard:whatsapp_logout' %}">
+                        Desconectar
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
