@@ -1,11 +1,34 @@
 import secrets
 import string
+import urllib.parse
 
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 
 from accounts.models import Profile
+
+
+class WhatsappNumber(models.Model):
+    """
+    Modelo de uso interno, apenas um número pode existir simultaneamente, usado no processador de contexto
+    """
+    number = models.CharField(max_length=20)
+
+    def get_whatsapp_url(self, message):
+        message = urllib.parse.quote(message)
+        return f'https://wa.me/{self.number}?text={message}'
+
+    def __str__(self):
+        return self.number
+
+    def save(self, *args, **kwargs):
+        if WhatsappNumber.objects.count() > 0:
+            raise ValidationError("Já existe um número de WhatsApp cadastrado")
+        else:
+            super(WhatsappNumber, self).save(*args, **kwargs)
+
 
 CODE_LENGTH = 6
 CODE_EXPIRATION_TIME = 60  # minutes
