@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'tinymce',
     'django_extensions',
     'crispy_forms',
-#    'crispy_bootstrap4',
+    #    'crispy_bootstrap4',
     'core',
     'accounts',
     'herbarium',
@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'dashboard'
 ]
 
-#CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+# CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -77,6 +77,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dashboard.context_processors.whatsapp'
             ],
         },
     },
@@ -108,7 +109,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -129,10 +129,10 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # STATICFILES_DIRS = (os.path.join(BASE_DIR, 'config/core/static'),)
 
-#Arquivos de mídia
+# Arquivos de mídia
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, "herbario", "media") 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media") 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = '/media/'
 
@@ -142,6 +142,4 @@ LOGOUT_REDIRECT_URL = '/painel/login/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-
 from .local_settings import *
-
