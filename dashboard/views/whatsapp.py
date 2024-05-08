@@ -1,12 +1,11 @@
+import requests
 from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import HttpResponseServerError
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView
 
 from alerts.constants import WHATSAPP_API_URL
-
-import requests
+from alerts.models.whatsapp import WhatsappNumber
 
 
 class WhatsappBaseMixin(UserPassesTestMixin, View):
@@ -21,13 +20,19 @@ class WhatsappStatusView(WhatsappBaseMixin, TemplateView):
         self.extra_context = {"errors": []}
 
         # Get the status of the WhatsApp API
-        response = requests.get(WHATSAPP_API_URL + '/qr')
+        try:
+            response = requests.get(WHATSAPP_API_URL + '/qr')
+        except requests.exceptions.ConnectionError:
+            self.extra_context["errors"].append("Falha ao se conectar com o WhatsApp")
+            return super().get(request, *args, **kwargs)
+
         if response.status_code == 200:  # bot is not connected, showing qr code
             qrcode = response.json().get('qrcode')
             if not qrcode:
                 self.extra_context["errors"].append("QR Code não encontrado")
+            else:
+                self.extra_context['qrcode'] = qrcode
 
-            self.extra_context['qrcode'] = response.json()['qrcode']
             self.extra_context['bot_connected'] = False
 
             return super().get(request, *args, **kwargs)
@@ -55,10 +60,20 @@ class WhatsappStatusView(WhatsappBaseMixin, TemplateView):
         """
         if response.status_code != 200:
             self.extra_context["errors"].append("Falha ao obter o status do WhatsApp")
+        else:
+            self.extra_context['status'] = response.json()
+
+            wa = WhatsappNumber.objects.first()
+
+            # Apenas um número de WhatsApp pode existir
+            if not wa:
+                WhatsappNumber.objects.create(number=response.json()['info']['me']['user'])
+            elif wa.number != response.json()['info']['me']['user']:
+                wa.delete()
+                WhatsappNumber.objects.create(number=response.json()['info']['me']['user'])
 
         has_errors = self.extra_context.get('errors')
         self.extra_context['bot_connected'] = not has_errors
-        self.extra_context['status'] = response.json()
 
         return super().get(request, *args, **kwargs)
 
