@@ -13,15 +13,15 @@
 
     <div class="container">
         {% if errors %}
-            <div class="text-danger">
-            {% for error in errors %}
-            	{{ error }}
-            {% endfor %}
+            <div class="row">
+                <div class="text-danger">
+                {% for error in errors %}
+                    {{ error }}
+                {% endfor %}
+                </div>
+                
             </div>
         {% endif %}
-        <div class="row">
-            
-        </div>
         <div class="row">
             {% if not bot_connected %}
                 <div id="qrcode"></div>
