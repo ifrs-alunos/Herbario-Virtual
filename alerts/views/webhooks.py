@@ -7,7 +7,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from alerts.models.whatsapp import MessageConfirmation, CODE_EXPIRATION_TIME, CODE_LENGTH
+from alerts.models.whatsapp import VerificationCode, CODE_EXPIRATION_TIME, CODE_LENGTH
 from .. import whatsapp
 
 
@@ -24,18 +24,18 @@ def whatsapp(request):
                                   "Código inválido. Por favor, digite um código de 6 dígitos.")
             return JsonResponse({"message": "invalid verification code"}, status=400)
 
-        mc = MessageConfirmation.objects.filter(code=code,
-                                                created_at__gt=timezone.now() - timedelta(minutes=CODE_EXPIRATION_TIME),
-                                                verified=False).first()
+        vc = VerificationCode.objects.filter(code=code,
+                                             created_at__gt=timezone.now() - timedelta(minutes=CODE_EXPIRATION_TIME),
+                                             verified=False).first()
 
-        if not MessageConfirmation.objects.exists():
+        if not vc:
             whatsapp.send_message(data.get("from").split("@")[0],
                                   f"O código enviado não existe ou já expirou.\n"
                                   f"Por favor gere outro código em "
                                   f"{request.build_absolute_uri(reverse('dashboard:profile'))}")
             return JsonResponse({"message": "verification code not found"}, status=400)
 
-        mc.verified = True
-        mc.save()
+        vc.verified = True
+        vc.save()
 
     return JsonResponse({"message": "ok"})

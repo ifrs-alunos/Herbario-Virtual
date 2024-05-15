@@ -1,11 +1,12 @@
 import requests
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpRequest
 from django.shortcuts import redirect, render
 from django.views import View
 from django.views.generic import TemplateView
 
 from alerts.constants import WHATSAPP_API_URL
-from alerts.models.whatsapp import WhatsappNumber
+from alerts.models.whatsapp import WhatsappNumber, VerificationCode
 
 
 class WhatsappBaseMixin(UserPassesTestMixin, View):
@@ -85,3 +86,11 @@ class WhatsappLogoutView(WhatsappBaseMixin, View):
             return redirect('dashboard:whatsapp_status')
 
         return render(request, 'dashboard/whatsapp.html', {'error': 'Falha ao desconectar o bot'})
+
+
+class WhatsappVerifyNumberView(View):
+    def get(self, request: HttpRequest, *args, **kwargs):
+        wa_number: WhatsappNumber = WhatsappNumber.objects.first()
+        vc: VerificationCode = VerificationCode(user=request.user)
+        vc.save()
+        return redirect(wa_number.get_whatsapp_url(message=vc.code))

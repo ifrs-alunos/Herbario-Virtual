@@ -5,7 +5,6 @@ from . import views
 
 app_name = 'dashboard'
 
-
 urlpatterns = [
     path('criar/', views.create_user, name='create'),
     path('login/', auth_views.LoginView.as_view(), name='login'),
@@ -33,31 +32,41 @@ urlpatterns = [
     path('aceitar-solicitacao-planta/<int:pk>', views.accept_plant_solicitation, name="accept_plant"),
     path('aceitar-solicitacao-doenca/<int:pk>', views.accept_disease_solicitation, name="accept_disease"),
     path('aceitar-solicitacao-foto-planta/<int:pk>', views.accept_plant_photo_solicitation, name="accept_plant_photo"),
-    path('aceitar-solicitacao-foto-doenca/<int:pk>', views.accept_disease_photo_solicitation, name="accept_disease_photo"),
+    path('aceitar-solicitacao-foto-doenca/<int:pk>', views.accept_disease_photo_solicitation,
+         name="accept_disease_photo"),
     path('aceitar-solicitacao/<int:pk>', views.accept_solicitation, name="accept_solicitation"),
     path('apagar-doenca/<slug:slug>/', views.DiseaseDeleteView.as_view(), name="delete_disease"),
     path('apagar-planta/<slug:slug>/', views.PlantDeleteView.as_view(), name="delete_plant"),
     path('apagar-solicitacao/<int:pk>/', views.SolicitationDeleteView.as_view(), name="delete_solicitation"),
     path('apagar-usuario/<int:pk>/', views.ProfileDeleteView.as_view(), name="delete_user"),
     path('detalhes-doencas/<slug:slug>/', views.DiseaseDetailView.as_view(), name='detail-disease'),
-    path('detalhes-solicitacao-doenca/<int:pk>/', views.DiseaseSolicitationDetailView.as_view(), name='detail-solicitation-disease'),
-    path('detalhes-solicitacao-planta/<int:pk>/', views.PlantSolicitationDetailView.as_view(), name='detail-solicitation-plant'),
-    path('detalhes-solicitacao-foto-planta/<int:pk>/', views.PlantPhotoSolicitationDetailView.as_view(), name='detail-solicitation-plant-photo'),
-    path('detalhes-solicitacao-foto-doenca/<int:pk>/', views.DiseasePhotoSolicitationDetailView.as_view(), name='detail-solicitation-disease-photo'),
+    path('detalhes-solicitacao-doenca/<int:pk>/', views.DiseaseSolicitationDetailView.as_view(),
+         name='detail-solicitation-disease'),
+    path('detalhes-solicitacao-planta/<int:pk>/', views.PlantSolicitationDetailView.as_view(),
+         name='detail-solicitation-plant'),
+    path('detalhes-solicitacao-foto-planta/<int:pk>/', views.PlantPhotoSolicitationDetailView.as_view(),
+         name='detail-solicitation-plant-photo'),
+    path('detalhes-solicitacao-foto-doenca/<int:pk>/', views.DiseasePhotoSolicitationDetailView.as_view(),
+         name='detail-solicitation-disease-photo'),
     path('detalhes-planta/<slug:slug>/', views.PlantDetailView.as_view(), name='detail-plant'),
     path('solicitacao-de-foto-planta/', views.photo_solicitation, name="photo_solicitation"),
     path('solicitacao-de-foto-doenca/', views.disease_photo_solicitation, name="disease_photo_solicitation"),
     path('solicitacoes-plantas/', views.PlantSolicitationListView.as_view(), name="plant_solicitation_list"),
     path('solicitacoes-doencas/', views.DiseaseSolicitationListView.as_view(), name="disease_solicitation_list"),
     path('solicitacoes-fotos-plantas/', views.PhotoSolicitationListView.as_view(), name="photo_solicitation_list"),
-    path('solicitacoes-fotos-doencas/', views.DiseasePhotoSolicitationListView.as_view(), name="disease_photo_solicitation_list"),
+    path('solicitacoes-fotos-doencas/', views.DiseasePhotoSolicitationListView.as_view(),
+         name="disease_photo_solicitation_list"),
     path('adicionar-cultura/', views.culture_solicitation, name="culture_solicitation"),
     path('lista-culturas/', views.CultureListView.as_view(), name="culture_list"),
     path('apagar-cultura/<slug:slug>', views.CultureDeleteView.as_view(), name="delete_culture"),
-    path('apagar-solicitacao-planta/<int:pk>', views.PlantSolicitationDeleteView.as_view(), name="delete_plant_solicitation"),
-    path('apagar-solicitacao-doenca/<int:pk>', views.DiseaseSolicitationDeleteView.as_view(), name="delete_diesase_solicitation"),
-    path('apagar-solicitacao-foto-doenca/<int:pk>', views.DiseasePhotoSolicitationDeleteView.as_view(), name="delete_diesase_photo_solicitation"),
-    path('apagar-solicitacao-foto-planta/<int:pk>', views.PlantPhotoSolicitationDeleteView.as_view(), name="delete_plant_photo_solicitation"),
+    path('apagar-solicitacao-planta/<int:pk>', views.PlantSolicitationDeleteView.as_view(),
+         name="delete_plant_solicitation"),
+    path('apagar-solicitacao-doenca/<int:pk>', views.DiseaseSolicitationDeleteView.as_view(),
+         name="delete_diesase_solicitation"),
+    path('apagar-solicitacao-foto-doenca/<int:pk>', views.DiseasePhotoSolicitationDeleteView.as_view(),
+         name="delete_diesase_photo_solicitation"),
+    path('apagar-solicitacao-foto-planta/<int:pk>', views.PlantPhotoSolicitationDeleteView.as_view(),
+         name="delete_plant_photo_solicitation"),
     path('editar-publicacoes/', views.PublicationListView.as_view(), name="publication_update"),
     path('editar-de-publicacao/<int:pk>', views.publication_update, name="publication_update"),
     path('solicitacao-de-publi/', views.PublicationCreateView.as_view(), name="publication_add"),
@@ -72,5 +81,6 @@ urlpatterns = [
 
     # whatsapp
     path('whatsapp/status/', views.WhatsappStatusView.as_view(), name="whatsapp_status"),
-    path('whatsapp/logout/', views.WhatsappLogoutView.as_view(), name="whatsapp_logout")
+    path('whatsapp/logout/', views.WhatsappLogoutView.as_view(), name="whatsapp_logout"),
+    path('whatsapp/confirmar/', views.WhatsappVerifyNumberView.as_view(), name="whatsapp_verify")
 ]
