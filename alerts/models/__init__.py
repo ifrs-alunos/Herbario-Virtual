@@ -11,4 +11,4 @@ from .sensor_in_mathmodel import SensorInMathModel
 from .constant import Constant
 from .mathmodel_result import MathModelResult
 
-from .whatsapp import WhatsappNumber, MessageConfirmation
+from .whatsapp import WhatsappNumber, VerificationCode
