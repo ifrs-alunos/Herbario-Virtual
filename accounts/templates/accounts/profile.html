@@ -3,6 +3,10 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/profile.css' %}">
+{% endblock %}
+
 {% block item %}
     {% if messages %}
         {% for message in messages %}
@@ -15,14 +19,33 @@
     <form id="create_form" method="POST">
         {% csrf_token %}
 
-        <div class="mb-2">{{ profile_form.name|as_crispy_field }}</div>
-        <div class="mb-2">{{ form.username|as_crispy_field }}</div>
-        <div class="mb-2">{{ form.email|as_crispy_field }}</div>
-        <div class="mb-2">{{ profile_form.institution|as_crispy_field }}</div>
-        <div class="mb-2">{{ profile_form.role|as_crispy_field }}</div>
-        <div class="mb-2">{{ profile_form.phone|as_crispy_field }}</div>
-        <div class="mb-2">{{ profile_form.cpf|as_crispy_field }}</div>
-        <div class="mb-2">{{ profile_form.rg|as_crispy_field }}</div>
+        <div class="container">
+            <div class="mb-2">{{ profile_form.name|as_crispy_field }}</div>
+            <div class="mb-2">{{ form.username|as_crispy_field }}</div>
+            <div class="mb-2">{{ form.email|as_crispy_field }}</div>
+            <div class="mb-2">{{ profile_form.institution|as_crispy_field }}</div>
+            <div class="mb-2">{{ profile_form.role|as_crispy_field }}</div>
+            <div class="mb-2 row">
+                <div class="col-xs-12 col-md">
+                    {{ profile_form.phone|as_crispy_field }}
+                </div>
+                <div class="col-xs-12 col-md-4 mt-2 mt-md-0 align-self-center">
+                    {% if not request.user.profile.is_phone_number_verified %}
+                        <a href="{% url 'dashboard:whatsapp_verify' %}" class="btn w-100 btn-whatsapp">
+                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                            Conectar Whatsapp
+                        </a>
+                    {% else %}
+                        <button type="button" class="btn w-100 btn-whatsapp" disabled>
+                            <i class="fa fa-whatsapp" aria-hidden="true"></i>
+                            Whatsapp Conectado
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="mb-2">{{ profile_form.cpf|as_crispy_field }}</div>
+            <div class="mb-2">{{ profile_form.rg|as_crispy_field }}</div>
+        </div>
 
         <!-- <div class="text-right"> -->
         <p class="font-weight-light mt-4">Se você deseja receber alertas pelo Whatsapp, após o seu cadastro envie a
