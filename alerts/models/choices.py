@@ -31,10 +31,14 @@ METRIC_TYPE_CHOICES = [
     ('C', 'Graus ºC'),
     ('CS', 'Graus ºC Solo'),
     ('bool', 'Sensor Humano'),
-    ('%', 'Umidade %'),
+    ('ur', 'Umidade Relativa %'),
+    # não sei quão importante isso é mas é preferivel não usar caractere especial como chave
+    ('%', 'Umidade % (depreciado)'),
     ('wm2', 'Wm2'),
     ('K', 'Graus ºK'),
-    ('m/s', 'm/s'),
-    ('mbar', 'milibares'),
-    ('v', 'volts'),
+    ('m/s', 'm/s (depreciado)'),
+    ('m_s', 'm/s'),
+    ('mbar', 'Milibares'),
+    ('v', 'Volts'),
+    ('pct', "Porcentagem")
 ]
