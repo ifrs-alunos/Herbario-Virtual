@@ -2,7 +2,7 @@ from django.urls import path
 
 from .views.map import get_map
 
-from .views import board_notify, formula, report, view_graphs, collect_data_cepadi, get_sensor_data, \
+from .views import formula, report, view_graphs, collect_data_cepadi, get_sensor_data, \
     collect_data_stationif, \
     get_station_sensors_data, download_data_station, get_station, get_mathmodels, get_station_mathmodel_color, webhooks
 from .views import mathmodel
