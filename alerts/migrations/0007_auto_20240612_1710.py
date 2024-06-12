@@ -3,11 +3,25 @@
 from django.db import migrations
 
 
-class Migration(migrations.Migration):
+def convert_char_to_float(apps, schema_editor):
+    Report = apps.get_model("alerts", "Report")
 
+    for report in Report.objects.all():
+        try:
+            report.value_new = float(report.value)
+        except ValueError:
+            if report.value.strip().lower() == "nan":
+                report.value_new = None
+            else:
+                raise
+        report.save()
+
+
+class Migration(migrations.Migration):
     dependencies = [
         ('alerts', '0006_auto_20240612_1709'),
     ]
 
     operations = [
+        migrations.RunPython(convert_char_to_float)
     ]
