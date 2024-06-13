@@ -29,6 +29,6 @@ class ReportView(View):
 
         for reading in body.get("readings"):
             sensor = station.sensor_set.get(type__name=reading.get("sensor_name"))
-            Report.objects.create(sensor=sensor, value=reading.get("value"))
+            Report.objects.create(sensor=sensor, value=float(reading.get("value")))
 
         return JsonResponse({"message": "ok"})
