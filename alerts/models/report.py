@@ -11,8 +11,7 @@ from django.utils import timezone
 
 
 class Report(BaseModel):
-    value = models.CharField('Valor', max_length=100, )
-    value_new = models.FloatField("Valor", null=True)
+    value = models.FloatField("Valor", null=True)
     sensor = models.ForeignKey(Sensor, verbose_name="Sensor", on_delete=models.PROTECT)
     time = models.DateTimeField(default=timezone.now)
 
