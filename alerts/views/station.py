@@ -6,14 +6,18 @@ from alerts.models import Station
 
 def get_station(request, station_id):
     station = Station.objects.get(id=station_id)
-    sensores = station.sensor_set.all()
+
+    if not station:
+        return JsonResponse({"error": "Station not found"}, status=404)
+
+    sensors = station.sensor_set.all()
 
     dict_station = {
         "station": station_id,
         "station_id": station.station_id,
         "sensors": {},
     }
-    for sensor in sensores:
+    for sensor in sensors:
         dict_station["sensors"][sensor.id] = sensor.name
 
     return JsonResponse(dict_station)
