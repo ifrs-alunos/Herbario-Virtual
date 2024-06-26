@@ -25,16 +25,21 @@ def get_station(request, station_id):
 
 def get_station_sensors_data(request, station_id):
     station = Station.objects.get(id=station_id)
-    sensores = station.sensor_set.all()
+
+    if not station:
+        return JsonResponse({"error": "Station not found"}, status=404)
+
+    sensors = station.sensor_set.all()
+
     dict_sensors = {}
-    for sensor in sensores:
-        if sensor.report_set.last():
+    for sensor in sensors:
+        last_report = sensor.report_set.last()
+        if last_report:
             dict_sensors[sensor.id] = {
                 "sensor_name": sensor.name,
-                "last_report": sensor.report_set.last().value,
+                "last_report": last_report.value,
                 "sensor_metric": sensor.type.metric,
-                # "updated": sensor.report_set.last().time.strftime(" %d/%m/%Y %H:%m")
-                "updated": localtime(sensor.report_set.last().time).strftime(
+                "updated": localtime(last_report.time).strftime(
                     "%d/%m/%Y %H:%m"
                 ),
             }
