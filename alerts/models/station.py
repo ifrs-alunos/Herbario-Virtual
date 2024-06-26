@@ -4,13 +4,19 @@ from django.db import models
 
 
 class Station(BaseModel):
-    station_id = models.CharField(max_length=20, verbose_name="Identificador da estação")
+    station_id = models.CharField(
+        max_length=20, verbose_name="Identificador da estação"
+    )
     slug = models.SlugField(unique=True, null=True)
     alias = models.CharField(max_length=100, verbose_name="Nome", null=True, blank=True)
     lat_coordinate = models.FloatField(verbose_name="Latitude", null=True)
     lon_coordinate = models.FloatField(verbose_name="Longitude", null=True)
-    description = models.TextField('Descrição da estação', max_length=400,
-                                   help_text='Endereço, ponto de referência, responsável...', null=True)
+    description = models.TextField(
+        "Descrição da estação",
+        max_length=400,
+        help_text="Endereço, ponto de referência, responsável...",
+        null=True,
+    )
 
     @property
     def lat_lon(self):
@@ -25,7 +31,7 @@ class Station(BaseModel):
         for sensor in self.sensor_set.all():
             if sensor.report_set.last():
                 sensor_report = sensor.report_set.last()  # Último report do sensor
-                if sensor.type.metric == 'bool':
+                if sensor.type.metric == "bool":
                     sensor_value = float(sensor_report.value)
                     if sensor_value == 1.00:
                         return True

@@ -1,11 +1,7 @@
-from datetime import datetime
-
 from django.db import models
-from django.db.models import FloatField, Avg
-from django.db.models.functions import TruncHour, Cast
 from django.utils.timezone import localtime
 
-from . import Sensor, MathModel
+from . import Sensor
 from .base import BaseModel
 from django.utils import timezone
 
@@ -20,9 +16,9 @@ class Report(BaseModel):
 
     @property
     def value_in_type(self):
-        return eval(f'{self.sensor.type.metric}({self.value})')
+        return eval(f"{self.sensor.type.metric}({self.value})")
 
     class Meta:
-        verbose_name = 'Report'
-        verbose_name_plural = 'Reports'
-        ordering = ['time']
+        verbose_name = "Report"
+        verbose_name_plural = "Reports"
+        ordering = ["time"]

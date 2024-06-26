@@ -1,19 +1,12 @@
-from datetime import datetime
+from django.core.management.base import BaseCommand
 
-import pytz
-from django.core.management.base import BaseCommand, CommandError
-import pandas as pd
-from django.utils import timezone
-from django.utils.timezone import make_aware
-
-from alerts.models import Station, Sensor, TypeSensor, Report
+from alerts.models import Station
 
 
 class Command(BaseCommand):
-    help = 'Closes the specified poll for voting'
+    help = "Closes the specified poll for voting"
 
     def handle(self, *args, **options):
-
         station_cepadi = Station.objects.get(station_id=23)
         maths = station_cepadi.mathmodel_set.all()
         for math in maths:
@@ -23,6 +16,3 @@ class Command(BaseCommand):
         # for x in sensors_name:
         #     sensor = Sensor.objects.get(type__name=x)
         #     sensor.report_set.all().delete()
-
-
-

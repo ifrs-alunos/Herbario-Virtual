@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 
-from alerts.models import Report, Sensor, Station
+from alerts.models import Report, Station
 
 
 @method_decorator(csrf_exempt, name="dispatch")
