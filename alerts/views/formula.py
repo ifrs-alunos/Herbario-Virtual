@@ -1,6 +1,4 @@
-from django.shortcuts import redirect, render
 
-from alerts.forms import FormulaForm
 # from alerts.models import Formula, ReportOld
 
 #

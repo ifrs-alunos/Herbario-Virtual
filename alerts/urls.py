@@ -2,8 +2,8 @@ from django.urls import path
 
 from .views.map import get_map
 
-from .views import formula, report, view_graphs, \
-    collect_data_cepadi, collect_data_stationif, download_data_station, \
+from .views import report, view_graphs, \
+    collect_data_cepadi, download_data_station, \
     get_sensor_data, \
     get_station, get_station_sensors_data, get_station_mathmodel_color, \
     get_mathmodels, \

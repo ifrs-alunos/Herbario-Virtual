@@ -1,11 +1,6 @@
-from branca.element import Element, JavascriptLink
 
 from alerts.models import Station, MathModel, Sensor
 from django.shortcuts import render
-from django.utils.timezone import localtime
-from django.shortcuts import render
-import folium
-from django.templatetags.static import static
 
 from disease.models import Disease
 

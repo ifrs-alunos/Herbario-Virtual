@@ -1,12 +1,7 @@
-from datetime import datetime
 
-import pytz
-from django.core.management.base import BaseCommand, CommandError
-import pandas as pd
-from django.utils import timezone
-from django.utils.timezone import make_aware
+from django.core.management.base import BaseCommand
 
-from alerts.models import Station, Sensor, TypeSensor, Report
+from alerts.models import Station
 
 
 class Command(BaseCommand):

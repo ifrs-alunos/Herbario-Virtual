@@ -1,19 +1,12 @@
-import datetime
 
-from django.db.models.functions import ExtractDay, TruncMonth, Cast, TruncDay, TruncYear
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.template.loader import render_to_string
+from django.db.models.functions import TruncMonth, Cast, TruncDay, TruncYear
+from django.http import JsonResponse
 from django.utils import timezone
-from django.utils.timezone import localtime, make_aware
+from django.utils.timezone import localtime
 
-from alerts.forms import MathModelForm, ChooseMathModelForm
-import plotly.graph_objects as go
-from plotly.offline import plot
 from django.db.models import Avg, FloatField
-from plotly.subplots import make_subplots
 
-from alerts.models import Station, Sensor
+from alerts.models import Sensor
 
 colors = ("maroon", "orangered", "limegreen", "steelblue", "mediumblue", "indigo", "purple", "crimson", "darkred") * 2
 

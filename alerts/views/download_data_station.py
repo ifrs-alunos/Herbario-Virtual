@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.utils.timezone import make_aware, localtime
 
 from alerts.forms import DownloadStationDataIntervalForm
-from alerts.models import Station, Sensor, Report
+from alerts.models import Station
 
 
 def download_data_station(request, station_id):

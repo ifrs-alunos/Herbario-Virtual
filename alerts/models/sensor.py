@@ -1,6 +1,4 @@
 from django.db import models
-from django.db.models import Avg
-from django.utils import timezone
 
 from . import TypeSensor, Station
 from .base import BaseModel

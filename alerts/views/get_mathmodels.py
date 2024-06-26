@@ -1,9 +1,9 @@
 from django.db.models import FloatField, Avg
 from django.db.models.functions import Cast, TruncMonth, TruncDay
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.utils import timezone
 
-from django.utils.timezone import localtime, make_aware
+from django.utils.timezone import localtime
 
 from alerts.models import MathModel
 

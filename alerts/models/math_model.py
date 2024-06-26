@@ -3,7 +3,6 @@ from django.db import models
 from . import Station
 from .base import BaseModel
 from disease.models.disease import Disease
-from django.db.models import Q
 
 class MathModel(BaseModel):
     name = models.CharField('Nome do modelo matemático', max_length=100, blank=False,
