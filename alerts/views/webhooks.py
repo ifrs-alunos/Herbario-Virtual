@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def whatsapp(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         # Message is a json object with the following structure:
         # https://docs.wwebjs.dev/Message.html
         data = json.loads(request.body)

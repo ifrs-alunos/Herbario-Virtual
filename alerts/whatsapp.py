@@ -14,10 +14,7 @@ def send_message(phone_number: str, message: str) -> dict:
     Returns:
         A dictionary with the response from the API.
     """
-    body = {
-        "phoneNumber": phone_number,
-        "messageText": message
-    }
+    body = {"phoneNumber": phone_number, "messageText": message}
 
     response = requests.post(WHATSAPP_API_URL + "/sendMessage", json=body)
 

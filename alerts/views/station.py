@@ -11,7 +11,7 @@ def get_station(request, station_id):
     dict_station = {
         "station": station_id,
         "station_id": station.station_id,
-        "sensors": {}
+        "sensors": {},
     }
     for sensor in sensores:
         dict_station["sensors"][sensor.id] = sensor.name
@@ -30,8 +30,9 @@ def get_station_sensors_data(request, station_id):
                 "last_report": sensor.report_set.last().value,
                 "sensor_metric": sensor.type.metric,
                 # "updated": sensor.report_set.last().time.strftime(" %d/%m/%Y %H:%m")
-                "updated": localtime(sensor.report_set.last().time).strftime("%d/%m/%Y %H:%m")
-
+                "updated": localtime(sensor.report_set.last().time).strftime(
+                    "%d/%m/%Y %H:%m"
+                ),
             }
 
     return JsonResponse(dict_sensors)
@@ -40,6 +41,12 @@ def get_station_sensors_data(request, station_id):
 def get_station_mathmodel_color(request, station_id, mathmodel_id):
     station = Station.objects.get(id=station_id)
     if station:
-        return JsonResponse({"result": station.mathmodel_set.get(id=mathmodel_id).mathmodelresult_set.last().value})
+        return JsonResponse(
+            {
+                "result": station.mathmodel_set.get(id=mathmodel_id)
+                .mathmodelresult_set.last()
+                .value
+            }
+        )
 
     return JsonResponse({"result": "Station not found"}, status=404)

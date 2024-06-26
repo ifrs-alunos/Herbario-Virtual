@@ -1,4 +1,3 @@
-
 from django.db import models
 from django.utils.timezone import localtime
 
@@ -17,9 +16,9 @@ class Report(BaseModel):
 
     @property
     def value_in_type(self):
-        return eval(f'{self.sensor.type.metric}({self.value})')
+        return eval(f"{self.sensor.type.metric}({self.value})")
 
     class Meta:
-        verbose_name = 'Report'
-        verbose_name_plural = 'Reports'
-        ordering = ['time']
+        verbose_name = "Report"
+        verbose_name_plural = "Reports"
+        ordering = ["time"]

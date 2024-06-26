@@ -22,5 +22,7 @@ class MessageConfirmation(models.Model):
 @receiver(pre_save, sender=MessageConfirmation)
 def generate_code(_sender, instance: MessageConfirmation, **_kwargs):
     if not instance.code:
-        instance.code = ''.join(secrets.choice(string.digits) for _ in range(CODE_LENGTH))
+        instance.code = "".join(
+            secrets.choice(string.digits) for _ in range(CODE_LENGTH)
+        )
         instance.save()

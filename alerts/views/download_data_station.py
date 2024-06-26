@@ -20,12 +20,18 @@ def download_data_station(request, station_id):
         end = datetime.fromisoformat(request.GET.get("date_until"))
         end = make_aware(end, timezone=timezone.utc)
         response = HttpResponse(
-            content_type='text/csv',
-            headers={'Content-Disposition': f'attachment; filename="{start.strftime("%Y-%m-%d %H:%M:%S")}.csv"'},
+            content_type="text/csv",
+            headers={
+                "Content-Disposition": f'attachment; filename="{start.strftime("%Y-%m-%d %H:%M:%S")}.csv"'
+            },
         )
         writer = csv.writer(response)
         sensors_name = ["Data"]
-        writer.writerow([station.alias,])
+        writer.writerow(
+            [
+                station.alias,
+            ]
+        )
         writer.writerow(" ")
         for x in sensors:
             sensors_name.append(x.name)
@@ -55,8 +61,6 @@ def download_data_station(request, station_id):
         pass
 
     form_interval = DownloadStationDataIntervalForm()
-    context = {'form': form_interval,
-               "error_message": error
-               }
+    context = {"form": form_interval, "error_message": error}
 
-    return render(request, 'download_data_station.html', context)
+    return render(request, "download_data_station.html", context)

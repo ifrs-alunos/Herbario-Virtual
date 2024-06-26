@@ -1,4 +1,3 @@
-
 # from alerts.models import Formula, ReportOld
 
 #
