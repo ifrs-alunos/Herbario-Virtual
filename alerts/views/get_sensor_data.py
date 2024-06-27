@@ -8,16 +8,16 @@ from django.db.models import Avg, FloatField
 from alerts.models import Sensor
 
 colors = (
-    "maroon",
-    "orangered",
-    "limegreen",
-    "steelblue",
-    "mediumblue",
-    "indigo",
-    "purple",
-    "crimson",
-    "darkred",
-) * 2
+             "maroon",
+             "orangered",
+             "limegreen",
+             "steelblue",
+             "mediumblue",
+             "indigo",
+             "purple",
+             "crimson",
+             "darkred",
+         ) * 2
 
 
 def get_sensor_data(request, sensor_id, date_filter):
@@ -101,4 +101,7 @@ def get_sensor_data(request, sensor_id, date_filter):
         data_x = []
         data_y = []
 
-    return JsonResponse({"x": data_x, "y": data_y})
+    if not (data_x and data_y):
+        return JsonResponse({"x": [], "y": []}, status=404)
+
+    return JsonResponse({"x": data_x, "y": data_y}, status=200)
