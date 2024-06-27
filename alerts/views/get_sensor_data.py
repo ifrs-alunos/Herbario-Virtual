@@ -24,7 +24,7 @@ def get_sensor_data(request, sensor_id, date_filter):
     date = date_filter
     # last_report_date = timezone.make_aware(datetime.datetime.now(),timezone.get_default_timezone())
     sensor = Sensor.objects.get(id=sensor_id)
-    last_report_date = sensor.report_set.all().last().time
+    last_report_date = localtime(sensor.report_set.all().last().time)
     data_x = []
     data_y = []
 
