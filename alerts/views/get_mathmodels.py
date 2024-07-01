@@ -17,7 +17,7 @@ def get_mathmodels(request, date_filter):
         data_x = []
         data_y = []
         if mathmodel.mathmodelresult_set.all():
-            last_mathmodel_result_date = mathmodel.mathmodelresult_set.all().last().date
+            last_mathmodel_result_date = localtime(mathmodel.mathmodelresult_set.all().last().date)
 
             if date == "day":
                 results = (
