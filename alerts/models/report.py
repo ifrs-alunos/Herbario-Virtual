@@ -21,4 +21,4 @@ class Report(BaseModel):
     class Meta:
         verbose_name = "Report"
         verbose_name_plural = "Reports"
-        ordering = ["time"]
+        ordering = ["-time"]
