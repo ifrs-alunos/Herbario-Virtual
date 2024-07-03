@@ -36,7 +36,6 @@ class ReportView(View):
 
 class LastReport(View):
     def get(self, request, station_chip_id):
-        print(f"{station_chip_id=}")
         station = Station.objects.get(station_id=station_chip_id)
         sensor = station.sensor_set.last()
         last_report = sensor.report_set.order_by("-time").first()
