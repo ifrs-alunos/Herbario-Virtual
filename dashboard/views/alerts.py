@@ -82,7 +82,7 @@ class CreateMathModel(CreateView):
                     print(new_exp)
                     report_calc = numexpr.evaluate(new_exp).astype(float)
                     condition = condition + report_calc
-                    print(report_calc,condition)
+                    print(report_calc, condition)
                 else:
                     condition = 0
 
@@ -163,6 +163,7 @@ class UpdateMathModel(UpdateView):
 
         return super().form_valid(form)
 
+
 class DeleteMathModel(DeleteView):
     model = MathModel
     template_name = 'dashboard/mathmodel_confirm_delete.html'
@@ -197,7 +198,7 @@ class SensorHumanListView(ListView):
         return data
 
     def get_queryset(self):
-        qs = Sensor.objects.all().filter(type__metric='bool')
+        qs = Sensor.objects.all().filter(type__metric='human')
         return qs
 
 

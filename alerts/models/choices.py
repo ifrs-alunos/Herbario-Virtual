@@ -34,7 +34,8 @@ METRIC_TYPE_CHOICES = [
     ("mm", "Milímetros"),
     ("C", "Graus ºC"),
     ("CS", "Graus ºC Solo"),
-    ("bool", "Sensor Humano"),
+    ("human", "Sensor Humano"),
+    ("bool", "Booleano"),
     ("ur", "Umidade Relativa %"),
     # não sei quão importante isso é mas é preferivel não usar caractere especial como chave
     ("%", "Umidade % (depreciado)"),

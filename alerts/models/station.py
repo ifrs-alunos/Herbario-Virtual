@@ -31,7 +31,7 @@ class Station(BaseModel):
         for sensor in self.sensor_set.all():
             if sensor.report_set.last():
                 sensor_report = sensor.report_set.last()  # Último report do sensor
-                if sensor.type.metric == "bool":
+                if sensor.type.metric == "human":
                     sensor_value = float(sensor_report.value)
                     if sensor_value == 1.00:
                         return True
