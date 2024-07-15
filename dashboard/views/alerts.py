@@ -140,13 +140,13 @@ class DeleteMathModel(DeleteView):
 class SensorListView(ListView):
     model = Sensor
     context_object_name = 'sensors'
-    template_name = 'dashboard/sensor_update.html'
+    template_name = 'dashboard/sensor_list.html'
     paginate_by = 12
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
 
-        data['link'] = 'sensor-update'  # Cria novo contexto
+        data['link'] = 'sensor-list'  # Cria novo contexto
 
         return data
 
