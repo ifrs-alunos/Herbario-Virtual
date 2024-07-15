@@ -19,7 +19,7 @@ def get_map(request):
     )
     mathmodel_get = ""
     station_modal = ""
-    human_sensor = Sensor.objects.all().filter(type__metric="bool")
+    human_sensor = Sensor.objects.all().filter(type__metric="human")
     if human_sensor:
         human_sensor = human_sensor[0]
     if request.GET:

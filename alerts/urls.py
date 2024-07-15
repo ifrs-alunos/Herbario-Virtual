@@ -53,6 +53,7 @@ urlpatterns = [
         get_station_mathmodel_color,
         name="get_station_mathmodel_color",
     ),
+    path("station/<str:station_chip_id>/last_report", report.LastReport.as_view(), name="last_report"),
     # Webhook
     path("webhooks/whatsapp", webhooks.whatsapp, name="whatsapp"),
 ]

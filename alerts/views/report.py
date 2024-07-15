@@ -32,3 +32,16 @@ class ReportView(View):
             Report.objects.create(sensor=sensor, value=float(reading.get("value")))
 
         return JsonResponse({"message": "ok"})
+
+
+class LastReport(View):
+    def get(self, request, station_chip_id):
+        station = Station.objects.get(station_id=station_chip_id)
+        sensor = station.sensor_set.last()
+        last_report = sensor.report_set.order_by("-time").first()
+
+        return JsonResponse(
+            {
+                "time": last_report.time,
+            }
+        )

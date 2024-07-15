@@ -165,7 +165,7 @@ class SensorHumanListView(ListView):
         return data
 
     def get_queryset(self):
-        qs = Sensor.objects.all().filter(type__metric='bool')
+        qs = Sensor.objects.all().filter(type__metric='human')
         return qs
 
 
