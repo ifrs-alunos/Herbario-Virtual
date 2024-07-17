@@ -252,7 +252,7 @@
                     const modalStation = $('#exampleModalCenter');
                     modalStation.find('.modal-title').html('{{ station.alias }} <small class=" mx-2 text-muted">dados desde: {{ station.sensor_set.first.report_set.first.time|date:"d/m/Y H:i" }}</small>');
                     modalStation.find('.modal-latlong').text('Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }}');
-                    modalStation.find('.modal-description').text('{{ station.description }}');
+                    modalStation.find('.modal-description').text('{{ station.description|escapejs }}');
                     modalStation.attr("station_id", {{ station.id }})
                     {#$(modalStation.find('.btn-download')).attr("href", "{% url 'alerts:dowload_data_station' station_id=0 %}".replace('0', {{ station.station_id }}))#}
                     {#  Aciona o modal, os trechos anteriores são antes do modal aparecer para o usuario#}
