@@ -13,3 +13,4 @@ tenacity==8.0.1
 typing-extensions==3.10.0.2
 beautifulsoup4~=4.10.0
 numexpr==2.10.0
+requests==2.32.3
