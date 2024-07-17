@@ -12,7 +12,7 @@ class Requirement(BaseModel):
     )
     value = models.FloatField("Valor")
     math_model = models.ForeignKey(
-        MathModel, on_delete=models.PROTECT, verbose_name="Modelo matematico"
+        MathModel, on_delete=models.PROTECT, verbose_name="Modelo matematico", null=True,
     )
     sensor = models.ForeignKey(Sensor, on_delete=models.PROTECT)
     relational = models.CharField(
