@@ -30,12 +30,6 @@ class MathModelForm(forms.Form):
     )
 
 
-class FormulaForm(forms.Form):
-    name = forms.CharField(max_length=100, required=True)
-    constants = forms.CharField(max_length=500, required=False, widget=forms.Textarea)
-    expression = forms.CharField(max_length=1000, required=True, widget=forms.Textarea)
-
-
 class ChooseMathModelForm(forms.Form):
     mathmodel = forms.ModelMultipleChoiceField(
         queryset=MathModel.objects.all(), label="Modelos matemáticos"

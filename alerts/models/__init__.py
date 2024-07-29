@@ -1,6 +1,5 @@
 from .base import BaseModel
 
-from .formula import Formula
 from .type_sensor import TypeSensor
 from .station import Station
 from .sensor import Sensor
