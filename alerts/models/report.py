@@ -5,8 +5,13 @@ from . import Sensor
 from .base import BaseModel
 from django.utils import timezone
 
+from alerts.managers import AggregatorManager
+
 
 class Report(BaseModel):
+    # AggregatorManager é uma classe que herda de   models.Manager, apenas adicionando a funcionalidade de agregação
+    objects = AggregatorManager()
+
     value = models.FloatField("Valor", null=True)
     sensor = models.ForeignKey(Sensor, verbose_name="Sensor", on_delete=models.PROTECT)
     time = models.DateTimeField(default=timezone.now)
