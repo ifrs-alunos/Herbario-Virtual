@@ -9,7 +9,7 @@ services:
       - db
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
   db:
     image: postgres
     ports:
