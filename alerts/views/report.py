@@ -26,9 +26,9 @@ class ReportView(View):
 
         body = json.loads(request.body.decode("utf-8"))
 
-        station = Station.objects.get(station_id=body.get("chipid"))
-
-        if not station:
+        try:
+            station = Station.objects.get(station_id=body.get("chipid"))
+        except Station.DoesNotExist:
             requests.post("https://ntfy.sh/jkt1mDGXFJ8isvnW", data=body)
             return JsonResponse({"message": "station not found"}, status=404)
 
