@@ -1,5 +1,6 @@
 import json
 
+import requests
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -27,9 +28,17 @@ class ReportView(View):
 
         station = Station.objects.get(station_id=body.get("chipid"))
 
+        if not station:
+            requests.post("https://ntfy.sh/jkt1mDGXFJ8isvnW", data=body)
+            return JsonResponse({"message": "station not found"}, status=404)
+
         for reading in body.get("readings"):
             sensor = station.sensor_set.get(type__name=reading.get("sensor_name"))
             Report.objects.create(sensor=sensor, value=float(reading.get("value")))
+
+        #        for sensor in Sensor.objects.filter(used_internally=True):
+        #            for requirement in sensor.requirement_set.all():
+        #                requirement.validate()
 
         return JsonResponse({"message": "ok"})
 
