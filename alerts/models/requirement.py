@@ -1,5 +1,7 @@
 import numexpr
 from django.db import models
+from django.db.models import Q, QuerySet
+
 from .base import BaseModel
 from .math_model import MathModel
 from .sensor import Sensor
@@ -61,6 +63,28 @@ class IntermediaryRequirement(models.Model):
     math_model = models.ForeignKey(
         MathModel, on_delete=models.PROTECT, verbose_name="Modelo matemático", blank=True, null=True,
     )
+
+    @property
+    def related_sensors(self) -> list[Sensor]:
+        return [requirement.sensor for requirement in self.requirements.all()]
+
+    @classmethod
+    def get_by_sensors(cls, sensors: list[Sensor], match_all: bool = False) -> 'QuerySet[IntermediaryRequirement]':
+        """
+        Obtém os requisitos intermediários que possuem os sensores passados como argumento.
+        
+        :param sensors: Lista de sensores usados para filtrar os requisitos intermediários.
+        :param match_all: Se True, todos os sensores passados devem estar presentes no requisito intermediário.
+        :return: QuerySet de requisitos intermediários.
+        """
+        if match_all:
+            query = Q()
+            for sensor in sensors:
+                query &= Q(requirements__sensor=sensor)
+        else:
+            query = Q(requirements__sensor__in=sensors)
+
+        return cls.objects.filter(query).distinct()
 
     def validate(self) -> bool:
         for requirement in self.requirements.all():
