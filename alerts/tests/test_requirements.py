@@ -3,7 +3,7 @@ import datetime
 from django.test import TestCase
 from freezegun import freeze_time
 
-from alerts.models import Report, Requirement, Sensor, Station, TypeSensor, IntermediaryRequirement
+from alerts.models import Reading, Requirement, Sensor, Station, TypeSensor, IntermediaryRequirement
 
 from django.utils.timezone import make_aware
 
@@ -61,11 +61,11 @@ class RequirementTest(TestCase):
         for i in range(7):
             self.initial_time += datetime.timedelta(hours=i)
             objs.extend([
-                Report(sensor=self.t_sensor, value=20, time=self.initial_time),
-                Report(sensor=self.rh_sensor, value=87, time=self.initial_time),
+                Reading(sensor=self.t_sensor, value=20, time=self.initial_time),
+                Reading(sensor=self.rh_sensor, value=87, time=self.initial_time),
             ])
 
-        Report.objects.bulk_create(objs)
+        Reading.objects.bulk_create(objs)
 
         self.assertTrue(IntermediaryRequirement.objects.first().validate())
 
@@ -75,24 +75,24 @@ class RequirementTest(TestCase):
         for i in range(3):
             self.initial_time += datetime.timedelta(hours=1)
             objs.extend([
-                Report(sensor=self.t_sensor, value=20, time=self.initial_time),
-                Report(sensor=self.rh_sensor, value=87, time=self.initial_time),
+                Reading(sensor=self.t_sensor, value=20, time=self.initial_time),
+                Reading(sensor=self.rh_sensor, value=87, time=self.initial_time),
             ])
 
         # Add a single invalid entry
         self.initial_time += datetime.timedelta(hours=1)
         objs.extend([
-            Report(sensor=self.t_sensor, value=20, time=self.initial_time),
-            Report(sensor=self.rh_sensor, value=84, time=self.initial_time),
+            Reading(sensor=self.t_sensor, value=20, time=self.initial_time),
+            Reading(sensor=self.rh_sensor, value=84, time=self.initial_time),
         ])
 
         for i in range(3):
             self.initial_time += datetime.timedelta(hours=1)
             objs.extend([
-                Report(sensor=self.t_sensor, value=20, time=self.initial_time),
-                Report(sensor=self.rh_sensor, value=87, time=self.initial_time),
+                Reading(sensor=self.t_sensor, value=20, time=self.initial_time),
+                Reading(sensor=self.rh_sensor, value=87, time=self.initial_time),
             ])
 
-        Report.objects.bulk_create(objs)
+        Reading.objects.bulk_create(objs)
 
         self.assertFalse(IntermediaryRequirement.objects.first().validate())

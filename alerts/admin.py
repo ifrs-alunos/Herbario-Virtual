@@ -6,7 +6,7 @@ from .models import (
     MathModel,
     Requirement,
     TypeSensor,
-    Report,
+    Reading,
     SensorInMathModel,
     Constant,
     MathModelResult,
@@ -19,7 +19,7 @@ admin.site.register(MathModel)
 admin.site.register(Requirement)
 
 
-@admin.register(Report)
+@admin.register(Reading)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ("sensor", "value", "time")
     search_fields = ("sensor__name", "time")

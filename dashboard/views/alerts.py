@@ -1,20 +1,16 @@
 import re
-from itertools import groupby, chain
 
 import numexpr
-from django.db.models import Q, Avg, F
-from django.db.models.functions import TruncDate, TruncHour, Cast
-from django.db.models import Avg, FloatField
+from django.db.models import Avg
+from django.db.models.functions import TruncHour
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.timezone import localtime
-from django.db.models import QuerySet
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView
 
 from ..forms import MathModelForm
 from ..forms.sensor_human_form import SensorHumanForm
-from operator import attrgetter
-from alerts.models import MathModel, Sensor, Constant, MathModelResult, Report
+from alerts.models import MathModel, Sensor, Constant, MathModelResult
 
 
 def _create_constants(constants_string: str, saved_form) -> None:

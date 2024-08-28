@@ -8,7 +8,7 @@ from django.utils import timezone
 from alerts.managers import AggregatorManager
 
 
-class Report(BaseModel):
+class Reading(BaseModel):
     # AggregatorManager é uma classe que herda de   models.Manager, apenas adicionando a funcionalidade de agregação
     objects = AggregatorManager()
 
