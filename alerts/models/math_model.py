@@ -1,3 +1,4 @@
+import numexpr
 from django.db import models
 
 from . import Station
@@ -15,7 +16,7 @@ class MathModel(BaseModel):
     source_code = models.TextField(
         max_length=1000,
         help_text="Variaveis disponiveis no momento: t = Temperatura rh = "
-        "Umidade Relativa</h4>",
+                  "Umidade Relativa</h4>",
     )
     disease = models.ForeignKey(
         Disease, verbose_name="Doença", on_delete=models.PROTECT
@@ -26,6 +27,22 @@ class MathModel(BaseModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_constants_dict(self) -> dict[str, float]:
+        constants = self.constant_set.all()
+
+        return {
+            constant.name: constant.value for constant in constants
+        }
+
+    def evaluate_by_station(self, station: Station):
+        """
+        Evaluate the math model for a given station
+        """
+
+        local_dict = station.get_latest_readings() | self.get_constants_dict()
+
+        return numexpr.evaluate(self.source_code, local_dict=local_dict).item(0)
 
     class Meta:
         verbose_name = "Modelo matemático"
