@@ -5,7 +5,7 @@ from .station import Station
 from .sensor import Sensor
 from .math_model import MathModel
 from .requirement import Requirement, IntermediaryRequirement
-from .reading import Reading
+from .report import Reading, Report
 from .sensor_in_mathmodel import SensorInMathModel
 from .constant import Constant
 from .mathmodel_result import MathModelResult
