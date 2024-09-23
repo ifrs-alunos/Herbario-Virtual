@@ -44,7 +44,7 @@ class Requirement(BaseModel):
                 return False
             return numexpr.evaluate(f"{self.sensor.last_value} {self.relational} {self.value}").item(0)
 
-        for hour in self.sensor.report_set.aggregate_hours(self.min_time):
+        for hour in self.sensor.reading_set.aggregate_hours(self.min_time):
             if not numexpr.evaluate(f"{hour['avg_value']} {self.relational} {self.value}").item(0):
                 return False
         return True

@@ -250,7 +250,7 @@
 
                     {#  coloca os dados da estação clicada no modal#}
                     const modalStation = $('#exampleModalCenter');
-                    modalStation.find('.modal-title').html('{{ station.alias }} <small class=" mx-2 text-muted">dados desde: {{ station.sensor_set.first.report_set.first.time|date:"d/m/Y H:i" }}</small>');
+                    modalStation.find('.modal-title').html('{{ station.alias }} <small class=" mx-2 text-muted">dados desde: {{ station.sensor_set.first.reading_set.first.time|date:"d/m/Y H:i" }}</small>');
                     modalStation.find('.modal-latlong').text('Lat: {{ station.lat_coordinate }}; Long: {{ station.lon_coordinate }}');
                     modalStation.find('.modal-description').text('{{ station.description|escapejs }}');
                     modalStation.attr("station_id", {{ station.id }})
@@ -419,9 +419,9 @@
                             xref: 'x',
 
                         yref: 'paper',
-                          x0: '{{human_sensor.report_set.last.time|escapejs}}',
+                          x0: '{{human_sensor.reading_set.last.time|escapejs}}',
                           y0: 0,
-                          x1: '{{human_sensor.report_set.last.time|escapejs}}',
+                          x1: '{{human_sensor.reading_set.last.time|escapejs}}',
                           y1: 1,
                           line: {
                               dash: "dot",

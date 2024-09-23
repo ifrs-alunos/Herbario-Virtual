@@ -11,16 +11,16 @@ from django.db.models import Avg
 from alerts.models import MathModel, SensorInMathModel
 
 colors = (
-    "maroon",
-    "orangered",
-    "limegreen",
-    "steelblue",
-    "mediumblue",
-    "indigo",
-    "purple",
-    "crimson",
-    "darkred",
-) * 2
+             "maroon",
+             "orangered",
+             "limegreen",
+             "steelblue",
+             "mediumblue",
+             "indigo",
+             "purple",
+             "crimson",
+             "darkred",
+         ) * 2
 
 
 def verify_require(requirements, value):
@@ -49,7 +49,7 @@ def get_reports(start, end, time_interval, requirements, mathmodel, fig):
             requires = [x.value_in_relation() for x in re]
 
             reports = (
-                sensor.report_set.filter(time__range=[start, end])
+                sensor.reading_set.filter(time__range=[start, end])
                 .values("time")
                 .annotate(avg_value=Avg("value"))
             )
@@ -99,7 +99,7 @@ def get_reports(start, end, time_interval, requirements, mathmodel, fig):
         re = requirements.filter(sensor=sensor)
         requires = [x.value_in_relation() for x in re]
         report = (
-            sensor.report_set.filter(time__range=[start, end])
+            sensor.reading_set.filter(time__range=[start, end])
             .values("time")
             .annotate(avg_value=Avg("value"))
             .first()

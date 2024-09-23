@@ -24,12 +24,12 @@ def get_sensor_data(request, sensor_id, date_filter):
     date = date_filter
     # last_report_date = timezone.make_aware(datetime.datetime.now(),timezone.get_default_timezone())
     sensor = Sensor.objects.get(id=sensor_id)
-    last_report_date = localtime(sensor.report_set.all().last().time)
+    last_report_date = localtime(sensor.reading_set.all().last().time)
     data_x = []
     data_y = []
 
     if date == "day":
-        reports = sensor.report_set.filter(
+        reports = sensor.reading_set.filter(
             time__day=last_report_date.day,
             time__year=last_report_date.year,
             time__month=last_report_date.month,
@@ -42,7 +42,7 @@ def get_sensor_data(request, sensor_id, date_filter):
         end_week = last_report_date - timezone.timedelta(last_report_date.weekday())
         start_week = end_week - timezone.timedelta(7)
         reports = (
-            sensor.report_set.filter(time__range=[start_week, end_week])
+            sensor.reading_set.filter(time__range=[start_week, end_week])
             .values("time", "value")
             .annotate(value_float=Cast("value", output_field=FloatField()))
             .annotate(day=TruncDay("time"))
@@ -54,7 +54,7 @@ def get_sensor_data(request, sensor_id, date_filter):
         data_y = [x["avg_value"] for x in reports]
     elif date == "month":
         reports = (
-            sensor.report_set.filter(time__year=last_report_date.year)
+            sensor.reading_set.filter(time__year=last_report_date.year)
             .filter(time__month=last_report_date.month)
             .annotate(value_float=Cast("value", output_field=FloatField()))
             .annotate(day=TruncDay("time"))
@@ -67,7 +67,7 @@ def get_sensor_data(request, sensor_id, date_filter):
 
     elif date == "year":
         reports = (
-            sensor.report_set.filter(time__year=last_report_date.year)
+            sensor.reading_set.filter(time__year=last_report_date.year)
             .annotate(value_float=Cast("value", output_field=FloatField()))
             .annotate(month=TruncMonth("time"))
             .values("month")
@@ -78,7 +78,7 @@ def get_sensor_data(request, sensor_id, date_filter):
         data_y = [x["avg_value"] for x in reports]
     elif date == "all":
         reports = (
-            sensor.report_set.annotate(
+            sensor.reading_set.annotate(
                 value_float=Cast("value", output_field=FloatField())
             )
             .annotate(year=TruncYear("time"))

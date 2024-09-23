@@ -21,7 +21,7 @@ class Sensor(BaseModel):
 
     @property
     def last_value(self) -> float:
-        return self.report_set.last().value
+        return self.reading_set.last().value
 
     class Meta:
         verbose_name = "Sensor"

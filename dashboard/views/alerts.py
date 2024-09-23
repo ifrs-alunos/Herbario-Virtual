@@ -63,7 +63,7 @@ class MathModelFormMixin:
             for sensor in station.sensor_set.all():
                 name = sensor.type.name
 
-                reports = sensor.report_set \
+                reports = sensor.reading_set \
                     .annotate(hour=TruncHour('time', is_dst=False)) \
                     .values('hour') \
                     .annotate(avg_value=Avg('value')) \
