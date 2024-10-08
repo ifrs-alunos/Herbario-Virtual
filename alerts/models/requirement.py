@@ -42,10 +42,14 @@ class Requirement(BaseModel):
         if not self.min_time:
             if not self.sensor.last_value:
                 return False
-            return numexpr.evaluate(f"{self.sensor.last_value} {self.relational} {self.value}").item(0)
+            return numexpr.evaluate(
+                f"{self.sensor.last_value} {self.relational} {self.value}"
+            ).item(0)
 
         for hour in self.sensor.reading_set.aggregate_hours(self.min_time):
-            if not numexpr.evaluate(f"{hour['avg_value']} {self.relational} {self.value}").item(0):
+            if not numexpr.evaluate(
+                f"{hour['avg_value']} {self.relational} {self.value}"
+            ).item(0):
                 return False
         return True
 
@@ -61,30 +65,16 @@ class IntermediaryRequirement(models.Model):
     )
     requirements = models.ManyToManyField(Requirement, verbose_name="Requisitos")
     math_model = models.ForeignKey(
-        MathModel, on_delete=models.PROTECT, verbose_name="Modelo matemático", blank=True, null=True,
+        MathModel,
+        on_delete=models.PROTECT,
+        verbose_name="Modelo matemático",
+        blank=True,
+        null=True,
     )
 
     @property
     def related_sensors(self) -> list[Sensor]:
         return [requirement.sensor for requirement in self.requirements.all()]
-
-    @classmethod
-    def get_by_sensors(cls, sensors: list[Sensor], match_all: bool = False) -> 'QuerySet[IntermediaryRequirement]':
-        """
-        Obtém os requisitos intermediários que possuem os sensores passados como argumento.
-        
-        :param sensors: Lista de sensores usados para filtrar os requisitos intermediários.
-        :param match_all: Se True, todos os sensores passados devem estar presentes no requisito intermediário.
-        :return: QuerySet de requisitos intermediários.
-        """
-        if match_all:
-            query = Q()
-            for sensor in sensors:
-                query &= Q(requirements__sensor=sensor)
-        else:
-            query = Q(requirements__sensor__in=sensors)
-
-        return cls.objects.filter(query).distinct()
 
     def validate(self) -> bool:
         for requirement in self.requirements.all():
