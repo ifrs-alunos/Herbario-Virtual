@@ -10,6 +10,11 @@ from alerts.managers import AggregatorManager
 
 class Report(BaseModel):
     time = models.DateTimeField(default=timezone.now)
+    station = models.ForeignKey("Station", on_delete=models.PROTECT, null=True)
+
+    @property
+    def sensors(self):
+        return self.readings.all().values("sensor").distinct()
 
     class Meta:
         verbose_name = "Relatório"
