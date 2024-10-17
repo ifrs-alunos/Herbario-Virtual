@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.test import Client, TransactionTestCase
 from django.urls import reverse
 
-from alerts.models import IntermediaryRequirement, MathModel, MathModelResult, Report
+from alerts.models import IntermediaryRequirement, MathModel, MathModelResult
 from alerts.tests.base_test import BaseAlertTest
 
 
