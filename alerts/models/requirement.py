@@ -1,7 +1,7 @@
 import numexpr
 from django.db import models
-from django.db.models import Q, QuerySet
 from typing import List
+
 
 from .base import BaseModel
 from .math_model import MathModel

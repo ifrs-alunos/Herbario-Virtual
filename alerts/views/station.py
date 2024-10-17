@@ -33,7 +33,7 @@ def get_station_sensors_data(request, station_id):
 
     dict_sensors = {}
     for sensor in sensors:
-        last_report = sensor.report_set.last()
+        last_report = sensor.reading_set.last()
         if last_report:
             dict_sensors[sensor.id] = {
                 "sensor_name": sensor.name,

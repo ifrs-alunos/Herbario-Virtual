@@ -46,4 +46,5 @@ METRIC_TYPE_CHOICES = [
     ("mbar", "Milibares"),
     ("v", "Volts"),
     ("pct", "Porcentagem"),
+    ("int", "Inteiro"),
 ]

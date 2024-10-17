@@ -19,6 +19,10 @@ class Sensor(BaseModel):
     def __str__(self):
         return f"{self.type} - {self.station}"
 
+    @property
+    def last_value(self) -> float:
+        return self.reading_set.last().value
+
     class Meta:
         verbose_name = "Sensor"
         verbose_name_plural = "Sensores"

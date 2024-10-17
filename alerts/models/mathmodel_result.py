@@ -8,7 +8,7 @@ class MathModelResult(BaseModel):
     value = models.FloatField(verbose_name="Valor")
     date = models.DateTimeField(default=timezone.now)
     mathmodel = models.ForeignKey(
-        "MathModel", verbose_name="Modelo matematico", on_delete=models.PROTECT
+        'alerts.MathModel', verbose_name="Modelo matematico", on_delete=models.PROTECT
     )
 
     def __str__(self):

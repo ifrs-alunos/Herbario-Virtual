@@ -19,4 +19,4 @@ class Command(BaseCommand):
 
         for x in sensors_name:
             sensor = Sensor.objects.get(name=x)
-            sensor.report_set.all().delete()
+            sensor.reading_set.all().delete()
