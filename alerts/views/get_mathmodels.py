@@ -75,7 +75,7 @@ def get_mathmodels(request, date_filter):
                 data_x = [localtime(x["month"]) for x in results]
                 data_y = [x["avg_value"] for x in results]
 
-                # reports = sensor.report_set.filter(time__year=last_report_date.year).annotate(
+                # reports = sensor.reading_set.filter(time__year=last_report_date.year).annotate(
                 #     value_float=Cast('value', output_field=FloatField())) \
                 #     .annotate(month=TruncMonth('time')) \
                 #     .values('month') \

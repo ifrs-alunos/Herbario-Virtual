@@ -1,0 +1,30 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static %}
+
+{% block item %}
+    {% if sensors %}
+        <table class="table table-striped mb-2">
+            <thead>
+            <tr>
+                <th scope="col">Nome</th>
+                <th scope="col">Tipo</th>
+                <th scope="col">Estação</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for sensor in sensors %}
+                <tr id="{{ sensor.name }}">
+                    <td>{{ sensor.name|truncatechars_html:100 }}</td>
+                    <td>{{ sensor.type }}</td>
+                    {% comment %} <td><a href="{% url 'dashboard:station_detail' sensor.station.id %}">{{sensor.station}}</a></td> {% endcomment %}
+                    <td>{{ sensor.station }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nenhum sensor cadastrado.
+        </div>
+    {% endif %}
+{% endblock %}

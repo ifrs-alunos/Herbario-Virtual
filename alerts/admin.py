@@ -2,26 +2,24 @@ from django.contrib import admin
 
 from .models import (
     Station,
-    Formula,
     Sensor,
     MathModel,
     Requirement,
     TypeSensor,
-    Report,
+    Reading,
     SensorInMathModel,
     Constant,
     MathModelResult,
 )
 
 admin.site.register(Station)
-admin.site.register(Formula)
 admin.site.register(TypeSensor)
 admin.site.register(Sensor)
 admin.site.register(MathModel)
 admin.site.register(Requirement)
 
 
-@admin.register(Report)
+@admin.register(Reading)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ("sensor", "value", "time")
     search_fields = ("sensor__name", "time")

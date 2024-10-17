@@ -1,6 +1,8 @@
+import numexpr
 from django.db import models
 
-from . import Station
+from alerts.models.mathmodel_result import MathModelResult
+from alerts.models.station import Station
 from .base import BaseModel
 from disease.models.disease import Disease
 
@@ -18,7 +20,7 @@ class MathModel(BaseModel):
         "Umidade Relativa</h4>",
     )
     disease = models.ForeignKey(
-        Disease, verbose_name="Doença", on_delete=models.PROTECT
+        Disease, verbose_name="Doença", on_delete=models.PROTECT, null=True, blank=True
     )
     stations = models.ManyToManyField(
         Station, verbose_name="Estaçôes atreladas", null=True, blank=True
@@ -26,6 +28,24 @@ class MathModel(BaseModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def get_constants_dict(self) -> dict[str, float]:
+        constants = self.constant_set.all()
+
+        return {constant.name: constant.value for constant in constants}
+
+    def evaluate_by_station(self, station: Station) -> MathModelResult:
+        """
+        Evaluate the math model for a given station and return the result
+        """
+
+        local_dict = station.get_latest_readings() | self.get_constants_dict()
+
+        value = numexpr.evaluate(self.source_code, local_dict=local_dict).item(0)
+        result = MathModelResult(value=value, mathmodel=self)
+        result.save()
+
+        return result
 
     class Meta:
         verbose_name = "Modelo matemático"

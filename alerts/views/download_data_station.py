@@ -1,7 +1,6 @@
 from datetime import datetime, timezone
 import csv
 
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.timezone import make_aware, localtime
@@ -40,7 +39,7 @@ def download_data_station(request, station_id):
         # sensores = station.sensor_set.all().order_by("name")
         relatorios_por_hora = {}
         for sensor in sensors:
-            reports = sensor.report_set.all().filter(time__range=(start, end))
+            reports = sensor.reading_set.all().filter(time__range=(start, end))
             for report in reports:
                 hora = localtime(report.time).strftime("%Y-%m-%d %H:%M:%S")
                 if hora not in relatorios_por_hora:

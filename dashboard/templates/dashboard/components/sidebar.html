@@ -108,7 +108,7 @@
                             </li>
                             <li class="list-group-item"><a
                                     id="{% if link == 'disease-photo-solicitation-list' %}selected-link{% endif %}"
-                                    href="{% url 'dashboard:disease_photo_solicitation_list' %}">Solicitações de foto</a>
+                                    href="{% url 'dashboard:disease_photo_solicitation_list' %}">Solicitações defoto</a>
                             </li>
                         {% endif %}
 
@@ -144,14 +144,14 @@
             </h2>
             <div id="flush-collapseFive" class="accordion-collapse collapse" aria-labelledby="flush-headingFive"
                  data-bs-parent="#accordionFlushExample">
-             <div class="accordion-body">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a id="{% if link == 'edit-about' %}selected-link{% endif %}"
-                           href="{% url 'core:edit-about' %}">Editar colaboradores</a>
-                    </li>
-                </ul>
-             </div>
+                <div class="accordion-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a id="{% if link == 'edit-about' %}selected-link{% endif %}"
+                               href="{% url 'core:edit-about' %}">Editar colaboradores</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     {% endif %}
@@ -172,10 +172,10 @@
                  data-bs-parent="#accordionFlushExample">
                 <div class="accordion-body">
                     <ul class="list-group">
-                            <li class="list-group-item"><a
-                                    id="{% if link == 'publication_update' %}selected-link{% endif %}"
-                                    href="{% url 'dashboard:publication_update' %}">Listar</a>
-                            </li>
+                        <li class="list-group-item"><a
+                                id="{% if link == 'publication_update' %}selected-link{% endif %}"
+                                href="{% url 'dashboard:publication_update' %}">Listar</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -208,12 +208,12 @@
                         {% endif %}
 
                         {% if perms.alerts.change_sensor %}
-                            <li class="list-group-item"><a id="{% if link == 'culture_list' %}selected-link{% endif %}"
-                                                           href="{% url 'dashboard:culture_list' %}">Sensores</a>
+                            <li class="list-group-item"><a id="{% if link == 'sensor_list' %}selected-link{% endif %}"
+                                                           href="{% url 'dashboard:sensor_list' %}">Sensores</a>
                             </li>
-                            <li class="list-group-item"><a id="{% if link == 'sensor_human_update' %}selected-lin
-                            k{% endif %}"
-                                                           href="{% url 'dashboard:sensor_human_update' %}">Sensores Humanos</a>
+                            <li class="list-group-item"><a
+                                    id="{% if link == 'sensor_human_update' %}selected-link{% endif %}"
+                                    href="{% url 'dashboard:sensor_human_update' %}">Sensores Humanos</a>
                             </li>
                         {% endif %}
 
@@ -245,32 +245,33 @@
         </div>
     {% endif %}
 
-     {% if perms.core.view_mathmodel %}
+    {% if perms.core.view_mathmodel %}
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-headingTwenty">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#flush-collapseTwenty" aria-expanded="false" aria-controls="flush-collapseTwenty">
+                        data-bs-target="#flush-collapseTwenty" aria-expanded="false"
+                        aria-controls="flush-collapseTwenty">
                     Módulos em desenvolvimento
                 </button>
             </h2>
             <div id="flush-collapseTwenty" class="accordion-collapse collapse" aria-labelledby="flush-headingTwenty"
                  data-bs-parent="#accordionFlushExample">
-             <div class="accordion-body">
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <a id="{% if link == 'seila' %}selected-link{% endif %}"
-                           href="{% url 'alerts:collect_data_cepadi' %}">Url cepadi</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a id="{% if link == 'seila' %}selected-link{% endif %}"
-                           href="{% url 'alerts:view_graphs' %}">Grafico de modelos matematicos</a>
-                    </li>
-                    <li class="list-group-item">
-                        <a id="{% if link == 'seila' %}selected-link{% endif %}"
-                           href="{% url 'alerts:map_url' %}">Mapa</a>
-                    </li>
-                </ul>
-             </div>
+                <div class="accordion-body">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <a id="{% if link == 'seila' %}selected-link{% endif %}"
+                               href="{% url 'alerts:collect_data_cepadi' %}">Url cepadi</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a id="{% if link == 'seila' %}selected-link{% endif %}"
+                               href="{% url 'alerts:view_graphs' %}">Grafico de modelos matematicos</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a id="{% if link == 'seila' %}selected-link{% endif %}"
+                               href="{% url 'alerts:map_url' %}">Mapa</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     {% endif %}

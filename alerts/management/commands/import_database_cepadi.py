@@ -4,7 +4,7 @@ import pytz
 from django.core.management.base import BaseCommand
 import pandas as pd
 
-from alerts.models import Station, Sensor, TypeSensor, Report
+from alerts.models import Station, Sensor, TypeSensor, Reading
 
 
 class Command(BaseCommand):
@@ -30,10 +30,10 @@ class Command(BaseCommand):
                 if sensor == "PTemp":
                     type_sensor_obj = TypeSensor(name=sensor, metric="C")
                 if (
-                    sensor == "short_up_Avg"
-                    or sensor == "short_dn_Avg"
-                    or sensor == "long_up_Avg"
-                    or sensor == "long_dn_Avg"
+                        sensor == "short_up_Avg"
+                        or sensor == "short_dn_Avg"
+                        or sensor == "long_up_Avg"
+                        or sensor == "long_dn_Avg"
                 ):
                     type_sensor_obj = TypeSensor(name=sensor, metric="wm2")
                 if sensor == "cnr4_T_C_Avg":
@@ -41,21 +41,21 @@ class Command(BaseCommand):
                 if sensor == "cnr4_T_K_Avg":
                     type_sensor_obj = TypeSensor(name=sensor, metric="K")
                 if (
-                    sensor == "WS_ms_S_WVT"
-                    or sensor == "WindDir_D1_WVT"
-                    or sensor == "WindDir_SD1_WVT"
-                    or sensor == "WS_ms_Max"
-                    or sensor == "WS_ms_Min"
-                    or sensor == "WindDir"
+                        sensor == "WS_ms_S_WVT"
+                        or sensor == "WindDir_D1_WVT"
+                        or sensor == "WindDir_SD1_WVT"
+                        or sensor == "WS_ms_Max"
+                        or sensor == "WS_ms_Min"
+                        or sensor == "WindDir"
                 ):
                     type_sensor_obj = TypeSensor(name=sensor, metric="m/s")
                 if (
-                    sensor == "AirTC_Avg"
-                    or sensor == "AirTC_Max"
-                    or sensor == "AirTC_Min"
-                    or sensor == "AirTC_2_Avg"
-                    or sensor == "AirTC_2_Max"
-                    or sensor == "AirTC_2_Min"
+                        sensor == "AirTC_Avg"
+                        or sensor == "AirTC_Max"
+                        or sensor == "AirTC_Min"
+                        or sensor == "AirTC_2_Avg"
+                        or sensor == "AirTC_2_Max"
+                        or sensor == "AirTC_2_Min"
                 ):
                     type_sensor_obj = TypeSensor(name=sensor, metric="C")
                 if sensor == "RH" or sensor == "RH_2":
@@ -92,11 +92,11 @@ class Command(BaseCommand):
                 naive = datetime(2017, 10, 11, 9, 30).replace(tzinfo=local_tz)
                 if naive < dateteste:
                     print(dateteste)
-                    report = Report(value=y, sensor=sensor, time=dateteste)
+                    report = Reading(value=y, sensor=sensor, time=dateteste)
                     report_list.append(report)
                 col += 1
             col = 0
-            Report.objects.bulk_create(report_list)
+            Reading.objects.bulk_create(report_list)
             print(f"Sensor {x} com reports! ")
 
         print("Acabou")

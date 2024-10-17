@@ -24,7 +24,6 @@ urlpatterns = [
     # path('estacoes/', stations.StationIndex.as_view(), name="stations"),
     # path('estacoes/<slug:slug>', stations.StationDetail.as_view(), name="station_detail"),
     # path('', alerts.AlertsView.as_view(), name="alerts"),
-    # path('formula/criar/', formula.create_formula, name="create_formula"),
     path("modelo/<int:pk>", mathmodel.MathModelView.as_view(), name="mathmodel"),
     path("mapa", get_map, name="map_url"),
     path("visualizar/graficos", view_graphs, name="view_graphs"),
