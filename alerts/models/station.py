@@ -1,4 +1,6 @@
 from django.utils.text import slugify
+from typing import Dict
+
 from .base import BaseModel
 from django.db import models
 
@@ -29,8 +31,8 @@ class Station(BaseModel):
 
     def get_human_sensor_condition(self):
         for sensor in self.sensor_set.all():
-            if sensor.report_set.last():
-                sensor_report = sensor.report_set.last()  # Último report do sensor
+            if sensor.reading_set.last():
+                sensor_report = sensor.reading_set.last()  # Último report do sensor
                 if sensor.type.metric == "human":
                     sensor_value = float(sensor_report.value)
                     if sensor_value == 1.00:
@@ -41,6 +43,11 @@ class Station(BaseModel):
     def get_mathmodels_id(self):
         mathmodels_id = self.mathmodel_set.all().values_list("id", flat=True)
         return list(mathmodels_id)
+
+    def get_latest_readings(self) -> Dict[str, float]:
+        sensors = self.sensor_set.all()
+
+        return {sensor.type.metric: sensor.last_value for sensor in sensors}
 
     def __str__(self):
         return f"{self.alias} {self.lat_lon}"

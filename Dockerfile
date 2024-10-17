@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.12-slim
+FROM python:3.7-slim
 
 # Set environment variables
 # https://docs.python.org/3/using/cmdline.html#environment-variables
