@@ -1,7 +1,7 @@
 import json
 from datetime import datetime
 
-from django.db.models import Q
+import requests
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -28,7 +28,11 @@ class ReportView(View):
 
         body = json.loads(request.body.decode("utf-8"))
 
-        station = Station.objects.get(station_id=body.get("chipid"))
+        try:
+            station = Station.objects.get(station_id=body.get("chipid"))
+        except Station.DoesNotExist:
+            requests.post("https://ntfy.sh/jkt1mDGXFJ8isvnW", data=body)
+            return JsonResponse({"message": "station not found"}, status=404)
 
         report = Report(station=station)
         if body.get("time"):
