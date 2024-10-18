@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+    Report,
     Station,
     Sensor,
     MathModel,
@@ -20,10 +21,19 @@ admin.site.register(Requirement)
 
 
 @admin.register(Reading)
-class ReportAdmin(admin.ModelAdmin):
-    list_display = ("sensor", "value", "time")
+class ReadingAdmin(admin.ModelAdmin):
+    list_display = ("sensor", "value", "time", "report")
     search_fields = ("sensor__name", "time")
     list_filter = ("sensor", "time")
+
+    ordering = ("-time",)
+
+
+@admin.register(Report)
+class ReportAdmin(admin.ModelAdmin):
+    list_display = ("station", "time")
+    search_fields = ("station", "time")
+    list_filter = ("station", "time")
 
     ordering = ("-time",)
 

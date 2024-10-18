@@ -9,8 +9,10 @@ from alerts.managers import AggregatorManager
 
 
 class Report(BaseModel):
-    time = models.DateTimeField(default=timezone.now)
-    station = models.ForeignKey("Station", on_delete=models.PROTECT, null=True)
+    time = models.DateTimeField(default=timezone.now, verbose_name="Data")
+    station = models.ForeignKey(
+        "Station", on_delete=models.PROTECT, null=True, verbose_name="Estação"
+    )
 
     @property
     def sensors(self):
@@ -21,6 +23,9 @@ class Report(BaseModel):
         verbose_name_plural = "Relatórios"
         ordering = ["time"]
 
+    def __str__(self):
+        return f"{self.station} - Data: {localtime(self.time):%d/%m/%Y %H:%M} horas"
+
 
 class Reading(BaseModel):
     # AggregatorManager é uma classe que herda de   models.Manager, apenas adicionando a funcionalidade de agregação
@@ -29,8 +34,14 @@ class Reading(BaseModel):
     value = models.FloatField("Valor", null=True)
     sensor = models.ForeignKey(Sensor, verbose_name="Sensor", on_delete=models.PROTECT)
     # mantido por retrocompatibilidade
-    time = models.DateTimeField(default=timezone.now, null=True)
-    report = models.ForeignKey(Report, on_delete=models.CASCADE, related_name="readings", null=True)
+    time = models.DateTimeField(default=timezone.now, null=True, verbose_name="Data")
+    report = models.ForeignKey(
+        Report,
+        on_delete=models.CASCADE,
+        related_name="readings",
+        null=True,
+        verbose_name="Relatório",
+    )
 
     def __str__(self):
         return f"{self.sensor} - Valor: {self.value} -  Data: {localtime(self.time):%d/%m/%Y %H:%M} horas"
