@@ -34,7 +34,9 @@ class Reading(BaseModel):
     value = models.FloatField("Valor", null=True)
     sensor = models.ForeignKey(Sensor, verbose_name="Sensor", on_delete=models.PROTECT)
     # mantido por retrocompatibilidade
-    time = models.DateTimeField(default=timezone.now, null=True, verbose_name="Data")
+    time = models.DateTimeField(
+        default=timezone.now, null=True, verbose_name="Data", blank=True
+    )
     report = models.ForeignKey(
         Report,
         on_delete=models.CASCADE,
