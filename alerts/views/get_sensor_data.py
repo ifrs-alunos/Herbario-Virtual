@@ -1,40 +1,52 @@
-from django.db.models.functions import TruncMonth, Cast, TruncDay, TruncYear
+from django.db import models
+from django.db.models.functions import Coalesce, TruncMonth, Cast, TruncDay, TruncYear
 from django.http import JsonResponse
 from django.utils import timezone
 from django.utils.timezone import localtime
 
-from django.db.models import Avg, FloatField
+from django.db.models import Avg, FloatField, Q
 
 from alerts.models import Sensor
 
 colors = (
-             "maroon",
-             "orangered",
-             "limegreen",
-             "steelblue",
-             "mediumblue",
-             "indigo",
-             "purple",
-             "crimson",
-             "darkred",
-         ) * 2
+    "maroon",
+    "orangered",
+    "limegreen",
+    "steelblue",
+    "mediumblue",
+    "indigo",
+    "purple",
+    "crimson",
+    "darkred",
+) * 2
 
 
 def get_sensor_data(request, sensor_id, date_filter):
     date = date_filter
     # last_report_date = timezone.make_aware(datetime.datetime.now(),timezone.get_default_timezone())
     sensor = Sensor.objects.get(id=sensor_id)
-    last_report_date = localtime(sensor.reading_set.all().last().time)
+    last_report_date = localtime(sensor.reading_set.last().time)
+    if not last_report_date:
+        last_report_date = localtime(sensor.reading_set.last().report.time)
     data_x = []
     data_y = []
 
+    # devido as mudanças na estrutura de reports (relatorio e leitura) foi necessário alterar a forma de buscar os dados
+    # idealmente esse código tem que ser todo refatorado, mas imagino que por enquanto funcione
+
+    reports = sensor.reading_set.all().annotate(
+        combined_time=Coalesce(
+            "time", "report__time", output_field=models.DateTimeField()
+        )
+    )
+
     if date == "day":
-        reports = sensor.reading_set.filter(
-            time__day=last_report_date.day,
-            time__year=last_report_date.year,
-            time__month=last_report_date.month,
-        ).values("time", "value")
-        data_x = [localtime(x["time"]) for x in reports]
+        reports = reports.filter(
+            combined_time__day=last_report_date.day,
+            combined_time__year=last_report_date.year,
+            combined_time__month=last_report_date.month,
+        ).values("combined_time", "value")
+        data_x = [localtime(x["combined_time"]) for x in reports]
         data_y = [x["value"] for x in reports]
     elif date == "week":
         # start_week = last_report_date - timezone.timedelta(last_report_date.weekday())
