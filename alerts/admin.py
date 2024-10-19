@@ -29,11 +29,17 @@ class ReadingAdmin(admin.ModelAdmin):
     ordering = ("-time",)
 
 
+class ReadingInline(admin.TabularInline):
+    model = Reading
+    extra = 0
+
+
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
     list_display = ("station", "time")
     search_fields = ("station", "time")
     list_filter = ("station", "time")
+    inlines = [ReadingInline]
 
     ordering = ("-time",)
 
