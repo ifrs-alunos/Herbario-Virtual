@@ -319,10 +319,12 @@
                             </div>\
                         </div>\
                         <ul id="date-list" class="nav nav-pills">\
-                            <li class="nav-item"><a class="nav-link date-button date-active" onclick="add_active_class(this)" date_filter="day" href="#">Dia</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button date-active" onclick="add_active_class(this)" date_filter="day" href="#">Dia</a></li>\
+                            {% comment %}
                             <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"   date_filter="week" href="#">Semana</a> </li>\
-                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"  date_filter="month" href="#">Mês</a> </li>\
+                            <li class="nav-item"><a class="nav-link date-button"  onclick="add_active_class(this)"  date_filter="month" href="#">Mês</a> </li>
                             <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="year" href="#">Ano</a> </li>\
+                            {% endcomment %}\
                             <li class="nav-item"><a class="nav-link date-button" onclick="add_active_class(this)"   date_filter="all" href="#">Total</a> </li>\
                         </ul>\
                         <br>\
