@@ -1,3 +1,4 @@
+{% load custom_filters %}
 <div class="accordion accordion-flush" id="accordionFlushExample">
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingOne">
@@ -275,4 +276,30 @@
             </div>
         </div>
     {% endif %}
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingTwentyOne">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseTwentyOne" aria-expanded="false"
+                    aria-controls="flush-collapseTwentyOne">
+                WhatsApp
+            </button>
+        </h2>
+        <div id="flush-collapseTwentyOne" class="accordion-collapse collapse" aria-labelledby="flush-headingTwentyOne"
+             data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        {% if request.user|has_group:"admins" %}
+                            <a id="{% if link == 'whatsapp-connection' %}selected-link{% endif %}"
+                               href="{% url 'whatsapp_messages:connect' %}">Configurar instância</a>
+                        {% endif %}
+                    </li>
+                <li class="list-group-item">
+                    <a id="{% if link == 'link-whatsapp' %}selected-link{% endif %}"
+                            href="{% url 'whatsapp_messages:link' %}">Conectar whatsapp</a>
+                </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
