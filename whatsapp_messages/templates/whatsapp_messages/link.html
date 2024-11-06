@@ -1,0 +1,35 @@
+{% extends "dashboard/dashboard.html" %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-4">Painel de controle</h4>
+            </div>
+        </div>
+        <!-- Barra lateral -->
+        <div class="row mb-5">
+            <div class="col-3">
+                {% include "dashboard/components/sidebar.html" %}
+            </div>
+            <!-- Bloco conteúdo -->
+            <div class="col-9 mb-5">
+                {% block item %}
+                    {% if message_confirmation.verified %}
+                        <p>Sua conta foi verificada com sucesso!</p>
+                    {% else %}
+
+                        Para verificar sua conta, envie
+                        <span class="font-monospace">{{ message_confirmation.code }}</span>
+                        para {{ whatsapp_number }}
+                        ou clique
+                        <a class="text-success"
+                           href="https://wa.me/{{ whatsapp_number }}?text={{ message_confirmation.code }}">Aqui</a>
+                    {% endif %}
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

@@ -1,87 +1,103 @@
-from django.shortcuts import render
-
-from django.views.decorators.csrf import csrf_exempt
 import json
-from django.http import HttpResponse
-from .functions import *
-from .models.message import Message
-from accounts.models import Profile
-from django.core.exceptions import MultipleObjectsReturned
-from datetime import datetime
-# Create your views here.
 
-#https://stackoverflow.com/questions/51710145/what-is-csrf-exempt-in-django
+import requests
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.views import View
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
+
+from whatsapp_messages.functions import (
+    get_whatsapp_qr_code,
+    get_whatsapp_status,
+    set_webhook,
+    start_whatsapp_session,
+)
+from whatsapp_messages.models.message_confirmation import (
+    CODE_LENGTH,
+    MessageConfirmation,
+)
+from whatsapp_messages.types import WhatsappEvent
+
+headers = {"token": settings.WHATSAPP_TOKEN}
+
+
 @csrf_exempt
 def whatsapp_webhook(request):
-	if request.method == 'GET':
-		VERIFY_TOKEN = '5Mp70BcUsroL9oWi56yxyLZuq8LEQeGO'
-		mode = request.GET['hub.mode']
-		token = request.GET['hub.verify_token']
-		challenge = request.GET['hub.challenge']
+    event_data = json.loads(request.POST.get("jsonData"))
+    event = WhatsappEvent.from_dict(event_data)
 
-		if mode == 'subscribe' and token == VERIFY_TOKEN:
-			return HttpResponse(challenge, status=200)
-		else:
-			return HttpResponse("error", status=403)
+    print(event)
 
-	if request.method == 'POST':
-		data = json.loads(request.body)
-		if 'object' in data and 'entry' in data:
-			if data['object'] == 'whatsapp_business_account':
-				try:
-					for entry in data['entry']:
-						testPhoneNumber = entry['changes'][0]['value']['metadata']['display_phone_number']
-						phoneId = entry['changes'][0]['value']['metadata']['phone_number_id']
-						profileName = entry['changes'][0]['value']['contacts'][0]['profile']['name']
-						whatsAppId = entry['changes'][0]['value']['contacts'][0]['wa_id']
-						fromId = entry['changes'][0]['value']['messages'][0]['from']
-						messageId = entry['changes'][0]['value']['messages'][0]['id']
-						timestamp = entry['changes'][0]['value']['messages'][0]['timestamp']
-						text = entry['changes'][0]['value']['messages'][0]['text']['body']
-						phoneNumber = whatsAppId
-												
-						if text.lower() == 'labfito':
-							numero_semddi = phoneNumber[2:]
+    if event.type == "Message":
+        number = event.sender.split(":")[0][2:]
+        if len(event.conversation) == CODE_LENGTH:
+            mc = MessageConfirmation.objects.get(
+                code=event.conversation,
+            )
+            print(number)
+            print(mc.phone_number)
+            mc.verified = True
+            mc.save()
 
-							if len(numero_semddi) == 10:
-								numero_semddi = numero_semddi[:2] + "9" + numero_semddi[2:]
+    return HttpResponse("ok")
 
-							try:#se user existir no site
-								sender = Profile.objects.get(phone=numero_semddi)
-								if sender.get_messages == False:
-									sender.can_get_messages()
-									message = "Número Cadastrado! Você está apto a receber alertas."
-								else:
-									message = "Você já está apto a receber alertas."
 
-							except:	
-								message = "Não foi possível localizar um usuário cadastrado com este número. Por favor, acesse o link abaixo e cadastre-se.\nhttp://labfito.vacaria.ifrs.edu.br"
-							
-							sendWhatsappMessage(phoneNumber, message)
-							message_object = Message(sender_number = testPhoneNumber, receiver_name = profileName, receiver_number = phoneNumber, timestamp = int(timestamp), message_text = message)
-							message_object.save()
-				except:
-					try:
-						"""Checa e armazena na mensagem o seu status"""
-						for entry in data['entry']:
-							status = entry['changes'][0]['value']['statuses'][0]['status']
-							number = entry['changes'][0]['value']['statuses'][0]['recipient_id']
-							message_id = entry['changes'][0]['value']['statuses'][0]['id']
+class WhatsappLogoutView(View):
+    def get(self, request):
+        requests.post(settings.WHATSAPP_API_URL + "/session/logout", headers=headers)
+        return redirect("whatsapp_messages:connect")
 
-							timestamp_status = entry['changes'][0]['value']['statuses'][0]['timestamp']
-							data_timestamp = datetime.fromtimestamp(int(timestamp_status))
 
-							if status == "sent":
-								ultima_mensagem = Message.objects.filter(receiver_number=number).latest('timestamp')
-								ultima_mensagem.status_log+="Status: "+status+" - Data e hora: "+str(data_timestamp)+"\n"
-								ultima_mensagem.message_id+=message_id
-								
-							else:
-								ultima_mensagem = Message.objects.filter(message_id=message_id).latest('timestamp')
-								ultima_mensagem.status_log+="Status: "+status+" - Data e hora: "+str(data_timestamp)+"\n"
-							ultima_mensagem.save()
+# Criação de sessão por parte de um administrador, como se fosse conectar ao WhatsApp web
+class WhatsappConnectionView(TemplateView):
+    template_name = "whatsapp_messages/whatsapp_connection.html"
 
-					except Exception as e:
-						print(e)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-		return HttpResponse("success", status=200)
+        status = get_whatsapp_status()
+
+        context["status"] = status
+
+        if status.Connected and status.LoggedIn:
+            context["connected"] = True
+            set_webhook(self.request)
+
+        if not status.Connected:
+            start_whatsapp_session()
+
+        if not status.LoggedIn:
+            qr = get_whatsapp_qr_code()
+            context["qr_code"] = qr
+
+        context["link"] = "whatsapp-connection"
+
+        return context
+
+
+class LinkUserWhatsappView(TemplateView):
+    template_name = "whatsapp_messages/link.html"
+
+    def get_context_data(self, **kwargs):
+        profile = self.request.user.profile
+        try:
+            mc = MessageConfirmation.objects.get(profile=profile)
+            if mc.has_expired() and not mc.verified:
+                mc.delete()
+                mc = MessageConfirmation(profile=profile)
+                mc.save()
+        except MessageConfirmation.DoesNotExist:
+            mc = MessageConfirmation(profile=profile)
+            mc.save()
+
+        context = super().get_context_data(**kwargs)
+
+        context["message_confirmation"] = mc
+
+        context["whatsapp_number"] = settings.WHATSAPP_NUMBER
+
+        context["link"] = "link-whatsapp"
+
+        return context
