@@ -116,4 +116,8 @@ def get_sensor_data(request, sensor_id, date_filter):
     if not (data_x and data_y):
         return JsonResponse({"x": [], "y": []}, status=404)
 
+    # Sort the data
+    sorted_data = sorted(zip(data_x, data_y))
+    data_x, data_y = zip(*sorted_data)
+
     return JsonResponse({"x": data_x, "y": data_y}, status=200)
