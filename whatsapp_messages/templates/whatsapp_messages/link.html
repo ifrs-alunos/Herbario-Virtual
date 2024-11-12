@@ -18,14 +18,22 @@
                 {% block item %}
                     {% if message_confirmation.verified %}
                         <p>Sua conta foi verificada com sucesso!</p>
-                    {% else %}
+                        <p>Número de telefone: {{ message_confirmation.phone_number }}</p>
 
+                        <p>Selecione abaixo os alertas que gostaria de receber: </p>
+                        <form action="{% url 'alerts:user_alerts' %}" method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </form>
+
+                    {% else %}
                         Para verificar sua conta, envie
                         <span class="font-monospace">{{ message_confirmation.code }}</span>
-                        para {{ whatsapp_number }}
+                        para {{ bot_whatsapp_number }}
                         ou clique
                         <a class="text-success"
-                           href="https://wa.me/{{ whatsapp_number }}?text={{ message_confirmation.code }}">Aqui</a>
+                           href="https://wa.me/{{ bot_whatsapp_number }}?text={{ message_confirmation.code }}">Aqui</a>
                     {% endif %}
                 {% endblock %}
             </div>
