@@ -9,8 +9,10 @@ from .report import Reading, Report
 from .sensor_in_mathmodel import SensorInMathModel
 from .constant import Constant
 from .mathmodel_result import MathModelResult
+from .user_alert import UserAlert
 
 __all__ = [
+    "UserAlert",
     "BaseModel",
     "TypeSensor",
     "Station",

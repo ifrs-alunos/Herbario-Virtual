@@ -11,6 +11,7 @@ from .models import (
     SensorInMathModel,
     Constant,
     MathModelResult,
+    UserAlert,
 )
 
 admin.site.register(Station)
@@ -42,6 +43,12 @@ class ReportAdmin(admin.ModelAdmin):
     inlines = [ReadingInline]
 
     ordering = ("-time",)
+
+
+@admin.register(UserAlert)
+class UserAlertAdmin(admin.ModelAdmin):
+    list_display = ("profile", "disease")
+    list_filter = ("profile", "disease")
 
 
 admin.site.register(SensorInMathModel)
