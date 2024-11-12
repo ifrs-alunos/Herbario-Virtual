@@ -17,22 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-#Para Imagem ser servida pelo Django
+# Para Imagem ser servida pelo Django
 from django.conf.urls.static import static
 from django.conf import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('herbario/', include('herbarium.urls', namespace='herbarium')),
-    path('painel/', include('dashboard.urls')),
-    path('', include('core.urls', namespace='core')),
-    path('fitopatologico/', include('disease.urls', namespace='disease')),
-    path('alertas/', include('alerts.urls', namespace='alerts')),
-    path('tinymce/', include('tinymce.urls')),
-    path('webhook/', include('whatsapp_messages.urls')),
+    path("admin/", admin.site.urls),
+    path("herbario/", include("herbarium.urls", namespace="herbarium")),
+    path("painel/", include("dashboard.urls")),
+    path("", include("core.urls", namespace="core")),
+    path("fitopatologico/", include("disease.urls", namespace="disease")),
+    path("alertas/", include("alerts.urls", namespace="alerts")),
+    path("tinymce/", include("tinymce.urls")),
+    path("whatsapp/", include("whatsapp_messages.urls")),
 ]
 
-#Para Imagem ser servida pelo Django
+# Para Imagem ser servida pelo Django
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    
