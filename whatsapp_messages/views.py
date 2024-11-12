@@ -8,6 +8,8 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from alerts.forms import UserAlertForm
+
 from whatsapp_messages.functions import (
     get_whatsapp_qr_code,
     get_whatsapp_status,
@@ -93,11 +95,11 @@ class LinkUserWhatsappView(TemplateView):
             mc.save()
 
         context = super().get_context_data(**kwargs)
-
         context["message_confirmation"] = mc
-
-        context["whatsapp_number"] = settings.WHATSAPP_NUMBER
-
+        context["bot_whatsapp_number"] = settings.WHATSAPP_NUMBER
         context["link"] = "link-whatsapp"
+
+        form = UserAlertForm(user=self.request.user)
+        context["form"] = form
 
         return context

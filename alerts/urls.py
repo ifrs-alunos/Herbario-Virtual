@@ -15,6 +15,7 @@ from .views import (
     webhooks,
 )
 from .views import mathmodel
+from .views.user_alerts import UserAlertPostView
 
 app_name = "alerts"
 
@@ -52,7 +53,13 @@ urlpatterns = [
         get_station_mathmodel_color,
         name="get_station_mathmodel_color",
     ),
-    path("station/<str:station_chip_id>/last_report", report.LastReport.as_view(), name="last_report"),
+    path(
+        "station/<str:station_chip_id>/last_report",
+        report.LastReport.as_view(),
+        name="last_report",
+    ),
     # Webhook
     path("webhooks/whatsapp", webhooks.whatsapp, name="whatsapp"),
+    # Cadastro em alertas
+    path("user_alerts", UserAlertPostView.as_view(), name="user_alerts"),
 ]
