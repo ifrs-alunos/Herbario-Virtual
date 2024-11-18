@@ -1,5 +1,7 @@
 from django.db import models
 
+from whatsapp_messages.functions import send_whatsapp_message
+
 
 class UserAlert(models.Model):
     profile = models.ForeignKey(
@@ -15,3 +17,6 @@ class UserAlert(models.Model):
     class Meta:
         verbose_name = "Alerta"
         verbose_name_plural = "Alertas"
+
+    def send_alert(self):
+        send_whatsapp_message(self.profile.phone, "Alerta de doença: " + self.disease.name_disease)
