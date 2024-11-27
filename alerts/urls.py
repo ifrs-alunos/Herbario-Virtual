@@ -15,7 +15,6 @@ from .views import (
     webhooks,
 )
 from .views import mathmodel
-from .views.user_alerts import UserAlertPostView
 
 app_name = "alerts"
 
@@ -61,5 +60,4 @@ urlpatterns = [
     # Webhook
     path("webhooks/whatsapp", webhooks.whatsapp, name="whatsapp"),
     # Cadastro em alertas
-    path("user_alerts", UserAlertPostView.as_view(), name="user_alerts"),
 ]
