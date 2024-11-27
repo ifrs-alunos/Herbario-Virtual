@@ -108,7 +108,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
@@ -142,6 +141,15 @@ LOGOUT_REDIRECT_URL = "/painel/login/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
+WHATSAPP_API_URL = "http://localhost:3000"
+
+# número do Whatsapp do bot de alertas
+# 55 representa o DDI do Brasil
+# O resto do número é o número com DDD e sem o 9 no começo
+WHATSAPP_NUMBER = "555496086696"
+
+# Criado direto na API Wuzapi
+WHATSAPP_TOKEN = ""
 
 WHATSAPP_API_URL = "http://localhost:3000"
 
