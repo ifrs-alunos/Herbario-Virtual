@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+
+from whatsapp_messages.functions import send_whatsapp_message
 from .solicitation import Solicitation
 
 
@@ -35,8 +37,14 @@ class Profile(models.Model):
     )
     rg = models.CharField(max_length=10, verbose_name="RG")
 
+    alerts_for_diseases = models.ManyToManyField("disease.Disease", verbose_name="alertas para doenças")
+
     def __str__(self):
         return self.name
+
+    def send_alert(self, disease):
+        """Envia alerta para o usuário"""
+        send_whatsapp_message(self.phone, "Alerta de doença: " + disease.name_disease)
 
     def can_send_solicitation(self):
         # Selecionando solicitações de um usuário

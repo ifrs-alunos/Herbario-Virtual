@@ -151,4 +151,14 @@ WHATSAPP_NUMBER = "555496086696"
 # Criado direto na API Wuzapi
 WHATSAPP_TOKEN = ""
 
+WHATSAPP_API_URL = "http://localhost:3000"
+
+# número do Whatsapp do bot de alertas
+# 55 representa o DDI do Brasil
+# O resto do número é o número com DDD e sem o 9 no começo
+WHATSAPP_NUMBER = "554891747724"
+
+# Criado direto na API Wuzapi
+WHATSAPP_TOKEN = ""
+
 from .local_settings import *

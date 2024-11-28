@@ -7,7 +7,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import View
 
-from alerts.models import IntermediaryRequirement, Reading, Station, Report, UserAlert
+from accounts.models import Profile
+from alerts.models import IntermediaryRequirement, Reading, Station, Report
 
 
 @method_decorator(csrf_exempt, name="dispatch")
@@ -63,9 +64,8 @@ class ReportView(View):
                 # Caso os requerimentos sejam válidos, o modelo matemático é calculado usando os valores da estação
                 # a função retorna o resultado do modelo matemático, mas não é utilizada, apenas salva no banco de dados
                 requirement.math_model.evaluate_by_station(station)
-                for user_alert in UserAlert.objects.filter(disease=requirement.math_model.disease):
-                    user_alert.send_alert()
-
+                for profile in Profile.objects.filter(alerts_for_diseases=requirement.math_model.disease):
+                    profile.send_alert(requirement.math_model.disease)
         return JsonResponse({"message": "ok"}, status=200)
 
 

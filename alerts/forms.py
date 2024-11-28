@@ -1,6 +1,7 @@
 from django import forms
 
-from alerts.models import Station, MathModel, UserAlert
+from accounts.models import Profile
+from alerts.models import Station, MathModel
 from disease.models import Disease
 
 
@@ -48,18 +49,19 @@ class DownloadStationDataIntervalForm(forms.Form):
     )
 
 
-class UserAlertForm(forms.Form):
-    disease = forms.ModelMultipleChoiceField(
-        queryset=Disease.objects.filter(mathmodel__isnull=False),
-        widget=forms.CheckboxSelectMultiple(),
-    )
+class AlertsForDiseasesForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["alerts_for_diseases"]
+
+        widgets = {
+            "alerts_for_diseases": forms.CheckboxSelectMultiple,
+        }
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop("user", None)
-        super(UserAlertForm, self).__init__(*args, **kwargs)
-        self.fields["disease"].queryset = Disease.objects.filter(
-            mathmodel__isnull=False
-        )
-        if user:
-            user_alerts = UserAlert.objects.filter(profile=user.profile)
-            self.initial["disease"] = [alert.disease.id for alert in user_alerts]
+        profile = kwargs.pop("profile")
+        super().__init__(*args, **kwargs)
+        self.fields["alerts_for_diseases"].queryset = Disease.objects.filter(mathmodel__isnull=False)
+        self.fields["alerts_for_diseases"].initial = profile.alerts_for_diseases.all()
+        if profile:
+            self.instance = profile
