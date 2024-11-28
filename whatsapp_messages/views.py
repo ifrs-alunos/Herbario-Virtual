@@ -6,8 +6,9 @@ from django.shortcuts import redirect
 from django.views import View
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
+from django.views.generic import FormView, TemplateView
 
+from alerts.forms import AlertsForDiseasesForm
 from whatsapp_messages.functions import (
     get_whatsapp_qr_code,
     get_whatsapp_status,
@@ -97,7 +98,21 @@ class LinkUserWhatsappView(TemplateView):
         context["bot_whatsapp_number"] = settings.WHATSAPP_NUMBER
         context["link"] = "link-whatsapp"
 
-        # form = UserAlertForm(user=self.request.user)
-        # context["form"] = form
+        form = AlertsForDiseasesForm(profile=profile)
+        context["form"] = form
 
         return context
+
+
+class AlertsForDiseasesView(View):
+    form_class = AlertsForDiseasesForm
+
+    def post(self, request):
+        profile = request.user.profile
+        form = self.form_class(request.POST, profile=profile)
+
+        if form.is_valid():
+            profile.alerts_for_diseases.set(form.cleaned_data["alerts_for_diseases"])
+            profile.save()
+
+        return redirect("whatsapp_messages:link")
