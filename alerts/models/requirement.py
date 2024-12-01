@@ -2,7 +2,6 @@ import numexpr
 from django.db import models
 from typing import List
 
-
 from .base import BaseModel
 from .math_model import MathModel
 from .sensor import Sensor
@@ -22,7 +21,7 @@ class Requirement(BaseModel):
     requires = models.ManyToManyField("self", blank=True, symmetrical=False)
 
     # tempo mínimo em horas
-    min_time = models.FloatField("Tempo mínimo", blank=True, null=True)
+    min_time = models.FloatField("Tempo mínimo", blank=True, null=True, help_text="Tempo mínimo em horas")
 
     def __str__(self):
         return f"{self.name} ({self.sensor.type} {self.relational} {self.value})"
@@ -49,7 +48,7 @@ class Requirement(BaseModel):
 
         for hour in self.sensor.reading_set.aggregate_hours(self.min_time):
             if not numexpr.evaluate(
-                f"{hour['avg_value']} {self.relational} {self.value}"
+                    f"{hour['avg_value']} {self.relational} {self.value}"
             ).item(0):
                 return False
         return True
