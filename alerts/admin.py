@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    Report,
+    IntermediaryRequirement, Report,
     Station,
     Sensor,
     MathModel,
@@ -49,6 +49,13 @@ class ReportAdmin(admin.ModelAdmin):
 class UserAlertAdmin(admin.ModelAdmin):
     list_display = ("profile", "disease")
     list_filter = ("profile", "disease")
+
+
+@admin.register(IntermediaryRequirement)
+class IntermediaryRequirementAdmin(admin.ModelAdmin):
+    list_display = ("name", "math_model")
+    list_filter = ("math_model",)
+    search_fields = ("name",)
 
 
 admin.site.register(SensorInMathModel)
