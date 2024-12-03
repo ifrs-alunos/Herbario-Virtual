@@ -15,16 +15,16 @@ class Requirement(BaseModel):
     )
     sensor = models.ForeignKey(Sensor, on_delete=models.PROTECT)
     relational = models.CharField(
-        max_length=10, choices=RELATIONAL_TYPE_CHOICES, blank=True
+        max_length=10, choices=RELATIONAL_TYPE_CHOICES, blank=True, verbose_name="Operador relacional",
     )
     value = models.FloatField("Valor")
-    requires = models.ManyToManyField("self", blank=True, symmetrical=False)
+    requires = models.ManyToManyField("self", blank=True, symmetrical=False, verbose_name="Requisitos")
 
     # tempo mínimo em horas
     min_time = models.FloatField("Tempo mínimo", blank=True, null=True, help_text="Tempo mínimo em horas")
 
     def __str__(self):
-        return f"{self.name} ({self.sensor.type} {self.relational} {self.value})"
+        return f"{self.name} ({self.sensor.type} {self.relational} {self.value}) - {self.sensor.station}"
 
     def value_in_relation(self):
         return f"x {self.relational} {self.value}"
