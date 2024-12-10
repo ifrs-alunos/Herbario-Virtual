@@ -18,13 +18,13 @@ class MathModel(BaseModel):
     source_code = models.TextField(
         max_length=1000,
         help_text="Variaveis disponiveis no momento: t = Temperatura rh = "
-        "Umidade Relativa</h4>",
+                  "Umidade Relativa</h4>",
     )
     disease = models.ForeignKey(
         Disease, verbose_name="Doença", on_delete=models.PROTECT, null=True, blank=True
     )
     stations = models.ManyToManyField(
-        Station, verbose_name="Estaçôes atreladas", null=True, blank=True
+        Station, verbose_name="Estaçôes atreladas", blank=True
     )
 
     def __str__(self):

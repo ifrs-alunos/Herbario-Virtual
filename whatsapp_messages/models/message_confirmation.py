@@ -11,7 +11,7 @@ CODE_EXPIRATION_TIME = 60  # minutes
 
 
 class MessageConfirmation(models.Model):
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, unique=True)
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     code = models.CharField(max_length=CODE_LENGTH, null=True, blank=True)
     verified = models.BooleanField(default=False)
 
@@ -19,7 +19,7 @@ class MessageConfirmation(models.Model):
 
     def has_expired(self):
         return (
-            timezone.now() - self.created_at
+                timezone.now() - self.created_at
         ).total_seconds() / 60 > CODE_EXPIRATION_TIME
 
     @property
