@@ -1,3 +1,5 @@
+import logging
+
 import numexpr
 from django.db import models
 from typing import List
@@ -6,6 +8,8 @@ from .base import BaseModel
 from .math_model import MathModel
 from .sensor import Sensor
 from .choices import RELATIONAL_TYPE_CHOICES
+
+logger = logging.getLogger("django")
 
 
 class Requirement(BaseModel):
@@ -30,6 +34,7 @@ class Requirement(BaseModel):
         return f"x {self.relational} {self.value}"
 
     def validate(self, exclude_ids: List[int] = None) -> bool:
+        logger.info(f"Validating requirement {self}")
         if exclude_ids is None:
             exclude_ids = []
         if self.id not in exclude_ids:
@@ -37,16 +42,22 @@ class Requirement(BaseModel):
 
         for requirement in self.requires.all().exclude(id__in=exclude_ids):
             if not requirement.validate(exclude_ids=exclude_ids):
+                logger.info(f"Requirement {requirement} failed")
                 return False
 
         if not self.min_time:
             if not self.sensor.last_value:
+                logger.info(f"Sensor {self.sensor} has no last value")
                 return False
+            logger.info(
+                f"Validating requirement {self} with last value {self.sensor.last_value}, expression: {self.sensor.last_value} {self.relational} {self.value}")
             return numexpr.evaluate(
                 f"{self.sensor.last_value} {self.relational} {self.value}"
             ).item(0)
 
         for hour in self.sensor.reading_set.aggregate_hours(self.min_time):
+            logger.info(
+                f"Validating requirement {self} with avg value {hour['avg_value']}, expression: {hour['avg_value']} {self.relational} {self.value}")
             if not numexpr.evaluate(
                     f"{hour['avg_value']} {self.relational} {self.value}"
             ).item(0):

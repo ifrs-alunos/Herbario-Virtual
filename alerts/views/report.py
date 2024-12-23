@@ -1,4 +1,5 @@
 import json
+import logging
 from datetime import datetime
 
 import requests
@@ -10,28 +11,19 @@ from django.views.generic import View
 from accounts.models import Profile
 from alerts.models import IntermediaryRequirement, Reading, Station, Report
 
+logger = logging.getLogger('django')
+
 
 @method_decorator(csrf_exempt, name="dispatch")
 class ReportView(View):
     def post(self, request):
-        # POST body looks like this:
-        """
-        {
-          "chipid":185249135999496,
-          "time":"2024-01-01T00:00:00",
-          "readings": [
-            { "sensor_name": "dht_h", "value": 57.5 },
-            { "sensor_name": "dht_t", "value": 17.2 },
-            { "sensor_name": "rain", "value": 0 }
-          ]
-        }
-        """
-
         body = json.loads(request.body.decode("utf-8"))
+        logger.info(f"Received request body: {body}")
 
         try:
             station = Station.objects.get(station_id=body.get("chipid"))
         except Station.DoesNotExist:
+            logger.error(f"Station with chipid {body.get('chipid')} not found.")
             requests.post("https://ntfy.sh/jkt1mDGXFJ8isvnW", data=body)
             return JsonResponse({"message": "station not found"}, status=404)
 
@@ -40,6 +32,7 @@ class ReportView(View):
             report.time = datetime.fromisoformat(body.get("time"))
 
         report.save()
+        logger.info(f"Created report: {report}")
 
         sensors = []
 
@@ -54,6 +47,7 @@ class ReportView(View):
                 reading.time = None
 
             reading.save()
+            logger.info(f"Created reading: {reading}")
 
         requirements = IntermediaryRequirement.objects.filter(
             requirements__sensor__in=sensors
@@ -61,11 +55,12 @@ class ReportView(View):
 
         for requirement in requirements:
             if requirement.validate():
-                # Caso os requerimentos sejam válidos, o modelo matemático é calculado usando os valores da estação
-                # a função retorna o resultado do modelo matemático, mas não é utilizada, apenas salva no banco de dados
+                logger.info(f"Requirement {requirement} validated.")
                 requirement.math_model.evaluate_by_station(station)
                 for profile in Profile.objects.filter(alerts_for_diseases=requirement.math_model.disease):
                     profile.send_alert(requirement.math_model.disease)
+                    logger.info(f"Alert sent to profile {profile} for disease {requirement.math_model.disease}")
+
         return JsonResponse({"message": "ok"}, status=200)
 
 
