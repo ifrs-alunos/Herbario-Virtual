@@ -140,8 +140,11 @@ class Publication(models.Model):
 
 	@property
 	def get_content_preview(self):
-		soup = BeautifulSoup(self.content, 'html.parser')
-		return soup.find('p').getText()
+		try:
+			soup = BeautifulSoup(self.content, 'html.parser')
+			return soup.find('p').getText()
+		except AttributeError as e:
+			return 'Erro ao carregar prévia do conteúdo'
 
 	class Meta:
 		verbose_name = 'Publicação'
