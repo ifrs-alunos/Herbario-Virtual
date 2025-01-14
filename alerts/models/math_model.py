@@ -40,7 +40,7 @@ class MathModel(BaseModel):
         Evaluate the math model for a given station and return the result
         """
 
-        local_dict = station.get_latest_readings() | self.get_constants_dict()
+        local_dict = {**station.get_latest_readings(), **self.get_constants_dict()}
 
         value = numexpr.evaluate(self.source_code, local_dict=local_dict).item(0)
         result = MathModelResult(value=value, mathmodel=self)
