@@ -12,7 +12,7 @@ from alerts.forms import AlertsForDiseasesForm
 from whatsapp_messages.functions import (
     get_whatsapp_qr_code,
     get_whatsapp_status,
-    set_webhook,
+    send_whatsapp_message, set_webhook,
     start_whatsapp_session,
 )
 from whatsapp_messages.models.message_confirmation import (
@@ -41,6 +41,7 @@ def whatsapp_webhook(request):
             print(mc.phone_number)
             mc.verified = True
             mc.save()
+            send_whatsapp_message(number, "Seu número foi vinculado com sucesso!")
 
     return HttpResponse("ok")
 
