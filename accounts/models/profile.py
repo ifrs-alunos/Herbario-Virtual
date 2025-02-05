@@ -37,7 +37,7 @@ class Profile(models.Model):
     )
     rg = models.CharField(max_length=10, verbose_name="RG")
 
-    alerts_for_diseases = models.ManyToManyField("disease.Disease", verbose_name="alertas para doenças")
+    alerts_for_diseases = models.ManyToManyField("disease.Disease", verbose_name="alertas para doenças", blank=True)
 
     def __str__(self):
         return self.name
