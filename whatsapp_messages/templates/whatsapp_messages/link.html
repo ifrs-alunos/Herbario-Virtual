@@ -22,11 +22,11 @@
                             </div>
                             <div class="card shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="card-title text-center">Detalhes da Conta</h5>
-                                    <p class="text-muted text-center">Número de telefone: <span
-                                            class="fw-bold">{{ message_confirmation.phone_number }}</span></p>
-
-                                    <hr>
+{#                                    <h5 class="card-title text-center">Detalhes da Conta</h5>#}
+{#                                    <p class="text-muted text-center">Número de telefone: <span#}
+{#                                            class="fw-bold">{{ message_confirmation.phone_number }}</span>#}
+{#                                    </p>#}
+{#                                    <hr>#}
                                     <h6 class="text-center">Selecione os alertas que deseja receber:</h6>
                                     <form action="{% url 'whatsapp_messages:alerts_for_diseases' %}" method="post"
                                           class="mt-3">
@@ -35,8 +35,8 @@
                                         <div class="mb-3">
                                             {{ form.alerts_for_diseases }}
                                         </div>
-                                        <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-primary btn-lg">Enviar</button>
+                                        <div>
+                                            <button type="submit" class="btn btn-primary">Enviar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -48,19 +48,18 @@
                                     <p class="card-text">
                                         Para verificar sua conta, envie o código:
                                         <span class="font-monospace bg-light px-2 py-1 rounded">{{ message_confirmation.code }}</span>
-                                        para o número: <span class="fw-bold">{{ bot_whatsapp_number }}</span>.
+                                        para o usuário: <span class="fw-bold">{{ bot_telegram_username }}</span>.
                                     </p>
                                     <p>Ou clique no botão abaixo para enviar automaticamente:</p>
-                                    <a href="https://wa.me/{{ bot_whatsapp_number }}?text={{ message_confirmation.code }}"
-                                       class="btn btn-success btn-lg">
-                                        Verificar no WhatsApp
+                                    <a href="https://t.me/{{ bot_telegram_username }}?text={{ message_confirmation.code }}"
+                                       class="btn btn-primary btn-lg">
+                                        Verificar no Telegram
                                     </a>
                                 </div>
                             </div>
                         {% endif %}
                     </div>
                 {% endblock %}
-
             </div>
         </div>
     </div>

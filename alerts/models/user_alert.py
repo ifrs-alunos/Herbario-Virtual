@@ -1,6 +1,6 @@
 from django.db import models
 
-from whatsapp_messages.functions import send_whatsapp_message
+from whatsapp_messages.functions import send_telegram_message
 
 
 class UserAlert(models.Model):
@@ -19,4 +19,5 @@ class UserAlert(models.Model):
         verbose_name_plural = "Alertas"
 
     def send_alert(self):
-        send_whatsapp_message(self.profile.phone, "Alerta de doença: " + self.disease.name_disease)
+        send_telegram_message(self.profile.messageconfirmation.telegram_chat_id,
+                              "Alerta de doença: " + self.disease.name_disease)

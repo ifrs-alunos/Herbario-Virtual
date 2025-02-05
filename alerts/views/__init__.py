@@ -7,7 +7,6 @@ from .collect_data_stationif import collect_data_stationif
 from .station import get_station, get_station_sensors_data, get_station_mathmodel_color
 from .download_data_station import download_data_station
 from .get_mathmodels import get_mathmodels
-from .webhooks import whatsapp
 
 __all__ = [
     "ReportView",
@@ -23,5 +22,4 @@ __all__ = [
     "get_station_mathmodel_color",
     "download_data_station",
     "get_mathmodels",
-    "whatsapp",
 ]

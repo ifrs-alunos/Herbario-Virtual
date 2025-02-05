@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from whatsapp_messages.functions import send_whatsapp_message
+from whatsapp_messages.functions import send_telegram_message
 from .solicitation import Solicitation
 
 
@@ -44,7 +44,7 @@ class Profile(models.Model):
 
     def send_alert(self, disease):
         """Envia alerta para o usuário"""
-        send_whatsapp_message(self.phone, "Alerta de doença: " + disease.name_disease)
+        send_telegram_message(self.messageconfirmation.telegram_chat_id, "Alerta de doença: " + disease.name_disease)
 
     def can_send_solicitation(self):
         # Selecionando solicitações de um usuário
