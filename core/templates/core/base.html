@@ -240,9 +240,11 @@
 
 <!-- Js Externo -->
 <script>
+    {% if conditions %}
     if (!"{{ conditions|safe }}") {
         cid = -1;
     }
+    {% endif %}
 </script>
 
 <script src="{% static 'core/js/core.js' %}"></script>
