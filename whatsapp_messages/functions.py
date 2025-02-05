@@ -17,6 +17,10 @@ def set_webhook(request: HttpRequest):
             "secret_token": settings.TELEGRAM_SECRET_TOKEN,
         },
     )
+
+    logger.info(f"Body: {response.request.body}")
+    logger.info(response)
+
     return response.json()
 
 

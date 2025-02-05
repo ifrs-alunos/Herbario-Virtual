@@ -82,7 +82,6 @@ class SetTelegramWebhookView(View):
     def get(self, request):
         logger.info("Setting webhook via control panel")
         response = set_webhook(request)
-        logger.info(response)
         return redirect("whatsapp_messages:link")
 
 class AlertsForDiseasesView(View):
