@@ -12,7 +12,7 @@ def set_webhook(request: HttpRequest):
     response = requests.post(
         settings.TELEGRAM_API_URL + f"{settings.TELEGRAM_BOT_TOKEN}/setWebhook",
         json={
-            "url": request.build_absolute_uri(reverse("whatsapp_messages:webhook")).replace('http', 'https'),
+            "url": request.build_absolute_uri(reverse("whatsapp_messages:webhook")).replace('http://', 'https://'),
             "allowed_updates": ["message"],
             "secret_token": settings.TELEGRAM_SECRET_TOKEN,
         },
