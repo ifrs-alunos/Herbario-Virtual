@@ -141,15 +141,16 @@ LOGOUT_REDIRECT_URL = "/painel/login/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-WHATSAPP_API_URL = "http://localhost:3000"
 
-# número do Whatsapp do bot de alertas
-# 55 representa o DDI do Brasil
-# O resto do número é o número com DDD e sem o 9 no começo
-WHATSAPP_NUMBER = "555496086696"
+TELEGRAM_BOT_USERNAME = "labfito_bot"
 
-# Criado direto na API Wuzapi
-WHATSAPP_TOKEN = ""
+# Criado na API do Telegram
+TELEGRAM_BOT_TOKEN = ""
+
+TELEGRAM_API_URL = "https://api.telegram.org/bot"
+
+# Sobrescrito no local_settings.py
+TELEGRAM_SECRET_TOKEN = ""
 
 # Logging
 LOGGING = {

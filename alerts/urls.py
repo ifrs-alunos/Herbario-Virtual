@@ -12,7 +12,6 @@ from .views import (
     get_station_sensors_data,
     get_station_mathmodel_color,
     get_mathmodels,
-    webhooks,
 )
 from .views import mathmodel
 
@@ -57,7 +56,4 @@ urlpatterns = [
         report.LastReport.as_view(),
         name="last_report",
     ),
-    # Webhook
-    path("webhooks/whatsapp", webhooks.whatsapp, name="whatsapp"),
-    # Cadastro em alertas
 ]

@@ -1,8 +1,11 @@
 import json
+import logging
 
 import requests
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.views import View
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
@@ -10,76 +13,47 @@ from django.views.generic import FormView, TemplateView
 
 from alerts.forms import AlertsForDiseasesForm
 from whatsapp_messages.functions import (
-    get_whatsapp_qr_code,
-    get_whatsapp_status,
-    send_whatsapp_message, set_webhook,
-    start_whatsapp_session,
+    send_telegram_message,
+    set_webhook,
 )
 from whatsapp_messages.models.message_confirmation import (
     CODE_LENGTH,
     MessageConfirmation,
 )
-from whatsapp_messages.types import WhatsappEvent
 
-headers = {"token": settings.WHATSAPP_TOKEN}
-
+logger = logging.getLogger('django')
 
 @csrf_exempt
-def whatsapp_webhook(request):
-    event_data = json.loads(request.POST.get("jsonData"))
-    event = WhatsappEvent.from_dict(event_data)
+def telegram_webhook(request):
+    event_data = json.loads(request.body.decode("utf-8"))
 
-    print(event)
+    telegram_chat_id = event_data.get('message', {}).get('from', {}).get('id')
+    text = event_data.get('message', {}).get('text')
 
-    if event.type == "Message":
-        number = event.sender.split(":")[0][2:]
-        if len(event.conversation) == CODE_LENGTH:
-            mc = MessageConfirmation.objects.get(
-                code=event.conversation,
-            )
-            print(number)
-            print(mc.phone_number)
-            mc.verified = True
-            mc.save()
-            send_whatsapp_message(number, "Seu número foi vinculado com sucesso!")
+    logger.info(f"Received message from {telegram_chat_id}: {text}")
 
-    return HttpResponse("ok")
+    if MessageConfirmation.objects.filter(telegram_chat_id=telegram_chat_id).exists():
+        send_telegram_message(telegram_chat_id,
+                              "Você já vinculou sua conta do Telegram.\n"
+                              f"Acesse https://labfito.vacaria.ifrs.edu.br{reverse('whatsapp_messages:link')} "
+                              f"para selecionar as doenças que deseja receber alertas.")
+        return HttpResponse(status=200)
 
+    try:
+        mc = MessageConfirmation.objects.get(code=text)
+        mc.verified = True
+        mc.telegram_chat_id = telegram_chat_id
+        mc.save()
+        send_telegram_message(telegram_chat_id, "Sua conta do Telegram foi vinculada com sucesso!\n"
+                                                f"Acesse https://labfito.vacaria.ifrs.edu.br{reverse('whatsapp_messages:link')} "
+                                                f"para selecionar as doenças que deseja receber alertas.")
 
-class WhatsappLogoutView(View):
-    def get(self, request):
-        requests.post(settings.WHATSAPP_API_URL + "/session/logout", headers=headers)
-        return redirect("whatsapp_messages:connect")
+    except MessageConfirmation.DoesNotExist:
+        send_telegram_message(telegram_chat_id, "Código inválido. Por favor, tente novamente.")
 
+    return HttpResponse(status=200)
 
-# Criação de sessão por parte de um administrador, como se fosse conectar ao WhatsApp web
-class WhatsappConnectionView(TemplateView):
-    template_name = "whatsapp_messages/whatsapp_connection.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        status = get_whatsapp_status()
-
-        context["status"] = status
-
-        if status.Connected and status.LoggedIn:
-            context["connected"] = True
-            set_webhook(self.request)
-
-        if not status.Connected:
-            start_whatsapp_session()
-
-        if not status.LoggedIn:
-            qr = get_whatsapp_qr_code()
-            context["qr_code"] = qr
-
-        context["link"] = "whatsapp-connection"
-
-        return context
-
-
-class LinkUserWhatsappView(TemplateView):
+class LinkUserTelegramView(TemplateView, LoginRequiredMixin):
     template_name = "whatsapp_messages/link.html"
 
     def get_context_data(self, **kwargs):
@@ -96,14 +70,20 @@ class LinkUserWhatsappView(TemplateView):
 
         context = super().get_context_data(**kwargs)
         context["message_confirmation"] = mc
-        context["bot_whatsapp_number"] = settings.WHATSAPP_NUMBER
-        context["link"] = "link-whatsapp"
+        context["bot_telegram_username"] = settings.TELEGRAM_BOT_USERNAME
+        context["link"] = "link-telegram"
 
         form = AlertsForDiseasesForm(profile=profile)
         context["form"] = form
 
         return context
 
+class SetTelegramWebhookView(View):
+    def get(self, request):
+        logger.info("Setting webhook via control panel")
+        response = set_webhook(request)
+        logger.info(response)
+        return redirect("whatsapp_messages:link")
 
 class AlertsForDiseasesView(View):
     form_class = AlertsForDiseasesForm

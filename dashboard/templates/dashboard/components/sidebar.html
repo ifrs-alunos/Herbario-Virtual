@@ -290,13 +290,12 @@
                 <ul class="list-group">
                     <li class="list-group-item">
                         {% if request.user|has_group:"admins" %}
-                            <a id="{% if link == 'whatsapp-connection' %}selected-link{% endif %}"
-                               href="{% url 'whatsapp_messages:connect' %}">Configurar instância</a>
+                            <a href="{% url 'whatsapp_messages:set_webhook' %}">Definir Webhook</a>
                         {% endif %}
                     </li>
                 <li class="list-group-item">
-                    <a id="{% if link == 'link-whatsapp' %}selected-link{% endif %}"
-                            href="{% url 'whatsapp_messages:link' %}">Conectar whatsapp</a>
+                    <a id="{% if link == 'link-telegram' %}selected-link{% endif %}"
+                            href="{% url 'whatsapp_messages:link' %}">Conectar Telegram</a>
                 </li>
                 </ul>
             </div>

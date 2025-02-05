@@ -14,6 +14,7 @@ class MessageConfirmation(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     code = models.CharField(max_length=CODE_LENGTH, null=True, blank=True)
     verified = models.BooleanField(default=False)
+    telegram_chat_id = models.CharField(max_length=255, null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -24,7 +25,10 @@ class MessageConfirmation(models.Model):
 
     @property
     def phone_number(self):
-        return self.profile.phone
+        try:
+            return self.profile.phone
+        except AttributeError:
+            return None
 
     def save(self, *args, **kwargs):
         if not self.code:
