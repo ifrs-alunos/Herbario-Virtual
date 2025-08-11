@@ -12,6 +12,10 @@ services:
     restart: unless-stopped
   db:
     image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: herbario
     ports:
       - "5433:5433"
     env_file:
