@@ -30,7 +30,7 @@ urlpatterns = [
     path("alertas/", include("alerts.urls", namespace="alerts")),
     path("tinymce/", include("tinymce.urls")),
     path("alertas/", include("whatsapp_messages.urls")),
-    path('insetos/', include('bugs.urls')),
+    path('insetos/', include('bugs.urls', namespace="bugs")),
 ]
 
 # Para Imagem ser servida pelo Django

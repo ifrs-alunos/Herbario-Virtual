@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "disease",
     "alerts",
     "whatsapp_messages",
+    "bugs",
     # dashboard deve ficar por ultimo na lista
     "dashboard",
 ]

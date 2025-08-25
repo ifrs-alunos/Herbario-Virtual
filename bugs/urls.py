@@ -7,7 +7,7 @@ from . import views
 app_name = 'bugs'
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('detail/', views.detail, name='detail'),
+    path('', views.home, name='index'),
+    path('detalhes/', views.detail, name='detail'),
     path('pagination/', views.pagination, name='pagination'),
 ]

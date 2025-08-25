@@ -4,14 +4,11 @@ from .models import *
 from django.views.generic import ListView, DetailView
 from accounts.models import *
 
-
-from django.shortcuts import render
-
-def index(request):
+def home(request):
     return render(request, 'bugs/index.html')
 
 def detail(request):
-    return render(request, 'meuapp/detail.html')
+    return render(request, 'bugs/detail.html')
 
 def pagination(request):
-    return render(request, 'meuapp/pagination.html')
+    return render(request, 'bugs/pagination.html')
