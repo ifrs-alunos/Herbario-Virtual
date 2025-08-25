@@ -7,7 +7,7 @@ from . import views
 app_name = 'bugs'
 
 urlpatterns = [
-    path('', views.index, name='bugs'),
-    path('detalhes/<slug:culture>/<slug:slug>/', views.DiseaseDetail.as_view(), name='disease-detail'),
-    path('<slug:culture_disease>/', views.DiseaseIndex.as_view(), name="diseases"),
+    path('', views.index, name='index'),
+    path('detail/', views.detail, name='detail'),
+    path('pagination/', views.pagination, name='pagination'),
 ]
