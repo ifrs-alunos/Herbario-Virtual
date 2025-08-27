@@ -1,13 +1,15 @@
-from django.shortcuts import render
 from django.urls import path
+
 from . import views
 
-# Create your views here.
-
 app_name = 'bugs'
-
 urlpatterns = [
-    path('', views.home, name='index'),
-    path('detalhes/', views.detail, name='detail'),
-    path('pagination/', views.pagination, name='pagination'),
+    path('', views.bugsIndex.as_view(), name='index'),
+    # path('detalhes/<slug:slug>/', views.HerbariumDetail.as_view(), name='detail'),
+    # Página de detalhe de um inseto em específico
+    path('detalhes/<slug:slug>/', views.bugsDetail.as_view(), name='detail'),
+    # Página de listagem de insetos
+
+    path('<slug:family>/', views.bugsIndex.as_view(), name="bugs"),  
 ]
+

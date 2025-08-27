@@ -20,9 +20,9 @@
                     </div>
                     {% if search_form.text.value %}
                     {% if selected_family %}
-                    <button type="button" class="btn btn-light"><a href="/herbario/{{selected_family}}">Limpar Filtro</a></button>
+                    <button type="button" class="btn btn-light"><a href="/bugs/{{selected_family}}">Limpar Filtro</a></button>
                     {% else %}
-                    <button type="button" class="btn btn-light"><a href="/herbario">Limpar Filtro</a></button>
+                    <button type="button" class="btn btn-light"><a href="/bugs">Limpar Filtro</a></button>
                     {% endif %}
                     {% endif %}
                 </form>
@@ -41,9 +41,9 @@
                 <ul class="list-group d-none d-lg-block">
                     {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == None %}
-                        <li class="list-group-item active"><a href="{% url 'herbarium:index' %}">Todas</a></li>
+                        <li class="list-group-item active"><a href="{% url 'bugs:index' %}">Todas</a></li>
                     {% else %}
-                        <li class="list-group-item"><a href="{% url 'herbarium:index' %}">Todas</a></li>
+                        <li class="list-group-item"><a target"_blank" href="{% url 'bugs:index' %}">Todas</a></li>
                     {% endif %}
 
                     {# Para cada família na lista de famílias #}
@@ -61,9 +61,9 @@
                 <select class="custom-select d-lg-none mb-3" onchange="location=this.value;">
                     {# Verifica se o dicionário de famílias está vazio. Se sim, elemento tem classe active, se não, não a tem #}
                     {% if selected_family == None %}
-                        <option selected value="{% url 'herbarium:index' %}">Todas</option>
+                        <option selected value="{% url 'bugs:index' %}">Todas</option>
                     {% else %}
-                        <option value="{% url 'herbarium:index' %}">Todas</option>
+                        <option value="{% url 'bugs:index' %}">Todas</option>
                     {% endif %}
 
                     {# Para cada família na lista de famílias #}
@@ -106,13 +106,13 @@
                         <div class="card col-12">
                             {# Verifica se o inseto contém ao menos uma imagem cadastrada #}
                             {% if plant.photos.first.small_image.url %}
-                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
+                                <a href="{% url 'bugs:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
-                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
+                                <a href="{% url 'bugs:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'bugs/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}
                             
                             <div class="card-body">
-                                <a id="card-title" href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
+                                <a id="card-title" href="{% url 'bugs:detail' plant.slug %}" target="_blank"><h5 class="card-title">{{ plant.name|truncatechars_html:20}}</h5></a>
                                 <p class="card-text">{{ plant.description|truncatechars_html:75}}</p>
                             </div>
                             <div class="card-body">
