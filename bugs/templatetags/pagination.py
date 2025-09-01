@@ -4,7 +4,7 @@ from django import template
 
 register = template.Library()
 
-@register.inclusion_tag("herbarium/pagination.html", takes_context=True)
+@register.inclusion_tag("bugs/pagination.html", takes_context=True)
 def pagination(context, extremes_count=1, expansion=2):
 
     filters = context["request"].GET.copy()
