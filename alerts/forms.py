@@ -4,6 +4,7 @@ from accounts.models import Profile
 from alerts.models import Station, MathModel
 from disease.models import Disease
 
+from django import forms
 
 class StationAndIntervalForm(forms.Form):
     station = forms.ModelChoiceField(queryset=Station.objects.all(), required=True)
@@ -16,7 +17,7 @@ class StationAndIntervalForm(forms.Form):
     )
 
     date_until = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "date"}), required=False
+        widget=forms.DateInput(attrs={"type": "date"}), required=True
     )
     time_until = forms.DateTimeField(
         widget=forms.DateInput(attrs={"type": "time"}), required=False
@@ -39,13 +40,17 @@ class ChooseMathModelForm(forms.Form):
 
 
 class DownloadStationDataIntervalForm(forms.Form):
-    date_since = forms.DateTimeField(
+    date_since = forms.DateField(
         widget=forms.DateInput(attrs={"type": "date"}),
-        label="Data Inicio",
+        label="Data Início",
+        input_formats=["%Y-%m-%d"], 
         required=True,
     )
-    date_until = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "date"}), label="Data Fim", required=False
+    date_until = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"}),
+        label="Data Fim",
+        input_formats=["%Y-%m-%d"],
+        required=True,
     )
 
 
