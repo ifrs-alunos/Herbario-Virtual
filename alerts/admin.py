@@ -41,7 +41,6 @@ class ReportAdmin(admin.ModelAdmin):
     search_fields = ("station", "time")
     list_filter = ("station", "time")
     inlines = [ReadingInline]
-
     ordering = ("-time",)
 
 
