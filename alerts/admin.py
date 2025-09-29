@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from .models import (
-    IntermediaryRequirement, Report,
+    IntermediaryRequirement, 
+    Report,
     Station,
     Sensor,
     MathModel,

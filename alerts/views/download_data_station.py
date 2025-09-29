@@ -8,6 +8,7 @@ from django.utils import timezone
 
 from alerts.forms import DownloadStationDataIntervalForm
 from alerts.models import Station
+from alerts.models import Report
 
 def download_data_station(request, station_id):
     station = get_object_or_404(Station, station_id=station_id)
@@ -38,18 +39,22 @@ def download_data_station(request, station_id):
         header = ["Data"] + [s.name for s in sensors]
         writer.writerow(header)
 
-        relatorios_por_hora = {}
-        for sensor in sensors:
-            reports = sensor.reading_set.filter(time__range=(start_dt, end_dt)).order_by("time")
-            for report in reports:
-                hora = timezone.localtime(report.time).strftime("%Y-%m-%d %H:%M:%S")
-                relatorios_por_hora.setdefault(hora, []).append(report.value)
+        reports = Report.objects.filter(
+            station=station,
+            time__range=(start_dt, end_dt)
+        ).order_by("time")
 
-        for hora in sorted(relatorios_por_hora):
-            row = [hora] + relatorios_por_hora[hora]
+        for report in reports:
+            hora = timezone.localtime(report.time).strftime("%Y-%m-%d %H:%M:%S")
+            # Para cada sensor, buscar a leitura correspondente ao relatório
+            row = [hora]
+            for sensor in sensors:
+                leitura = report.readings.filter(sensor=sensor).first()
+                valor = leitura.value if leitura else ""
+                row.append(valor)
             writer.writerow(row)
 
-        if relatorios_por_hora:
+        if reports.exists():
             return response
         else:
             error = "Data indisponível."
