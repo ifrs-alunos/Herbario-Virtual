@@ -46,7 +46,7 @@ def download_data_station(request, station_id):
 
         for report in reports:
             hora = timezone.localtime(report.time).strftime("%Y-%m-%d %H:%M:%S")
-            # Para cada sensor, buscar a leitura correspondente ao relatório
+        
             row = [hora]
             for sensor in sensors:
                 leitura = report.readings.filter(sensor=sensor).first()
