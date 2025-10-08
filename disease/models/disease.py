@@ -23,7 +23,7 @@ class Disease(models.Model):
     symptoms_disease = models.TextField('Sintomas', blank=False,
                                         help_text='Insira uma descrição sobre os sintomas da doença')
     cycle_disease = models.TextField('Ciclo da doença', blank=True, help_text='Descreva o ciclo da doença')
-    occurrence_regions_disease = models.ManyToManyField(Region, blank=True,
+    occurrence_regions_disease = models.ManyToManyField(Region, blank=True, null=True,
                                                         verbose_name="Regiões de Ocorrência",
                                                         help_text='Selecione as regiões de ocorrência desta doença')
     management_disease = models.TextField('Medidas de controle', blank=True,

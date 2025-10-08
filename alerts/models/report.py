@@ -9,7 +9,7 @@ from alerts.managers import AggregatorManager
 
 
 class Report(BaseModel):
-    time = models.DateTimeField(default=timezone.now, blank=True, null=True, verbose_name="Data")
+    time = models.DateTimeField(blank=True, null=True,default=timezone.now, verbose_name="Data")
     station = models.ForeignKey(
         "Station", on_delete=models.PROTECT, null=True, verbose_name="Estação"
     )
@@ -47,12 +47,6 @@ class Reading(BaseModel):
 
     def __str__(self):
         return f"{self.sensor} - Valor: {self.value} -  Data: {localtime(self.time):%d/%m/%Y %H:%M} horas"
-    
-    #relatorio data igual a data da leitura
-    #def save(self, *args, **kwargs):
-       # if self.report and self.report.time:
-            #self.time = self.report.time
-        #super().save(*args, **kwargs)
 
     @property
     def value_in_type(self):

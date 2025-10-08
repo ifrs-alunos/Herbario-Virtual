@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    IntermediaryRequirement, 
-    Report,
+    IntermediaryRequirement, Report,
     Station,
     Sensor,
     MathModel,
@@ -42,6 +41,7 @@ class ReportAdmin(admin.ModelAdmin):
     search_fields = ("station", "time")
     list_filter = ("station", "time")
     inlines = [ReadingInline]
+
     ordering = ("-time",)
 
 
