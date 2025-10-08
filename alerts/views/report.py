@@ -43,8 +43,7 @@ class ReportView(View):
             reading = Reading(
                 sensor=sensor, value=float(reading.get("value")), report=report
             )
-            if report.time:
-                reading.time = None
+            
 
             reading.save()
             logger.info(f"Created reading: {reading}")
