@@ -1,65 +1,65 @@
-from datetime import datetime, timezone
+# alerts/views/download_data_station.py
+from datetime import datetime, time
 import csv
 
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.utils.timezone import make_aware, localtime
+from django.utils import timezone
 
 from alerts.forms import DownloadStationDataIntervalForm
 from alerts.models import Station
-
+from alerts.models import Report
 
 def download_data_station(request, station_id):
-    station = Station.objects.get(station_id=station_id)
+    station = get_object_or_404(Station, station_id=station_id)
     sensors = station.sensor_set.all().order_by("name")
     error = ""
-    if request.GET.get("date_since") is not None:
-        start = datetime.fromisoformat(request.GET.get("date_since"))
-        start = make_aware(start, timezone=timezone.utc)
-        end = datetime.fromisoformat(request.GET.get("date_until"))
-        end = make_aware(end, timezone=timezone.utc)
-        response = HttpResponse(
-            content_type="text/csv",
-            headers={
-                "Content-Disposition": f'attachment; filename="{start.strftime("%Y-%m-%d %H:%M:%S")}.csv"'
-            },
+
+    form = DownloadStationDataIntervalForm(request.GET or None)
+
+    if form.is_valid():
+        date_since = form.cleaned_data["date_since"]  
+        date_until = form.cleaned_data["date_until"]  
+
+        tz = timezone.get_current_timezone()
+        start_dt = datetime.combine(date_since, time.min)  
+        end_dt = datetime.combine(date_until, time.max)    
+
+        start_dt = timezone.make_aware(start_dt, tz)
+        end_dt = timezone.make_aware(end_dt, tz)
+
+        response = HttpResponse(content_type="text/csv")
+        response["Content-Disposition"] = (
+            f'attachment; filename="{date_since.isoformat()}__{date_until.isoformat()}.csv"'
         )
         writer = csv.writer(response)
-        sensors_name = ["Data"]
-        writer.writerow(
-            [
-                station.alias,
-            ]
-        )
-        writer.writerow(" ")
-        for x in sensors:
-            sensors_name.append(x.name)
-        writer.writerow(sensors_name)
 
-        # sensores = station.sensor_set.all().order_by("name")
-        relatorios_por_hora = {}
-        for sensor in sensors:
-            reports = sensor.reading_set.all().filter(time__range=(start, end))
-            for report in reports:
-                hora = localtime(report.time).strftime("%Y-%m-%d %H:%M:%S")
-                if hora not in relatorios_por_hora:
-                    relatorios_por_hora[hora] = []
-                relatorios_por_hora[hora].append(report.value)
+        writer.writerow([station.alias])
+        writer.writerow([])
+        header = ["Data"] + [s.name for s in sensors]
+        writer.writerow(header)
 
-        for x in relatorios_por_hora:
-            row = [x]
-            for relatorio in relatorios_por_hora[x]:
-                row.append(relatorio)
+        reports = Report.objects.filter(
+            station=station,
+            time__range=(start_dt, end_dt)
+        ).order_by("time")
+
+        for report in reports:
+            hora = timezone.localtime(report.time).strftime("%Y-%m-%d %H:%M:%S")
+        
+            row = [hora]
+            for sensor in sensors:
+                leitura = report.readings.filter(sensor=sensor).first()
+                valor = leitura.value if leitura else ""
+                row.append(valor)
             writer.writerow(row)
 
-        if relatorios_por_hora:
+        if reports.exists():
             return response
         else:
-            error = "Data indisponível"
+            error = "Data indisponível."
     else:
         pass
 
-    form_interval = DownloadStationDataIntervalForm()
-    context = {"form": form_interval, "error_message": error}
-
+    context = {"form": form, "error_message": error, "station": station}
     return render(request, "download_data_station.html", context)

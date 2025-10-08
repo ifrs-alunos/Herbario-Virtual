@@ -9,7 +9,7 @@ from alerts.managers import AggregatorManager
 
 
 class Report(BaseModel):
-    time = models.DateTimeField(default=timezone.now, verbose_name="Data")
+    time = models.DateTimeField(blank=True, null=True,default=timezone.now, verbose_name="Data")
     station = models.ForeignKey(
         "Station", on_delete=models.PROTECT, null=True, verbose_name="Estação"
     )
