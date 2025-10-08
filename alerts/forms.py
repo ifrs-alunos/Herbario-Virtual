@@ -1,9 +1,9 @@
 from django import forms
+from django.utils import timezone
 
 from accounts.models import Profile
 from alerts.models import Station, MathModel
 from disease.models import Disease
-
 
 class StationAndIntervalForm(forms.Form):
     station = forms.ModelChoiceField(queryset=Station.objects.all(), required=True)
@@ -12,14 +12,14 @@ class StationAndIntervalForm(forms.Form):
         widget=forms.DateInput(attrs={"type": "date"}), required=True
     )
     time_since = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "time"}), required=False
+        widget=forms.DateTimeInput(attrs={"type": "time"}), required=False
     )
 
     date_until = forms.DateTimeField(
         widget=forms.DateInput(attrs={"type": "date"}), required=False
     )
     time_until = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "time"}), required=False
+        widget=forms.DateTimeInput(attrs={"type": "time"}), required=False
     )
 
 
@@ -39,14 +39,26 @@ class ChooseMathModelForm(forms.Form):
 
 
 class DownloadStationDataIntervalForm(forms.Form):
-    date_since = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "date"}),
-        label="Data Inicio",
-        required=True,
+    date_since = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"}),label="Data Início",input_formats=["%Y-%m-%d"],required=True,
     )
-    date_until = forms.DateTimeField(
-        widget=forms.DateInput(attrs={"type": "date"}), label="Data Fim", required=False
+    date_until = forms.DateField(
+        widget=forms.DateInput(attrs={"type": "date"}),label="Data Fim",input_formats=["%Y-%m-%d"],required=False,
     )
+
+    def clean_date_until(self):
+        date_until = self.cleaned_data.get("date_until")
+        if date_until is None: 
+            return timezone.localdate()
+        return date_until
+    
+    def clean(self):
+        cleaned = super().clean()
+        start = cleaned.get("date_since")
+        end = cleaned.get("date_until")
+        if start and end and end < start:
+            raise forms.ValidationError("Data final não pode ser anterior à data inicial.")
+        return cleaned
 
 
 class AlertsForDiseasesForm(forms.ModelForm):
@@ -58,10 +70,3 @@ class AlertsForDiseasesForm(forms.ModelForm):
             "alerts_for_diseases": forms.CheckboxSelectMultiple,
         }
 
-    def __init__(self, *args, **kwargs):
-        profile = kwargs.pop("profile")
-        super().__init__(*args, **kwargs)
-        self.fields["alerts_for_diseases"].queryset = Disease.objects.filter(mathmodel__isnull=False)
-        self.fields["alerts_for_diseases"].initial = profile.alerts_for_diseases.all()
-        if profile:
-            self.instance = profile
