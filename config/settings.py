@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "eg%2hr5a4y@6w+*kipd5by()+vwqkaqqf_s4gj9h%!g_a(l!t6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["labfito.vacaria.ifrs.edu.br", "localhost"]
 
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "tinymce",
     "django_extensions",
     "crispy_forms",
-    'crispy_bootstrap4',
+    #'crispy_bootstrap4',
     "core",
     "accounts",
     "herbarium",
