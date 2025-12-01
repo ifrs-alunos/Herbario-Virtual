@@ -75,14 +75,6 @@ def get_mathmodels(request, date_filter):
                 data_x = [localtime(x["month"]) for x in results]
                 data_y = [x["avg_value"] for x in results]
 
-                # reports = sensor.reading_set.filter(time__year=last_report_date.year).annotate(
-                #     value_float=Cast('value', output_field=FloatField())) \
-                #     .annotate(month=TruncMonth('time')) \
-                #     .values('month') \
-                #     .annotate(avg_value=Avg('value_float')) \
-                #     .order_by("month")
-                # data_x = [localtime(x['month']) for x in reports]
-                # data_y = [x['avg_value'] for x in reports]
             elif date == "all":
                 results = mathmodel.mathmodelresult_set.all().values("date", "value")
 
@@ -91,10 +83,7 @@ def get_mathmodels(request, date_filter):
             else:
                 data_x = []
                 data_y = []
-
-            # results = mathmodel.mathmodelresult_set.all().values('date', 'value')
-            # data_x = [localtime(x['date']) for x in results]
-            # data_y = [x['value'] for x in results]
+                
             mathmodels_response[mathmodel.id] = {
                 "name": mathmodel.name,
                 "x": data_x,

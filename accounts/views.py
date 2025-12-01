@@ -277,6 +277,7 @@ class UserListView(ListView):
     context_object_name = 'users'
     template_name = 'dashboard/user_list.html'
     paginate_by = 12
+    ordering = ['username']
 
     def get_queryset(self):
         queryset = super().get_queryset()

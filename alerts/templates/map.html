@@ -64,7 +64,9 @@
                 <h4>Favorabilidade de doenças disponíveis:</h4>
                 <br>
                 {% for mathmodel in mathmodels %}
-                    <a href="?mathmodel={{ mathmodel.id }}">{{ mathmodel.disease.culture_disease }} - {{ mathmodel.disease }} - {{ mathmodel }}</a>
+                    <a href="?mathmodel={{ mathmodel.id }}">
+                        {{ mathmodel.disease.culture_disease.name }} - {{ mathmodel.disease.name_disease }} - {{ mathmodel }}
+                    </a>
                 {% endfor %}
             </div>
         </div>

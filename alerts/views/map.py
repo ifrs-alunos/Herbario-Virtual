@@ -8,7 +8,7 @@ def get_map(request):
     """Esta função cria um mapa mostrando todas as estações cadastradas
     e suas respectivas situações. Consulte a codumentação do Folium para saber mais sobre poup, icons, tooltips, markers..."""
 
-    query_station = Station.objects.all()  # Lista de todas as estações
+    query_station = Station.objects.all()
     list_disease_has_mathmodel = (
         Disease.objects.all()
         .filter(mathmodel__isnull=False)

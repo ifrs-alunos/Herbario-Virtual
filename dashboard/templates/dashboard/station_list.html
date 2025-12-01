@@ -1,0 +1,72 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static pagination %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/herbarium_update.css' %}"/>
+{% endblock %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mb-4">
+        <h5><i class="fas fa-weather-station me-2"></i>Estações Meteorológicas</h5>
+        <a href="{% url 'dashboard:station_add' %}">
+            <button type="button" class="btn btn-success">
+                <i class="fa fa-plus"></i> Nova Estação
+            </button>
+        </a>
+    </div>
+
+    {% if perms.alerts.view_station %}
+        {% if station_list %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Alias</th>
+                        <th>Identificador</th>
+                        <th>Localização</th>
+                        <th>Ativa</th>
+                        <th>Modelos</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for station in station_list %}
+                    <tr>
+                        <td>{{ station.alias }}</td>
+                        <td>{{ station.identifier }}</td>
+                        <td>{{ station.location|default:"-" }}</td>
+                        <td>
+                            {% if station.is_active %}
+                                <span class="badge bg-success">Ativa</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inativa</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ station.mathmodel_set.count }}</td>
+                        <td>
+                            <a href="{% url 'dashboard:station_edit' station.id %}" class="btn btn-warning btn-sm">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url 'dashboard:station_delete' station.id %}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Tem certeza que deseja excluir esta estação?')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fa fa-info-circle"></i> Nenhuma estação cadastrada.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-danger">
+            <i class="fa fa-ban"></i> Você não tem permissão para visualizar estações.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

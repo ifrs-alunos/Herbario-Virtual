@@ -21,6 +21,8 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+#from telegram_bot.webhooks import telegram_webhook
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("herbario/", include("herbarium.urls", namespace="herbarium")),
@@ -30,6 +32,8 @@ urlpatterns = [
     path("alertas/", include("alerts.urls", namespace="alerts")),
     path("tinymce/", include("tinymce.urls")),
     path("alertas/", include("whatsapp_messages.urls")),
+    #path('telegram/webhook/', telegram_webhook),
+    
 ]
 
 # Para Imagem ser servida pelo Django

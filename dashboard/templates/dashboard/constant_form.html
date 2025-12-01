@@ -1,0 +1,28 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="card" style="border-color: #2c6b3a;">
+        <div class="card-header text-white" style="background-color: #2c6b3a;">
+            <h5 class="card-title mb-0">
+                {% if object %}Editar{% else %}Criar{% endif %} Constante
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn text-white" style="background-color: #2c6b3a; border-color: #2c6b3a;">
+                        <i class="fa fa-save"></i> Salvar
+                    </button>
+                    <a href="{% url 'dashboard:constant_list' %}" class="btn btn-secondary">
+                        <i class="fa fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

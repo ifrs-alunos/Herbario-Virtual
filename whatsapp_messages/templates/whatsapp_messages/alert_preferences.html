@@ -1,0 +1,49 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Configurações de Alertas WhatsApp</h2>
+    
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                
+                <div class="form-group form-check">
+                    {{ form.whatsapp_enabled }}
+                    <label class="form-check-label" for="{{ form.whatsapp_enabled.id_for_label }}">
+                        {{ form.whatsapp_enabled.label }}
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.phone.id_for_label }}">{{ form.phone.label }}</label>
+                    {{ form.phone }}
+                    <small class="form-text text-muted">{{ form.phone.help_text }}</small>
+                    {% if form.phone.errors %}
+                        <div class="alert alert-danger">{{ form.phone.errors }}</div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>Doenças para receber alertas:</label>
+                    <div class="row">
+                        {% for disease in form.diseases %}
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                {{ disease.tag }}
+                                <label class="form-check-label" for="{{ disease.id_for_label }}">
+                                    {{ disease.choice_label }}
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Salvar Configurações</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -16,8 +16,31 @@ from ..forms.term_form import TermForm
 from accounts.models import Contribuition
 from ..forms import UserForm, SolicitationStatusUpdateForm
 
-class ProfileView(TemplateView):
+class ProfileView(LoginRequiredMixin, TemplateView):
 	template_name = "accounts/profile.html"
+
+	def get_context_data(self, **kwargs):
+		context = super().get_context_data(**kwargs)
+		profile, created = Profile.objects.get_or_create(user=self.request.user)
+		context['form'] = UserUpdateForm(instance=self.request.user)
+		context['profile_form'] = ProfileForm(instance=profile)
+		context['link'] = 'profile'
+		return context
+
+	def post(self, request, *args, **kwargs):
+		profile, created = Profile.objects.get_or_create(user=request.user)
+		form = UserUpdateForm(request.POST, instance=request.user)
+		profile_form = ProfileForm(request.POST, instance=profile)
+
+		if form.is_valid() and profile_form.is_valid():
+			form.save()
+			profile_form.save()
+			return redirect("dashboard:view_dashboard")
+
+		context = self.get_context_data()
+		context['form'] = form
+		context['profile_form'] = profile_form
+		return self.render_to_response(context)
 
 
 class InfoView(TemplateView):

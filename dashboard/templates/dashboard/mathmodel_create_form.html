@@ -2,19 +2,298 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags static %}
 
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/form.css' %}"/>
+{% endblock %}
+
 {% block item %}
-    <form method="POST" id="form-mathmodel">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
-        <button type="button" id="btn-mathmodel-create" class="btn  btn-light">Enviar</button>
-    </form>
+    <div class="card" style="border-color: #2c6b3a;">
+        <div class="card-header text-white" style="background-color: #2c6b3a;">
+            <h5 class="card-title mb-0">{% if object %}Editar{% else %}Criar{% endif %} Modelo Matemático</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST" id="form-mathmodel">
+                {% csrf_token %}
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.name|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.disease|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONSTANTES -->
+                <div class="form-group">
+                    <label for="id_constants" class="form-label">Constantes *</label>
+                    <textarea name="constants" id="id_constants" class="form-control" rows="3" required placeholder="Ex: rmax=0.04;c=2.0;tbs=28.5;topt=22.5;tbi=9.0">{{ form.constants.value|default:'' }}</textarea>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle"></i> Formato: nome=valor;nome2=valor2
+                    </small>
+                </div>
+
+                <!-- FÓRMULA COM BADGES CLICÁVEIS -->
+                <div class="form-group">
+                    <label for="id_source_code" class="form-label">Fórmula Matemática *</label>
+                    <textarea name="source_code" id="id_source_code" class="form-control" rows="4" required placeholder="Digite a fórmula matemática...">{{ form.source_code.value|default:'' }}</textarea>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle"></i> Variáveis disponíveis: 
+                        <span class="badge bg-primary" onclick="insertInFormula('t')">t</span>
+                        <span class="badge bg-primary" onclick="insertInFormula('rh')">rh</span>
+                        <span class="badge bg-primary" onclick="insertInFormula('rain')">rain</span>
+                        
+                        <br>Constantes disponíveis: 
+                        <span id="formulaVariables">
+                            <!-- Badges das constantes aparecerão aqui -->
+                        </span>
+                        
+                        <br>Operadores:
+                        <span class="badge bg-info" onclick="insertInFormula(' + ')">+</span>
+                        <span class="badge bg-info" onclick="insertInFormula(' - ')">-</span>
+                        <span class="badge bg-info" onclick="insertInFormula(' * ')">*</span>
+                        <span class="badge bg-info" onclick="insertInFormula(' / ')">/</span>
+                        <span class="badge bg-info" onclick="insertInFormula(' ** ')">**</span>
+                        <span class="badge bg-info" onclick="insertInFormula('( )')">( )</span>
+                        
+                        <br>
+                        <em>Clique para inserir na fórmula</em>
+                    </small>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.alert_threshold|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.evaluation_period|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.min_positive_reports|as_crispy_field }}
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            {{ form.is_active|as_crispy_field }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CAMPO DE MENSAGEM COM VARIÁVEIS (aqui mantém com {}) -->
+                <div class="form-group">
+                    <label for="id_alert_message" class="form-label">Mensagem de Alerta *</label>
+                    <textarea name="alert_message" id="id_alert_message" class="form-control" rows="6" required placeholder="Digite a mensagem de alerta completa...">{{ form.alert_message.value|default:'' }}</textarea>
+                    <small class="form-text text-muted">
+                        <i class="fas fa-info-circle"></i> Variáveis disponíveis: 
+                        <span class="badge bg-secondary" onclick="insertInMessage('{value}')">{value}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{station}')">{station}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{disease}')">{disease}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{temp}')">{temp}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{t}')">{t}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{humidity}')">{humidity}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{rh}')">{rh}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{model}')">{model}</span>
+                        <span class="badge bg-secondary" onclick="insertInMessage('{rain}')">{rain}</span>
+                        <br>
+                        <em>Clique em uma variável para inserir na mensagem</em>
+                    </small>
+                </div>
+
+                <!-- PREVIEW DA MENSAGEM -->
+                <div class="card mt-3">
+                    <div class="card-header bg-light">
+                        <h6 class="mb-0">
+                            <i class="fas fa-eye me-2"></i>Prévia da Mensagem (Telegram)
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="messagePreview" class="telegram-preview">
+                            Digite uma mensagem para ver a prévia...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    {{ form.stations|as_crispy_field }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.requirements|as_crispy_field }}
+                </div>
+
+                <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn text-white" style="background-color: #2c6b3a; border-color: #2c6b3a;">
+                        <i class="fa fa-save"></i> Salvar
+                    </button>
+                    <button type="button" class="btn btn-info" onclick="updateMessagePreview()">
+                        <i class="fas fa-sync"></i> Atualizar Prévia
+                    </button>
+                    <a href="{% url 'dashboard:mathmodel_update' %}" class="btn btn-secondary">
+                        <i class="fa fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <script>
-    const btnMathModel = document.getElementById("btn-mathmodel-create");
-    const form = document.getElementById('form-mathmodel')
-    btnMathModel.addEventListener('click', () => {
-        form.submit()
-    })
+    // Função para inserir na FÓRMULA (sem {})
+    function insertInFormula(text) {
+        const textarea = document.getElementById('id_source_code');
+        insertAtCursor(textarea, text);
+    }
+
+    // Função para inserir na MENSAGEM (com {})
+    function insertInMessage(text) {
+        const textarea = document.getElementById('id_alert_message');
+        insertAtCursor(textarea, text);
+        updateMessagePreview();
+    }
+
+    // Função genérica para inserir no cursor
+    function insertAtCursor(textarea, text) {
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const content = textarea.value;
+        
+        // Se for parênteses, insere com cursor no meio: (|)
+        if (text === '( )') {
+            textarea.value = content.substring(0, start) + '()' + content.substring(end);
+            textarea.selectionStart = textarea.selectionEnd = start + 1;
+        } else {
+            textarea.value = content.substring(0, start) + text + content.substring(end);
+            textarea.selectionStart = textarea.selectionEnd = start + text.length;
+        }
+        
+        textarea.focus();
+    }
+
+    // Extrai constantes e gera badges (mostra com {} no badge mas insere sem)
+    function updateConstantsBadges() {
+        const constantsTextarea = document.getElementById('id_constants');
+        const formulaBadgesContainer = document.getElementById('formulaVariables');
+        
+        const constantsText = constantsTextarea.value;
+        const constants = extractConstants(constantsText);
+        
+        formulaBadgesContainer.innerHTML = '';
+        
+        constants.forEach(constName => {
+            const badge = document.createElement('span');
+            badge.className = 'badge bg-success me-1 mb-1';
+            badge.style.cursor = 'pointer';
+            badge.textContent = constName;
+            badge.title = `Inserir ${constName} na fórmula`;
+            badge.onclick = () => insertInFormula(constName);
+            
+            formulaBadgesContainer.appendChild(badge);
+        });
+
+        if (constants.length === 0) {
+            formulaBadgesContainer.innerHTML = '<span class="text-muted">Digite constantes acima</span>';
+        }
+    }
+
+    function extractConstants(constantsText) {
+        const constants = [];
+        if (!constantsText.trim()) return constants;
+        
+        const pairs = constantsText.split(';');
+        pairs.forEach(pair => {
+            if (pair.includes('=')) {
+                const name = pair.split('=')[0].trim();
+                if (name) {
+                    constants.push(name);
+                }
+            }
+        });
+        
+        return constants;
+    }
+
+    function updateMessagePreview() {
+        const messageTextarea = document.getElementById('id_alert_message');
+        const previewDiv = document.getElementById('messagePreview');
+        
+        const data = {
+            value: 0.150,
+            station: 'Estação Exemplo',
+            disease: 'Ferrugem da Soja',
+            temp: '25.0°C',
+            humidity: '90.0%',
+            model: 'Favorabilidade para ferrugem da soja',
+            rain: '0.0mm'
+        };
+        
+        let message = messageTextarea.value;
+        
+        if (!message.trim()) {
+            previewDiv.innerHTML = '<em class="text-muted">Digite uma mensagem para ver a prévia...</em>';
+            return;
+        }
+        
+        message = message
+            .replace(/{value}/g, data.value.toFixed(3))
+            .replace(/{station}/g, data.station)
+            .replace(/{disease}/g, data.disease)
+            .replace(/{temp}/g, data.temp)
+            .replace(/{t}/g, data.temp)
+            .replace(/{humidity}/g, data.humidity)
+            .replace(/{rh}/g, data.humidity)
+            .replace(/{rain}/g, data.rain)
+            .replace(/{model}/g, data.model);
+        
+        previewDiv.innerHTML = message;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateConstantsBadges();
+        updateMessagePreview();
+        
+        document.getElementById('id_constants').addEventListener('input', updateConstantsBadges);
+        
+        document.getElementById('id_alert_message').addEventListener('input', updateMessagePreview);
+    });
     </script>
+
+    <style>
+    .badge {
+        font-size: 0.75em;
+        margin: 2px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-block;
+    }
+
+    .badge:hover {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+
+    .telegram-preview {
+        background-color: #f8f9fa;
+        border-left: 4px solid #2c6b3a;
+        font-size: 0.9em;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        padding: 15px;
+        border-radius: 4px;
+        min-height: 100px;
+    }
+    </style>
 {% endblock %}

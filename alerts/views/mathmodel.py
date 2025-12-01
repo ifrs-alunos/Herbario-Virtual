@@ -1,7 +1,7 @@
 from django.views.generic import DetailView
-from alerts.models import MathModel
-# SensorInMathModel
-
+from alerts.models import MathModel, SensorInMathModel
+from django.views.generic import TemplateView
+from alerts.models import Report
 from django.utils import timezone
 from datetime import datetime
 from django.utils.timezone import localtime, make_aware
@@ -10,6 +10,7 @@ from django.db.models import Avg
 from plotly.offline import plot
 import plotly.graph_objects as go
 import datetime
+from .station import Station
 
 colors = (
              "maroon",
@@ -32,13 +33,16 @@ def verify_require(requirements, value):
         return True
 
 
-def get_reports(start, end, time_interval, requirements, mathmodel):
-    # sensors_in_math = SensorInMathModel.objects.filter(mathmodel=mathmodel)
-    sensors_in_math = ""
+def get_reports(start, end, time_interval, requirements, mathmodel, fig):
+    sensors_in_math = SensorInMathModel.objects.filter(mathmodel=mathmodel)
     data = {}
     data_x = []
     data_y = []
+    
     sensors_in_graph = sensors_in_math.filter(in_graph=True).first()
+    if not sensors_in_graph:
+        return
+        
     sensors_in_divider = sensors_in_math.filter(divider=True)
 
     data_in_graph = {}
@@ -132,7 +136,6 @@ class MathModelView(DetailView):
         context["form"] = MathModelForm
 
         params = self.request.GET
-        # se os parametros estiverem definidos, filtra a partir deles
         mathmodel = self.object
         requirements = mathmodel.requirement_set.all()
         sensors_type = list(set([x.sensor.id for x in requirements]))
@@ -142,29 +145,33 @@ class MathModelView(DetailView):
             end = datetime.fromisoformat(params.get("date_until"))
             end = make_aware(end, timezone=timezone.utc)
 
-            # get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
+           
             get_rp = get_reports(start, end, 5, requirements, mathmodel)
-        #
-        # exp = mathmodel.source_code
-        # for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-        # 	exp = exp.replace(key, str(value))
-        #
-        # data_in_graph = set_reports_data_to_graph(get_rp, exp)
-        # se não, mostra os relatórios desde 12 horas atrás
         else:
             start = timezone.datetime(2022, 2, 1, 3, 0, 0, tzinfo=timezone.utc)
             end = timezone.datetime(2022, 3, 1, 2, 59, 59, tzinfo=timezone.utc)
 
             get_rp = get_reports(start, end, 15, requirements, mathmodel)
-        # get_rp = get_reports_requirement_sensor_per_time_interval(Report, start, end, 5, sensors_type, requirements)
-        # exp = mathmodel.source_code
-        # for key, value in mathmodel.disease.constant_set.all().values_list('name', 'value'):
-        # 	exp = exp.replace(key, str(value))
-
-        # data_in_graph = set_reports_data_to_graph(get_rp, exp)
 
         plot_element = get_rp
 
         context["plot"] = plot_element
 
+        return context
+
+class DashboardView(TemplateView):
+    template_name = "dashboard.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        stations = Station.objects.all()
+        reports = []
+        
+        for station in stations:
+            report = Report.objects.filter(station=station).order_by('-time').first()
+            if report:
+                reports.append(report)
+        
+        context['reports'] = reports
         return context

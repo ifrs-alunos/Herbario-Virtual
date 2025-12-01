@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "eg%2hr5a4y@6w+*kipd5by()+vwqkaqqf_s4gj9h%!g_a(l!t6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["labfito.vacaria.ifrs.edu.br", "localhost"]
 
@@ -39,13 +39,16 @@ INSTALLED_APPS = [
     "tinymce",
     "django_extensions",
     "crispy_forms",
-    #'crispy_bootstrap4',
+    'crispy_bootstrap4',
     "core",
-    "accounts",
+    'accounts.apps.AccountsConfig',
+    'alerts.apps.AlertsConfig',
+    "background_task",
     "herbarium",
     "disease",
-    "alerts",
     "whatsapp_messages",
+    "telegram_bot.apps.TelegramBotConfig",
+    "celery",
     # dashboard deve ficar por ultimo na lista
     "dashboard",
 ]
@@ -92,6 +95,11 @@ DATABASES = {}
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
+
+#CRONJOBS = [
+#    ('*/5 * * * *', 'alerts.management.commands.process_alertas.Command'),
+#    ('0 * * * *', 'alerts.management.commands.cleanup_old_data.Command'),
+#]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -144,13 +152,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 TELEGRAM_BOT_USERNAME = "labfito_bot"
 
-# Criado na API do Telegram
-TELEGRAM_BOT_TOKEN = ""
+# Telegram Bot Configuration - Use environment variables for security
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '7688297430:AAH_xolKyVwXlMVRrF9AXioh0vryMV00lWg')
 
 TELEGRAM_API_URL = "https://api.telegram.org/bot"
 
 # Sobrescrito no local_settings.py
-TELEGRAM_SECRET_TOKEN = ""
+TELEGRAM_SECRET_TOKEN = os.getenv('TELEGRAM_SECRET_TOKEN', "")
 
 # Logging
 LOGGING = {
@@ -184,3 +192,12 @@ LOGGING = {
 }
 
 from .local_settings import *
+
+TESTING = False
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'America/Sao_Paulo'
