@@ -1,0 +1,68 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mb-4">
+        <h5><i class="fas fa-list-check me-2"></i>Requisitos para Alertas</h5>
+        <a href="{% url 'dashboard:requirement_add' %}">
+            <button type="button" class="btn btn-success">
+                <i class="fa fa-plus"></i> Novo Requisito
+            </button>
+        </a>
+    </div>
+
+    {% if perms.alerts.view_requirement %}
+        {% if requirement_list %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Parâmetro</th>
+                        <th>Operador</th>
+                        <th>Valor</th>
+                        <th>Ativo</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for requirement in requirement_list %}
+                    <tr>
+                        <td>{{ requirement.name }}</td>
+                        <td>{{ requirement.get_parameter_display }}</td>
+                        <td>{{ requirement.get_operator_display }}</td>
+                        <td>{{ requirement.value }}</td>
+                        <td>
+                            {% if requirement.is_active %}
+                                <span class="badge bg-success">Ativo</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Inativo</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'dashboard:requirement_edit' requirement.id %}" class="btn btn-warning btn-sm">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url 'dashboard:requirement_delete' requirement.id %}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Tem certeza que deseja excluir este requisito?')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fa fa-info-circle"></i> Nenhum requisito cadastrado.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-danger">
+            <i class="fa fa-ban"></i> Você não tem permissão para visualizar requisitos.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'dashboard/css/telegram.css' %}"/>
+{% endblock %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card" style="border-color: #2c6b3a;">
+                <div class="card-header text-white" style="background-color: #2c6b3a; border-bottom-color: #2c6b3a;">
+                    <h4 class="card-title mb-0">
+                        <i class="fab fa-telegram me-2"></i>Cadastro no Telegram para Alertas
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="alert alert-info" style="background-color: #e8f5e8; border-color: #2c6b3a; color: #2c6b3a;">
+                                <h5 style="color: #2c6b3a;"><i class="fas fa-info-circle me-2"></i>Como se cadastrar:</h5>
+                                <ol class="mb-0" style="color: #2c6b3a;">
+                                    <li>Tenha o Telegram instalado no seu celular</li>
+                                    <li>Clique no botão abaixo para abrir nosso bot</li>
+                                    <li>Envie o comando <code style="background-color: #A6DDA6; color: #2c6b3a;">/start</code></li>
+                                    <li>Pronto! Você receberá alertas automáticos</li>
+                                </ol>
+                            </div>
+                            
+                            <a href="https://t.me/{{ bot_username }}" target="_blank" class="btn text-white btn-lg w-100 mb-3" style="background-color: #2c6b3a; border-color: #2c6b3a;">
+                                <i class="fab fa-telegram me-2"></i> Cadastrar no Telegram
+                            </a>
+                            
+                            {% if user_subscriptions %}
+                            <div class="alert alert-success" style="background-color: #e8f5e8; border-color: #2c6b3a; color: #2c6b3a;">
+                                <h6 style="color: #2c6b3a;"><i class="fas fa-check-circle me-2"></i>Você está cadastrado!</h6>
+                                <p class="mb-0" style="color: #2c6b3a;">Seus chats ativos:</p>
+                                <ul class="mb-0" style="color: #2c6b3a;">
+                                    {% for sub in user_subscriptions %}
+                                    <li>{{ sub.chat_id }} - {{ sub.first_name }} ({{ sub.subscribed_at|date:"d/m/Y" }})</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="alert alert-warning" style="background-color: #f8f9fa; border-color: #2c6b3a; color: #2c6b3a;">
+                                <small>
+                                    <i class="fas fa-exclamation-triangle me-1" style="color: #2c6b3a;"></i>
+                                    <strong style="color: #2c6b3a;">Importante:</strong> 
+                                    <span style="color: #2c6b3a;">Você pode cancelar os alertas a qualquer momento 
+                                    enviando <code style="background-color: #A6DDA6; color: #2c6b3a;">/stop</code> para o bot.</span>
+                                </small>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <h5 style="color: #2c6b3a;"><i class="fas fa-bell me-2"></i>Benefícios dos Alertas:</h5>
+                            <div class="list-group">
+                                <div class="list-group-item" style="background-color: #f8f9fa; border-color: #A6DDA6;">
+                                    <i class="fas fa-check me-2" style="color: #2c6b3a;"></i>
+                                    Alertas em tempo real sobre possíveis doenças
+                                </div>
+                                <div class="list-group-item" style="background-color: #f8f9fa; border-color: #A6DDA6;">
+                                    <i class="fas fa-check me-2" style="color: #2c6b3a;"></i>
+                                    Notificações de condições meteorológicas críticas
+                                </div>
+                                <div class="list-group-item" style="background-color: #f8f9fa; border-color: #A6DDA6;">
+                                    <i class="fas fa-check me-2" style="color: #2c6b3a;"></i>
+                                    Avisos preventivos para suas culturas
+                                </div>
+                                <div class="list-group-item" style="background-color: #f8f9fa; border-color: #A6DDA6;">
+                                    <i class="fas fa-check me-2" style="color: #2c6b3a;"></i>
+                                    Recomendações técnicas especializadas
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <h6 style="color: #2c6b3a;"><i class="fas fa-question-circle me-2"></i>Comandos Disponíveis:</h6>
+                                <div class="card" style="border-color: #2c6b3a;">
+                                    <div class="card-body" style="background-color: #f8f9fa;">
+                                        <code style="color: #2c6b3a;">/start</code> - Cadastrar para receber alertas<br>
+                                        <code style="color: #2c6b3a;">/stop</code> - Parar de receber alertas<br>
+                                        <code style="color: #2c6b3a;">/teste</code> - Testar recebimento de alertas<br>
+                                        <code style="color: #2c6b3a;">/alerta</code> - Configurar alertas específicos<br>
+                                        <code style="color: #2c6b3a;">/limite</code> - Definir limites personalizados
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

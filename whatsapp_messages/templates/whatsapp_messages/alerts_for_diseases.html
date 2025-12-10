@@ -1,0 +1,21 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Doenças para Receber Alertas</h2>
+<form method="post">
+    {% csrf_token %}
+    <ul>
+        {% for disease in diseases %}
+        <li>
+            <label>
+                <input type="checkbox" name="diseases" value="{{ disease.id }}"
+                    {% if disease in selected_diseases %}checked{% endif %}>
+                {{ disease.name_disease }}
+            </label>
+        </li>
+        {% endfor %}
+    </ul>
+    <button type="submit">Salvar Preferências</button>
+</form>
+{% endblock %}

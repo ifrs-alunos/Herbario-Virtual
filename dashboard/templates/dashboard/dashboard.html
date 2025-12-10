@@ -2,19 +2,16 @@
 {% load static %}
 
 {% block content %}
-
 <div class="container">
     <div class="row">
         <div class="col-12">
             <h4 class="mb-4">Painel de controle</h4>
         </div>
     </div>
-    <!-- Barra lateral -->
     <div class="row mb-5">
         <div class="col-3">
             {% include "dashboard/components/sidebar.html" %}
         </div>
-        <!-- Bloco conteúdo -->
         <div class="col-9 mb-5">
         {% block item %}
             <p>Olá! Seja bem-vindo(a), selecione um item do menu ao lado.</p>
@@ -22,5 +19,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

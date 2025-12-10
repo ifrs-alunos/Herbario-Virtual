@@ -1,0 +1,60 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mb-4">
+        <h5><i class="fas fa-calculator me-2"></i>Constantes dos Modelos</h5>
+        <a href="{% url 'dashboard:constant_add' %}">
+            <button type="button" class="btn btn-success">
+                <i class="fa fa-plus"></i> Nova Constante
+            </button>
+        </a>
+    </div>
+
+    {% if perms.alerts.view_constant %}
+        {% if constant_list %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Valor</th>
+                        <th>Modelo</th>
+                        <th>Descrição</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for constant in constant_list %}
+                    <tr>
+                        <td>{{ constant.name }}</td>
+                        <td>{{ constant.value }}</td>
+                        <td>{{ constant.mathmodel.name }}</td>
+                        <td>{{ constant.description|default:"-"|truncatewords:5 }}</td>
+                        <td>
+                            <a href="{% url 'dashboard:constant_edit' constant.id %}" class="btn btn-warning btn-sm">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <a href="{% url 'dashboard:constant_delete' constant.id %}" class="btn btn-danger btn-sm"
+                               onclick="return confirm('Tem certeza que deseja excluir esta constante?')">
+                                <i class="fa fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fa fa-info-circle"></i> Nenhuma constante cadastrada.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-danger">
+            <i class="fa fa-ban"></i> Você não tem permissão para visualizar constantes.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

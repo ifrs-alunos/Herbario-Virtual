@@ -23,16 +23,12 @@ colors = (
 
 def get_sensor_data(request, sensor_id, date_filter):
     date = date_filter
-    # last_report_date = timezone.make_aware(datetime.datetime.now(),timezone.get_default_timezone())
     sensor = Sensor.objects.get(id=sensor_id)
     last_report_date = localtime(sensor.reading_set.last().time)
     if not last_report_date:
         last_report_date = localtime(sensor.reading_set.last().report.time)
     data_x = []
     data_y = []
-
-    # devido as mudanças na estrutura de reports (relatorio e leitura) foi necessário alterar a forma de buscar os dados
-    # idealmente esse código tem que ser todo refatorado, mas imagino que por enquanto funcione
 
     reports = sensor.reading_set.all().annotate(
         combined_time=Coalesce(
@@ -49,8 +45,6 @@ def get_sensor_data(request, sensor_id, date_filter):
         data_x = [localtime(x["combined_time"]) for x in reports]
         data_y = [x["value"] for x in reports]
     elif date == "week":
-        # start_week = last_report_date - timezone.timedelta(last_report_date.weekday())
-        # end_week = start_week + timezone.timedelta(7)
         end_week = last_report_date - timezone.timedelta(last_report_date.weekday())
         start_week = end_week - timezone.timedelta(7)
         reports = (
@@ -103,7 +97,6 @@ def get_sensor_data(request, sensor_id, date_filter):
         data_y = [
             x["avg_value"] if x["avg_value"] == x["avg_value"] else 0 for x in reports
         ]
-        # for para verificar caso exista alguma data com valor nulo retirar da lista
         for x, y in enumerate(data_y):
             if y == 0:
                 data_x.pop(x)
@@ -116,7 +109,6 @@ def get_sensor_data(request, sensor_id, date_filter):
     if not (data_x and data_y):
         return JsonResponse({"x": [], "y": []}, status=404)
 
-    # Sort the data
     sorted_data = sorted(zip(data_x, data_y))
     data_x, data_y = zip(*sorted_data)
 

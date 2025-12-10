@@ -8,7 +8,7 @@ from plotly.offline import plot
 from datetime import datetime
 from django.db.models import Avg
 
-from alerts.models import MathModel, SensorInMathModel
+from alerts.models import MathModel, SensorInMathModel, Requirement
 
 colors = (
              "maroon",
@@ -124,12 +124,18 @@ def view_graphs(request):
         start = make_aware(start, timezone=timezone.utc)
         end = datetime.fromisoformat(request.GET.get("date_until"))
         end = make_aware(end, timezone=timezone.utc)
+        
         for x in request.GET.getlist("mathmodel"):
             mathmodel = MathModel.objects.get(id=x)
-            requirements = mathmodel.requirement_set.all()
-            get_reports(start, end, 5, requirements, mathmodel, fig)
+            intermediary_reqs = mathmodel.intermediaryrequirement_set.all()
+            requirements = Requirement.objects.filter(
+                intermediaryrequirement__in=intermediary_reqs
+            )
+            
+            if requirements.exists():
+                get_reports(start, end, 5, requirements, mathmodel, fig)
 
-        plot_element = plot(fig, output_type="div")
+        plot_element = plot(fig, output_type="div") if fig.data else ""
     else:
         plot_element = ""
 

@@ -6,9 +6,7 @@ from django.db import models
 
 
 class Station(BaseModel):
-    station_id = models.CharField(
-        max_length=20, verbose_name="Identificador da estação"
-    )
+    station_id = models.CharField(max_length=20, verbose_name="Identificador da estação")
     slug = models.SlugField(unique=True, null=True)
     alias = models.CharField(max_length=100, verbose_name="Nome", null=True, blank=True)
     lat_coordinate = models.FloatField(verbose_name="Latitude", null=True)
@@ -32,13 +30,11 @@ class Station(BaseModel):
     def get_human_sensor_condition(self):
         for sensor in self.sensor_set.all():
             if sensor.reading_set.last():
-                sensor_report = sensor.reading_set.last()  # Último report do sensor
+                sensor_report = sensor.reading_set.last()
                 if sensor.type.metric == "human":
                     sensor_value = float(sensor_report.value)
-                    if sensor_value == 1.00:
-                        return True
-                    else:
-                        return False
+                    return sensor_value == 1.00
+        return False
 
     def get_mathmodels_id(self):
         mathmodels_id = self.mathmodel_set.all().values_list("id", flat=True)
@@ -46,8 +42,18 @@ class Station(BaseModel):
 
     def get_latest_readings(self) -> Dict[str, float]:
         sensors = self.sensor_set.all()
-
-        return {sensor.type.metric: sensor.last_value for sensor in sensors}
+        readings = {}
+    
+        for sensor in sensors:
+            if sensor.reading_set.last():
+                if sensor.type.metric in ['dht_t', 'bmp_t']:
+                    readings['t'] = sensor.last_value
+                elif sensor.type.metric == 'dht_h':
+                    readings['rh'] = sensor.last_value
+                elif sensor.type.metric == 'rain':
+                    readings['rain'] = sensor.last_value
+    
+        return readings
 
     def __str__(self):
         return f"{self.alias} {self.lat_lon}"

@@ -1,0 +1,47 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load static %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between mb-4">
+        <h5><i class="fas fa-bell me-2"></i>Histórico de Alertas</h5>
+    </div>
+
+    {% if perms.alerts.view_alerthistory %}
+        {% if alert_history_list %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Data/Hora</th>
+                        <th>Modelo</th>
+                        <th>Estação</th>
+                        <th>Valor</th>
+                        <th>Mensagem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for alert in alert_history_list %}
+                    <tr>
+                        <td>{{ alert.timestamp|date:"d/m/Y H:i" }}</td>
+                        <td>{{ alert.math_model.name }}</td>
+                        <td>{{ alert.station.alias }}</td>
+                        <td>{{ alert.calculated_value|floatformat:3 }}</td>
+                        <td>{{ alert.alert_message|truncatewords:10 }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <div class="alert alert-info">
+                <i class="fa fa-info-circle"></i> Nenhum alerta registrado.
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-danger">
+            <i class="fa fa-ban"></i> Você não tem permissão para visualizar o histórico de alertas.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

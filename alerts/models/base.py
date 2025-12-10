@@ -1,8 +1,7 @@
-from django.db.models import Model
+from django.db import models
 from typing import Tuple
 
-
-class BaseModel(Model):
+class BaseModel(models.Model):
     def get_fields(self, exclude: Tuple[str] = None) -> list:
         """
         :param exclude: campos que serão excluídos da lista retornada

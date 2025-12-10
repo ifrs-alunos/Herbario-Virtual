@@ -36,7 +36,6 @@ class RequirementTest(BaseAlertTest, TestCase):
                 ]
             )
 
-        # Add a single invalid entry
         self.initial_time += datetime.timedelta(hours=1)
         objs.extend(
             [

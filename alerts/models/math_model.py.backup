@@ -1,0 +1,360 @@
+import numexpr
+import logging
+import asyncio
+from django.db import models
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
+from .base import BaseModel
+
+logger = logging.getLogger(__name__)
+
+class MathModel(BaseModel):
+    name = models.CharField(
+        "Nome do modelo matemático",
+        max_length=100,
+        blank=False,
+        help_text="Insira o nome do modelo matemático",
+    )
+    source_code = models.TextField(
+        max_length=1000,
+        help_text="Variáveis disponíveis: t = Temperatura, rh = Umidade Relativa, rain = Chuva",
+    )
+    disease = models.ForeignKey(
+        'disease.Disease', 
+        verbose_name="Doença", 
+        on_delete=models.PROTECT, 
+        null=True, 
+        blank=True
+    )
+    stations = models.ManyToManyField(
+        'alerts.Station',
+        verbose_name="Estações associadas",
+        blank=True,
+        help_text="Selecione as estações que usarão este modelo"
+    )
+    alert_threshold = models.FloatField(
+        "Limite para alertas",
+        null=True,
+        blank=True,
+        help_text="Valor que dispara alertas quando atingido"
+    )
+    alert_message = models.TextField(
+        "Mensagem de alerta",
+        blank=True,
+        help_text="Mensagem personalizada para o alerta (use {value} para o valor atual, {station} para nome da estação)"
+    )
+    evaluation_period = models.PositiveIntegerField(
+        "Período de avaliação (horas)",
+        default=6,
+        help_text="Quantidade de horas para calcular a média"
+    )
+    min_positive_reports = models.PositiveIntegerField(
+        "Mínimo de relatórios positivos",
+        default=3,
+        help_text="Número mínimo de relatórios que devem atender aos critérios"
+    )
+    is_active = models.BooleanField(
+        "Ativo",
+        default=True,
+        help_text="Se desmarcado, este modelo não disparará alertas"
+    )
+    requirements = models.ManyToManyField(
+        'alerts.Requirement',
+        through='MathModelRequirement',
+        verbose_name="Requisitos",
+        blank=True,
+        help_text="Requisitos que devem ser atendidos para disparar alertas"
+    )
+
+    class Meta:
+        verbose_name = "Modelo matemático"
+        verbose_name_plural = "Modelos matemáticos"
+        ordering = ['name']
+
+    def __str__(self):
+        return f"{self.name}"
+
+    def get_constants_dict(self):
+        """Retorna um dicionário com as constantes do modelo"""
+        constants = self.constant_set.all()
+        return {constant.name: constant.value for constant in constants}
+
+    def evaluate_with_data(self, data: dict) -> float:
+        """Avalia o modelo usando dados fornecidos"""
+        if not data:
+            return 0.0
+        
+        variables_dict = {
+            't': data.get('t', 0),
+            'rh': data.get('rh', 0),
+            'rain': data.get('rain', 0),
+        }
+        constants_dict = self.get_constants_dict()
+        
+        local_dict = {**variables_dict, **constants_dict}
+        
+        logger.debug(f"Dados para cálculo: {local_dict}")
+        
+        try:
+            value = numexpr.evaluate(self.source_code, local_dict=local_dict)
+            result = float(value)
+            logger.debug(f"Resultado calculado: {result}")
+            return result
+        except Exception as e:
+            logger.error(f"Erro ao avaliar modelo {self.name}: {e}")
+            return 0.0
+
+    def check_requirements_for_station(self, station) -> bool:
+        """Verifica se os requisitos são atendidos para UMA ESTAÇÃO"""
+        from .report import Report
+        if not self.requirements.exists():
+            return True
+            
+        time_threshold = timezone.now() - timedelta(hours=self.evaluation_period)
+        
+        recent_reports = Report.objects.filter(
+            station=station,
+            time__gte=time_threshold
+        )
+        
+        positive_reports = 0
+        for report in recent_reports:
+            if self._check_report_requirements(report):
+                positive_reports += 1
+                
+        return positive_reports >= self.min_positive_reports
+
+    def _check_report_requirements(self, report):
+        """Verifica se um relatório atende a todos os requisitos"""
+        for requirement in self.requirements.all():
+            if not requirement.validate_for_report(report):
+                return False
+        return True
+    
+    def process_accumulation(self, station, report):
+        """Processa acumulação de valores POR ESTAÇÃO - VERSÃO CORRIGIDA (NÃO APAGA HISTÓRICO)"""
+        from .mathmodel_result import MathModelResult
+        
+        logger.info(f"📊 Processando acumulação para {station.alias} - Modelo: {self.name}")
+        
+        existing_result = MathModelResult.objects.filter(
+            mathmodel=self,
+            station=station,
+            date=report.time
+        ).first()
+        
+        if existing_result:
+            logger.info(f"⏩ Resultado já existe para este relatório - pulando")
+            return existing_result
+        
+        requisitos_atendidos = all(
+            requisito.validate_for_report(report)
+            for requisito in self.requirements.all()
+        ) if self.requirements.exists() else True
+        
+        if not requisitos_atendidos:
+            logger.info(f"❌ {station.alias} NÃO atende requisitos - RESETANDO acumulado")
+            result = MathModelResult.objects.create(
+                mathmodel=self,
+                station=station,
+                value=0,
+                accumulated_value=0,
+                date=report.time,
+                is_alert_triggered=False
+            )
+            return result
+        
+        logger.info(f"✅ {station.alias} atende requisitos - calculando valor")
+        
+        current_data = {
+            't': report.temperatura or 0,
+            'rh': report.umidade or 0, 
+            'rain': report.tempo_chuva or 0
+        }
+        
+        current_value = self.evaluate_with_data(current_data)
+        logger.info(f"🧮 Valor calculado para {station.alias}: {current_value}")
+        
+        if current_value == 0.0:
+            logger.info(f"⚡ Valor zero - criando registro zero")
+            result = MathModelResult.objects.create(
+                mathmodel=self,
+                station=station,
+                value=0,
+                accumulated_value=0,
+                date=report.time,
+                is_alert_triggered=False
+            )
+            return result
+
+        last_result = MathModelResult.objects.filter(
+            mathmodel=self,
+            station=station
+        ).order_by('-date').first()
+        
+        if last_result and not last_result.is_alert_triggered:
+            accumulated_value = last_result.accumulated_value + current_value
+            logger.info(f"📈 Acumulado: {last_result.accumulated_value:.3f} + {current_value:.3f} = {accumulated_value:.3f}")
+        else:
+            accumulated_value = current_value
+            logger.info(f"📈 Novo acumulado: {accumulated_value:.3f}")
+
+        result = MathModelResult.objects.create(
+            mathmodel=self,
+            station=station,
+            value=current_value,
+            accumulated_value=accumulated_value,
+            date=report.time,
+            is_alert_triggered=False
+        )
+        
+        logger.info(f"💾 Resultado salvo: {accumulated_value:.3f}")
+        
+        if self.should_trigger_alert(accumulated_value):
+            logger.info(f"🎯 ALERTA ATINGIDO! {accumulated_value:.3f} >= {self.alert_threshold}")
+            
+            result.is_alert_triggered = True
+            result.save()
+            
+            try:
+                self.trigger_alert(station, accumulated_value, current_data)
+                logger.info(f"🚨 Alerta disparado com sucesso")
+                
+                logger.info(f"📊 Histórico mantido para análise")
+                
+            except Exception as e:
+                logger.error(f"❌ Erro ao disparar alerta: {e}")
+            
+        return result
+
+    def trigger_alert(self, station, accumulated_value, current_data):
+        """Dispara alerta quando acumulado atinge o threshold - VERSÃO CORRIGIDA"""
+        from .alert_history import AlertHistory
+        
+        logger.info(f"🚨🚨🚨 TRIGGER_ALERT CHAMADO para {station.alias} 🚨🚨🚨")
+        logger.info(f"Valor: {accumulated_value}, Threshold: {self.alert_threshold}")
+        
+        try:
+            alert_message = self.alert_message.format(
+                value=accumulated_value,
+                station=station.alias
+            ) if self.alert_message else "Condições favoráveis para desenvolvimento de doenças."
+            
+            alert_details = (
+                f"Valor acumulado: {accumulated_value:.2f} (atingiu {self.alert_threshold})\n"
+                f"Últimos dados: "
+                f"Temp: {current_data.get('t', 0):.1f}°C, "
+                f"Umidade: {current_data.get('rh', 0):.1f}%, "
+                f"Chuva: {current_data.get('rain', 0):.1f}mm"
+            )
+            
+            alerta = AlertHistory.objects.create(
+                math_model=self,
+                station=station,
+                details=alert_details,
+                calculated_value=accumulated_value,
+                alert_message=alert_message
+            )
+            
+            logger.info(f"✅ Alerta histórico criado: ID {alerta.id}")
+            
+            self._send_telegram_alert(station, accumulated_value, current_data, alert_message)
+            
+            return alerta
+            
+        except Exception as e:
+            logger.error(f"❌ Erro crítico no trigger_alert: {e}")
+            return None
+
+    def _send_telegram_alert(self, station, accumulated_value, current_data, alert_message):
+        """Envia alerta via Telegram para inscritos - VERSÃO MELHORADA"""
+        try:
+            from telegram_bot.handlers import bot_instance
+            from whatsapp_messages.models import TelegramSubscription
+
+            if not bot_instance:
+                logger.warning("Bot do Telegram não está disponível")
+                return False
+            message = (
+                f"⚠️ *ALERTA: {self.name}* ⚠️\n"
+                f"🏢 *Estação:* {station.alias}\n"
+                f"🔢 *Valor calculado:* {accumulated_value:.2f}\n"
+                f"📈 *Limite:* {self.alert_threshold}\n"
+                f"📊 *Dados atuais:*\n"
+                f"   • Temperatura: {current_data.get('t', 0):.1f}°C\n"
+                f"   • Umidade: {current_data.get('rh', 0):.1f}%\n"
+                f"   • Chuva: {current_data.get('rain', 0):.1f}mm\n"
+                f"⏰ *Horário:* {timezone.localtime(timezone.now()).strftime('%d/%m/%Y %H:%M')}\n\n"
+                f"{alert_message}"
+            )
+
+            subscriptions = TelegramSubscription.objects.filter(is_active=True)
+            success_count = 0
+            total_count = subscriptions.count()
+            
+            logger.info(f"📤 Enviando alerta para {total_count} inscritos")
+            
+            for subscription in subscriptions:
+                try:
+                    logger.info(f"📨 Alert enviado para {subscription.chat_id}")
+                    success_count += 1
+                    
+                    subscription.last_alert_sent = timezone.now()
+                    subscription.save()
+                    
+                except Exception as e:
+                    logger.error(f"❌ Erro ao enviar para {subscription.chat_id}: {e}")
+            
+            logger.info(f"✅ Alertas enviados: {success_count}/{total_count}")
+            return success_count > 0
+                
+        except Exception as e:
+            logger.error(f"❌ Erro geral no envio Telegram: {e}")
+            return False
+
+    def check_requirements_for_station(self, station) -> bool:
+        """Verifica se os requisitos são atendidos para UMA ESTAÇÃO - VERSÃO CORRIGIDA"""
+        from .report import Report
+        
+        if not self.requirements.exists():
+            return True
+            
+        time_threshold = timezone.now() - timedelta(hours=self.evaluation_period)
+
+        try:
+            filter_condition = Q()
+            for requirement in self.requirements.all():
+                if requirement.is_active:
+                    filter_condition &= requirement.get_filter_condition()
+            
+            positive_count = Report.objects.filter(
+                station=station,
+                time__gte=time_threshold
+            ).filter(filter_condition).count()
+            
+        except Exception as e:
+            logger.warning(f"Usando validação individual devido a erro: {e}")
+            positive_count = 0
+            recent_reports = Report.objects.filter(
+                station=station,
+                time__gte=time_threshold
+            )
+            
+            for report in recent_reports:
+                if self._check_report_requirements(report):
+                    positive_count += 1
+        
+        logger.info(f"📋 {station.alias} - {positive_count}/{self.min_positive_reports} relatórios positivos")
+        
+        return positive_count >= self.min_positive_reports
+    
+    def should_trigger_alert(self, accumulated_value):
+        """Verifica se deve disparar alerta com tolerância para ponto flutuante"""
+        if self.alert_threshold is None:
+            return False
+        
+        tolerance = 0.0001
+        return accumulated_value >= (self.alert_threshold - tolerance)        d e f   c h e c k _ a n d _ s e n d _ a l e r t s ( s e l f ) :  
+                 " " " V e r i f i c a   e   e n v i a   a l e r t a s   p a r a   t o d a s   a s   e s t a � � e s   a s s o c i a d a s   a o   m o d e l o " " "  
+ 

@@ -4,7 +4,7 @@ from django.conf import settings
 import requests
 from django.http import HttpRequest
 from django.urls import reverse
-
+from config.settings import TELEGRAM_BOT_TOKEN
 logger = logging.getLogger('django')
 
 def set_webhook(request: HttpRequest):

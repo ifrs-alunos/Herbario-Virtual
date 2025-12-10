@@ -1,0 +1,30 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Confirmar Exclusão</h5>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <strong>Atenção!</strong> Tem certeza que deseja excluir a constante "{{ object.name }}"?
+            </div>
+            
+            <p>Esta ação não pode ser desfeita.</p>
+            
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Confirmar Exclusão
+                    </button>
+                    <a href="{% url 'dashboard:constant_list' %}" class="btn btn-secondary">
+                        <i class="fa fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

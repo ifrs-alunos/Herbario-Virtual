@@ -1,0 +1,10 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h2>Vincular Conta do Telegram</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Vincular</button>
+</form>
+{% endblock %}
