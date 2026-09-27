@@ -156,10 +156,17 @@ LOGOUT_REDIRECT_URL = "/painel/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
-TELEGRAM_BOT_USERNAME = "labfito_bot"
+# Usado nas mensagens do bot para apontar o usuário ao cadastro do sistema.
+SITE_URL = os.getenv('SITE_URL', 'https://labfito.vacaria.ifrs.edu.br')
 
-# Telegram Bot Configuration - Use environment variables for security
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '7688297430:AAH_xolKyVwXlMVRrF9AXioh0vryMV00lWg')
+# Bot do Telegram. Cada ambiente usa o seu, definido no .env:
+#   produção -> labfito_vacaria_bot (padrão abaixo)
+#   local    -> labfito_teste_bot
+# O token NUNCA vai no código: o repositório é público. Sem TELEGRAM_BOT_TOKEN
+# no ambiente, o bot não sobe e nenhuma mensagem é enviada.
+TELEGRAM_BOT_USERNAME = os.getenv('TELEGRAM_BOT_USERNAME', 'labfito_vacaria_bot')
+
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
 
 TELEGRAM_API_URL = "https://api.telegram.org/bot"
 
