@@ -1,7 +1,1 @@
-from django import forms
-from accounts.models import Profile
-
-class ProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        exclude = ['user']
+from accounts.forms.profile_form import ProfileForm  # noqa: F401

@@ -63,6 +63,10 @@
                             Solicitações de planta
                         </a>
                     </li>
+                    {% endif %}
+
+                    {# Aprovar foto deixou de depender de change_plant #}
+                    {% if perms.herbarium.approve_photo %}
                     <li class="list-group-item">
                         <a id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}" href="{% url 'dashboard:photo_solicitation_list' %}">
                             Solicitações de foto
@@ -107,6 +111,10 @@
                             Solicitações de doenças
                         </a>
                     </li>
+                    {% endif %}
+
+                    {# Aprovar foto deixou de depender de change_disease #}
+                    {% if perms.disease.approve_photodisease %}
                     <li class="list-group-item">
                         <a id="{% if link == 'disease-photo-solicitation-list' %}selected-link{% endif %}" href="{% url 'dashboard:disease_photo_solicitation_list' %}">
                             Solicitações de foto
@@ -226,7 +234,11 @@
                     {% endif %}
 
                     <!-- Alertas Manuais -->
-                    {% if perms.alerts.add_manualalert %}
+                    {% comment %}
+                    add_manualalert não existe: não há modelo ManualAlert. A view
+                    ManualAlertView exige alerts.add_alerthistory.
+                    {% endcomment %}
+                    {% if perms.alerts.add_alerthistory %}
                     <li class="list-group-item">
                         <a id="{% if link == 'manual_alert' %}selected-link{% endif %}" href="{% url 'dashboard:manual_alert' %}">
                             Alertas Manuais
@@ -290,7 +302,11 @@
     {% endif %}
 
     <!-- MÓDULOS EM DESENVOLVIMENTO -->
-    {% if perms.core.view_mathmodel %}
+    {% comment %}
+    MathModel está no app alerts, não em core — perms.core.view_mathmodel era
+    sempre falso e a seção nunca aparecia, nem para superusuário.
+    {% endcomment %}
+    {% if perms.alerts.view_mathmodel %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingTwenty">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"

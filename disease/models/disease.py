@@ -42,9 +42,16 @@ class Disease(models.Model):
     def __str__(self):
         return self.name_disease
 
-    # função que retorna uma queryset com fotos aceitas pelo adminstrador
+    @property
     def published_photos(self):
-        return self.photos.all().filter(published=True)
+        """Fotos aprovadas por um administrador — as únicas que o site público exibe.
+
+        Virou `property` para casar com Plant.published_photos: como método, o
+        template chamava sozinho mas o Python devolvia a função. Os templates
+        continuam iguais.
+        """
+
+        return self.photos.filter(published=True)
 
     def save(self, *args, **kwargs):
         if self.slug is None:

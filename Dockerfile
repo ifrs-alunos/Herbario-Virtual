@@ -19,6 +19,9 @@ COPY requirements.txt /code/
 # Install project dependencies
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
+# Create log directory required by Django logging config
+RUN mkdir -p /var/log/django/
+
 # Copy the project code to the working directory
 COPY . /code/
 

@@ -1,23 +1,5 @@
-from django import forms
-from django.forms import widgets
-
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User 
-
-class UserForm(UserCreationForm):
-    email = forms.EmailField(label="E-mail")
-
-    def __init__(self, *args, **kwargs):
-        super(UserCreationForm, self).__init__(*args, **kwargs)
-        
-        self.fields['password1'].help_text = "Mínimo 8 caracteres. Não use dados pessoais, senhas comuns ou somente números."
-        self.fields['username'].help_text = "Credencial utilizada para login. Use letras, números e os símbolos @/./+/-/_ apenas."
-        
-    # password1 = forms.CharField(label="Senha", help_text="Mínimo 8 caracteres. É proibido somente números, dados pessoais ou senhas comuns")
-
-    class Meta(UserCreationForm.Meta):
-        model = User
-        fields = UserCreationForm.Meta.fields + ('email',)
-        labels = {
-            'username': 'Nome de usuário',
-        }     
+# Reexporta o form de accounts em vez de manter uma cópia.
+# dashboard.views.accounts.create_user usava esta cópia enquanto importava o
+# ProfileForm de accounts, então uma validação adicionada só lá não teria efeito
+# no cadastro. Uma classe só, uma fonte de verdade.
+from accounts.forms.user_form import UserForm  # noqa: F401

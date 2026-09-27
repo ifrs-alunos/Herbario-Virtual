@@ -17,6 +17,16 @@ class Station(BaseModel):
         help_text="Endereço, ponto de referência, responsável...",
         null=True,
     )
+    # Região onde a estação fica. Referência por string para não criar um
+    # import alerts -> herbarium.
+    region = models.ForeignKey(
+        "herbarium.Region",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="stations",
+        verbose_name="Região",
+    )
 
     @property
     def lat_lon(self):

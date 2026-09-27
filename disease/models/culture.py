@@ -20,10 +20,13 @@ class Culture(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self):
+    def save(self, *args, **kwargs):
+        # *args/**kwargs são obrigatórios aqui: Model.objects.create() chama
+        # save(force_insert=True), e sem repassar isso o create() quebrava com
+        # TypeError para toda cultura.
         if not self.slug:
             self.slug = slugify(self.name)
-        return super().save()
+        return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Cultura'

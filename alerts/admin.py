@@ -228,8 +228,8 @@ class ReportAdmin(admin.ModelAdmin):
 
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
-    list_display = ('alias', 'station_id', 'lat_coordinate', 'lon_coordinate')
-    list_filter = ('alias',)
+    list_display = ('alias', 'station_id', 'region', 'lat_coordinate', 'lon_coordinate')
+    list_filter = ('alias', 'region')
     search_fields = ('alias', 'station_id', 'description')
 
 @admin.register(TypeSensor)
