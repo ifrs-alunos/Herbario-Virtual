@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.defaultfilters import date
 from django.urls import reverse_lazy, reverse
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, DeleteView
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from accounts.forms import ProfileForm, UserUpdateForm, SolicitationForm
 from accounts.models import Profile, Solicitation
@@ -59,9 +60,13 @@ def create_user(request):
 		if form.is_valid() and profile_form.is_valid():
 			user = form.save()
 
+			# O post_save de accounts/signals.py já criou um Profile em branco para
+			# este usuário. Reaproveitamos o pk dele para não violar o OneToOne.
 			profile = profile_form.save(commit=False)
+			profile.pk = Profile.objects.get(user=user).pk
 			profile.user = user
 			profile.save()
+			profile_form.save_m2m()
 
 			# Tornando todos usuários comuns
 			group, _ = Group.objects.get_or_create(name="common_users")
@@ -269,7 +274,11 @@ class ContributionTemplateView(ListView):
 		return result
 
 
-class UserListView(ListView):
+class UserListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+	# Até 24/09/2026 esta lista e o detalhe abaixo não tinham verificação: um
+	# anônimo via os dados de contato (nome, e-mail, instituição) de qualquer conta,
+	# percorrendo os ids na URL. auth.view_user é a permissão que o menu já usava.
+	permission_required = 'auth.view_user'
 	model = User
 	context_object_name = 'users'
 	template_name = 'dashboard/user_list.html'
@@ -290,8 +299,9 @@ class UserListView(ListView):
 		return data
 
 
-class UserDetailView(DetailView):
-    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+class UserDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    # Dados de contato de uma conta. Só para quem administra usuários.
+    permission_required = 'auth.view_user'
     model = Profile
     template_name = 'dashboard/user_detail.html'
 
@@ -301,11 +311,16 @@ class UserDetailView(DetailView):
         return context
 
 
-class ProfileDeleteView(DeleteView):
+class ProfileDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	# Apagar a conta de um usuário. Sem verificação, um anônimo apagava qualquer
+	# perfil pela URL. auth.change_user é o que administra usuários no painel.
+	permission_required = 'auth.change_user'
 	model = Profile
 	success_url = reverse_lazy('dashboard:user_list')
 
-class SolicitationDeleteView(DeleteView):
+class SolicitationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	# Recusar/apagar um pedido de contribuidor: mesma permissão de quem revisa.
+	permission_required = 'accounts.change_solicitation'
 	model = Solicitation
 	success_url = reverse_lazy('dashboard:solicitation_list')
 
@@ -319,8 +334,14 @@ def accept_solicitation(request, pk):
     return redirect("dashboard:solicitation_list")
 
 
+@login_required
 def term_check_password(request):
-	"""Essa função verifica se a senha dada no request é a mesma do usuario do request"""
+	"""Essa função verifica se a senha dada no request é a mesma do usuario do request.
+
+	Exige login: sem isso, era um oráculo de senha aberto — qualquer um podia
+	testar senhas contra qualquer id de usuário. O fluxo que a usa (aceite dos
+	termos, em solicitation.html) já é acessível só por quem está logado.
+	"""
 
 	password = request.POST['password']
 	user = User.objects.get(id=request.POST['user'])

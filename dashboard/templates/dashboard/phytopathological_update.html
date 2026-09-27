@@ -11,7 +11,7 @@
         <h5>Lista de doenças cadastradas</h5>
 
         <!-- Botão para cadastramento de novas doenças -->
-
+        {% if perms.disease.add_disease %}
         <a id="{% if link == 'disease-update' %}selected-link{% endif %}"
            href="{% url 'dashboard:disease_solicitation' %}">
             <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"
@@ -19,7 +19,9 @@
                 Adicionar uma doença <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
+        {% endif %}
 
+        {% if perms.disease.add_photodisease %}
         <a id="{% if link == 'disease-update' %}selected-link{% endif %}"
            href="{% url 'dashboard:disease_photo_solicitation' %}">
             <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip"
@@ -27,6 +29,7 @@
                 Adicionar uma foto de doença <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
+        {% endif %}
 
     </div>
 
@@ -95,10 +98,12 @@
                                    title="Atualizar doença">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
+                                {% if perms.disease.delete_disease %}
                                 <a class="btn btn-danger" data-toggle="modal" id="plant_delete"
                                    data-target="#exampleModal{{ disease.id }}" title="Excluir doença" data-bs-toggle="tooltip" data-bs-placement="bottom">
                                     <i class="fa fa-times" aria-hidden="true"></i>
                                 </a>
+                                {% endif %}
 
                             </td>
 

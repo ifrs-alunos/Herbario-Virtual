@@ -14,16 +14,20 @@
     <div class="d-flex justify-content-between mb-4">
         <h5>Lista de plantas cadastradas</h5>
 
+        {% if perms.herbarium.add_plant %}
         <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'dashboard:plant_solicitation' %}">
             <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
                Adicionar uma planta <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
+        {% endif %}
+        {% if perms.herbarium.add_photo %}
         <a id="{% if link == 'disease-update' %}selected-link{% endif %}" href="{% url 'dashboard:photo_solicitation' %}">
             <button id="new_plant" type="button" class="btn btn-success" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar doenças">
                Adicionar uma foto de planta <i class="fa fa-plus" aria-hidden="true"></i>
             </button>
         </a>
+        {% endif %}
     </div>
 
     {% if perms.herbarium.change_plant %}
@@ -43,8 +47,11 @@
             {% for plant in plants %} {# Loop na lista de solicitações #}
 
                 {% if plant.published == True %}
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    {% if perms.herbarium.delete_plant %}
+                    <!-- Modal. Um por planta: com um id só para todas as linhas, o
+                         navegador abria sempre o primeiro e "Excluir" em qualquer
+                         planta confirmava a exclusão da primeira da lista. -->
+                    <div class="modal fade" id="exampleModal{{ plant.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                       <div class="modal-dialog modal-dialog-centered" role="document">
                         <div class="modal-content">
                           <div class="modal-header">
@@ -68,6 +75,7 @@
                         </div>
                       </div>
                     </div>
+                    {% endif %}
 
                 <tr id="{{plant.id}}">
                     <td scope="row">{{plant.name|truncatechars_html:30}}</td>
@@ -80,9 +88,11 @@
                         <a href="{% url 'dashboard:plant_update' plant.id %}" id="plant_update" class="btn btn-warning" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Atualizar planta">
                             <i class="fa fa-pencil" aria-hidden="true"></i>
                         </a>
-                        <a class="btn btn-danger" data-toggle="modal" id="plant_delete" data-target="#exampleModal" title="Excluir planta" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                        {% if perms.herbarium.delete_plant %}
+                        <a class="btn btn-danger" data-toggle="modal" id="plant_delete" data-target="#exampleModal{{ plant.id }}" title="Excluir planta" data-bs-toggle="tooltip" data-bs-placement="bottom">
                             <i class="fa fa-times" aria-hidden="true"></i>
                         </a>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endif %}

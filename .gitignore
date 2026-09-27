@@ -11,3 +11,10 @@ local_settings.py
 venv
 backups
 .env
+# Ajustes do Docker Compose só desta máquina (ex.: outra porta). Ver README.
+docker-compose.override.yml
+# Credenciais de ambiente local. NUNCA versionar.
+Docs/CREDENCIAIS-LOCAIS.md
+*.credenciais.md
+# Documentação interna da equipe, mantida fora do repositório.
+Docs/

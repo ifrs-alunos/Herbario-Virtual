@@ -1,6 +1,7 @@
 from django.db import models
 from PIL import Image
 from core.utils import make_small_image
+from core.validators import MIN_HEIGHT, MIN_WIDTH, validate_min_resolution
 from django.utils.text import slugify
 from .plant import Plant
 
@@ -31,7 +32,12 @@ class Photo(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE, related_name='photos', verbose_name="Planta")
 
     # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
-    image = models.ImageField(upload_to=plant_directory_path, verbose_name="Imagens")
+    image = models.ImageField(
+        upload_to=plant_directory_path,
+        verbose_name="Imagens",
+        validators=[validate_min_resolution],
+        help_text="Resolução mínima: {}x{} (Full HD).".format(MIN_WIDTH, MIN_HEIGHT),
+    )
 
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores
     small_image = models.ImageField(upload_to=small_plant_directory_path, editable=False, null=True)
@@ -57,8 +63,10 @@ class Photo(models.Model):
 
         pillow_img_width, pillow_img_height = pillow_img.size
 
-        # Especificando tamanho mínimo como Full HD
-        if (pillow_img_width >= 1920 and pillow_img_height >= 1080):
+        # Última barreira, para os caminhos que não passam por validação de
+        # formulário (shell, bulk, scripts). O que atende o usuário é o validador
+        # do campo — ver core/validators.py.
+        if pillow_img_width >= MIN_WIDTH and pillow_img_height >= MIN_HEIGHT:
             # Cria a imagem pequena e insere no campo do modelo
             self.small_image = make_small_image(self.image)
             super().save(*args, **kwargs)
@@ -69,3 +77,7 @@ class Photo(models.Model):
     class Meta:
         verbose_name = 'Foto'
         verbose_name_plural = 'Fotos'
+        # Separada de change_plant: aprovar a foto de um contribuidor e editar o
+        # cadastro de uma planta são decisões diferentes, e até aqui as duas
+        # dependiam da mesma permissão.
+        permissions = [('approve_photo', 'Pode aprovar fotos de plantas')]

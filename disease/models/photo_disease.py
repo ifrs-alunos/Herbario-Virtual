@@ -5,6 +5,7 @@ from django.core.files import File
 from django.utils.text import slugify
 
 from core.utils import make_small_image
+from core.validators import MIN_HEIGHT, MIN_WIDTH, validate_min_resolution
 from disease.models.disease import Disease
 
 
@@ -33,7 +34,13 @@ class PhotoDisease(models.Model):
     disease = models.ForeignKey(Disease, on_delete=models.CASCADE, related_name='photos', verbose_name="Doença")
 
     # Campo que contém uma imagem e indica a função que retorna onde a imagem deve ser guardada
-    image = models.ImageField(upload_to=disease_directory_path, verbose_name="Imagens",max_length=500)
+    image = models.ImageField(
+        upload_to=disease_directory_path,
+        verbose_name="Imagens",
+        max_length=500,
+        validators=[validate_min_resolution],
+        help_text="Resolução mínima: {}x{} (Full HD).".format(MIN_WIDTH, MIN_HEIGHT),
+    )
 
     # Cria um campo não editável que conterá imagens pequenas geradas a partir das imagens maiores
     small_image = models.ImageField(upload_to=small_disease_directory_path, editable=False, null=True, max_length=500)
@@ -65,8 +72,8 @@ class PhotoDisease(models.Model):
 
         pillow_img_width, pillow_img_height = pillow_img.size
 
-        # Especificando tamanho mínimo como Full HD
-        if pillow_img_width >= 1920 and pillow_img_height >= 1080:
+        # Ver o comentário equivalente em herbarium/models/photo.py.
+        if pillow_img_width >= MIN_WIDTH and pillow_img_height >= MIN_HEIGHT:
             # Cria a imagem pequena e insere no campo do modelo
             self.small_image = make_small_image(self.image)
             super().save(*args, **kwargs)
@@ -77,3 +84,6 @@ class PhotoDisease(models.Model):
     class Meta:
         verbose_name = 'Foto'
         verbose_name_plural = 'Fotos'
+        # Ver o comentário equivalente em herbarium/models/photo.py: aprovar foto
+        # deixa de depender de change_disease.
+        permissions = [('approve_photodisease', 'Pode aprovar fotos de doenças')]

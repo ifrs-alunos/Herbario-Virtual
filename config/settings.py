@@ -143,6 +143,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = "/media/"
 
+# Sem isto o Django usa o padrão "/accounts/login/", que dá 404: config/urls.py
+# não inclui accounts.urls (esse app é código morto). O efeito era todo
+# @login_required / LoginRequiredMixin mandar o visitante para uma página
+# inexistente em vez da tela de login.
+LOGIN_URL = "/painel/login/"
+
 LOGIN_REDIRECT_URL = "/painel/"
 
 LOGOUT_REDIRECT_URL = "/painel/login/"
