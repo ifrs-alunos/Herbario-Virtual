@@ -10,7 +10,7 @@ class PhotoInline(admin.TabularInline):
 
 class DiseaseAdmin(admin.ModelAdmin):
 	prepopulated_fields = {'slug': ('name_disease',)}
-	list_display = ('name_disease', 'scientific_name_disease', 'culture_disease',)
+	list_display = ('name_disease', 'scientific_name_disease', 'culture_disease', 'states',)
 	list_filter = ('culture_disease',)
 	search_fields = ('name_disease', 'scientific_name_disease', 'symptoms_disease')
 	inlines = [PhotoInline, ]

@@ -105,8 +105,8 @@
                     <div class="col-lg-4 col-md-6 card-col d-flex col-12">
                         <div class="card col-12">
                             {# Verifica a planta contém ao menos uma imagem cadastrada #}
-                            {% if plant.photos.first.small_image.url %}
-                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ plant.photos.first.small_image.url }}" alt="Card image cap"></a>
+                            {% if plant.published_photos.first.small_image.url %}
+                                <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{{ plant.published_photos.first.small_image.url }}" alt="Card image cap"></a>
                             {% else %}
                                 <a href="{% url 'herbarium:detail' plant.slug %}" target="_blank"><img class="card-img-top text-center" src="{% static 'herbarium/images/aviso_pequeno.png' %}" alt="Imagem de Aviso Sobre Falta de Imagens"></a>
                             {% endif %}

@@ -5,8 +5,6 @@ from django.utils import timezone
 from datetime import timedelta
 from .base import BaseModel
 import asyncio
-from telegram_bot.models import TelegramUser
-import requests
 
 logger = logging.getLogger(__name__)
 
@@ -408,17 +406,16 @@ class MathModel(BaseModel):
         """Função para envio direto via Telegram"""
         try:
             from telegram_bot.models import TelegramUser
-            from django.conf import settings
-            import requests
-            
-            usuarios = TelegramUser.objects.filter(is_active=True)
-            
+            from telegram_bot.services import broadcast_alert
+
+            usuarios = TelegramUser.objects.receiving_alerts()
+
             if not usuarios.exists():
-                print("Nenhum usuário cadastrado no Telegram")
+                print("Nenhum usuário vinculado a uma conta para receber alertas")
                 return False
-            
+
             print(f"Enviando para {usuarios.count()} usuários")
-            
+
             temp = current_data.get('t', 0) or 0
             humidity = current_data.get('rh', 0) or 0
             
@@ -431,71 +428,13 @@ class MathModel(BaseModel):
                 f"\n💬 *Recomendação:*\n{alert_message}"
             )
             
-            enviados = 0
-            for usuario in usuarios:
-                try:
-                    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-                    payload = {
-                        'chat_id': usuario.chat_id,
-                        'text': full_message,
-                        'parse_mode': 'Markdown'
-                    }
-                    
-                    response = requests.post(url, json=payload, timeout=10)
-                    
-                    if response.status_code == 200:
-                        enviados += 1
-                        print(f"Alerta enviado para {usuario.first_name}")
-                    else:
-                        print(f"Erro API para {usuario.chat_id}: {response.status_code}")
-                            
-                except Exception as e:
-                    print(f"Erro para {usuario.chat_id}: {e}")
-            
-            print(f"Alertas enviados: {enviados}/{usuarios.count()}")
+            enviados, total = broadcast_alert(full_message, usuarios)
+
+            print(f"Alertas enviados: {enviados}/{total}")
             return enviados > 0
-                
+
         except Exception as e:
             print(f"Erro no envio: {e}")
-            return False
-
-    def send_telegram_alert_directly(message):
-        try:
-            usuarios = TelegramUser.objects.filter(is_active=True)
-            
-            if not usuarios.exists():
-                print("Nenhum usuário cadastrado no Telegram")
-                return False
-            
-            print(f"Enviando para {usuarios.count()} usuários")
-            
-            enviados = 0
-            for usuario in usuarios:
-                try:
-                    url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage"
-                    payload = {
-                        'chat_id': usuario.chat_id,
-                        'text': message,
-                        'parse_mode': 'Markdown'
-                    }
-                    
-                    print(f"Enviando para chat_id: {usuario.chat_id}")
-                    response = requests.post(url, json=payload, timeout=10)
-                    
-                    if response.status_code == 200:
-                        enviados += 1
-                        print(f"Mensagem enviada para {usuario.first_name}")
-                    else:
-                        print(f"Erro API Telegram: {response.status_code} - {response.text}")
-                        
-                except Exception as e:
-                    print(f"Erro no envio para {usuario.chat_id}: {e}")
-            
-            print(f"Total enviados: {enviados}/{usuarios.count()}")
-            return enviados > 0
-            
-        except Exception as e:
-            print(f"Erro geral no envio Telegram: {e}")
             return False
 
     def recalculate_all_windows(self, station=None):

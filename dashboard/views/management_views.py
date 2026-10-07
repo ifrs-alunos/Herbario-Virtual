@@ -218,57 +218,31 @@ class ManualAlertView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView)
                 calculated_value=float(value)
             )
             
-            telegram_success = self.send_telegram_alert_directly(formatted_message)
-            
-            if telegram_success:
-                messages.success(request, "Alerta manual enviado com sucesso!")
+            enviados, total = self.send_telegram_alert_directly(formatted_message)
+
+            if total == 0:
+                messages.warning(
+                    request,
+                    "Alerta registrado, mas nenhum usuário tem conta vinculada ao Telegram — "
+                    "ninguém foi notificado."
+                )
+            elif enviados:
+                messages.success(request, f"Alerta manual enviado para {enviados} de {total} usuários!")
             else:
                 messages.warning(request, "Alerta criado, mas houve problemas no envio do Telegram.")
-            
+
         except Exception as e:
             messages.error(request, f"Erro ao enviar alerta: {str(e)}")
-        
+
         return redirect('dashboard:manual_alert')
 
     def send_telegram_alert_directly(self, message):
+        """Envia o alerta manual. Retorna (enviados, total)."""
         try:
-            from telegram_bot.models import TelegramUser
-            from django.conf import settings
-            import requests
-            
-            usuarios = TelegramUser.objects.filter(is_active=True)
-            
-            if not usuarios.exists():
-                print("Nenhum usuário cadastrado no Telegram")
-                return False
-            
-            print(f"Enviando para {usuarios.count()} usuários")
-            
-            enviados = 0
-            for usuario in usuarios:
-                try:
-                    url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-                    payload = {
-                        'chat_id': usuario.chat_id,
-                        'text': message,
-                        'parse_mode': 'Markdown'
-                    }
-                    
-                    print(f"Enviando para chat_id: {usuario.chat_id}")
-                    response = requests.post(url, json=payload, timeout=10)
-                    
-                    if response.status_code == 200:
-                        enviados += 1
-                        print(f"Mensagem enviada para {usuario.first_name}")
-                    else:
-                        print(f"Erro API Telegram: {response.status_code} - {response.text}")
-                        
-                except Exception as e:
-                    print(f"Erro no envio para {usuario.chat_id}: {e}")
-            
-            print(f"Total enviados: {enviados}/{usuarios.count()}")
-            return enviados > 0
-            
+            from telegram_bot.services import broadcast_alert
+
+            return broadcast_alert(message)
+
         except Exception as e:
             print(f"Erro geral no envio Telegram: {e}")
-            return False
+            return 0, 0

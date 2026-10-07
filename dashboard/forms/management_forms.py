@@ -4,12 +4,13 @@ from alerts.models import Station, Constant, Requirement
 class StationForm(forms.ModelForm):
     class Meta:
         model = Station
-        fields = ['station_id', 'alias', 'lat_coordinate', 'lon_coordinate', 'description']
+        fields = ['station_id', 'alias', 'lat_coordinate', 'lon_coordinate', 'region', 'description']
         widgets = {
             'station_id': forms.TextInput(attrs={'class': 'form-control'}),
             'alias': forms.TextInput(attrs={'class': 'form-control'}),
             'lat_coordinate': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.000001'}),
             'lon_coordinate': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.000001'}),
+            'region': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
         labels = {
@@ -17,6 +18,7 @@ class StationForm(forms.ModelForm):
             'alias': 'Nome/Alias',
             'lat_coordinate': 'Latitude',
             'lon_coordinate': 'Longitude',
+            'region': 'Região',
             'description': 'Descrição'
         }
 

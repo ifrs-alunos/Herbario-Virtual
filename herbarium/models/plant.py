@@ -31,6 +31,17 @@ class Plant(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def published_photos(self):
+        """Fotos aprovadas por um administrador — as únicas que o site público exibe.
+
+        Espelha Disease.published_photos. Os templates públicos devem usar sempre
+        esta propriedade, e nunca `photos`, senão a foto de um contribuidor entra
+        no ar no instante do envio, sem passar pela fila de revisão.
+        """
+
+        return self.photos.filter(published=True)
+
     def save(self, *args, **kwargs):
         if self.slug == None:
             self.slug = slugify(self.name)

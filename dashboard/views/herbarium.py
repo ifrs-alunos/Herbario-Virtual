@@ -1,4 +1,5 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
 from django.urls import reverse_lazy
@@ -24,6 +25,8 @@ class HerbariumListView(ListView):
         return data
 
 
+@login_required
+@permission_required('herbarium.add_plant', raise_exception=True)
 def plant_solicitation(request):
     """Essa função cria uma solicitação para enviar uma nova planta"""
 
@@ -54,8 +57,13 @@ def plant_solicitation(request):
     return render(request, 'dashboard/plant_solicitation.html', context)
 
 
+# raise_exception=True em vez do redirecionamento padrão para o login: quem chega
+# aqui já está autenticado e apenas não é contribuidor. Mandá-lo ao login seria um
+# laço sem fim.
+@login_required
+@permission_required('herbarium.add_photo', raise_exception=True)
 def photo_solicitation(request):
-    """Essa função cria uma solicitação para enviar uma nova planta"""
+    """Essa função cria uma solicitação para enviar uma nova foto de planta"""
 
     # Se o usuário mandar dados, ou seja, se a requisição for POST
     if request.method == "POST":
@@ -63,8 +71,12 @@ def photo_solicitation(request):
         photo_form = PhotoForm(request.POST, request.FILES)
 
         if photo_form.is_valid():
-            photo = photo_form.save()  # Cria objeto mas nao salva no banco de dados
+            # commit=False é essencial: com photo_form.save() a linha já ia para o
+            # banco e o published=False seguinte só existia em memória — a foto
+            # nascia com NULL e escapava da fila de revisão.
+            photo = photo_form.save(commit=False)
             photo.published = False
+            photo.save()  # Photo.save() gera a small_image
 
             photo_solicitation = PhotoSolicitation(user=request.user, status='sent', new_photo=photo)
             photo_solicitation.save()
@@ -84,7 +96,13 @@ def photo_solicitation(request):
     return render(request, 'dashboard/photo_solicitation.html', context)
 
 
-class PlantSolicitationListView(ListView):
+# As views abaixo — revisão de solicitações de planta, edição e exclusão — não
+# tinham verificação nenhuma até 24/09/2026: um visitante anônimo editava e apagava
+# plantas (com as fotos, em cascata). A permissão de revisar segue a que
+# accept_plant_solicitation já exigia, herbarium.change_plant; apagar a planta exige
+# herbarium.delete_plant. As duas pertencem só ao grupo `admins`.
+class PlantSolicitationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'herbarium.change_plant'
     model = PlantSolicitation
     context_object_name = 'solicitations'
     template_name = 'dashboard/plant_solicitation_list.html'
@@ -103,8 +121,10 @@ class PlantSolicitationListView(ListView):
         return queryset
 
 
+@login_required
+@permission_required('herbarium.change_plant', raise_exception=True)
 def plant_update(request, pk):
-    """Essa função edita uma doença"""
+    """Essa função edita uma planta"""
 
     plant = get_object_or_404(Plant, id=pk)
 
@@ -137,7 +157,8 @@ class PlantDetailView(DetailView):
         return context
 
 
-class PhotoSolicitationListView(ListView):
+class PhotoSolicitationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+    permission_required = 'herbarium.approve_photo'
     model = PhotoSolicitation
     context_object_name = 'solicitations'
     template_name = 'dashboard/photo_solicitation_list.html'
@@ -156,8 +177,9 @@ class PhotoSolicitationListView(ListView):
         return queryset
 
 
-class PlantSolicitationDetailView(DetailView):
-    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+class PlantSolicitationDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    # Tela de revisão: mostra a planta pendente para quem vai decidir sobre ela
+    permission_required = 'herbarium.change_plant'
     model = PlantSolicitation
     template_name = 'dashboard/plant_solicitation_detail.html'
 
@@ -167,8 +189,9 @@ class PlantSolicitationDetailView(DetailView):
         return context
 
 
-class PlantPhotoSolicitationDetailView(DetailView):
-    # Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+class PlantPhotoSolicitationDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+    # Tela de revisão: mostra a foto pendente para quem vai decidir sobre ela
+    permission_required = 'herbarium.approve_photo'
     model = PhotoSolicitation
     template_name = 'dashboard/plant_photo_detail.html'
 
@@ -178,17 +201,21 @@ class PlantPhotoSolicitationDetailView(DetailView):
         return context
 
 
-class PlantDeleteView(DeleteView):
+class PlantDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'herbarium.delete_plant'
     model = Plant
     success_url = reverse_lazy('dashboard:herbarium_update')
 
 
-class PlantSolicitationDeleteView(DeleteView):
+class PlantSolicitationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    # Apagar a solicitação é recusá-la: mesma permissão de quem aprova
+    permission_required = 'herbarium.change_plant'
     model = PlantSolicitation
     success_url = reverse_lazy('dashboard:plant_solicitation_list')
 
 
-class PlantPhotoSolicitationDeleteView(DeleteView):
+class PlantPhotoSolicitationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+    permission_required = 'herbarium.approve_photo'
     model = PhotoSolicitation
     success_url = reverse_lazy('dashboard:photo_solicitation_list')
 
@@ -208,8 +235,21 @@ def accept_plant_solicitation(request, pk):
     return redirect("dashboard:plant_solicitation_list")
 
 
+# NOTA (02/09/2026): aprovar é um GET, e um GET não deveria mudar estado. Na
+# prática isso significa que qualquer coisa que apenas *visite* a URL — o
+# pré-carregamento de link do navegador, um antivírus que abre links de e-mail,
+# uma <img src> hospedada em outro site — pode publicar a foto sem que o revisor
+# tenha clicado. Mantido como está por decisão de escopo; a correção é trocar por
+# POST e virar os links de `photo_solicitation_list.html` em
+# <form method="post">, como os botões de apagar já são. Vale para todas as
+# funções accept_* deste projeto.
+@login_required
+@permission_required('herbarium.approve_photo', raise_exception=True)
 def accept_plant_photo_solicitation(request, pk):
-    if request.method == "GET" and request.user.has_perm('herbarium.change_plant'):
+    # A permissão saiu de change_plant para approve_photo: editar o cadastro de uma
+    # planta e aprovar a foto de um contribuidor são decisões diferentes. O decorador
+    # também troca o antigo "não faz nada e redireciona" por um 403 honesto.
+    if request.method == "GET":
         plant_photo = PhotoSolicitation.objects.filter(id=pk).first()
         plant_photo.status = "accepted"
         plant_photo.save()

@@ -1,3 +1,4 @@
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.text import slugify
 
@@ -32,6 +33,18 @@ class Disease(models.Model):
                                               help_text='Insira as condições ambientais de desenvolvimento')
     references_disease = models.TextField('Referências', blank=True,null=True, help_text='Insira as referências utilizadas')
 
+    # Estados em que a planta pode aparecer nas imagens de treino do modelo de IA.
+    # Cada doença tem os seus: a ferrugem asiática da soja, por exemplo, tem só
+    # "doente" e "saudável". Quem aprova uma imagem escolhe um deles (ver
+    # telegram_bot.services.approve_training_photo).
+    states = ArrayField(
+        models.CharField(max_length=60),
+        default=list,
+        blank=True,
+        verbose_name='Estados da doença',
+        help_text='Separados por vírgula. Ex.: doente,saudável',
+    )
+
     # Dados relacionados à criação e publicação de atualizações
     created_at_disease = models.DateField('Criado em', auto_now_add=True, null=False)
     updated_at_disease = models.DateField('Atualizado em', auto_now=True, null=False)
@@ -42,11 +55,37 @@ class Disease(models.Model):
     def __str__(self):
         return self.name_disease
 
-    # função que retorna uma queryset com fotos aceitas pelo adminstrador
+    @property
     def published_photos(self):
-        return self.photos.all().filter(published=True)
+        """Fotos aprovadas por um administrador — as únicas que o site público exibe.
+
+        Virou `property` para casar com Plant.published_photos: como método, o
+        template chamava sozinho mas o Python devolvia a função. Os templates
+        continuam iguais.
+        """
+
+        return self.photos.filter(published=True)
+
+    def add_state(self, name):
+        """Acrescenta um estado à lista, se ainda não houver um de mesmo nome.
+
+        Devolve o nome como ficou gravado: digitar "Doente" quando já existe
+        "doente" reaproveita o existente.
+        """
+
+        name = name.strip()
+        for existente in self.states:
+            if existente.lower() == name.lower():
+                return existente
+
+        self.states = self.states + [name]
+        self.save(update_fields=['states'])
+        return name
 
     def save(self, *args, **kwargs):
+        # Sem espaços nas pontas e sem itens vazios ("doente, ,saudável")
+        self.states = [state.strip() for state in self.states if state and state.strip()]
+
         if self.slug is None:
             self.slug = slugify(self.name_disease)
 

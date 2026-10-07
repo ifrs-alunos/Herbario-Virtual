@@ -63,6 +63,10 @@
                             Solicitações de planta
                         </a>
                     </li>
+                    {% endif %}
+
+                    {# Aprovar foto deixou de depender de change_plant #}
+                    {% if perms.herbarium.approve_photo %}
                     <li class="list-group-item">
                         <a id="{% if link == 'photo-solicitation-list' %}selected-link{% endif %}" href="{% url 'dashboard:photo_solicitation_list' %}">
                             Solicitações de foto
@@ -107,6 +111,10 @@
                             Solicitações de doenças
                         </a>
                     </li>
+                    {% endif %}
+
+                    {# Aprovar foto deixou de depender de change_disease #}
+                    {% if perms.disease.approve_photodisease %}
                     <li class="list-group-item">
                         <a id="{% if link == 'disease-photo-solicitation-list' %}selected-link{% endif %}" href="{% url 'dashboard:disease_photo_solicitation_list' %}">
                             Solicitações de foto
@@ -168,7 +176,11 @@
     {% endif %}
 
     <!-- ALERTAS - TODOS OS ITENS DO DASHBOARD AQUI -->
-    {% if perms.alerts.view_mathmodel or perms.alerts.view_station or perms.alerts.view_constant or perms.alerts.view_requirement %}
+    {% comment %}
+    Visível a todo usuário logado: "Pontos de Interesse" e "Cadastro no Telegram"
+    são do próprio usuário. Os itens de gestão continuam presos às permissões.
+    {% endcomment %}
+    {% if user.is_authenticated %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingEight">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -226,13 +238,24 @@
                     {% endif %}
 
                     <!-- Alertas Manuais -->
-                    {% if perms.alerts.add_manualalert %}
+                    {% comment %}
+                    add_manualalert não existe: não há modelo ManualAlert. A view
+                    ManualAlertView exige alerts.add_alerthistory.
+                    {% endcomment %}
+                    {% if perms.alerts.add_alerthistory %}
                     <li class="list-group-item">
                         <a id="{% if link == 'manual_alert' %}selected-link{% endif %}" href="{% url 'dashboard:manual_alert' %}">
                             Alertas Manuais
                         </a>
                     </li>
                     {% endif %}
+
+                    <!-- Pontos de interesse -->
+                    <li class="list-group-item">
+                        <a id="{% if link == 'interest_point_list' %}selected-link{% endif %}" href="{% url 'dashboard:interest_point_list' %}">
+                            Pontos de Interesse
+                        </a>
+                    </li>
 
                     <!-- Telegram -->
                     <li class="list-group-item">
@@ -290,7 +313,14 @@
     {% endif %}
 
     <!-- MÓDULOS EM DESENVOLVIMENTO -->
-    {% if perms.core.view_mathmodel %}
+    {% comment %}
+    MathModel está no app alerts, não em core — perms.core.view_mathmodel era
+    sempre falso e a seção nunca aparecia, nem para superusuário.
+
+    A seção aparece também para quem revisa as imagens de treino do bot (grupo
+    admins), mas os links antigos continuam restritos a view_mathmodel.
+    {% endcomment %}
+    {% if perms.alerts.view_mathmodel or perms.telegram_bot.approve_telegramphoto %}
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingTwenty">
             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -302,6 +332,14 @@
              data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
                 <ul class="list-group">
+                    {% if perms.telegram_bot.approve_telegramphoto %}
+                    <li class="list-group-item">
+                        <a id="{% if link == 'ai-model-review' %}selected-link{% endif %}" href="{% url 'dashboard:ai_model_review' %}">
+                            Modelos de IA
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if perms.alerts.view_mathmodel %}
                     <li class="list-group-item">
                         <a id="{% if link == 'seila' %}selected-link{% endif %}" href="{% url 'alerts:collect_data_cepadi' %}">
                             Url cepadi
@@ -317,6 +355,7 @@
                             Mapa
                         </a>
                     </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>

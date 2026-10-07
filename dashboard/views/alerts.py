@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.utils.timezone import localtime, now
 from django.views.generic import CreateView, UpdateView, ListView, DeleteView
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib import messages
 from django.db import transaction
@@ -160,8 +161,16 @@ class SensorHumanListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Sensor.objects.filter(type__metric='human')
 
+@login_required
+@permission_required('alerts.add_reading', raise_exception=True)
 def create_sensor_human(request, pk):
-    """Função que cria um novo sensor humano"""
+    """Função que cria um novo sensor humano.
+
+    Grava uma Reading, que dispara o processamento de alertas pelos signals de
+    alerts — e pode terminar em mensagem do Telegram para usuários reais. Até
+    24/09/2026 não exigia login. A gestão de alertas é restrita a superusuário
+    (ver accounts/permissions.py), e alerts.add_reading segue essa regra.
+    """
     if request.method == "POST":
         updated_request = request.POST.copy()
         if updated_request.get('choice'):

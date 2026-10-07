@@ -6,6 +6,7 @@ from .requirement import Requirement
 from .mathmodel_requirement import MathModelRequirement
 from .alert_history import AlertHistory
 from .station import Station
+from .interest_point import InterestPoint
 from .sensor import Sensor
 from .math_model import MathModel
 from .reading import Reading
@@ -23,6 +24,7 @@ __all__ = [
     "MathModelRequirement",
     "AlertHistory",
     "Station",
+    "InterestPoint",
     "Sensor",
     "MathModel",
     "Reading",

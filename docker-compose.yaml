@@ -1,6 +1,7 @@
 services:
   labfito:
     build: .
+    platform: linux/amd64
     volumes:
       - .:/code
     ports:
@@ -10,8 +11,20 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+  bot:
+    build: .
+    platform: linux/amd64
+    command: python manage_bot.py
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+    env_file:
+      - .env
+    restart: unless-stopped
   db:
     image: postgres:16
+    platform: linux/amd64
     ports:
       - "5432:5432"
     env_file:

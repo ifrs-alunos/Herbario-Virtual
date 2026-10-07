@@ -1,9 +1,35 @@
+import re
+
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 
 User = get_user_model()
+
+# 5 a 32 caracteres, letras/números/underscore — a regra do próprio Telegram.
+TELEGRAM_USERNAME_RE = re.compile(r'^[A-Za-z0-9_]{5,32}$')
+
+
+def normalize_telegram_username(value):
+    """Reduz o que o usuário digitou à forma canônica do @ do Telegram.
+
+    '@Fulano', 'https://t.me/Fulano' e ' Fulano ' viram todos 'fulano'. Vazio
+    vira None — o campo é unique, e só NULL pode se repetir entre os perfis.
+
+    Guardar sempre em minúsculas é o que faz o unique do banco valer como
+    comparação case-insensitive: o Telegram não distingue @Fulano de @fulano.
+    """
+
+    if not value:
+        return None
+
+    value = str(value).strip()
+
+    # Aceita o link do perfil, que é o que o app do Telegram copia
+    value = re.sub(r'^(https?://)?(t\.me|telegram\.me)/', '', value, flags=re.IGNORECASE)
+    value = value.lstrip('@').strip()
+
+    return value.lower() or None
+
 
 class Profile(models.Model):
     user = models.OneToOneField(
@@ -22,6 +48,18 @@ class Profile(models.Model):
         null=True,
         blank=True
     )
+    # Chave do vínculo com o bot: o /start compara este valor com o @ que a API
+    # do Telegram informa. Quem declara o vínculo é o dono da conta do Labfito,
+    # e não quem chega no bot. Ver telegram_bot/services.link_by_telegram_username().
+    telegram_username = models.CharField(
+        max_length=32,
+        unique=True,
+        null=True,
+        blank=True,
+        verbose_name="Usuário do Telegram",
+        help_text=("Seu @ no Telegram, sem o @. Opcional — necessário apenas "
+                   "para receber os alertas pelo bot.")
+    )
     whatsapp_enabled = models.BooleanField(
         default=False,
         verbose_name="Receber alertas por WhatsApp"
@@ -37,7 +75,7 @@ class Profile(models.Model):
     cpf = models.CharField(max_length=11, verbose_name="CPF")
     rg = models.CharField(max_length=10, verbose_name="RG")
     alerts_for_diseases = models.ManyToManyField(
-        "disease.Disease", 
+        "disease.Disease",
         blank=True,
         verbose_name="Doenças para alerta"
     )
@@ -45,6 +83,12 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.user.username})"
+
+    def save(self, *args, **kwargs):
+        # Normaliza aqui, e não só no formulário, para que admin, shell e bot
+        # gravem sempre a mesma forma canônica — é dela que o unique depende.
+        self.telegram_username = normalize_telegram_username(self.telegram_username)
+        super().save(*args, **kwargs)
 
     def send_alert(self, disease):
         """Envia alerta para o usuário"""
@@ -73,14 +117,6 @@ class Profile(models.Model):
         profile, created = cls.objects.get_or_create(user=user)
         return profile
 
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-    """Cria perfil automaticamente para novo usuário"""
-    if created:
-        Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    """Salva perfil quando usuário é salvo"""
-    if hasattr(instance, 'profile'):
-        instance.profile.save()
+# Os signals que criam/salvam o Profile ficam em accounts/signals.py.
+# Declará-los aqui também conectava dois receivers extras em post_save, e o
+# Profile.objects.create() deles colidia com o OneToOneField no cadastro.

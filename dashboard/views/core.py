@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
 from django.urls import reverse_lazy
@@ -8,8 +10,11 @@ from ..forms import  PublicationForm, PublicationPhotoForm
 from core.models import Publication
 
 
-
-class PublicationListView(ListView):
+# Até 24/09/2026 estas views não tinham verificação nenhuma: um visitante anônimo
+# criava, editava e apagava publicações. Protegidas com as permissões do próprio
+# modelo (core.*_publication). Ver a seção 2.9/5.6 do balanço de 24/09/2026.
+class PublicationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+	permission_required = 'core.view_publication'
 	model = Publication
 	context_object_name = 'publications'
 	template_name = 'dashboard/publication_update.html'
@@ -23,8 +28,10 @@ class PublicationListView(ListView):
 		return data
 
 
+@login_required
+@permission_required('core.change_publication', raise_exception=True)
 def publication_update(request, pk):
-	"""Essa função cria uma solicitação para cadastrar uma nova publicação"""
+	"""Essa função edita uma publicação"""
 
 	publication = get_object_or_404(Publication, id=pk)
 
@@ -46,7 +53,8 @@ def publication_update(request, pk):
 	return render(request, 'dashboard/publication_add.html', context)
 
 
-class PublicationCreateView(CreateView):
+class PublicationCreateView(LoginRequiredMixin, PermissionRequiredMixin, CreateView):
+	permission_required = 'core.add_publication'
 	model = Publication
 	fields = ['title', 'content']
 	template_name = "dashboard/publication_add.html"
@@ -58,11 +66,14 @@ class PublicationCreateView(CreateView):
 		return context
 
 
-class PublicationDeleteView(DeleteView):
+class PublicationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	permission_required = 'core.delete_publication'
 	model = Publication
 	success_url = reverse_lazy('dashboard:publication_update')
 
 
+@login_required
+@permission_required('core.add_publication', raise_exception=True)
 def publication_photo_solicitation(request):
 	"""Essa função cria uma imagem de uma publicação"""
 

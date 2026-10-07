@@ -1,4 +1,6 @@
 
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 
 from django.urls import reverse_lazy
@@ -10,7 +12,12 @@ from ..forms import CultureSolicitationModelForm
 from disease.models import Culture
 
 
-
+# Até 24/09/2026 estas quatro views não tinham verificação nenhuma: um visitante
+# anônimo criava, editava, listava e — o mais grave — apagava culturas. Apagar uma
+# cultura cascateia sobre as doenças dela (Disease.culture_disease, on_delete=CASCADE)
+# e sobre as fotos dessas doenças. Ver a seção 2.9/5.6 do balanço de 24/09/2026.
+@login_required
+@permission_required('disease.add_culture', raise_exception=True)
 def culture_solicitation(request):
 	"""Essa função cria uma solicitação para cadastrar uma nova cultura"""
 
@@ -37,8 +44,10 @@ def culture_solicitation(request):
 	return render(request, 'dashboard/culture_solicitation.html', context)
 
 
+@login_required
+@permission_required('disease.change_culture', raise_exception=True)
 def culture_update(request, pk):
-	"""Essa função cria uma solicitação para cadastrar uma nova doença"""
+	"""Essa função edita uma cultura"""
 
 	culture = get_object_or_404(Culture, id=pk)
 
@@ -59,13 +68,15 @@ def culture_update(request, pk):
 
 	return render(request, 'dashboard/culture_solicitation.html', context)
 
-class CultureDeleteView(DeleteView):
+class CultureDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	permission_required = 'disease.delete_culture'
 	model = Culture
 	success_url = reverse_lazy('dashboard:culture_list')
 
 
 
-class CultureListView(ListView):
+class CultureListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+	permission_required = 'disease.view_culture'
 	model = Culture
 	context_object_name = 'culture'
 	template_name = 'dashboard/culture_list.html'

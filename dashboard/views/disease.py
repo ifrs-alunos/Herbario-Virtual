@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, DeleteView
@@ -8,6 +10,11 @@ from disease.models import Disease
 from disease.forms import DiseaseForm, DiseasePhotoForm
 
 
+# Mesmo padrão de plant_solicitation (dashboard/views/herbarium.py). Até 24/09/2026
+# não havia verificação: qualquer usuário logado pedia doença nova, e um anônimo
+# chegava a gravar a doença antes de a view quebrar ao montar a solicitação.
+@login_required
+@permission_required('disease.add_disease', raise_exception=True)
 def disease_solicitation(request):
 	"""Essa função cria uma solicitação para cadastrar uma nova doença"""
 
@@ -36,8 +43,14 @@ def disease_solicitation(request):
 	return render(request, 'dashboard/disease_solicitation.html', context)
 
 
+# Ver o comentário sobre PlantSolicitationListView em dashboard/views/herbarium.py:
+# as views de edição, exclusão e revisão de doença também estavam abertas a
+# anônimos até 24/09/2026. Revisar exige disease.change_disease (a mesma que
+# accept_disease_solicitation já checava); apagar exige disease.delete_disease.
+@login_required
+@permission_required('disease.change_disease', raise_exception=True)
 def disease_update(request, pk):
-	"""Essa função cria uma solicitação para cadastrar uma nova doença"""
+	"""Essa função edita uma doença"""
 
 	disease = get_object_or_404(Disease, id=pk)
 
@@ -58,6 +71,9 @@ def disease_update(request, pk):
 	return render(request, 'dashboard/disease_solicitation.html', context)
 
 
+# Ver o comentário equivalente em dashboard/views/herbarium.py sobre raise_exception.
+@login_required
+@permission_required('disease.add_photodisease', raise_exception=True)
 def disease_photo_solicitation(request):
 	"""Essa função cria uma solicitação para enviar uma imagem de uma doença"""
 
@@ -67,8 +83,11 @@ def disease_photo_solicitation(request):
 		disease_photo_form = DiseasePhotoForm(request.POST, request.FILES)
 
 		if disease_photo_form.is_valid():
-			disease_photo = disease_photo_form.save()  # Cria objeto mas nao salva no banco de dados
+			# commit=False: sem isso a linha já ia para o banco e o published=False
+			# seguinte só existia em memória. Ver herbarium.photo_solicitation.
+			disease_photo = disease_photo_form.save(commit=False)
 			disease_photo.published = False
+			disease_photo.save()  # PhotoDisease.save() gera a small_image
 
 			disease_photo_solicitation = DiseasePhotoSolicitation(user=request.user, status='sent',
 																  new_photo=disease_photo)
@@ -89,7 +108,8 @@ def disease_photo_solicitation(request):
 	return render(request, 'dashboard/disease_photo_solicitation.html', context)
 
 
-class DiseasePhotoSolicitationListView(ListView):
+class DiseasePhotoSolicitationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+	permission_required = 'disease.approve_photodisease'
 	model = DiseasePhotoSolicitation
 	context_object_name = 'solicitations'
 	template_name = 'dashboard/disease_photo_solicitation_list.html'
@@ -122,26 +142,10 @@ class DiseaseListView(ListView):
 		return data
 
 
-class DiseaseSolicitationListView(ListView):
-	model = DiseaseSolicitation
-	context_object_name = 'solicitations'
-	template_name = 'dashboard/disease_solicitation_list.html'
-
-	def get_context_data(self, **kwargs):
-		data = super().get_context_data(**kwargs)
-
-		data['link'] = 'disease-solicitation-list'  # Cria novo contexto
-
-		return data
-
-	def get_queryset(self):  # Filtra as solicitações que estão com o status "enviada"
-		queryset = super().get_queryset()
-		queryset = queryset.filter(status=DiseaseSolicitation.Status.SENT)
-
-		return queryset
-
-
-class DiseaseSolicitationListView(ListView):
+# Esta classe estava definida duas vezes, idênticas, neste arquivo. Em Python vale a
+# segunda — proteger só a primeira deixaria a lista aberta. Ficou uma só.
+class DiseaseSolicitationListView(LoginRequiredMixin, PermissionRequiredMixin, ListView):
+	permission_required = 'disease.change_disease'
 	model = DiseaseSolicitation
 	context_object_name = 'solicitations'
 	template_name = 'dashboard/disease_solicitation_list.html'
@@ -171,8 +175,9 @@ class DiseaseDetailView(DetailView):
 		return context
 
 
-class DiseaseSolicitationDetailView(DetailView):
-	# Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+class DiseaseSolicitationDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+	# Tela de revisão: mostra a doença pendente para quem vai decidir sobre ela
+	permission_required = 'disease.change_disease'
 	model = DiseaseSolicitation
 	template_name = 'dashboard/disease_solicitation_detail.html'
 
@@ -182,8 +187,9 @@ class DiseaseSolicitationDetailView(DetailView):
 		return context
 
 
-class DiseasePhotoSolicitationDetailView(DetailView):
-	# Mostra detalhes de uma doença em específico. Passa no contexto os dados de UMA doença
+class DiseasePhotoSolicitationDetailView(LoginRequiredMixin, PermissionRequiredMixin, DetailView):
+	# Tela de revisão: mostra a foto pendente para quem vai decidir sobre ela
+	permission_required = 'disease.approve_photodisease'
 	model = DiseasePhotoSolicitation
 	template_name = 'dashboard/disease_photo_solicitation_detail.html'
 
@@ -193,17 +199,21 @@ class DiseasePhotoSolicitationDetailView(DetailView):
 		return context
 
 
-class DiseaseSolicitationDeleteView(DeleteView):
+class DiseaseSolicitationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	# Apagar a solicitação é recusá-la: mesma permissão de quem aprova
+	permission_required = 'disease.change_disease'
 	model = DiseaseSolicitation
 	success_url = reverse_lazy('dashboard:disease_solicitation_list')
 
 
-class DiseasePhotoSolicitationDeleteView(DeleteView):
+class DiseasePhotoSolicitationDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	permission_required = 'disease.approve_photodisease'
 	model = DiseasePhotoSolicitation
 	success_url = reverse_lazy('dashboard:disease_photo_solicitation_list')
 
 
-class DiseaseDeleteView(DeleteView):
+class DiseaseDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
+	permission_required = 'disease.delete_disease'
 	model = Disease
 	success_url = reverse_lazy('dashboard:disease_update')
 
@@ -223,8 +233,20 @@ def accept_disease_solicitation(request, pk):
 	return redirect("dashboard:disease_solicitation_list")
 
 
+# NOTA (02/09/2026): aprovar é um GET, e um GET não deveria mudar estado. Na
+# prática isso significa que qualquer coisa que apenas *visite* a URL — o
+# pré-carregamento de link do navegador, um antivírus que abre links de e-mail,
+# uma <img src> hospedada em outro site — pode publicar a foto sem que o revisor
+# tenha clicado. Mantido como está por decisão de escopo; a correção é trocar por
+# POST e virar os links de `disease_photo_solicitation_list.html` em
+# <form method="post">, como os botões de apagar já são. Vale para todas as
+# funções accept_* deste projeto.
+@login_required
+@permission_required('disease.approve_photodisease', raise_exception=True)
 def accept_disease_photo_solicitation(request, pk):
-	if request.method == "GET" and request.user.has_perm('disease.change_disease'):
+	# Permissão trocada de change_disease para approve_photodisease — ver o
+	# comentário equivalente em dashboard/views/herbarium.py.
+	if request.method == "GET":
 		photo_disease = DiseasePhotoSolicitation.objects.filter(id=pk).first()
 		photo_disease.status = "accepted"
 		photo_disease.save()

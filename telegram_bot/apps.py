@@ -6,4 +6,5 @@ class TelegramBotConfig(AppConfig):
     verbose_name = 'Bot do Telegram'
     
     def ready(self):
-        pass
+        # Registra o receiver que mantém o vínculo em dia quando o perfil muda
+        import telegram_bot.signals  # noqa: F401

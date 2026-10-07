@@ -4,6 +4,9 @@
     <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+            <!-- Os tiles do OpenStreetMap pedem o Referer do site (política de uso). O
+                 Django manda só "same-origin"; aqui a página libera a origem, sem o caminho. -->
+            <meta name="referrer" content="strict-origin-when-cross-origin">
 
             <!-- Ícone favicon -->
             <link rel="icon" type="image/png" href="{% static 'core/images/favicon2.png' %}"/>
@@ -39,6 +42,7 @@
         <link rel="stylesheet" href="{% static 'alerts/css/map.css' %}"/>
     </head>
     <body>
+        {{ interest_points|json_script:"interest-points-data" }}
         <div id="map" style="">
         </div>
 
@@ -172,13 +176,9 @@
           bsOffcanvas.show();
       }, 'Barra lateral de ações', 'labfito-sidebar').addTo( map );
 
-        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-            maxZoom: 18,
-            id: 'mapbox/streets-v11',
-            tileSize: 512,
-            zoomOffset: -1,
-            accessToken: 'pk.eyJ1IjoiZm0tbGVvbmFyZG8iLCJhIjoiY2t3cHZuNXl6MGdwNzJ2bThmMHpqbmlnNiJ9.uX-B9pNeRXPtHt3zs2kTEg'
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 19
         }).addTo(map);
         function return_color(station_id) {
             let marker = greenMarker;
@@ -274,6 +274,41 @@
         {% for station in stations %}
             L.circle({{ station.lat_lon }}, {stroke: false}).addTo(map)
         {% endfor %}
+
+        {# Pontos de interesse do usuário logado, com o raio de cada um #}
+        const interestPointMarker = L.AwesomeMarkers.icon({
+            prefix: 'fa',
+            extraClasses: 'fa-solid',
+            icon: 'fa-location-dot',
+            markerColor: 'blue'
+        });
+        const interestPointsData = JSON.parse(document.getElementById('interest-points-data').textContent);
+        const interestPoints = L.layerGroup();
+        interestPointsData.forEach(function (point) {
+            const tooltip = document.createElement('div');
+            [['b', point.name], ['span', point.kind + ': ' + point.location], ['span', 'Raio de interesse: ' + point.radius_km + ' km']]
+                .forEach(function ([tag, text], i) {
+                    if (i) tooltip.appendChild(document.createElement('br'));
+                    const el = document.createElement(tag);
+                    el.textContent = text;
+                    tooltip.appendChild(el);
+                });
+            L.marker([point.lat, point.lon], {icon: interestPointMarker, zIndexOffset: 1000})
+                .bindTooltip(tooltip)
+                .addTo(interestPoints);
+            L.circle([point.lat, point.lon], {
+                radius: point.radius_km * 1000,
+                color: '#2a81cb', weight: 2, dashArray: '6 6', fillOpacity: 0.06, interactive: false
+            }).addTo(interestPoints);
+        });
+        interestPoints.addTo(map);
+
+        if (interestPointsData.length) {
+            L.control.layers(null, {
+                'Estações': stations,
+                'Meus pontos de interesse': interestPoints
+            }, {position: 'topright', collapsed: false}).addTo(map);
+        }
     </script>
      <script>
          function add_active_class(a) {

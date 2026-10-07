@@ -18,6 +18,7 @@ from .models import (
     UserAlert,
     AlertHistory,
     MathModelRequirement,
+    InterestPoint,
 )
 
 class MathModelForm(forms.ModelForm):
@@ -228,9 +229,16 @@ class ReportAdmin(admin.ModelAdmin):
 
 @admin.register(Station)
 class StationAdmin(admin.ModelAdmin):
-    list_display = ('alias', 'station_id', 'lat_coordinate', 'lon_coordinate')
-    list_filter = ('alias',)
+    list_display = ('alias', 'station_id', 'region', 'lat_coordinate', 'lon_coordinate')
+    list_filter = ('alias', 'region')
     search_fields = ('alias', 'station_id', 'description')
+
+@admin.register(InterestPoint)
+class InterestPointAdmin(admin.ModelAdmin):
+    list_display = ('name', 'profile', 'kind', 'radius_km', 'station', 'latitude', 'longitude')
+    list_filter = ('kind',)
+    search_fields = ('name', 'address', 'profile__name', 'profile__user__username')
+    raw_id_fields = ('profile',)
 
 @admin.register(TypeSensor)
 class TypeSensorAdmin(admin.ModelAdmin):

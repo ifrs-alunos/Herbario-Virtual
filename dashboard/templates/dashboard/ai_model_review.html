@@ -1,0 +1,187 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block item %}
+    <h5>Modelos de IA — imagens de treino aguardando aprovação</h5>
+    <p class="text-muted">
+        Imagens enviadas ao bot do Telegram para treinar o modelo, com a descrição de quem enviou.
+        Para aprovar, escolha a planta, a doença e o estado: a imagem vai para
+        <code>media-ia/training/approved/</code> com o nome <code>data_chatid_planta_doenca_estado</code>.
+        Reprovar exclui o arquivo, mas a decisão fica registrada. Imagens para teste não passam por aqui.
+        <br>Já aprovadas: {{ approved_total }}. Reprovadas: {{ rejected_total }}.
+        {% if awaiting_description_total %}
+            Aguardando a descrição de quem enviou: {{ awaiting_description_total }}.
+        {% endif %}
+    </p>
+
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if photos and not cultures %}
+        <div class="alert alert-warning" role="alert">
+            Nenhuma planta (cultura) cadastrada. Cadastre a planta e a doença antes de aprovar imagens.
+        </div>
+    {% endif %}
+
+    {% if photos %}
+        <div class="row">
+            {% for photo in photos %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <a href="{% url 'dashboard:ai_model_photo_file' photo.pk %}" target="_blank" rel="noopener">
+                            <img src="{% url 'dashboard:ai_model_photo_file' photo.pk %}" class="card-img-top"
+                                 alt="Imagem #{{ photo.pk }}" loading="lazy"
+                                 style="height: 200px; object-fit: cover;">
+                        </a>
+                        <div class="card-body">
+                            <p class="card-text mb-1">
+                                <strong>#{{ photo.pk }}</strong> ·
+                                {% with profile=photo.telegram_user.profile %}
+                                    {% if profile %}{{ profile.name|default:profile.user.username }}{% else %}{{ photo.telegram_user }}{% endif %}
+                                {% endwith %}
+                            </p>
+                            <p class="card-text text-muted small mb-1">
+                                {{ photo.received_at|date:"d/m/Y H:i" }}
+                                {% if photo.width %} · {{ photo.width }}×{{ photo.height }}{% endif %}
+                            </p>
+                            {% if photo.description %}
+                                <p class="card-text small mb-1"><strong>Descrição:</strong> {{ photo.description|linebreaksbr }}</p>
+                            {% else %}
+                                <p class="card-text small text-muted mb-1">Sem descrição.</p>
+                            {% endif %}
+                            {% if photo.caption %}
+                                <p class="card-text small text-muted">Legenda: {{ photo.caption|truncatechars:120 }}</p>
+                            {% endif %}
+                        </div>
+                        <div class="card-footer">
+                            <form method="post" action="{% url 'dashboard:ai_model_photo_approve' photo.pk %}"
+                                  class="js-approval mb-2">
+                                {% csrf_token %}
+                                <div class="mb-2">
+                                    <label class="form-label small mb-0" for="culture-{{ photo.pk }}">Planta</label>
+                                    <select class="form-select form-select-sm js-culture" name="culture"
+                                            id="culture-{{ photo.pk }}" required>
+                                        <option value="">Escolha…</option>
+                                        {% for culture in cultures %}
+                                            <option value="{{ culture.pk }}">{{ culture.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small mb-0" for="disease-{{ photo.pk }}">Doença</label>
+                                    <select class="form-select form-select-sm js-disease" name="disease"
+                                            id="disease-{{ photo.pk }}" required disabled>
+                                        <option value="">Escolha a planta primeiro</option>
+                                    </select>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label small mb-0" for="state-{{ photo.pk }}">Estado</label>
+                                    <select class="form-select form-select-sm js-state" name="state"
+                                            id="state-{{ photo.pk }}" disabled>
+                                        <option value="">Escolha a doença primeiro</option>
+                                    </select>
+                                    <input type="text" class="form-control form-control-sm mt-1 js-new-state"
+                                           name="new_state" maxlength="60" disabled
+                                           placeholder="ou digite um novo estado (ex.: saudável)"
+                                           aria-label="Novo estado">
+                                </div>
+                                <button type="submit" class="btn btn-sm"
+                                        style="background-color: #A6DDA6; color: green;">
+                                    <i class="fa fa-square-check" aria-hidden="true"></i> Aprovar
+                                </button>
+                            </form>
+                            <form method="post" action="{% url 'dashboard:ai_model_photo_reject' photo.pk %}"
+                                  onsubmit="return confirm('Reprovar a imagem #{{ photo.pk }}? O arquivo será excluído.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm"
+                                        style="background-color: #ffa4a4; color: #c13b3b;">
+                                    <i class="fa fa-times" aria-hidden="true"></i> Reprovar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+            <nav aria-label="Páginas">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a></li>
+                    {% endif %}
+                    <li class="page-item disabled">
+                        <span class="page-link">{{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Próxima</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="alert alert-warning" role="alert">
+            Nenhuma imagem de treino aguardando aprovação no momento.
+        </div>
+    {% endif %}
+
+    {{ catalog|json_script:"ai-model-catalog" }}
+    <script>
+        // Doença filtrada pela planta, estado filtrado pela doença. O servidor
+        // valida de novo (AIModelApprovalForm): isto só evita escolhas impossíveis.
+        (function () {
+            var catalog = JSON.parse(document.getElementById('ai-model-catalog').textContent);
+
+            // items: [{value, label}]
+            function fill(select, items, placeholder) {
+                select.innerHTML = '';
+                var first = document.createElement('option');
+                first.value = '';
+                first.textContent = placeholder;
+                select.appendChild(first);
+                items.forEach(function (item) {
+                    var option = document.createElement('option');
+                    option.value = item.value;
+                    option.textContent = item.label;
+                    select.appendChild(option);
+                });
+            }
+
+            function findDisease(id) {
+                return catalog.diseases.filter(function (d) { return String(d.id) === id; })[0];
+            }
+
+            document.querySelectorAll('.js-approval').forEach(function (form) {
+                var culture = form.querySelector('.js-culture');
+                var disease = form.querySelector('.js-disease');
+                var state = form.querySelector('.js-state');
+                var newState = form.querySelector('.js-new-state');
+
+                culture.addEventListener('change', function () {
+                    var diseases = catalog.diseases
+                        .filter(function (d) { return String(d.culture) === culture.value; })
+                        .map(function (d) { return {value: d.id, label: d.name}; });
+                    fill(disease, diseases, diseases.length ? 'Escolha…' : 'Nenhuma doença cadastrada para esta planta');
+                    disease.disabled = !culture.value || !diseases.length;
+                    fill(state, [], 'Escolha a doença primeiro');
+                    state.disabled = true;
+                    newState.disabled = true;
+                });
+
+                disease.addEventListener('change', function () {
+                    var chosen = findDisease(disease.value);
+                    var states = (chosen ? chosen.states : []).map(function (e) { return {value: e, label: e}; });
+                    fill(state, states, states.length ? 'Escolha…' : 'Nenhum estado cadastrado — digite abaixo');
+                    state.disabled = !disease.value || !states.length;
+                    newState.disabled = !disease.value;
+                });
+
+                // Um ou outro: escolher um estado existente limpa o novo, e vice-versa
+                state.addEventListener('change', function () { if (state.value) { newState.value = ''; } });
+                newState.addEventListener('input', function () { if (newState.value) { state.value = ''; } });
+            });
+        })();
+    </script>
+{% endblock %}

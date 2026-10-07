@@ -1,4 +1,4 @@
-from .profile import Profile
+from .profile import Profile, normalize_telegram_username
 from .solicitation import Solicitation
 # from .plant_solicitation import PlantSolicitation
 # from .photo_solicitation import PhotoSolicitation

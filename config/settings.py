@@ -143,6 +143,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = "/media/"
 
+# Imagens recebidas pelo bot do Telegram para o modelo de IA, separadas por uso
+# em training/ e test/. Ficam fora do MEDIA_ROOT porque não são servidas pelo
+# site: o banco guarda só o caminho relativo a esta pasta. Ver telegram_bot/storage.py
+AI_MEDIA_ROOT = os.path.join(BASE_DIR, "media-ia")
+
+# Sem isto o Django usa o padrão "/accounts/login/", que dá 404: config/urls.py
+# não inclui accounts.urls (esse app é código morto). O efeito era todo
+# @login_required / LoginRequiredMixin mandar o visitante para uma página
+# inexistente em vez da tela de login.
+LOGIN_URL = "/painel/login/"
+
 LOGIN_REDIRECT_URL = "/painel/"
 
 LOGOUT_REDIRECT_URL = "/painel/login/"
@@ -150,10 +161,17 @@ LOGOUT_REDIRECT_URL = "/painel/login/"
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
 
-TELEGRAM_BOT_USERNAME = "labfito_bot"
+# Usado nas mensagens do bot para apontar o usuário ao cadastro do sistema.
+SITE_URL = os.getenv('SITE_URL', 'https://labfito.vacaria.ifrs.edu.br')
 
-# Telegram Bot Configuration - Use environment variables for security
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '7688297430:AAH_xolKyVwXlMVRrF9AXioh0vryMV00lWg')
+# Bot do Telegram. Cada ambiente usa o seu, definido no .env:
+#   produção -> labfito_vacaria_bot (padrão abaixo)
+#   local    -> labfito_teste_bot
+# O token NUNCA vai no código: o repositório é público. Sem TELEGRAM_BOT_TOKEN
+# no ambiente, o bot não sobe e nenhuma mensagem é enviada.
+TELEGRAM_BOT_USERNAME = os.getenv('TELEGRAM_BOT_USERNAME', 'labfito_vacaria_bot')
+
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '')
 
 TELEGRAM_API_URL = "https://api.telegram.org/bot"
 
