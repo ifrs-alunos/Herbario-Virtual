@@ -1,10 +1,12 @@
 """Grupos padrão do sistema e as permissões de cada um.
 
-Este dicionário é a **fonte da verdade** sobre o que cada grupo pode fazer: o
-receiver abaixo sincroniza os grupos com ele a cada `post_migrate`, o que
-significa que uma permissão concedida à mão pelo `/admin/` a um destes três
-grupos será desfeita na próxima migração. Para conceder algo pontual a uma
-pessoa, use as permissões individuais do usuário — não mexa nos grupos.
+Este dicionário é o **mínimo** que cada grupo precisa ter: o receiver abaixo
+acrescenta aos grupos, a cada `post_migrate`, as permissões daqui que estiverem
+faltando. Ele **nunca remove** permissões: o que foi concedido à mão pelo
+`/admin/` continua valendo. Em produção, os grupos já tinham muito mais
+permissões do que este dicionário antes de ele existir, e um deploy não pode
+tirá-las de quem as usa. Para retirar uma permissão de um grupo, faça isso pelo
+`/admin/` — tirá-la só daqui não basta.
 
 As permissões são atribuídas em `post_migrate` — e não numa data migration — porque
 as linhas de `auth.Permission` só são criadas pelo receiver `create_permissions` do
@@ -104,7 +106,10 @@ GROUP_PERMISSIONS = {
 
 
 def ensure_default_groups(sender=None, **kwargs):
-    """Cria os grupos padrão e sincroniza suas permissões. Idempotente.
+    """Cria os grupos padrão e acrescenta as permissões que faltam. Idempotente.
+
+    Só acrescenta: permissões que o grupo já tem e não estão no dicionário ficam
+    como estão (ver o docstring do módulo).
 
     Conectado a `post_migrate` sem `sender` (ver accounts/apps.py), então roda uma
     vez por app instalado. É de propósito: as permissões de `herbarium` e `disease`
@@ -131,15 +136,9 @@ def ensure_default_groups(sender=None, **kwargs):
 
         entries = GROUP_PERMISSIONS.get(name, [])
 
-        if not entries:
-            group.permissions.clear()
-            continue
+        # Permissão de app ainda não migrado nesta passada fica para uma passada
+        # seguinte, quando ela já existir.
+        permissions = [existentes[entry] for entry in entries if entry in existentes]
 
-        try:
-            permissions = [existentes[entry] for entry in entries]
-        except KeyError:
-            # App ainda não migrado nesta passada. Sair sem tocar no grupo: um
-            # set() com a lista incompleta apagaria o que já estava correto.
-            continue
-
-        group.permissions.set(permissions)
+        if permissions:
+            group.permissions.add(*permissions)

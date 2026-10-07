@@ -5,6 +5,7 @@ from django.test import TestCase
 from accounts.forms import ProfileForm, UserForm, UserUpdateForm
 from accounts.models import Profile, normalize_telegram_username
 from accounts.permissions import (
+    ADMIN_PERMISSIONS,
     CONTRIBUTOR_PERMISSIONS,
     DEFAULT_GROUPS,
     GROUP_PERMISSIONS,
@@ -213,10 +214,10 @@ class DefaultGroupsTests(TestCase):
         self.assertIn('view_solicitation', codenames)
 
     def test_cada_grupo_tem_exatamente_o_que_o_dicionario_declara(self):
-        """O post_migrate do banco de teste já deve ter sincronizado tudo.
+        """Num banco novo, o post_migrate deixa cada grupo com o dicionário.
 
-        Pega tanto permissão faltando quanto permissão sobrando — é o segundo caso
-        que o antigo `permissions.add()` não conseguia detectar.
+        Pega tanto permissão faltando quanto permissão sobrando: num banco novo
+        não há nada concedido à mão, então qualquer sobra veio do código.
         """
 
         for nome, esperado in GROUP_PERMISSIONS.items():
@@ -273,17 +274,18 @@ class EnsureDefaultGroupsTests(TestCase):
             with self.subTest(grupo=nome):
                 self.assertEqual(permissoes_do_grupo(nome), antes[nome])
 
-    def test_remove_permissao_concedida_por_fora(self):
-        """O dicionário é a fonte da verdade: o que foi dado à mão é desfeito"""
+    def test_preserva_permissao_concedida_por_fora(self):
+        """O deploy não pode tirar de um grupo o que foi dado pelo /admin/"""
 
-        intrusa = Permission.objects.get(
-            content_type__app_label='alerts', codename='add_station'
+        extra = Permission.objects.get(
+            content_type__app_label='core', codename='change_highlight'
         )
-        Group.objects.get(name='contributors').permissions.add(intrusa)
+        Group.objects.get(name='admins').permissions.add(extra)
 
         ensure_default_groups()
 
-        self.assertNotIn('alerts.add_station', permissoes_do_grupo('contributors'))
+        self.assertIn('core.change_highlight', permissoes_do_grupo('admins'))
+        self.assertTrue(set(ADMIN_PERMISSIONS).issubset(permissoes_do_grupo('admins')))
 
     def test_repoe_permissao_removida_por_fora(self):
         grupo = Group.objects.get(name='contributors')
