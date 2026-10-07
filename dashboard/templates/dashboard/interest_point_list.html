@@ -1,0 +1,68 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-start mb-3">
+        <div>
+            <h5><i class="fas fa-map-marker-alt me-2"></i>Pontos de Interesse</h5>
+            <p class="text-muted small mb-0">
+                Locais para os quais você quer receber alertas. Valem as estações escolhidas como ponto
+                e as estações que estiverem dentro do raio de cada ponto.
+            </p>
+        </div>
+        <a href="{% url 'dashboard:interest_point_add' %}" class="btn btn-success text-nowrap ms-3">
+            <i class="fa fa-plus"></i> Novo ponto
+        </a>
+    </div>
+
+    {% for message in messages %}
+        <div class="alert {% if message.tags == 'success' %}alert-success{% else %}alert-warning{% endif %}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% if interest_points %}
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Localização</th>
+                        <th>Raio</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for point in interest_points %}
+                    <tr>
+                        <td>{{ point.name }}</td>
+                        <td>{{ point.get_kind_display }}</td>
+                        <td>{{ point.location_label }}</td>
+                        <td class="text-nowrap">{{ point.radius_km }} km</td>
+                        <td class="text-nowrap">
+                            <a href="{% url 'dashboard:interest_point_edit' point.pk %}" class="btn btn-warning btn-sm"
+                               title="Editar">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                            <form method="post" action="{% url 'dashboard:interest_point_delete' point.pk %}"
+                                  class="d-inline" onsubmit="return confirm('Excluir o ponto “{{ point.name|escapejs }}”?');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" title="Excluir">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <a href="{% url 'alerts:map_url' %}" class="small"><i class="fas fa-map me-1"></i>Ver os pontos no mapa</a>
+    {% else %}
+        <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i> Você ainda não cadastrou nenhum ponto de interesse.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

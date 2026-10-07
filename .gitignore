@@ -1,6 +1,14 @@
 *.pyc
 __pycache__/
 media/
+# Imagens do bot para o modelo de IA. Versiona só as pastas (.gitkeep), nunca as imagens.
+media-ia/**
+!media-ia/training/
+!media-ia/test/
+!media-ia/*/.gitkeep
+!media-ia/training/pending/
+!media-ia/training/approved/
+!media-ia/training/*/.gitkeep
 db.json
 db1.json
 plants/
@@ -18,3 +26,5 @@ Docs/CREDENCIAIS-LOCAIS.md
 *.credenciais.md
 # Documentação interna da equipe, mantida fora do repositório.
 Docs/
+# Metadados do Finder (macOS)
+.DS_Store

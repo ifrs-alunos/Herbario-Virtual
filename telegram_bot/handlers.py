@@ -5,7 +5,6 @@ import time
 import sys
 from asgiref.sync import sync_to_async
 from django.conf import settings
-from django.utils import timezone
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -58,13 +57,15 @@ class TelegramBot:
                 self.application.add_handler(CommandHandler("start", self._handle_start))
                 self.application.add_handler(CommandHandler("stop", self._handle_stop))
                 self.application.add_handler(CommandHandler("teste", self._handle_test))
+                self.application.add_handler(CommandHandler(["ajuda", "help"], self._handle_help))
                 # Precisa vir ANTES do handler geral: dentro de um mesmo grupo,
                 # apenas o primeiro handler que casa com a mensagem é executado
                 self.application.add_handler(
                     MessageHandler(filters.PHOTO | filters.Document.IMAGE, self._handle_photo)
                 )
-                # Texto puro de quem ainda não vinculou a conta. O ~filters.COMMAND
-                # impede que um comando digitado errado caia aqui.
+                # Texto puro: resposta 1/2 às imagens pendentes, descrição das
+                # imagens de treino ou, fora disso, a ajuda. O ~filters.COMMAND deixa comando desconhecido para o
+                # handler geral, que também responde com a ajuda.
                 self.application.add_handler(
                     MessageHandler(filters.TEXT & ~filters.COMMAND, self._handle_text)
                 )
@@ -101,15 +102,63 @@ class TelegramBot:
             print(f"🔴 ERRO NO POLLING: {e}")
     
     async def _handle_any_message(self, update, context):
-        """Handler para QUALQUER mensagem - para debug"""
+        """Tudo que nenhum outro handler tratou: comando desconhecido, figurinha,
+        áudio, vídeo, localização... Responde com a ajuda do tipo de usuário."""
         try:
-            if update.message and update.message.text:
-                print(f"📨 MENSAGEM RECEBIDA: '{update.message.text}'")
-                print(f"📨 CHAT ID: {update.effective_chat.id}")
-                print(f"📨 USUÁRIO: {update.effective_user.first_name}")
-                print("---")
+            message = update.message
+
+            # Edições de mensagem e outros updates sem `message` não têm a quem responder
+            if message is None:
+                return
+
+            print(f"📨 MENSAGEM NÃO PREVISTA DE {update.effective_chat.id}: '{message.text or '[sem texto]'}'")
+
+            # Um álbum de vídeos, por exemplo, chega como vários updates: uma ajuda só
+            if self._album_ja_respondido(update.effective_chat.id, message.media_group_id):
+                return
+
+            await self._responder_ajuda(update)
+
         except Exception as e:
             print(f"🔴 ERRO NO HANDLER GERAL: {e}")
+            import traceback
+            traceback.print_exc()
+
+    async def _handle_help(self, update, context):
+        """Handler para /ajuda e /help"""
+        try:
+            await self._responder_ajuda(update, nao_entendi=False)
+        except Exception as e:
+            print(f"🔴 ERRO NO /ajuda: {e}")
+            await update.message.reply_text("❌ Erro ao mostrar a ajuda.")
+
+    async def _responder_ajuda(self, update, nao_entendi=True):
+        """Chama o usuário pelo nome e explica o que o bot faz para o tipo de conta dele"""
+
+        from telegram.helpers import escape_markdown
+
+        from telegram_bot import messages
+        from telegram_bot.services import bot_role, site_url
+
+        papel = await sync_to_async(bot_role)(update.effective_chat.id)
+
+        # Quem não vinculou ainda não tem nome no Labfito: usa o do Telegram.
+        # Escapado porque o nome vem do usuário e um `_` solto quebra o Markdown.
+        nome = escape_markdown(papel.name or update.effective_user.first_name or "", version=1)
+
+        texto = messages.AJUDA[papel.role].format(
+            name=nome,
+            intro=messages.AJUDA_NAO_ENTENDI if nao_entendi else "",
+            profile_url=site_url('dashboard:profile'),
+            create_url=site_url('dashboard:create'),
+            solicitation_url=site_url('dashboard:solicitation'),
+            solicitation_list_url=site_url('dashboard:solicitation_list'),
+            ai_model_review_url=site_url('dashboard:ai_model_review'),
+        )
+
+        print(f"💡 AJUDA ({papel.role}) PARA {update.effective_chat.id}")
+
+        await update.message.reply_text(texto, parse_mode="Markdown")
 
     def _album_ja_respondido(self, chat_id, media_group_id):
         """Evita repetir a mesma recusa uma vez por foto de um álbum.
@@ -137,7 +186,7 @@ class TelegramBot:
             from telegram_bot import messages
             from telegram_bot.services import (
                 MAX_TELEGRAM_FILE_SIZE, PhotoPermission, photo_permission,
-                save_incoming_photo, site_url,
+                register_pending_photo, site_url,
             )
 
             message = update.message
@@ -146,8 +195,8 @@ class TelegramBot:
 
             print(f"🖼️ IMAGEM RECEBIDA DE: {user.first_name} ({chat_id})")
 
-            # A permissão vem ANTES do download: não faz sentido baixar até 20 MB
-            # de uma imagem que vai ser descartada. Só strings saem daqui — tocar
+            # A permissão vem ANTES de registrar: imagem de quem não pode enviar
+            # não deixa rastro no banco nem em media-ia/. Só strings saem daqui — tocar
             # no ORM em contexto async levanta SynchronousOnlyOperation.
             permissao = await sync_to_async(photo_permission)(chat_id)
 
@@ -175,11 +224,11 @@ class TelegramBot:
             if message.photo:
                 # A última posição é sempre a maior resolução disponível
                 media = message.photo[-1]
-                filename = f"{media.file_unique_id}.jpg"
+                file_name = ""
                 source = 'photo'
             else:
                 media = message.document
-                filename = media.file_name or f"{media.file_unique_id}.jpg"
+                file_name = media.file_name or ""
                 source = 'document'
 
             if media.file_size and media.file_size > MAX_TELEGRAM_FILE_SIZE:
@@ -187,34 +236,26 @@ class TelegramBot:
                 await message.reply_text(messages.FOTO_MUITO_GRANDE)
                 return
 
-            print(f"⬇️ BAIXANDO ARQUIVO: {filename}")
-            telegram_file = await context.bot.get_file(media.file_id)
-            image_bytes = bytes(await telegram_file.download_as_bytearray())
-
-            photo = await sync_to_async(save_incoming_photo)(
+            # Só registra: o download fica para quando o usuário disser se a
+            # imagem é para treinar ou testar, e aí vai direto para a pasta certa.
+            photo, perguntar = await sync_to_async(register_pending_photo)(
                 chat_id=chat_id,
-                image_bytes=image_bytes,
-                filename=filename,
                 username=user.username or "",
                 first_name=user.first_name or "",
                 file_id=media.file_id,
                 file_unique_id=media.file_unique_id,
                 file_size=media.file_size,
+                file_name=file_name,
                 caption=message.caption or "",
                 telegram_message_id=message.message_id,
                 media_group_id=message.media_group_id or "",
                 source=source,
             )
 
-            print(f"✅ IMAGEM SALVA: #{photo.pk} em {photo.image.name}")
+            print(f"🕓 IMAGEM #{photo.pk} AGUARDANDO ESCOLHA DE USO")
 
-            await message.reply_text(
-                messages.FOTO_RECEBIDA.format(
-                    photo_id=photo.pk,
-                    recebida_em=f"{timezone.localtime(photo.received_at):%d/%m/%Y %H:%M}",
-                ),
-                parse_mode="Markdown"
-            )
+            if perguntar:
+                await message.reply_text(messages.FOTO_PERGUNTA_USO, parse_mode="Markdown")
 
         except Exception as e:
             print(f"🔴 ERRO AO RECEBER IMAGEM: {e}")
@@ -276,10 +317,13 @@ class TelegramBot:
             await update.message.reply_text("❌ Erro no cadastro. Tente novamente.")
 
     async def _handle_text(self, update, context):
-        """Handler para texto puro — o vínculo não se faz por aqui, só orienta"""
+        """Handler para texto puro: a resposta 1/2 às imagens pendentes, a
+        descrição das imagens de treino ou, fora disso, a ajuda. O vínculo não
+        se faz por aqui."""
         try:
-            from telegram_bot import messages
-            from telegram_bot.services import get_link_state
+            from telegram_bot.services import (
+                get_link_state, pending_description_numbers, pending_photos,
+            )
 
             chat_id = update.effective_chat.id
             texto = update.message.text
@@ -287,19 +331,139 @@ class TelegramBot:
             estado = await sync_to_async(get_link_state)(chat_id)
 
             if estado == 'linked':
-                # Conversa vinculada: nada a fazer com texto solto, só registra.
-                print(f"📨 MENSAGEM DE CHAT VINCULADO {chat_id}: '{texto}'")
-                return
+                # A pergunta 1/2 vem primeiro: imagens novas chegando no meio das
+                # descrições ainda não sabem se são de treino.
+                pendentes = await sync_to_async(pending_photos)(chat_id)
 
-            await update.message.reply_text(
-                messages.PRECISA_VINCULAR, parse_mode="Markdown"
-            )
+                if pendentes:
+                    await self._classificar_fotos(update, context, pendentes, texto)
+                    return
+
+                if await sync_to_async(pending_description_numbers)(chat_id):
+                    await self._registrar_descricoes(update, texto)
+                    return
+
+            print(f"📨 TEXTO NÃO PREVISTO DE {chat_id}: '{texto}'")
+            await self._responder_ajuda(update)
 
         except Exception as e:
             print(f"🔴 ERRO NO HANDLER DE TEXTO: {e}")
             import traceback
             traceback.print_exc()
             await update.message.reply_text("❌ Erro ao processar sua mensagem. Tente novamente.")
+
+    async def _classificar_fotos(self, update, context, pendentes, texto):
+        """Trata a resposta 1 (treinar) ou 2 (testar) às imagens pendentes do chat.
+
+        Baixa cada imagem e a grava em media-ia/training/pending/ ou media-ia/test/. A
+        que falhar é descartada e o usuário é avisado para reenviá-la. Para as de
+        treino, pede em seguida a descrição de cada uma.
+        """
+
+        from telegram_bot import messages
+        from telegram_bot.models import TelegramPhoto
+        from telegram_bot.services import (
+            PURPOSE_BY_ANSWER, discard_pending_photo, store_photo_file,
+        )
+
+        chat_id = update.effective_chat.id
+
+        purpose = PURPOSE_BY_ANSWER.get(texto.strip())
+
+        if purpose is None:
+            await update.message.reply_text(
+                messages.FOTO_LEMBRETE_USO.format(total=len(pendentes)),
+                parse_mode="Markdown"
+            )
+            return
+
+        salvas = 0
+
+        for pendente in pendentes:
+            try:
+                telegram_file = await context.bot.get_file(pendente.file_id)
+                image_bytes = bytes(await telegram_file.download_as_bytearray())
+                await sync_to_async(store_photo_file)(pendente.id, image_bytes, purpose)
+                salvas += 1
+            except Exception as e:
+                print(f"🔴 FALHA AO GRAVAR IMAGEM #{pendente.id}: {e}")
+                await sync_to_async(discard_pending_photo)(pendente.id)
+
+        print(f"✅ {salvas}/{len(pendentes)} IMAGENS GRAVADAS EM {purpose}")
+
+        falhas = len(pendentes) - salvas
+
+        if purpose == TelegramPhoto.PURPOSE_TRAINING and salvas:
+            await self._pedir_descricoes(update, context, chat_id, falhas)
+            return
+
+        partes = []
+        if salvas:
+            partes.append(messages.FOTO_SALVAS.format(total=salvas, uso=messages.FOTO_USO[purpose]))
+        if falhas:
+            partes.append(messages.FOTO_FALHARAM.format(falhas=falhas))
+
+        await update.message.reply_text("\n\n".join(partes), parse_mode="Markdown")
+
+    async def _pedir_descricoes(self, update, context, chat_id, falhas=0):
+        """Pede a descrição das imagens de treino que acabaram de ser gravadas.
+
+        Com mais de uma imagem esperando, cita cada foto com o número dela antes
+        de explicar o formato "1 - texto": sem isso o usuário não sabe qual
+        número corresponde a qual imagem de um álbum.
+        """
+
+        from telegram_bot import messages
+        from telegram_bot.services import request_descriptions
+
+        pedidos = await sync_to_async(request_descriptions)(chat_id)
+
+        if len(pedidos) > 1:
+            for pedido in pedidos:
+                await context.bot.send_message(
+                    chat_id=chat_id,
+                    text=messages.FOTO_NUMERO.format(numero=pedido.number),
+                    parse_mode="Markdown",
+                    reply_to_message_id=pedido.telegram_message_id,
+                    # A foto pode ter sido apagada pelo usuário: manda assim mesmo
+                    allow_sending_without_reply=True,
+                )
+            texto = messages.FOTO_PEDE_DESCRICOES.format(total=len(pedidos))
+        else:
+            texto = messages.FOTO_PEDE_DESCRICAO
+
+        if falhas:
+            texto = "{}\n\n{}".format(texto, messages.FOTO_FALHARAM.format(falhas=falhas))
+
+        await update.message.reply_text(texto, parse_mode="Markdown")
+
+    async def _registrar_descricoes(self, update, texto):
+        """Grava as descrições das imagens de treino e diz o que ainda falta"""
+
+        from telegram_bot import messages
+        from telegram_bot.services import save_descriptions
+
+        chat_id = update.effective_chat.id
+
+        resultado = await sync_to_async(save_descriptions)(chat_id, texto)
+
+        print(f"📝 DESCRIÇÕES DE {chat_id}: gravadas {resultado.saved}, faltam {resultado.missing}")
+
+        faltam = ", ".join(str(n) for n in resultado.missing)
+        exemplo = resultado.missing[0] if resultado.missing else 1
+
+        if not resultado.missing:
+            resposta = messages.FOTO_DESCRICOES_OK
+        elif resultado.saved:
+            resposta = messages.FOTO_DESCRICOES_FALTAM.format(faltam=faltam, exemplo=exemplo)
+        elif len(resultado.missing) == 1:
+            resposta = messages.FOTO_LEMBRETE_DESCRICAO_UNICA
+        else:
+            resposta = messages.FOTO_LEMBRETE_DESCRICAO.format(
+                total=len(resultado.missing), faltam=faltam, exemplo=exemplo,
+            )
+
+        await update.message.reply_text(resposta, parse_mode="Markdown")
 
     async def _handle_stop(self, update, context):
         """Handler para /stop — para os alertas, mas mantém o vínculo"""

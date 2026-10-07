@@ -20,6 +20,8 @@
         <div class="mb-2">{{ disease_form.management_disease|as_crispy_field }}</div>
         <div class="mb-2">{{ disease_form.symptoms_disease|as_crispy_field }}</div>
         <div class="mb-2">{{ disease_form.occurrence_regions_disease|as_crispy_field }}</div>
+        {# Precisa estar aqui: o DiseaseForm inclui o campo, e fora do template a edição gravaria a lista vazia #}
+        <div class="mb-2">{{ disease_form.states|as_crispy_field }}</div>
         <div class="mb-2"> {{ disease_form.references_disease|as_crispy_field }}</div>
 
         <p class="fw-light mt-4">Campos marcados com * são obrigatórios</p>

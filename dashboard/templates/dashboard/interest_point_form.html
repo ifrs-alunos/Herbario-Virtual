@@ -1,0 +1,281 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block head %}
+    <!-- Os tiles do OpenStreetMap pedem o Referer do site (política de uso). O
+         Django manda só "same-origin"; aqui a página libera a origem, sem o caminho. -->
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <style>
+        #interest-point-map { height: 380px; border-radius: .25rem; border: 1px solid #ced4da; }
+        .kind-choices .btn-check:checked + .btn { background-color: #2c6b3a; border-color: #2c6b3a; color: #fff; }
+        .kind-choices .btn { border-color: #2c6b3a; color: #2c6b3a; }
+    </style>
+{% endblock %}
+
+{% block item %}
+<div class="container-fluid">
+    <div class="card" style="border-color: #2c6b3a;">
+        <div class="card-header text-white" style="background-color: #2c6b3a;">
+            <h5 class="card-title mb-0">
+                {% if object %}Editar{% else %}Novo{% endif %} ponto de interesse
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="post" id="interest-point-form" novalidate>
+                {% csrf_token %}
+
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                {% endfor %}
+
+                <div class="mb-3">
+                    <label for="{{ form.name.id_for_label }}" class="form-label">{{ form.name.label }}</label>
+                    {{ form.name }}
+                    <div class="form-text">{{ form.name.help_text }}</div>
+                    {% for error in form.name.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label d-block">{{ form.kind.label }}</label>
+                    <div class="kind-choices d-flex flex-wrap gap-2">
+                        {% for radio in form.kind %}
+                            <input type="radio" class="btn-check" name="{{ radio.data.name }}" id="{{ radio.id_for_label }}"
+                                   value="{{ radio.data.value }}" autocomplete="off" {% if radio.data.selected %}checked{% endif %}>
+                            <label class="btn btn-sm" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+                        {% endfor %}
+                    </div>
+                    {% for error in form.kind.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                </div>
+
+                <!-- Endereço (urbano ou rural) -->
+                <div class="mb-3" data-kinds="urban_address rural_address">
+                    <label for="{{ form.address.id_for_label }}" class="form-label">{{ form.address.label }}</label>
+                    <div class="input-group">
+                        {{ form.address }}
+                        <button type="button" class="btn btn-outline-secondary" id="geocode-button">
+                            <i class="fas fa-search-location"></i> Localizar
+                        </button>
+                    </div>
+                    <div class="form-text" id="address-help"></div>
+                    <div class="small mt-1" id="geocode-status"></div>
+                    {% for error in form.address.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                </div>
+
+                <!-- Estação -->
+                <div class="mb-3" data-kinds="station">
+                    <label for="{{ form.station.id_for_label }}" class="form-label">{{ form.station.label }}</label>
+                    {{ form.station }}
+                    <div class="form-text">Você também pode clicar em uma estação no mapa.</div>
+                    {% for error in form.station.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                </div>
+
+                <!-- Coordenadas: digitadas, encontradas pelo endereço ou marcadas no mapa -->
+                <div class="row mb-2" data-kinds="urban_address rural_address coordinates">
+                    <div class="col-sm-6 mb-2">
+                        <label for="{{ form.latitude.id_for_label }}" class="form-label">{{ form.latitude.label }}</label>
+                        {{ form.latitude }}
+                        {% for error in form.latitude.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="col-sm-6 mb-2">
+                        <label for="{{ form.longitude.id_for_label }}" class="form-label">{{ form.longitude.label }}</label>
+                        {{ form.longitude }}
+                        {% for error in form.longitude.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div id="interest-point-map"></div>
+                    <div class="form-text" id="map-help"></div>
+                </div>
+
+                <div class="mb-3" style="max-width: 16rem;">
+                    <label for="{{ form.radius_km.id_for_label }}" class="form-label">{{ form.radius_km.label }}</label>
+                    {{ form.radius_km }}
+                    <div class="form-text">{{ form.radius_km.help_text }}</div>
+                    {% for error in form.radius_km.errors %}<div class="text-danger small">{{ error }}</div>{% endfor %}
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn text-white" style="background-color: #2c6b3a; border-color: #2c6b3a;">
+                        <i class="fa fa-save"></i> Salvar
+                    </button>
+                    <a href="{% url 'dashboard:interest_point_list' %}" class="btn btn-secondary">
+                        <i class="fa fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{{ stations_json|json_script:"stations-data" }}
+{% endblock %}
+
+{% block scripts %}
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+(function () {
+    const GEOCODE_URL = "{% url 'dashboard:interest_point_geocode' %}";
+    const ADDRESS_KINDS = ['urban_address', 'rural_address'];
+    const ADDRESS_HELP = {
+        urban_address: {
+            placeholder: 'Rua, número, bairro, cidade - UF',
+            help: 'Clique em “Localizar” para achar o endereço no mapa. Se o ponto ficar no lugar errado, clique no mapa ou arraste o marcador.',
+        },
+        rural_address: {
+            placeholder: 'Localidade/linha, estrada, km, município - UF',
+            help: 'Endereços rurais nem sempre são encontrados automaticamente. Se não for, clique no mapa para marcar o local da propriedade.',
+        },
+    };
+    const DEFAULT_CENTER = [-28.43, -50.92];  // Vacaria - RS
+
+    const stations = JSON.parse(document.getElementById('stations-data').textContent);
+    const form = document.getElementById('interest-point-form');
+    const latInput = document.getElementById('{{ form.latitude.id_for_label }}');
+    const lonInput = document.getElementById('{{ form.longitude.id_for_label }}');
+    const addressInput = document.getElementById('{{ form.address.id_for_label }}');
+    const stationSelect = document.getElementById('{{ form.station.id_for_label }}');
+    const radiusInput = document.getElementById('{{ form.radius_km.id_for_label }}');
+    const geocodeButton = document.getElementById('geocode-button');
+    const geocodeStatus = document.getElementById('geocode-status');
+    const mapHelp = document.getElementById('map-help');
+
+    const map = L.map('interest-point-map').setView(DEFAULT_CENTER, 10);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    }).addTo(map);
+
+    // Estações como referência; no tipo "Estação" o clique escolhe a estação
+    stations.forEach(function (station) {
+        L.circleMarker([station.lat, station.lon], {radius: 7, color: '#555', fillColor: '#999', fillOpacity: 0.9, weight: 1})
+            .bindTooltip(station.name)
+            .on('click', function (e) {
+                if (currentKind() === 'station') {
+                    L.DomEvent.stopPropagation(e);
+                    stationSelect.value = String(station.id);
+                    refresh();
+                }
+            })
+            .addTo(map);
+    });
+
+    const marker = L.marker(DEFAULT_CENTER, {draggable: true});
+    const circle = L.circle(DEFAULT_CENTER, {color: '#2c6b3a', fillColor: '#2c6b3a', fillOpacity: 0.12, weight: 2});
+
+    function currentKind() {
+        const checked = form.querySelector('input[name="{{ form.kind.html_name }}"]:checked');
+        return checked ? checked.value : null;
+    }
+
+    function currentLatLon() {
+        if (currentKind() === 'station') {
+            const station = stations.find(s => String(s.id) === stationSelect.value);
+            return station ? [station.lat, station.lon] : null;
+        }
+        const lat = parseFloat(latInput.value), lon = parseFloat(lonInput.value);
+        return (isNaN(lat) || isNaN(lon)) ? null : [lat, lon];
+    }
+
+    function setLatLon(lat, lon) {
+        latInput.value = lat.toFixed(6);
+        lonInput.value = lon.toFixed(6);
+    }
+
+    function refresh(fit) {
+        const kind = currentKind();
+
+        document.querySelectorAll('[data-kinds]').forEach(function (el) {
+            el.style.display = el.dataset.kinds.split(' ').includes(kind) ? '' : 'none';
+        });
+
+        if (ADDRESS_HELP[kind]) {
+            addressInput.placeholder = ADDRESS_HELP[kind].placeholder;
+            document.getElementById('address-help').textContent = ADDRESS_HELP[kind].help;
+        }
+
+        mapHelp.textContent = kind === 'station'
+            ? 'Clique em uma estação para escolhê-la. A área verde mostra o raio de interesse.'
+            : 'Clique no mapa ou arraste o marcador para ajustar o ponto. A área verde mostra o raio de interesse.';
+
+        const latLon = currentLatLon();
+        if (!latLon) {
+            marker.remove();
+            circle.remove();
+            return;
+        }
+
+        const radiusKm = Math.max(parseFloat(radiusInput.value) || 0, 0);
+        marker.setLatLng(latLon).addTo(map);
+        kind === 'station' ? marker.dragging.disable() : marker.dragging.enable();
+        circle.setLatLng(latLon).setRadius(radiusKm * 1000).addTo(map);
+        if (fit) {
+            radiusKm > 0 ? map.fitBounds(circle.getBounds(), {padding: [20, 20]}) : map.setView(latLon, 13);
+        }
+    }
+
+    let lastQuery = null;
+
+    function geocodeAddress(force) {
+        const query = addressInput.value.trim();
+        // Enter seguido de sair do campo dispararia duas buscas iguais
+        if (!force && query && query === lastQuery) return;
+        lastQuery = query;
+        if (!query) {
+            geocodeStatus.className = 'small mt-1 text-danger';
+            geocodeStatus.textContent = 'Digite o endereço antes de localizar.';
+            return;
+        }
+        geocodeStatus.className = 'small mt-1 text-muted';
+        geocodeStatus.textContent = 'Procurando...';
+        fetch(GEOCODE_URL + '?' + new URLSearchParams({q: query}))
+            .then(response => response.json())
+            .then(function (data) {
+                if (!data.found) {
+                    geocodeStatus.className = 'small mt-1 text-warning';
+                    geocodeStatus.textContent = currentLatLon()
+                        ? 'Endereço não encontrado. O ponto marcado no mapa foi mantido.'
+                        : 'Endereço não encontrado. Clique no mapa para marcar o local.';
+                    return;
+                }
+                setLatLon(data.lat, data.lon);
+                geocodeStatus.className = 'small mt-1 text-success';
+                geocodeStatus.textContent = 'Encontrado: ' + data.display_name;
+                refresh(true);
+            })
+            .catch(function () {
+                lastQuery = null;
+                geocodeStatus.className = 'small mt-1 text-danger';
+                geocodeStatus.textContent = 'Não foi possível consultar o endereço agora. Marque o local no mapa.';
+            });
+    }
+
+    map.on('click', function (e) {
+        if (currentKind() === 'station') return;
+        setLatLon(e.latlng.lat, e.latlng.lng);
+        refresh();
+    });
+    marker.on('dragend', function () {
+        const pos = marker.getLatLng();
+        setLatLon(pos.lat, pos.lng);
+        refresh();
+    });
+
+    form.querySelectorAll('input[name="{{ form.kind.html_name }}"]').forEach(el => el.addEventListener('change', () => refresh(true)));
+    [latInput, lonInput, stationSelect].forEach(el => el.addEventListener('change', () => refresh(true)));
+    radiusInput.addEventListener('input', () => refresh());
+    geocodeButton.addEventListener('click', () => geocodeAddress(true));
+    // Endereço alterado: relocaliza, para as coordenadas não ficarem do endereço antigo
+    addressInput.addEventListener('change', () => geocodeAddress(false));
+    addressInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            geocodeAddress(false);
+        }
+    });
+
+    refresh(true);
+})();
+</script>
+{% endblock %}

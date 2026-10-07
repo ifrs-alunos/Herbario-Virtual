@@ -79,6 +79,10 @@ ADMIN_PERMISSIONS = CONTRIBUTOR_PERMISSIONS + [
     # SolicitationListView/SolicitationUpdateView exigem hoje.
     "accounts.change_solicitation",
     "auth.view_user",
+
+    # Aprovar ou reprovar as imagens de treino que os contribuidores mandam ao bot
+    # do Telegram — tela "Modelos de IA" do painel (dashboard/views/ai_models.py).
+    "telegram_bot.approve_telegramphoto",
 ]
 
 # Permissões por grupo, no formato "app_label.codename".

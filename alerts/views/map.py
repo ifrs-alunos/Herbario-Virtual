@@ -1,4 +1,4 @@
-from alerts.models import Station, MathModel, Sensor
+from alerts.models import InterestPoint, Station, MathModel, Sensor
 from django.shortcuts import render
 
 from disease.models import Disease
@@ -31,6 +31,7 @@ def get_map(request):
 
     context = {
         "stations": query_station,
+        "interest_points": interest_points_for_map(request.user),
         "mathmodels": mathmodels,
         "mathmodel": mathmodel_get,
         "station_modal": station_modal,
@@ -38,3 +39,24 @@ def get_map(request):
     }
 
     return render(request, "map.html", context)
+
+
+def interest_points_for_map(user):
+    """Pontos de interesse do usuário logado, no formato usado pelo mapa"""
+    if not user.is_authenticated:
+        return []
+
+    points = []
+    for point in InterestPoint.objects.filter(profile__user=user).select_related("station"):
+        coordinates = point.coordinates
+        if coordinates is None:
+            continue
+        points.append({
+            "name": point.name,
+            "kind": point.get_kind_display(),
+            "location": point.location_label,
+            "radius_km": point.radius_km,
+            "lat": coordinates[0],
+            "lon": coordinates[1],
+        })
+    return points

@@ -143,6 +143,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = "/media/"
 
+# Imagens recebidas pelo bot do Telegram para o modelo de IA, separadas por uso
+# em training/ e test/. Ficam fora do MEDIA_ROOT porque não são servidas pelo
+# site: o banco guarda só o caminho relativo a esta pasta. Ver telegram_bot/storage.py
+AI_MEDIA_ROOT = os.path.join(BASE_DIR, "media-ia")
+
 # Sem isto o Django usa o padrão "/accounts/login/", que dá 404: config/urls.py
 # não inclui accounts.urls (esse app é código morto). O efeito era todo
 # @login_required / LoginRequiredMixin mandar o visitante para uma página

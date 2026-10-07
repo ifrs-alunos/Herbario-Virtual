@@ -99,6 +99,20 @@ urlpatterns = [
     # Telegram
     path('telegram-alertas/', TelegramSubscriptionView.as_view(), name="telegram_subscription"),
     
+    # Modelos de IA: revisão das imagens de treino enviadas ao bot
+    path('modelos-ia/', views.AIModelReviewListView.as_view(), name='ai_model_review'),
+    path('modelos-ia/imagem/<int:pk>/', views.ai_model_photo_file, name='ai_model_photo_file'),
+    path('modelos-ia/aprovar/<int:pk>/', views.ai_model_photo_approve, name='ai_model_photo_approve'),
+    path('modelos-ia/reprovar/<int:pk>/', views.ai_model_photo_reject, name='ai_model_photo_reject'),
+
+    # Pontos de interesse do usuário para os alertas
+    path('pontos-de-interesse/', views.InterestPointListView.as_view(), name='interest_point_list'),
+    path('pontos-de-interesse/adicionar/', views.InterestPointCreateView.as_view(), name='interest_point_add'),
+    path('pontos-de-interesse/editar/<int:pk>/', views.InterestPointUpdateView.as_view(), name='interest_point_edit'),
+    path('pontos-de-interesse/excluir/<int:pk>/', views.InterestPointDeleteView.as_view(),
+         name='interest_point_delete'),
+    path('pontos-de-interesse/localizar/', views.interest_point_geocode, name='interest_point_geocode'),
+
     # Alertas Manuais
     path('alerta-manual/', ManualAlertView.as_view(), name='manual_alert'),
 

@@ -106,6 +106,62 @@ TELEGRAM_BOT_USERNAME=labfito_teste_bot
 TELEGRAM_BOT_TOKEN=<token do bot de teste>
 ```
 
+#### Imagens enviadas ao bot
+
+Contribuidores e administradores com a conta vinculada podem enviar imagens (uma ou várias, avulsas ou em álbum). O bot
+pergunta se elas servem para **treinar** (resposta `1`) ou **testar** (resposta `2`) o modelo, uma vez por lote, e só
+então baixa os arquivos:
+
+| Resposta | Pasta |
+|---|---|
+| `1` — treinar | `media-ia/training/pending/` |
+| `2` — testar | `media-ia/test/` |
+
+As imagens de treino só entram no modelo depois de revisadas por um administrador no painel, em **Módulos em
+desenvolvimento → Modelos de IA** (permissão `telegram_bot.approve_telegramphoto`, do grupo `admins`). Aprovar move o
+arquivo para `media-ia/training/approved/`; reprovar apaga o registro e o arquivo. Imagens de teste não passam por
+revisão, e as de treino enviadas por um administrador já nascem aprovadas, direto em `media-ia/training/approved/`. Imagens de treino gravadas antes da revisão existir (direto em `media-ia/training/`) também aparecem na fila.
+
+O banco (`TelegramPhoto`) guarda só os dados do envio e o caminho do arquivo relativo a `media-ia/`; o binário fica na
+pasta. `media-ia/` não é servida pelo site e as imagens não são versionadas. No admin, a pré-visualização passa por uma
+rota restrita à equipe.
+
+#### Comandos e ajuda
+
+| Comando | O que faz |
+|---|---|
+| `/start` | Vincula a conversa à conta do Labfito (pelo `@` informado no perfil) e volta a receber alertas |
+| `/stop` | Para de receber alertas, sem desfazer o vínculo |
+| `/teste` | Mostra um exemplo de alerta |
+| `/ajuda` ou `/help` | Explica o que o bot faz para o tipo de conta de quem pergunta |
+
+Qualquer mensagem que o bot não sabe tratar (texto solto, comando inexistente, figurinha, áudio, vídeo...) recebe a
+mesma ajuda, chamando a pessoa pelo nome. Há um texto para cada tipo de conta: sem vínculo, usuário comum, contribuidor
+e administrador.
+
+### Pontos de interesse
+
+Em **Alertas → Pontos de Interesse**, no painel, cada usuário cadastra os locais para os quais quer receber alertas:
+endereço urbano, endereço rural, coordenadas ou uma estação já cadastrada. Cada ponto tem um raio em km (padrão 20). Os
+pontos do usuário logado aparecem no mapa (`/alertas/mapa`) junto das estações. O envio de alertas ainda não filtra
+pelos pontos.
+
+O fundo dos mapas vem do [OpenStreetMap](https://www.openstreetmap.org/), sem conta, token nem custo. A política de uso
+dele pede atribuição visível e o `Referer` do site; por isso as páginas com mapa têm uma
+`<meta name="referrer" content="strict-origin-when-cross-origin">`.
+
+A busca de endereços usa o [Nominatim](https://nominatim.org/) (OpenStreetMap), consultado pelo servidor. Por isso o
+servidor precisa de acesso de saída a `nominatim.openstreetmap.org`. Endereço rural costuma não ser encontrado; nesse
+caso o usuário marca o local clicando no mapa. `GEOCODING_URL` e `GEOCODING_USER_AGENT` podem ser definidas no settings
+para trocar o serviço ou a identificação enviada a ele, mas não são obrigatórias.
+
+Os testes ficam em `alerts/tests/test_interest_points.py`. Rode o módulo pelo nome, porque os outros testes de `alerts`
+estão quebrados:
+
+```bash
+docker compose exec labfito python manage.py test alerts.tests.test_interest_points
+```
+
 ### Produção
 
 O repositório não tem deploy automático. Enviar código ao GitHub **não altera** o servidor: a atualização é feita no
@@ -117,3 +173,6 @@ próprio servidor.
    desse bot. O token é guardado pela equipe responsável e não fica no repositório.
 4. Recrie os containers: `docker compose up -d --build`.
 5. Aplique as migrações: `docker compose exec labfito python manage.py migrate`.
+
+O backup do servidor precisa cobrir, além do banco, as pastas `media/` e `media-ia/`. As imagens ficam nelas, e um dump
+do PostgreSQL não as inclui.

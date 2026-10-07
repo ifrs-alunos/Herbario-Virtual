@@ -5,6 +5,8 @@ from .disease import *
 from .herbarium import *
 from .culture import *
 from .management_views import *
+from .ai_models import *
+from .interest_points import *
 
 __all__ = [
     'MathModelListView',
