@@ -1,9 +1,9 @@
 from django.contrib.auth.models import Group, Permission, User
-from django.db import IntegrityError, transaction
+from django.db import IntegrityError, connection, transaction
 from django.test import TestCase
 
 from accounts.forms import ProfileForm, UserForm, UserUpdateForm
-from accounts.models import Profile, normalize_telegram_username
+from accounts.models import Contribuition, Profile, normalize_telegram_username
 from accounts.permissions import (
     ADMIN_PERMISSIONS,
     CONTRIBUTOR_PERMISSIONS,
@@ -294,3 +294,79 @@ class EnsureDefaultGroupsTests(TestCase):
         ensure_default_groups()
 
         self.assertEqual(permissoes_do_grupo('contributors'), set(CONTRIBUTOR_PERMISSIONS))
+
+
+class ProfilePhoneOptionalTests(TestCase):
+    """Telefone opcional no perfil, como declara o modelo"""
+
+    def test_dados_pessoais_cria_perfil_sem_telefone(self):
+        """Usuário sem perfil abre "Dados pessoais" e ganha um perfil em branco"""
+
+        user = User.objects.create_user(username='semperfil', password='SenhaForte!2026')
+        Profile.objects.filter(user=user).delete()
+        self.client.force_login(user)
+
+        resposta = self.client.get('/painel/perfil/')
+
+        self.assertEqual(resposta.status_code, 200)
+        self.assertIsNone(Profile.objects.get(user=user).phone)
+
+    def test_varios_perfis_sem_telefone_nao_colidem_no_unique(self):
+        for nome in ('sem_telefone_1', 'sem_telefone_2'):
+            User.objects.create_user(username=nome)
+
+        self.assertEqual(
+            Profile.objects.filter(
+                user__username__startswith='sem_telefone_', phone=None
+            ).count(),
+            2,
+        )
+
+    def test_migracao_libera_coluna_herdada_como_not_null(self):
+        """Reproduz o banco de produção, onde a coluna tinha ficado NOT NULL"""
+
+        import importlib
+
+        migracao = importlib.import_module(
+            'accounts.migrations.0008_profile_phone_permite_nulo'
+        ).Migration
+        with connection.cursor() as cursor:
+            cursor.execute('ALTER TABLE "accounts_profile" ALTER COLUMN "phone" SET NOT NULL;')
+            cursor.execute(migracao.operations[0].sql)
+
+        user = User.objects.create_user(username='depois_da_migracao')
+
+        self.assertIsNone(Profile.objects.get(user=user).phone)
+
+
+class ContribuitionProfileColumnTests(TestCase):
+    """Migração 0009: coluna profile_id que faltava em produção"""
+
+    def _sql(self):
+        import importlib
+
+        return importlib.import_module(
+            'accounts.migrations.0009_contribuition_profile_id'
+        ).SQL
+
+    def test_migracao_recria_coluna_ausente(self):
+        """Reproduz o banco de produção, onde a tabela só tinha a coluna id"""
+
+        with connection.cursor() as cursor:
+            cursor.execute('ALTER TABLE "accounts_contribuition" DROP COLUMN "profile_id";')
+            cursor.execute(self._sql())
+
+        perfil = User.objects.create_user(username='contribuidor').profile
+        Contribuition.objects.create(profile=perfil)
+
+        self.assertEqual(Contribuition.objects.filter(profile=perfil).count(), 1)
+
+    def test_migracao_nao_muda_banco_ja_correto(self):
+        with connection.cursor() as cursor:
+            cursor.execute(self._sql())
+            cursor.execute(self._sql())
+
+        perfil = User.objects.create_user(username='contribuidor2').profile
+        Contribuition.objects.create(profile=perfil)
+
+        self.assertEqual(Contribuition.objects.filter(profile=perfil).count(), 1)
