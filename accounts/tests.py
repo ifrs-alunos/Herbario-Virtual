@@ -3,7 +3,7 @@ from django.db import IntegrityError, connection, transaction
 from django.test import TestCase
 
 from accounts.forms import ProfileForm, UserForm, UserUpdateForm
-from accounts.models import Profile, normalize_telegram_username
+from accounts.models import Contribuition, Profile, normalize_telegram_username
 from accounts.permissions import (
     ADMIN_PERMISSIONS,
     CONTRIBUTOR_PERMISSIONS,
@@ -337,3 +337,36 @@ class ProfilePhoneOptionalTests(TestCase):
         user = User.objects.create_user(username='depois_da_migracao')
 
         self.assertIsNone(Profile.objects.get(user=user).phone)
+
+
+class ContribuitionProfileColumnTests(TestCase):
+    """Migração 0009: coluna profile_id que faltava em produção"""
+
+    def _sql(self):
+        import importlib
+
+        return importlib.import_module(
+            'accounts.migrations.0009_contribuition_profile_id'
+        ).SQL
+
+    def test_migracao_recria_coluna_ausente(self):
+        """Reproduz o banco de produção, onde a tabela só tinha a coluna id"""
+
+        with connection.cursor() as cursor:
+            cursor.execute('ALTER TABLE "accounts_contribuition" DROP COLUMN "profile_id";')
+            cursor.execute(self._sql())
+
+        perfil = User.objects.create_user(username='contribuidor').profile
+        Contribuition.objects.create(profile=perfil)
+
+        self.assertEqual(Contribuition.objects.filter(profile=perfil).count(), 1)
+
+    def test_migracao_nao_muda_banco_ja_correto(self):
+        with connection.cursor() as cursor:
+            cursor.execute(self._sql())
+            cursor.execute(self._sql())
+
+        perfil = User.objects.create_user(username='contribuidor2').profile
+        Contribuition.objects.create(profile=perfil)
+
+        self.assertEqual(Contribuition.objects.filter(profile=perfil).count(), 1)
