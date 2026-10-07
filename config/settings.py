@@ -192,9 +192,12 @@ LOGGING = {
             'style': '{',
         },
     },
+    # WARNING, e não DEBUG: em DEBUG o Django registra até as variáveis de
+    # template que não resolvem, e em produção o arquivo chegou a 12 GB num disco
+    # de 28 GB (07/10/2026). Erros 500 continuam saindo com o traceback completo.
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'class': 'logging.FileHandler',
             'filename': '/var/log/django/debug.log',
             'formatter': 'verbose',
@@ -203,7 +206,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': 'WARNING',
             'propagate': True,
         },
     },
